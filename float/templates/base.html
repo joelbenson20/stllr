@@ -17,7 +17,8 @@
 <body>
     <ul class="navbar-nav">
         {% if user.is_authenticated %}
-            <li class="nav-item">User: {{ user.get_username }}</li>
+            <li class="nav-item"><a href="{% url 'index' %}">Home</a></li>
+            <li class="nav-item">User: <a href="{{ user.get_absolute_url }}">{{ user.get_username }}</a></li>
             <li class="nav-item">
                 <form id="logout-form" method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
