@@ -7,14 +7,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Float</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/fontawesome/css/all.min.css' %}">
+    {% block styles %}
+    {% endblock %}
 </head>
 
 <body>
-    <ul>
+    <ul class="navbar-nav">
         {% if user.is_authenticated %}
-            <li>User: {{ user.get_username }}</li>
-            <li>
+            <li class="nav-item">User: {{ user.get_username }}</li>
+            <li class="nav-item">
                 <form id="logout-form" method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-link">Logout</button>
@@ -24,6 +28,10 @@
     </ul>
    
     {% block content %}
+    {% endblock %}
+
+    <script src="{% static 'js/base.js' %}"></script>
+    {% block scripts %}
     {% endblock %}
 </body>
 
