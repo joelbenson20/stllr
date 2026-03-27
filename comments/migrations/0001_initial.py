@@ -12,10 +12,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Webpage',
+            name='Comment',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('url', models.URLField(max_length=250, unique=True)),
+                ('content', models.TextField()),
+                ('datetime', models.DateTimeField(auto_now_add=True)),
             ],
+            options={
+                'ordering': ['-datetime'],
+            },
         ),
     ]

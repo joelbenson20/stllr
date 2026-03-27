@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'float',
     'users.apps.UsersConfig',
     'webpages.apps.WebpagesConfig',
+    'votes.apps.VotesConfig',
+    'comments.apps.CommentsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
