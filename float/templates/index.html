@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Welcome to Float!</h1>
+    <p>This is the home page.</p>
+
+    <ol>
+        {% for webpage in webpages %}
+            <li>{{ webpage.url }}</li>
+        {% endfor %}
+    </ol>
+{% endblock %}
