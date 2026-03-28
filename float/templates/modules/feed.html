@@ -1,0 +1,25 @@
+<div class="container-fluid">
+
+    {% for webpage in webpages %}
+        <div class="row m-3">
+
+            <p>{{ webpage.url }}</p>
+
+            {% if webpage in user.voted_webpages.all %}
+                <p>You have already voted on this webpage.</p>
+            {% endif %}
+
+            <button class="vote-button" data-vote-type="upvote" data-webpage-id="{{ webpage.id }}">
+                Send Up
+            </button>
+
+            <span>{{ webpage.votes_sum }}</span>
+
+            <button class="vote-button" data-vote-type="downvote" data-webpage-id="{{ webpage.id }}">
+                Send Down
+            </button>
+
+        </div>
+    {% endfor %}
+
+</div>
