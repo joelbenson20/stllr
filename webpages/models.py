@@ -6,3 +6,7 @@ class Webpage(models.Model):
 
     def __str__(self):
         return self.url
+    
+    @property
+    def votes_sum(self):
+        return self.webpage_votes.aggregate(total=models.Sum("value"))["total"] or 0

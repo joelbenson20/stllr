@@ -4,9 +4,36 @@
     <h1>Welcome to Float!</h1>
     <p>This is the home page.</p>
 
-    <ol>
-        {% for webpage in webpages %}
-            <li>{{ webpage.url }}</li>
+    <div class="webpage-feed col-6 mx-auto">
+
+
+
+         {% for webpage in webpages %}
+            <div class="row m-3">
+
+                <p>{{ webpage.url }}</p>
+
+                {% if webpage in user.voted_webpages.all %}
+                    <p>You have already voted on this webpage.</p>
+                {% endif %}
+
+                <form action="{% url 'api_webpage_vote' webpage.id %}" method="post">
+                    {% csrf_token %}
+
+                    <button class="btn btn-primary" type='submit' name='webpage_id' value="{{ webpage.id }}">
+                        Send Up
+                    </button>
+
+                    <span>{{ webpage.votes_sum }}</span>
+
+                    <button class="btn btn-primary" type='submit' name='webpage_id' value="{{ webpage.id }}">
+                        Send Down
+                    </button>
+
+                </form>
+            </div>
         {% endfor %}
-    </ol>
+
+    </div>
+
 {% endblock %}
