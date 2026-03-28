@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     <h1>Welcome to Float!</h1>
     <p>This is the home page.</p>
 
     <div class="webpage-feed col-6 mx-auto">
-
-
 
          {% for webpage in webpages %}
             <div class="row m-3">
@@ -17,23 +16,25 @@
                     <p>You have already voted on this webpage.</p>
                 {% endif %}
 
-                <form action="{% url 'api_webpage_vote' webpage.id %}" method="post">
-                    {% csrf_token %}
+                <button class="vote-button" data-vote-type="upvote" data-webpage-id="{{ webpage.id }}">
+                    Send Up
+                </button>
 
-                    <button class="btn btn-primary" type='submit' name='webpage_id' value="{{ webpage.id }}">
-                        Send Up
-                    </button>
+                <span>{{ webpage.votes_sum }}</span>
 
-                    <span>{{ webpage.votes_sum }}</span>
+                <button class="vote-button" data-vote-type="downvote" data-webpage-id="{{ webpage.id }}">
+                    Send Down
+                </button>
 
-                    <button class="btn btn-primary" type='submit' name='webpage_id' value="{{ webpage.id }}">
-                        Send Down
-                    </button>
-
-                </form>
             </div>
         {% endfor %}
-
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        window.CSRF_TOKEN = '{{ csrf_token }}';
+    </script>
+    <script src="{% static 'js/index.js' %}"></script>
 {% endblock %}
