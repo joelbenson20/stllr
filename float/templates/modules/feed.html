@@ -5,19 +5,15 @@
 
             <p>{{ webpage.url }}</p>
 
-            {% if webpage in user.voted_webpages.all %}
-                <p>You have already voted on this webpage.</p>
+            {% if webpage.id in user.voted_webpage_ids %}
+                <p>You have voted for this webpage!</p>
             {% endif %}
 
-            <button class="vote-button" data-vote-type="upvote" data-webpage-id="{{ webpage.id }}">
-                Send Up
+            <button class="float-button" data-webpage-id="{{ webpage.id }}">
+                <i class="fa-solid fa-ghost"></i>
             </button>
 
-            <span>{{ webpage.votes_sum }}</span>
-
-            <button class="vote-button" data-vote-type="downvote" data-webpage-id="{{ webpage.id }}">
-                Send Down
-            </button>
+            <span>{{ webpage.num_votes }}</span>
 
         </div>
     {% endfor %}
