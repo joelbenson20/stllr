@@ -9,12 +9,13 @@ class User(AbstractUser):
         return reverse('user', kwargs={'username': self.username})
     
     @property
-    def voted_webpage_ids(self):
+    def voted_webpages_ids(self):
         return set(self.webpage_votes.values_list('webpage_id', flat=True))
+
     
 class Comment(models.Model):
     user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
-    webpage = models.ForeignKey('webpages.Webpage', related_name='webpage_comments', on_delete=models.CASCADE)
+    webpage = models.ForeignKey(Webpage, related_name='comments', on_delete=models.CASCADE)
     content = models.TextField()
     datetime = models.DateTimeField(auto_now_add=True)
 

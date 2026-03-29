@@ -2,9 +2,13 @@
     {% for webpage in webpages %}
         <div class="row m-5">
 
-            <p class="m-0 p-0">
-                {{ webpage.num_votes }} 
-                <button data-webpage-id="{{ webpage.id }}"><i class="fa-solid fa-ghost" ></i></button>
+            <p class="m-0 p-0"> 
+                <span class="float-count">{{ webpage.num_votes }}</span>
+                <button class="float-button"
+                     data-webpage-id="{{ webpage.id }}" 
+                     {% if webpage.id in user.voted_webpages_ids %}data-voted="true"{% else %}data-voted="false"{% endif %}>
+                    <i class="fa-solid fa-ghost"></i>
+                </button>
             </p>
             <h1 class="display-6 m-0 p-0">{{ webpage.url }}</h1>
 
