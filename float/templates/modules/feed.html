@@ -1,21 +1,16 @@
-<div class="container-fluid">
-
+<div class="feed">
     {% for webpage in webpages %}
-        <div class="row m-3">
+        <div class="row m-5">
 
-            <p>{{ webpage.url }}</p>
-
-            {% if webpage.id in user.voted_webpage_ids %}
-                <p>You have voted for this webpage!</p>
-            {% endif %}
-
-            <button class="float-button" data-webpage-id="{{ webpage.id }}">
-                <i class="fa-solid fa-ghost"></i>
-            </button>
-
-            <span>{{ webpage.num_votes }}</span>
+            <p class="m-0 p-0">
+                {{ webpage.num_votes }} 
+                <button data-webpage-id="{{ webpage.id }}"><i class="fa-solid fa-ghost" ></i></button>
+            </p>
+            <h1 class="display-6 m-0 p-0">{{ webpage.url }}</h1>
 
         </div>
     {% endfor %}
-
+    <script>
+        window.CSRF_TOKEN = '{{ csrf_token }}';
+    </script>
 </div>

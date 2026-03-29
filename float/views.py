@@ -9,4 +9,4 @@ def index(request):
     
     context = {'webpages': webpages}
 
-    return render(request, 'index.html', context=context)
+    return render(request, 'base.html', context=context)

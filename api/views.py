@@ -7,12 +7,11 @@ from webpages.models import Webpage
 
 @login_required
 @require_POST
-def webpage_vote(request, webpage_id):
+def webpage_vote(request):
 
     data = json.loads(request.body)
-    print(f"Received vote for webpage ID: {webpage_id}")
+    print(f"Received vote for webpage ID: {data.get('webpage_id')}")
     print(f"User: {request.user}")
-    print(f"Vote type: {data.get('vote_type')}")
 
     return JsonResponse({"message": "Vote received"})
 
