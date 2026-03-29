@@ -5,9 +5,6 @@ from webpages.models import Webpage
 
 class User(AbstractUser):
     
-    voted_webpages = models.ManyToManyField(Webpage, through='WebpageVote', related_name='voters')
-    voted_comments = models.ManyToManyField('Comment', through='CommentVote', related_name='voters')
-
     def get_absolute_url(self):
         return reverse('user', kwargs={'username': self.username})
     
