@@ -5,6 +5,7 @@ from django.views.decorators.http import require_POST
 from webpages.models import Webpage
 from users.models import WebpageVote
 import json
+from .utils import clean_and_validate_url
 
 @login_required
 @require_POST
@@ -25,10 +26,12 @@ def webpage_vote(request):
         return JsonResponse({"message": "Vote added"})
 
 @login_required
-def api_index(request):
-
-    webpages = Webpage.objects.all()
+def extension(request):
     
-    context = {'webpages': webpages}
+    webpage_url = request.headers.get('url', '')
 
-    return render(request, 'modules/feed.html', context=context)
+    webpage_url = clean_and_validate_url(webpage_url)
+
+    context = {'webpage_url': webpage_url}
+
+    return render(request, 'extension.html', context=context)

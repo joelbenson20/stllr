@@ -22,8 +22,6 @@ float_buttons.forEach(button => {
     });
 });
 
-
-
 function updateFloatButton(button) {
     //Toggle the data-voted attribute
     if (button.dataset.voted === 'true') {
