@@ -28,10 +28,12 @@ def webpage_vote(request):
 @login_required
 def extension(request):
     
-    webpage_url = request.headers.get('url', '')
+    webpage_url = clean_and_validate_url(request.headers.get('url', ''))
+    webpage = Webpage.objects.filter(url=webpage_url).first()
 
-    webpage_url = clean_and_validate_url(webpage_url)
-
-    context = {'webpage_url': webpage_url}
+    if (not webpage):
+        webpage = Webpage.objects.create(url=webpage_url)
+    
+    context = {'webpage': webpage}
 
     return render(request, 'extension.html', context=context)

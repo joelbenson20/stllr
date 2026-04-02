@@ -32,7 +32,7 @@ function updateFloatButton(button) {
     }
 
     //Update float count
-    let floatCount = button.closest('p').querySelector('.float-count');
+    let floatCount = button.closest('div').querySelector('.float-count');
     let count = parseInt(floatCount.textContent);
     if (button.dataset.voted === 'true') {
         count += 1;

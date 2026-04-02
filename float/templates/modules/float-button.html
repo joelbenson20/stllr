@@ -1,0 +1,9 @@
+
+<p>
+    <span class="float-count">{{ webpage.num_votes }}</span>
+    <button class="float-button"
+        data-webpage-id="{{ webpage.id }}" 
+        {% if webpage.id in user.voted_webpages_ids %}data-voted="true"{% else %}data-voted="false"{% endif %}>
+        <i class="fa-solid fa-ghost"></i>
+    </button>
+</p>

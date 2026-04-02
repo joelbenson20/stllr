@@ -38,7 +38,20 @@
 
         {% block content %}
 
-            {% include 'modules/webpage-feed.html' with user=user webpages=webpages %}
+            <div class="feed">
+                {% for webpage in webpages %}
+                    <div class="row m-5">
+
+                        {% include 'modules/float-button.html' with webpage=webpage user=user %}
+
+                        <h1>{{ webpage.url }}</h1>
+
+                    </div>
+                {% endfor %}
+                <script>
+                    window.CSRF_TOKEN = '{{ csrf_token }}';
+                </script>
+            </div>
 
         {% endblock %}
 
