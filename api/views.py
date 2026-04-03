@@ -1,5 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.middleware.csrf import get_token
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from webpages.models import Webpage
@@ -35,5 +37,6 @@ def extension(request):
         webpage = Webpage.objects.create(url=webpage_url)
     
     context = {'webpage': webpage}
+    html = render_to_string('extension.html', context=context)
 
-    return render(request, 'extension.html', context=context)
+    return JsonResponse({'html': html, 'csrfToken': get_token(request)})
