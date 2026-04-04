@@ -39,7 +39,7 @@
                 </ul>
                 {% if user.is_authenticated %}
                 <span class="navbar-text ms-auto fst-italic">
-                    Welcome, {{ user.username }}!
+                    Welcome, @{{ user.username }}!
                 </span>
                 <form class="navbar-text" id="logout-form" method="post" action="{% url 'logout' %}">
                     {% csrf_token %}

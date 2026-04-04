@@ -1,4 +1,5 @@
 from django.db import models
+from urllib.parse import urlparse
 
 # Create your models here.
 class Webpage(models.Model):
@@ -13,9 +14,12 @@ class Webpage(models.Model):
     def __str__(self):
         return self.canonical
     
+    def get_absolute_url(self):
+        return 'https://' + self.canonical
+    
     @property
-    def domain(self):
-        return self.canonical.split('/')[0]
+    def hostname(self):
+        return urlparse('https://' +self.canonical).hostname
     
     @property
     def num_votes(self):

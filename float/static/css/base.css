@@ -54,7 +54,8 @@ body {
 
 .webpage-fav-icon {
     float: left;
-    max-width: 32px;
+    height: 32px;
+    font-size: 32px;
     border-radius: .5rem;
 }
 

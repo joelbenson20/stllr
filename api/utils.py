@@ -10,18 +10,20 @@ ALLOWED_QUERY_PARAMS = {
 
 def get_canonical(url):
 
-    url = url.strip()
-
-    # Add a scheme if missing so urlparse can split the host correctly
-    if not url.startswith(('http://', 'https://')):
-        url = 'https://' + url
-
     parsed = urlparse(url)
+    scheme = (parsed.scheme or '').lower()
 
     # Lowercase and strip leading 'www.' from the host
     host = parsed.hostname or ''
     if host.startswith('www.'):
         host = host[4:]
+
+    # Keep non-default ports because they can point to a different app/site.
+    # Drop default ports to avoid duplicates like :80 and :443.
+    if parsed.port is not None:
+        default_ports = {'http': 80, 'https': 443}
+        if default_ports.get(scheme) != parsed.port:
+            host = f'{host}:{parsed.port}'
 
     # Normalize the path: resolve any '..' or '.' segments and strip trailing slash
     path = posixpath.normpath(parsed.path) if parsed.path else ''
@@ -35,7 +37,7 @@ def get_canonical(url):
     ]
     query = urlencode(filtered_params) if filtered_params else ''
 
-    # Reconstruct without scheme, userinfo, port, or fragment
+    # Reconstruct without scheme, userinfo, or fragment
     normalized = host + path
     if query:
         normalized += '?' + query
