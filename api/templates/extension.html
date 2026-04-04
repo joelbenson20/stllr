@@ -2,8 +2,6 @@
 
 <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/base.css">
 
-{% include 'modules/webpage-feed.html' with webpages=webpages user=user %}
+{% include 'modules/webpage-feed.html' with webpages=webpages user=user %}<hr>
 
-<hr>
-
-<p>Comment feed...</p>
+{% include 'modules/comment-feed.html' with webpage=webpages|first user=user %}

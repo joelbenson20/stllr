@@ -35,6 +35,7 @@ def float_webpage(request):
     
     return JsonResponse(response)
 
+
 @login_required
 @require_POST
 def extension(request):
@@ -71,5 +72,5 @@ def extension(request):
 @login_required
 @require_GET
 def get_csrf_token(request):
-    token = get_token(request)
-    return JsonResponse({'csrfToken': token})
+
+    return JsonResponse({'csrfToken': get_token(request)})
