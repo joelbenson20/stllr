@@ -13,3 +13,8 @@ When a webpage does not have a <og:description> tag, I leave the description bla
 
 Do we want to only support HTTPS supported webpages? I think yes.
 What kind of statistical algorithm do we want to use to order the webpage feed?
+
+# Bugs
+
+-Converting Unicode to ASCII for JSON
+Webpages with curly quotes or apostraphes in their titles cause an error with the extension, because those characters are Unicode, not ASCII. Need to convert.
