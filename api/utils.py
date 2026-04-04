@@ -8,7 +8,7 @@ ALLOWED_QUERY_PARAMS = {
     'q', 'query', 'search', 'page', 'p', 'id', 'v',
 }
 
-def clean_and_validate_url(url):
+def get_canonical(url):
 
     url = url.strip()
 
@@ -41,3 +41,6 @@ def clean_and_validate_url(url):
         normalized += '?' + query
 
     return normalized
+
+def verify_security(url):
+    pass

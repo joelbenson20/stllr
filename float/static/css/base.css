@@ -11,6 +11,10 @@ body {
     color: white;
 }
 
+a {
+    color: var(--iridescent-2);
+}
+
 .float-button {
     color: inherit;
     appearance: none;
@@ -33,7 +37,31 @@ body {
     text-shadow: 0 0 5px var(--iridescent-4);
 }
 
-.webpage-title,
 .float-button {
-    font-size: 1.5rem;
+    font-size: 1rem;
+}
+
+.webpage-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.webpage-card {
+    position: relative;
+}
+.webpage-image {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.2;
+}
+
+
+.webpage-title,
+.webpage-description,
+.webpage-link {
+    position: relative;
+    z-index: 1;
 }

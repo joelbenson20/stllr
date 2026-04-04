@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 from webpages.models import Webpage
 from users.models import WebpageVote
 import json
-from .utils import clean_and_validate_url
+from .utils import get_canonical, verify_security
 
 @login_required
 @require_POST
@@ -38,12 +38,22 @@ def webpage_vote(request):
 def extension(request):
 
     response = {}
-    
-    webpage_url = clean_and_validate_url(request.headers.get('url', ''))
-    webpage = Webpage.objects.filter(url=webpage_url).first()
+    webpage_data = json.loads(request.headers.get('webpageData'))
+
+    verify_security(webpage_data['url'])
+    canonical = get_canonical(webpage_data['url'])
+
+    image_url = webpage_data.get('imageUrl', '')
+    if (image_url):
+        verify_security(image_url)
+
+    webpage = Webpage.objects.filter(canonical=canonical).first()
 
     if (not webpage):
-        webpage = Webpage.objects.create(url=webpage_url)
+        webpage = Webpage.objects.create(canonical=canonical,
+                                        title=webpage_data['title'],
+                                        description=webpage_data['description'],
+                                        image_url=image_url)
     
     context = {'webpages': [webpage], 'user': request.user}
     
