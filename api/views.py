@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.middleware.csrf import get_token
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from webpages.models import Webpage
 from users.models import WebpageVote
 import json
@@ -35,10 +35,12 @@ def webpage_vote(request):
     return JsonResponse(response)
 
 @login_required
+@require_POST
 def extension(request):
 
     response = {}
-    webpage_data = json.loads(request.headers.get('webpageData'))
+    payload = json.loads(request.body)
+    webpage_data = payload.get('webpageData')
 
     print(webpage_data)
 
@@ -66,3 +68,9 @@ def extension(request):
     response['status'] = '200'
 
     return JsonResponse(response)
+
+@login_required
+@require_GET
+def get_csrf_token(request):
+    token = get_token(request)
+    return JsonResponse({'csrfToken': token})

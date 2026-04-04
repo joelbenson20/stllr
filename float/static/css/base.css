@@ -55,7 +55,7 @@ body {
 .webpage-fav-icon {
     float: left;
     height: 32px;
-    font-size: 32px;
+    font-size: 27px;
     border-radius: .5rem;
 }
 
@@ -67,6 +67,6 @@ body {
 
 .webpage-image {
     float: left;
-    max-height: 3rem;
+    height: 3.75rem;
     border-radius: 0.5rem;
 }
