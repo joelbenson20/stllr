@@ -13,22 +13,31 @@ from .utils import clean_and_validate_url
 @require_POST
 def webpage_vote(request):
 
+    response = {}
+
     payload = json.loads(request.body)
     webpage_id = payload.get('webpage_id')
-
     user = request.user
     webpage = Webpage.objects.get(id=webpage_id)
 
+    # Check if there already exists a vote for the page by the user. If so, delete.
     if (user.webpage_votes.filter(webpage=webpage).exists()):
         vote = user.webpage_votes.get(webpage=webpage)
         vote.delete()
-        return JsonResponse({"message": "Vote removed"})
+        response["status"] = "410"
+    # Otherwise, create a new vote.
     else:
         vote = WebpageVote.objects.create(user=user, webpage=webpage)
-        return JsonResponse({"message": "Vote added"})
+        response["status"] = "201"
+
+    response["num_votes"] = webpage.num_votes
+    
+    return JsonResponse(response)
 
 @login_required
 def extension(request):
+
+    response = {}
     
     webpage_url = clean_and_validate_url(request.headers.get('url', ''))
     webpage = Webpage.objects.filter(url=webpage_url).first()
@@ -36,7 +45,9 @@ def extension(request):
     if (not webpage):
         webpage = Webpage.objects.create(url=webpage_url)
     
-    context = {'webpage': webpage}
-    html = render_to_string('extension.html', context=context)
+    context = {'webpages': [webpage], 'user': request.user}
+    
+    response['html'] = render_to_string('extension.html', context=context, request=request)
+    response['status'] = '200'
 
-    return JsonResponse({'html': html, 'csrfToken': get_token(request)})
+    return JsonResponse(response)

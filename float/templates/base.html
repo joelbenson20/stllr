@@ -9,9 +9,9 @@
 
     <title>Float</title>
 
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'libs/fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'brand/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'brand/favicon-32x32.png' %}">
@@ -21,42 +21,53 @@
 </head>
 
 <body>
-    <div id="window" class="container-fluid">
 
-        {% if user.is_authenticated %}
-            <ul class="navbar-nav">
-                <li class="nav-item"><a href="{% url 'index' %}">Home</a></li>
-                <li class="nav-item">User: <a href="{{ user.get_absolute_url }}">{{ user.get_username }}</a></li>
-                <li class="nav-item">
-                    <form id="logout-form" method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-link">Logout</button>
-                    </form>
-                </li>
-            </ul>
-        {% endif %}
+    <div id="window" class="container-fluid m-0 p-0">
 
+        <nav class="navbar navbar-dark navbar-expand-sm sticky-top m-0 p-0">
+            <a class="navbar-brand m-0 p-0" href="{% url 'index' %}">
+                <img class="navbar-brand-image" src="{% static 'brand/favicon-32x32.png' %}">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse p-4" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Home</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <form id="logout-form" method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link">Logout</button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                {% if user.is_authenticated %}
+                <span class="navbar-text ms-auto fst-italic">
+                    Welcome, {{ user.username }}!
+                </span>
+                {% endif %}
+            </div>
+        </nav>
+
+        <div id="content" class="container-fluid m-0 p-3">
         {% block content %}
 
-            <div class="feed">
-                {% for webpage in webpages %}
-                    <div class="row m-5">
-
-                        {% include 'modules/float-button.html' with webpage=webpage user=user %}
-
-                        <h1>{{ webpage.url }}</h1>
-
-                    </div>
-                {% endfor %}
-                <script>
-                    window.CSRF_TOKEN = '{{ csrf_token }}';
-                </script>
-            </div>
+            {% include 'modules/webpage-feed.html' with webpages=webpages user=user %}
 
         {% endblock %}
+        </div>
 
     </div>
     
+    <script src="{% static 'libs/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/floatButtons.js' %}"></script>
     {% block scripts %}
     {% endblock %}

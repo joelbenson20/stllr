@@ -1,5 +1,4 @@
 {% load static %}
+<link rel="stylesheet" href="http://127.0.0.1:8000/static/css/base.css">
 
-<h1>{{ webpage.url }}</h1>
-
-{% include 'modules/float-button.html' with webpage=webpage user=user %}
+{% include 'modules/webpage-feed.html' with webpages=webpages user=user %}

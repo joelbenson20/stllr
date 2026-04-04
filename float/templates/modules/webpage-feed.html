@@ -1,0 +1,16 @@
+<input id="csrf-token" name="csrf-token" value="{{ csrf_token }}" type="hidden">
+
+{% for webpage in webpages %}
+    <div class="row">
+
+        <div class="col-2 text-end">
+            {% include 'modules/float-button.html' with webpage=webpage user=user %}
+        </div>
+
+        <div class="col">
+            <h1 class="webpage-title">{{ webpage.url }}</h1>
+            <p class="webpage-description">This is a webpage description.</p>
+        </div>
+
+    </div>
+{% endfor %}

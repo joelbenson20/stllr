@@ -1,4 +1,18 @@
+:root {
+    --iridescent-0: #ced9ef;
+    --iridescent-1: #cfc7fb;
+    --iridescent-2: #e2c6ee;
+    --iridescent-3: #efc8df;
+    --iridescent-4: #d7e9dc;
+}
+
+body {
+    background-color: #000010;
+    color: white;
+}
+
 .float-button {
+    color: inherit;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -6,9 +20,20 @@
     background: transparent;
     cursor: pointer;
     outline: none;
-    padding: 0;
+    transition: color 160ms ease, text-shadow 160ms ease;
+}
+
+.float-button[data-voted="false"] {
+    color: var(--iridescent-0);
+    text-shadow: none;
 }
 
 .float-button[data-voted="true"] {
-    text-shadow: -3px 3px blue;
+    color: var(--iridescent-4);
+    text-shadow: 0 0 5px var(--iridescent-4);
+}
+
+.webpage-title,
+.float-button {
+    font-size: 1.5rem;
 }
