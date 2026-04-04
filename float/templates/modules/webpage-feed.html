@@ -1,28 +1,38 @@
 <input id="csrf-token" name="csrf-token" value="{{ csrf_token }}" type="hidden">
 
 {% for webpage in webpages %}
-    <div class="row m-3">
+<div class="webpage-feed">
+    <div class="row p-0 m-0">
 
-        <div class="col-2 text-end m-0 p-0">
+        <div class="col-2 m-0 pr-3 text-end">
             {% include 'modules/float-button.html' with webpage=webpage user=user %}
         </div>
 
-        <div class="webpage-card col">
+        <div class="col-10 m-0 p-0">
 
+            <img class="webpage-fav-icon me-1 p-0" src="{{ webpage.fav_icon_url }}">
+
+            <p class="webpage-site-name m-0 p-0">{% firstof webpage.site_name webpage.domain %}</p>
+
+            <a class="webpage-link d-block text-truncate m-0 p-0" href="{{ webpage.canonical }}" target="_blank">{{ webpage.canonical }}</a>
+
+        </div>
+    </div>
+
+    <div class="row p-0 mb-4">
+
+        <div class="col-2 m-0 p-0"></div>
+        <div class="col-10 m-0 p-1">
+
+            <a class="webpage-title" href="{{ webpage.canonical }}" target="_blank"><h1 class="webpage-title">{{ webpage.title }}</h1></a>
+            
             {% if webpage.image_url %}
-            <img class="webpage-image" src="{{ webpage.image_url }}">
+            <img class="webpage-image me-1" src="{{ webpage.image_url }}">
             {% endif %}
+            <p class="webpage-description small">{% firstof webpage.description "No description." %}</p>
 
-            {% if webpage.title %}
-            <a class="webpage-title" href="{{ webpage.canonical }}" target="_blank"><h1 class="webpage-title m-0">{{ webpage.title }}</h1></a>
-            {% endif %}
-
-            <a class="webpage-link small m-0" href="{{ webpage.canonical }}" target="_blank">{{ webpage.canonical }}</a>
-           
-            {% if webpage.description %}
-            <p class="webpage-description small">{% firstof webpage.description %}</p>
-            {% endif %}
         </div>
 
     </div>
+</div>
 {% endfor %}

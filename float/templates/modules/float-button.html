@@ -1,7 +1,7 @@
-<button class="float-button display-6"
+<button class="float-button display-6 text-nowrap m-0 p-0"
     data-webpage-id="{{ webpage.id }}" 
     {% if webpage.id in user.voted_webpages_ids %}data-voted="true"
     {% else %}data-voted="false"{% endif %}>
-    <span class="float-count">{{ webpage.num_votes }}</span>
+    <span class="float-count small">{{ webpage.num_votes }}</span>
     <i class="fa-solid fa-circle"></i>
 </button>

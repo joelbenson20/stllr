@@ -40,6 +40,8 @@ def extension(request):
     response = {}
     webpage_data = json.loads(request.headers.get('webpageData'))
 
+    print(webpage_data)
+
     verify_security(webpage_data['url'])
     canonical = get_canonical(webpage_data['url'])
 
@@ -53,7 +55,10 @@ def extension(request):
         webpage = Webpage.objects.create(canonical=canonical,
                                         title=webpage_data['title'],
                                         description=webpage_data['description'],
-                                        image_url=image_url)
+                                        image_url=image_url,
+                                        site_name=webpage_data.get('siteName', ''),
+                                        fav_icon_url=webpage_data.get('favIconUrl', '')
+                                        )
     
     context = {'webpages': [webpage], 'user': request.user}
     
