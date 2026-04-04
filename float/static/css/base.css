@@ -28,6 +28,11 @@ body {
     transition: color 160ms ease, text-shadow 160ms ease;
 }
 
+.float-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
 .float-button[data-voted="false"] {
     color: var(--iridescent-0);
     text-shadow: none;

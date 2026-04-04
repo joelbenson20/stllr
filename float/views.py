@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from webpages.models import Webpage
 
-@login_required
 def index(request):
 
     webpages = (

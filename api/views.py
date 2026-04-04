@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
 from django.middleware.csrf import get_token
 from django.contrib.auth.decorators import login_required
@@ -11,14 +11,15 @@ from .utils import get_canonical, verify_security
 
 @login_required
 @require_POST
-def webpage_vote(request):
+def float_webpage(request):
 
     response = {}
 
+    user = request.user
+    
     payload = json.loads(request.body)
     webpage_id = payload.get('webpage_id')
-    user = request.user
-    webpage = Webpage.objects.get(id=webpage_id)
+    webpage = get_object_or_404(Webpage, id=webpage_id)
 
     # Check if there already exists a vote for the page by the user. If so, delete.
     if (user.webpage_votes.filter(webpage=webpage).exists()):
@@ -41,8 +42,6 @@ def extension(request):
     response = {}
     payload = json.loads(request.body)
     webpage_data = payload.get('webpageData')
-
-    print(webpage_data)
 
     verify_security(webpage_data['url'])
     canonical = get_canonical(webpage_data['url'])
