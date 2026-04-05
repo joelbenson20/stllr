@@ -3,5 +3,3 @@
 <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/base.css">
 
 {% include 'modules/webpage-feed.html' with webpages=webpages user=user %}<hr>
-
-{% include 'modules/comment-section.html' with webpage=webpages|first user=user %}

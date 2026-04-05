@@ -37,28 +37,6 @@ def float_webpage(request):
 
 @login_required
 @require_POST
-def create_comment(request):
-
-    response = {}
-
-    user = request.user
-    
-    payload = json.loads(request.body)
-    webpage_id = payload.get('webpage_id')
-    content = payload.get('content')
-    webpage = get_object_or_404(Webpage, id=webpage_id)
-
-    comment = webpage.comments.create(user=user, content=content)
-
-    context = {'comment': comment, 'user': user}
-    
-    response['html'] = render_to_string('modules/comment.html', context=context, request=request)
-    response['status'] = '201'
-
-    return JsonResponse(response)
-
-@login_required
-@require_POST
 def extension(request):
 
     response = {}
