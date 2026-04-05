@@ -1,5 +1,7 @@
 from django.db import models
 from urllib.parse import urlparse
+from django.urls import reverse
+from django_comments_xtd.moderation import moderator, XtdCommentModerator
 
 # Create your models here.
 class Webpage(models.Model):
@@ -15,7 +17,7 @@ class Webpage(models.Model):
         return self.canonical
     
     def get_absolute_url(self):
-        return 'https://' + self.canonical
+        return reverse('webpage_detail', kwargs={'pk': self.pk})
     
     @property
     def hostname(self):
@@ -24,3 +26,8 @@ class Webpage(models.Model):
     @property
     def num_votes(self):
         return self.votes.count()
+    
+class WebpageCommentModerator(XtdCommentModerator):
+    removal_suggestion_notification = True
+
+moderator.register(Webpage, WebpageCommentModerator)

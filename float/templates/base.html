@@ -9,8 +9,8 @@
 
     <title>Float</title>
 
-    <link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'libs/fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/bootstrap-icons/font/bootstrap-icons.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'brand/apple-touch-icon.png' %}">
@@ -54,16 +54,15 @@
         <div id="content" class="container-fluid m-0 p-3">
         {% block content %}
 
-            {% include 'modules/webpage-feed.html' with webpages=webpages user=user %}
+            {% include 'webpage_feed.html' with webpages=webpages user=user %}
 
         {% endblock %}
         </div>
 
     </div>
     
-    <script src="{% static 'libs/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/floatButtons.js' %}"></script>
-    <script src="{% static 'js/comments.js' %}"></script>
     {% block scripts %}
     {% endblock %}
 </body>

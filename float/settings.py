@@ -15,6 +15,8 @@ import os
 from dotenv import load_dotenv
 import dj_database_url
 
+SITE_ID = 1
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,19 +39,20 @@ ALLOWED_HOSTS = []
 CORS_ALLOWED_ORIGINS = ["chrome-extension://ejnoheplbbmipnokmhagihclpgnkiano"]
 CSRF_TRUSTED_ORIGINS = ["chrome-extension://ejnoheplbbmipnokmhagihclpgnkiano"]
 
-
-
 # Application definition
 
 INSTALLED_APPS = [
     'float',
     'users.apps.UsersConfig',
     'webpages.apps.WebpagesConfig',
+    'django_comments_xtd',
+    'django_comments',
     'api.apps.ApiConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages',
@@ -162,3 +165,23 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+COMMENTS_APP = 'django_comments_xtd'
+
+COMMENTS_XTD_MAX_THREAD_LEVEL = 3
+
+COMMENTS_XTD_LIST_ORDER = ('-thread_id', 'order')
+
+COMMENTS_XTD_APP_MODEL_OPTIONS = {
+    'webpages.webpage': {
+        'allow_threading': True,
+        'allow_flagging': True,
+        'allow_feedback': True,
+        'show_feedback': True,
+        'who_can_post': 'users',
+    },
+}
+
+MANAGERS = (
+    ("Manager", os.environ.get('MANAGER_EMAIL')),
+)

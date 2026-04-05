@@ -11,6 +11,9 @@ def index(request):
         .filter(vote_count__gt=0)
         .order_by('-vote_count')[:100]
     )
+
+    print(webpages)
+    print('------------------HERE------------------')
     
     context = {'webpages': webpages}
 
