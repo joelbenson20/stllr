@@ -1,5 +1,6 @@
 from django.db import models
 from urllib.parse import urlparse
+from django.urls import reverse
 
 # Create your models here.
 class Webpage(models.Model):
@@ -15,7 +16,7 @@ class Webpage(models.Model):
         return self.canonical
     
     def get_absolute_url(self):
-        return 'https://' + self.canonical
+        return reverse('webpage_detail', kwargs={'pk': self.pk})
     
     @property
     def hostname(self):
