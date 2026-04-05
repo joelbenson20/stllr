@@ -52,7 +52,7 @@ def create_comment(request):
 
     context = {'comment': comment, 'user': user}
     
-    response['html'] = ""
+    response['html'] = render_to_string('modules/comment.html', context=context, request=request)
     response['status'] = '201'
 
     return JsonResponse(response)
