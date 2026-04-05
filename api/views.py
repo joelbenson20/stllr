@@ -61,7 +61,7 @@ def extension(request):
                                         fav_icon_url=webpage_data.get('favIconUrl', '')
                                         )
     
-    context = {'webpages': [webpage], 'user': request.user}
+    context = {'webpage': webpage, 'user': request.user}
     
     response['html'] = render_to_string('extension.html', context=context, request=request)
     response['status'] = '200'
