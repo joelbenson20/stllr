@@ -11,7 +11,12 @@ body {
     color: white;
 }
 
-.webpage-feed {
+.navbar {
+    background-color: #000010;
+    border-bottom: 1px solid var(--iridescent-0);
+}
+
+.webpage-card {
     max-width: 768px;
 }
 
