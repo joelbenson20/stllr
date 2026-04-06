@@ -3,29 +3,34 @@
 {% load comments %}
 
 {% if request.user.is_authenticated %}
-    <form method="POST" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
+<form class="comment-form border rounded m-3 p-1" method="POST" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
     {% csrf_token %}
     <fieldset>
         <input type="hidden" name="next" value="{% url 'comments-xtd-sent' %}" />
         <div class="alert alert-danger" data-comment-element="errors" hidden></div>
         {% for field in form %}
-        {% if field.is_hidden %}<div>{{ field }}</div>{% endif %}
+            {% if field.is_hidden %}<div>{{ field }}</div>{% endif %}
         {% endfor %}
         <div style="display:none">{{ form.honeypot }}</div>
-        <div class="row justify-content-center my-3 form-group">
-        <div class="col-10">
-            {{ form.comment }}
+        
+        <div class="row form-group justify-content-center m-0">
+            <textarea class="form-control rounded"
+                id="id_comment"
+                name="comment"
+                rows="3"
+                placeholder="Float an idea..."
+                required
+            >{% if form.comment.value %}{{ form.comment.value }}{% endif %}</textarea>
             {% if 'comment' in form.errors %}<span class="form-text small invalid-feedback">{{ form.errors.comment.0 }}</span>{% endif %}
         </div>
+
+        <div class="row form-group m-2 p-0">
+            <div class="d-flex justify-content-end m-0 p-0">
+                <input class="btn btn-primary btn-sm rounded-pill" type="submit" name="post" value="Float"/>
+            </div>
         </div>
     </fieldset>
-
-    <div class="row mt-2 mb-4 form-group">
-        <div class="d-flex w-100 justify-content-center">
-        <input type="submit" name="post" value="{% trans 'send' %}" class="me-1 btn btn-primary" />
-        </div>
-    </div>
-    </form>
+</form>
 {% else %}
     <p><a href="{% url 'login' %}?next={{ request.path }}">Login</a> to post a comment.</p>
 {% endif %}

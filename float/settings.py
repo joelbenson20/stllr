@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'webpages.apps.WebpagesConfig',
     'comments.apps.CommentsConfig',
+    'extension.apps.ExtensionConfig',
     'django_comments_xtd',
     'django_comments',
-    'api.apps.ApiConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -153,7 +153,7 @@ STORAGES = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STORAGES["staticfiles"] = {

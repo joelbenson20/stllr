@@ -7,21 +7,11 @@
     {% include 'webpage_card.html' with webpage=webpage user=user %}
 
     <hr>
+    
+    {% render_comment_form for webpage %}
 
-    <p>
-        {% get_comment_count for webpage as comment_count %}
-        {{ comment_count }} comment{{ comment_count|pluralize:"s" }}
-        ha{{ comment_count|pluralize:"s,ve" }} been posted.
-    </p>
 
-    <div class="comment mt-3 mb-5">
-        <h4 class="text-center mb-4">Your comment</h4>
-        <div class="card pt-4">
-            {% render_comment_form for webpage %}
-        </div>
-    </div>
-
-    <ul class="media-list">
+    <ul class="comment-feed media-list">
         {% render_xtdcomment_tree for webpage allow_flagging allow_feedback show_feedback %}
     </ul>
 

@@ -24,6 +24,6 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('comments/', include('django_comments_xtd.urls')),
     path('webpages/', include('webpages.urls')),
-    path('api/', include('api.urls')),
+    path('extension/', include('extension.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

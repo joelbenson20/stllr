@@ -16,6 +16,23 @@ body {
     border-bottom: 1px solid var(--iridescent-0);
 }
 
+.float-bar {
+    width: 300px;
+    border-radius: 1rem;
+    border-color: var(--iridescent-0);
+}
+
+.logout-button {
+    color: var(--iridescent-2);
+    background-color: transparent;
+    border: 1px solid var(--iridescent-0);
+    transition: background-color 160ms ease, color 160ms ease;
+}
+.logout-button:hover {
+    color: var(--iridescent-0);
+    background-color: var(--iridescent-2);
+}
+
 .webpage-card {
     max-width: 768px;
 }

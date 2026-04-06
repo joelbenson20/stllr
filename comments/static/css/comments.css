@@ -1,0 +1,9 @@
+.comment-form {
+    max-width: 576px;
+    border-color: var(--iridescent-0);
+    background-color: var(--iridescent-0);
+}
+
+.comment-feed {
+    max-width: 576px;
+}
