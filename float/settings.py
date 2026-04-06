@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'float',
     'users.apps.UsersConfig',
     'webpages.apps.WebpagesConfig',
+    'comments.apps.CommentsConfig',
     'django_comments_xtd',
     'django_comments',
     'api.apps.ApiConfig',
@@ -161,7 +162,6 @@ STORAGES["staticfiles"] = {
 
 AUTH_USER_MODEL = 'users.User'
 
-LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

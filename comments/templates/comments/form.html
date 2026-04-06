@@ -1,0 +1,32 @@
+{% load static %}
+{% load i18n %}
+{% load comments %}
+
+{% if request.user.is_authenticated %}
+    <form method="POST" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
+    {% csrf_token %}
+    <fieldset>
+        <input type="hidden" name="next" value="{% url 'comments-xtd-sent' %}" />
+        <div class="alert alert-danger" data-comment-element="errors" hidden></div>
+        {% for field in form %}
+        {% if field.is_hidden %}<div>{{ field }}</div>{% endif %}
+        {% endfor %}
+        <div style="display:none">{{ form.honeypot }}</div>
+        <div class="row justify-content-center my-3 form-group">
+        <div class="col-10">
+            {{ form.comment }}
+            {% if 'comment' in form.errors %}<span class="form-text small invalid-feedback">{{ form.errors.comment.0 }}</span>{% endif %}
+        </div>
+        </div>
+    </fieldset>
+
+    <div class="row mt-2 mb-4 form-group">
+        <div class="d-flex w-100 justify-content-center">
+        <input type="submit" name="post" value="{% trans 'send' %}" class="me-1 btn btn-primary" />
+        </div>
+    </div>
+    </form>
+{% else %}
+    <p><a href="{% url 'login' %}?next={{ request.path }}">Login</a> to post a comment.</p>
+{% endif %}
+
