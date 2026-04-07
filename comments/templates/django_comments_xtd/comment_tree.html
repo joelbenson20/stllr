@@ -2,7 +2,7 @@
 {% load comments %}
 {% load comments_xtd %}
 
-<div class="comment-tree mt-3 mb-0 mx-0 p-0">
+<div class="comment-tree mt-4 mb-0 mx-0 p-0">
     {% for item in comments %}
     <div id="c{{ item.comment.id }}" class="comment {% if not item.children %}pb-3{% endif %}">
     <div class="d-flex flex-column">
@@ -44,7 +44,7 @@
         
         {% if item.comment.is_removed %}
 
-            <p class="text-muted{% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
+            <p class="text-secondary {% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
                 <em>{% trans "This comment has been removed." %}</em>
             </p>
 
@@ -73,7 +73,7 @@
         {% endif %}
 
         {% if not item.comment.is_removed and item.children %}
-        <div class="collapse show border-start border-light ms-3 ps-2" id="replies-{{ item.comment.id }}">
+        <div class="collapse show border-start border-light ps-4" id="replies-{{ item.comment.id }}">
             {% render_xtdcomment_tree with comments=item.children %}
         </div>
         {% endif %}

@@ -8,9 +8,9 @@
     background-color: var(--iridescent-0);
 }
 
-.comment-feed {
+/* .comment-feed {
     max-width: 576px;
-}
+} */
 
 .comment-floated-badge {
     background-color: var(--iridescent-4);

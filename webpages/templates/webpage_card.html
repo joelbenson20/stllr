@@ -24,26 +24,24 @@
     <div class="row m-0 p-0">
         <div class="col m-0 py-1 px-0">
 
-            <a class="webpage-title mb-2" href="{{ webpage.link }}" target="_blank">
-                <h1 class="webpage-title m-0 p-0">{{ webpage.title }}</h1>
+            <a class="webpage-title" href="{{ webpage.link }}" target="_blank">
+                <h1 class="webpage-title mb-2">{{ webpage.title }}</h1>
             </a>
             
             {% if webpage.image_url %}
             <img class="webpage-image me-2" src="{{ webpage.image_url }}">
             {% endif %}
 
-            <p class="webpage-description small m-0 p-0">{% firstof webpage.description "No description." %}</p>
+            <p class="webpage-description small m-0">{% firstof webpage.description "No description." %}</p>
 
         </div>
     </div>
 
 
-    <div class="row m-0 p-0">
-        <div class="webpage-badges col my-1 mx-0 p-0">
-
-            {% include 'float_button.html' with webpage=webpage user=user %}
-            <a class="webpage-badge badge rounded-pill text-decoration-none" href="{{ webpage.get_absolute_url }}">{% get_comment_count for webpage as comment_count %}{{ comment_count }} <i class="bi bi-chat-fill"></i></a>
-
+    <div class="row mt-2">
+        <div class="webpage-badges d-inline-block p-0">
+            {% include 'float_button.html' with webpage=webpage user=user %} 
+            <a class="webpage-badge badge rounded-pill text-decoration-none mx-2" href="{{ webpage.get_absolute_url }}">{% get_comment_count for webpage as comment_count %}{{ comment_count }} <i class="bi bi-chat-fill"></i></a>
         </div>
     </div>
 

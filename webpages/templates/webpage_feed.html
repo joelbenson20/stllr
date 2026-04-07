@@ -4,8 +4,10 @@
 <input id="csrf-token" name="csrf-token" value="{{ csrf_token }}" type="hidden">
 {% endif %}
 
+<div class="webpage-feed">
 {% for webpage in webpages %}
 
     {% include 'webpage_card.html' with webpage=webpage user=user %}
     
 {% endfor %}
+</div>
