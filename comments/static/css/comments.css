@@ -8,11 +8,6 @@
     max-width: 576px;
 }
 
-.comment-badge {
-    background-color: var(--iridescent-2);
-    color: white;
-}
-
 .comment-floated-badge {
     background-color: var(--iridescent-4);
     color: white;

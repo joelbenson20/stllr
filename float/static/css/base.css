@@ -6,6 +6,13 @@
     --iridescent-4: #d7e9dc;
 }
 
+a {
+    color: var(--iridescent-2);
+}
+a:hover {
+    opacity: 0.8;
+}
+
 body {
     background-color: #000010;
     color: white;
@@ -22,6 +29,10 @@ body {
     border-color: var(--iridescent-0);
 }
 
+#sign-in-button {
+    background-color: var(--iridescent-1);
+}
+
 .logout-button {
     color: var(--iridescent-2);
     background-color: transparent;
@@ -34,12 +45,25 @@ body {
 }
 
 .badge {
-    background-color: var(--iridescent-2);
-    color: white;
+    background-color: var(--iridescent-0);
+    color: black;
+    border: 2px solid var(--iridescent-0);
+}
+
+.floats-badge {
+    display: inline-flex;
+    align-items: center;
+}
+
+.float-icon {
+    line-height: 1;
 }
 
 .floats-badge:has([data-floated="true"]) {
-    background-color: var(--iridescent-4);
+    background: linear-gradient(to right, var(--iridescent-0), var(--iridescent-1), var(--iridescent-2), var(--iridescent-3), var(--iridescent-4));
+    filter: brightness(1.1);
+    filter: saturate(5);
+    border-color: white;
 }
 
 .float-count:hover {

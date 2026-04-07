@@ -9,7 +9,7 @@
         <h6 class="comment-header mb-1 d-flex justify-content-between" style="font-size: 0.8rem">
         
             <div class="d-inline flex-grow-1">
-                <span>@{{ item.comment.user.username }}</span>
+                <b>@{{ item.comment.user.username }}</b>
                 <span class="small text-secondary">{{ item.comment.submit_date }}</span>
                 <span>{% if item.comment.url and not item.comment.is_removed %}<a href="{{ item.comment.url }}" target="_new" class="text-decoration-none">{{ item.comment.url }}</a>{% endif %}</span>
                 <!-- {% if item.comment.user and item.comment.user|has_permission:"django_comments.can_moderate" %}&nbsp;<span class="badge text-bg-secondary">{% trans "moderator" %}</span>{% endif %}&nbsp;&nbsp;<a class="permalink text-decoration-none" title="{% trans 'comment permalink' %}" href="{% get_comment_permalink item.comment %}">¶</a></span> -->
@@ -56,7 +56,7 @@
                 {% endif %}
 
                 {% if not item.comment.is_removed and item.children %}
-                    <button class="badge comment-badge rounded-pill border-0 mx-1" type="button" data-bs-toggle="collapse" data-bs-target="#replies-{{ item.comment.id }}" aria-expanded="true" aria-controls="replies-{{ item.comment.id }}">
+                    <button class="badge rounded-pill mx-1" type="button" data-bs-toggle="collapse" data-bs-target="#replies-{{ item.comment.id }}" aria-expanded="false" aria-controls="replies-{{ item.comment.id }}">
                         {{ item.comment.nested_count }} <i class="bi bi-chat-fill"></i>
                     </button>
                 {% endif %}

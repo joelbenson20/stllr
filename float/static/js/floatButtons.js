@@ -33,11 +33,11 @@ function initFloatButtons() {
 function updateFloatButton(button, status, num_votes) {
     // If a vote was successfully created
     if (status === '201') {
-        button.dataset.voted = 'true';
+        button.dataset.floated = 'true';
     }
     // If a vote was successfully deleted
     else if (status === '410') {
-        button.dataset.voted = 'false';
+        button.dataset.floated = 'false';
     }
 
     //Update float count

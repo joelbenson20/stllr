@@ -4,7 +4,7 @@
 
 {% if request.user.is_authenticated %}
 
-<form class="comment-form border rounded m-3 p-1" method="POST" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
+<form class="comment-form border rounded p-1" method="POST" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
     {% csrf_token %}
     <fieldset>
         
@@ -34,6 +34,7 @@
                 <input class="btn btn-primary btn-sm rounded-pill" type="submit" name="post" value="Float"/>
             </div>
         </div>
+        
     </fieldset>
 </form>
 

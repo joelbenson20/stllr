@@ -1,20 +1,20 @@
 {% if allow_feedback %}
-<span class="badge floats-badge rounded-pill py-0 pe-0 ps-2 {% if item.likedit %}comment-floated-badge{% endif %}">
+<span class="badge floats-badge rounded-pill p-0">
 
     {% if show_feedback %}
-        <span class="float-count" data-bs-toggle="tooltip"
-            data-bs-title="{{ item.likedit_users|join:'<br/>' }}">
+        <span class="float-count rounded-pill ms-2 me-0" data-bs-toggle="tooltip"
+            data-bs-title="{% firstof item.likedit_users|join:'<br/>' 'Nobody has floated this comment.' %}">
             {{ item.likedit_users|length }}
         </span>
     {% endif %}
 
-    <a class="float-button btn btn-sm rounded-circle text-decoration-none py-0 px-1" href="{% url 'comments-xtd-like' item.comment.pk %}" aria-label="Float comment" title="Float comment"
+    <a class="float-button btn btn-sm rounded-circle text-decoration-none m-0 py-0 px-1" href="{% url 'comments-xtd-like' item.comment.pk %}" aria-label="Float comment" title="Float comment"
         {% if item.likedit %}
             data-floated="true"
         {% else %}
             data-floated="false"
         {% endif %}>
-        <i class="bi bi-arrow-up-circle"></i>
+        <i class="float-icon bi bi-arrow-up-circle-fill"></i>
     </a>
     
 </span>
