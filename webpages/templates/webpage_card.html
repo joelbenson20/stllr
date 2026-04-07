@@ -3,14 +3,10 @@
 {% load comments_xtd %}
 
 
-<div class="webpage-card row my-4 mx-0 p-0">
+<div class="webpage-card row mb-4 mx-0">
+
     <div class="row m-0 p-0">
-
-        <div class="col-1 m-0 pe-3 text-end">
-            {% include 'float_button.html' with webpage=webpage user=user %}
-        </div>
-
-        <div class="col-11 m-0 p-0">
+        <div class="col m-0 p-0">
 
             {% if webpage.fav_icon_url %}
             <img class="webpage-fav-icon me-1 p-0" src="{{ webpage.fav_icon_url }}">
@@ -26,9 +22,7 @@
     </div>
 
     <div class="row m-0 p-0">
-
-        <div class="col-1 m-0 p-0"></div>
-        <div class="col-11 m-0 py-1 px-0">
+        <div class="col m-0 py-1 px-0">
 
             <a class="webpage-title m-0 p-0" href="{{ webpage.link }}" target="_blank">
                 <h1 class="webpage-title m-0 p-0">{{ webpage.title }}</h1>
@@ -40,11 +34,17 @@
 
             <p class="webpage-description small m-0 p-0">{% firstof webpage.description "No description." %}</p>
 
-            <div class="webpage-badges my-1 mx-0 p-0">
-                <span class="badge text-bg-light">{% get_comment_count for webpage as comment_count %}{{ comment_count }} idea{{ comment_count|pluralize:"s" }} <i class="bi bi-chat-fill"></i></span>
-                <a class="badge text-bg-info text-decoration-none" href="{{ webpage.get_absolute_url }}">Detail <i class="webpage-badge-icon bi bi-box-arrow-up-right"></i></a>
-            </div>
         </div>
-
     </div>
+
+
+    <div class="row m-0 p-0">
+        <div class="webpage-badges col my-1 mx-0 p-0">
+
+            {% include 'float_button.html' with webpage=webpage user=user %}
+            <a class="webpage-badge badge rounded-pill text-decoration-none" href="{{ webpage.get_absolute_url }}">{% get_comment_count for webpage as comment_count %}{{ comment_count }} <i class="bi bi-chat-fill"></i></a>
+
+        </div>
+    </div>
+
 </div>

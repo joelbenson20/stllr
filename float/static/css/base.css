@@ -33,67 +33,15 @@ body {
     background-color: var(--iridescent-2);
 }
 
-.webpage-card {
-    max-width: 768px;
-}
-
-.float-button {
-    font-size: 1rem;
-    color: inherit;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    outline: none;
-    transition: color 160ms ease, text-shadow 160ms ease;
-}
-
-.float-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
-.float-button[data-voted="false"] {
-    color: var(--iridescent-0);
-    text-shadow: none;
-}
-
-.float-button[data-voted="true"] {
-    color: var(--iridescent-4);
-    text-shadow: 0 0 5px var(--iridescent-4);
-}
-
-.webpage-title {
-    font-size: 1.5rem;
-    color: var(--iridescent-2);
-    text-decoration: none;
-}
-.webpage-title:hover {
-    text-decoration: underline;
-}
-
-.webpage-link {
+.badge {
+    background-color: var(--iridescent-2);
     color: white;
-    line-height: 1;
 }
 
-.webpage-fav-icon {
-    float: left;
-    height: 32px;
-    font-size: 27px;
-    border-radius: .5rem;
+.floats-badge:has([data-floated="true"]) {
+    background-color: var(--iridescent-4);
 }
 
-.webpage-link,
-.webpage-site-name {
-    font-weight: 300;
-    font-size: 0.75rem;
-}
-
-.webpage-image {
-    float: left;
-    height: 3.75rem;
-    border-radius: 0.5rem;
+.float-count:hover {
+    cursor: default;
 }

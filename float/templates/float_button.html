@@ -1,0 +1,24 @@
+<span class="badge floats-badge rounded-pill py-0 pe-0 ps-2">
+
+    <span class="float-count" 
+        data-bs-toggle="tooltip"
+        data-bs-title="Users who floated this webpage..."
+        >
+        {{ webpage.num_votes }}
+    </span>
+
+    <button class="float-button btn btn-sm rounded-circle border-0 py-0 px-1" aria-label="Float webpage" title="Float webpage"
+        data-webpage-id="{{ webpage.id }}"
+        data-csrf-token="{{ csrf_token }}"
+        {% if webpage.id in user.voted_webpages_ids %}
+            data-floated="true"
+        {% else %}
+            data-floated="false"
+        {% endif %}
+        {% if not user.is_authenticated %}
+            disabled
+        {% endif %}>
+        <i class="bi bi-arrow-up-circle"></i>
+    </button>
+    
+</span>

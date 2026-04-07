@@ -1,4 +1,4 @@
-const FLOAT_API_URL = 'http://127.0.0.1:8000/api';
+const FLOAT_API_URL = 'http://127.0.0.1:8000/extension';
 
 function initFloatButtons() {
 
@@ -41,7 +41,7 @@ function updateFloatButton(button, status, num_votes) {
     }
 
     //Update float count
-    let floatCount = button.querySelector('.float-count');
+    let floatCount = button.closest('.floats-badge').querySelector('.float-count');
     floatCount.textContent = num_votes;
 }
 

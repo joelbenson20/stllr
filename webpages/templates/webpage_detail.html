@@ -4,16 +4,12 @@
 
 {% block content %}
 
-    {% include 'webpage_card.html' with webpage=webpage user=user %}
-
-    <hr>
+    {% include 'webpage_card.html' with webpage=webpage user=user %}<hr>
     
     {% render_comment_form for webpage %}
 
-
-    <ul class="comment-feed media-list">
+    <ul class="comment-feed media-list m-0 p-0">
         {% render_xtdcomment_tree for webpage allow_flagging allow_feedback show_feedback %}
     </ul>
-
 
 {% endblock %}
