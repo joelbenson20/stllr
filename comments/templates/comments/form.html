@@ -4,7 +4,7 @@
 
 {% if request.user.is_authenticated %}
 
-<form class="comment-form border rounded p-1" method="POST" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
+<form class="comment-form rounded" method="POST" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
     {% csrf_token %}
     <fieldset>
         
@@ -19,7 +19,7 @@
         <div style="display:none">{{ form.honeypot }}</div>
         
         <div class="row form-group justify-content-center m-0">
-            <textarea class="form-control rounded"
+            <textarea class="form-control rounded border-0 shadow-none"
                 id="id_comment"
                 name="comment"
                 rows="3"
@@ -31,7 +31,9 @@
 
         <div class="row form-group m-2 p-0">
             <div class="d-flex justify-content-end m-0 p-0">
-                <input class="btn btn-primary btn-sm rounded-pill" type="submit" name="post" value="Float"/>
+                <button class="comment-submit-button btn btn-sm rounded-circle" type="submit" name="post" value="Float">
+                    <i class="bi bi-arrow-up-circle-fill m-0 p-0"></i>
+                </button>
             </div>
         </div>
         

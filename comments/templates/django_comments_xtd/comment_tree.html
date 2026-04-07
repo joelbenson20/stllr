@@ -43,14 +43,18 @@
         </h6>
         
         {% if item.comment.is_removed %}
+
             <p class="text-muted{% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
                 <em>{% trans "This comment has been removed." %}</em>
             </p>
+
         {% else %}
-            <div class="content{% if not allow_feedback and not item.comment.allow_thread %} pt-1 pb-3{% else %} py-1{% endif %}">
+
+            <div class="content {% if not allow_feedback and not item.comment.allow_thread %}pt-1 pb-3{% else %} py-1{% endif %}">
                 {% include "includes/django_comments_xtd/comment_content.html" with content=item.comment.comment %}
             </div>
-            <div>
+            
+            <div class="comment-badges my-1">
                 {% if allow_feedback %}
                     {% include "django_comments_xtd/includes/user_feedback.html" %}
                 {% endif %}
@@ -65,6 +69,7 @@
                 <a class="small text-decoration-none mx-1" href="{{ item.comment.get_reply_url }}">Reply</a>
                 {% endif %}
             </div>
+
         {% endif %}
 
         {% if not item.comment.is_removed and item.children %}
