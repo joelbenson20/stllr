@@ -4,7 +4,7 @@
 
 {% if request.user.is_authenticated %}
 
-<form class="comment-form rounded" method="POST" action="{% comment_form_target %}" onsubmit="post.disabled = true; return true;">
+<form class="comment-form rounded" method="POST" action="{% comment_form_target %}" data-csrf-token="{{ csrf_token }}" onsubmit="post.disabled = true; return true;">
     {% csrf_token %}
     <fieldset>
         
