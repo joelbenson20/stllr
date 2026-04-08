@@ -41,12 +41,11 @@
                 </ul>
                 {% if user.is_authenticated %}
                 <span class="navbar-text ms-auto fst-italic">
-                    Hello, @{{ user.username }}! 
+                    Hello, <a href="{{ user.get_absolute_url }}">@{{ user.username }}!</a>
                 </span>
                 <form class="d-flex ms-auto" method="post" action="{% url 'float_webpage' %}">
                     {% csrf_token %}
                     <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Float a webpage..." required>
-                    <!-- <button type="submit" class="btn btn-sm btn-primary">Float</button> -->
                 </form>
                 <form class="navbar-text ms-3" id="logout-form" method="post" action="{% url 'logout' %}">
                     {% csrf_token %}

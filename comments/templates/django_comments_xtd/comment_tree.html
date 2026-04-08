@@ -6,15 +6,14 @@
     
     {% for item in comments %}
     <div id="c{{ item.comment.id }}" class="comment mt-3 {% if not item.children %}pb-3{% endif %}">
-        <div class="d-flex flex-column">
+        <div class="comment-frame d-flex flex-column rounded p-2">
 
             <h6 class="comment-header mb-1 d-flex justify-content-between" style="font-size: 0.8rem">
             
                 <div class="d-inline flex-grow-1">
-                    <b>@{{ item.comment.user.username }}</b>
+                    <a class="text-light text-decoration-none" href="{{ item.comment.user.get_absolute_url }}">@{{ item.comment.user.username }}</a>
                     <span class="small text-secondary">{{ item.comment.submit_date }}</span>
                     <span>{% if item.comment.url and not item.comment.is_removed %}<a href="{{ item.comment.url }}" target="_new" class="text-decoration-none">{{ item.comment.url }}</a>{% endif %}</span>
-                    <!-- {% if item.comment.user and item.comment.user|has_permission:"django_comments.can_moderate" %}&nbsp;<span class="badge text-bg-secondary">{% trans "moderator" %}</span>{% endif %}&nbsp;&nbsp;<a class="permalink text-decoration-none" title="{% trans 'comment permalink' %}" href="{% get_comment_permalink item.comment %}">¶</a></span> -->
                 </div>
             
                 <div class="d-inline">
@@ -75,13 +74,14 @@
 
             {% endif %}
 
-            {% if not item.comment.is_removed and item.children %}
-            <div id="replies-{{ item.comment.id }}" class="collapse show border-start border-light mt-3 ps-4">
-                {% render_xtdcomment_tree with comments=item.children %}
-            </div>
-            {% endif %}
-
         </div>
+
+        {% if not item.comment.is_removed and item.children %}
+        <div id="replies-{{ item.comment.id }}" class="collapse show border-start border-light mt-3 ps-4">
+            {% render_xtdcomment_tree with comments=item.children %}
+        </div>
+        {% endif %}
+
     </div>
     {% endfor %}
 

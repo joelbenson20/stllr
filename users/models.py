@@ -12,6 +12,10 @@ class User(AbstractUser):
         return reverse('user', kwargs={'username': self.username})
     
     @property
+    def voted_webpages(self):
+        return Webpage.objects.filter(votes__user=self)
+    
+    @property
     def voted_webpages_ids(self):
         return set(self.webpage_votes.values_list('webpage_id', flat=True))
 
