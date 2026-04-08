@@ -1,0 +1,71 @@
+:root {
+    --iridescent-0: #ced9ef;
+    --iridescent-1: #cfc7fb;
+    --iridescent-2: #e2c6ee;
+    --iridescent-3: #efc8df;
+    --iridescent-4: #d7e9dc;
+}
+
+a {
+    color: var(--iridescent-2);
+}
+a:hover {
+    opacity: 0.8;
+}
+
+body {
+    background-color: #000010;
+    color: white;
+}
+
+.navbar {
+    background-color: #000010;
+    border-bottom: 1px solid var(--iridescent-0);
+}
+
+.float-bar {
+    width: 300px;
+    border-radius: 1rem;
+    border-color: var(--iridescent-0);
+}
+
+#sign-in-button {
+    background-color: var(--iridescent-1);
+}
+
+.logout-button {
+    color: var(--iridescent-2);
+    background-color: transparent;
+    border: 1px solid var(--iridescent-0);
+    transition: background-color 160ms ease, color 160ms ease;
+}
+.logout-button:hover {
+    color: var(--iridescent-0);
+    background-color: var(--iridescent-2);
+}
+
+.badge {
+    background-color: var(--iridescent-0);
+    color: black;
+    border: 2px solid var(--iridescent-0);
+}
+
+.floats-badge {
+    display: inline-flex;
+    align-items: center;
+}
+
+.float-icon {
+    line-height: 1;
+}
+
+.floats-badge:has([data-floated="true"]) {
+    background: linear-gradient(to right, var(--iridescent-0), var(--iridescent-1), var(--iridescent-2), var(--iridescent-3), var(--iridescent-4));
+    filter: brightness(1.1);
+    filter: saturate(5);
+    border-color: white;
+}
+
+.float-count:hover {
+    cursor: default;
+}

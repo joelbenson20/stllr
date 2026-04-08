@@ -68,14 +68,15 @@
                     {% endif %}
 
                     {% if item.comment.allow_thread and not item.comment.is_removed %}
-                    <a class="small text-decoration-none mx-1" href="{{ item.comment.get_reply_url }}">Reply</a>
+                    <button class="comment-reply-link btn btn-link btn-sm text-decoration-none mx-1 p-0" type="button" data-bs-toggle="collapse" data-bs-target="#reply-form-{{ item.comment.id }}" data-reply-to="{{ item.comment.id }}" aria-expanded="false" aria-controls="reply-form-{{ item.comment.id }}">Reply</button>
+                    <div id="reply-form-{{ item.comment.id }}" class="collapse mt-2" data-reply-form-slot="{{ item.comment.id }}"></div>
                     {% endif %}
                 </div>
 
             {% endif %}
 
             {% if not item.comment.is_removed and item.children %}
-            <div class="collapse show border-start border-light mt-3 ps-4" id="replies-{{ item.comment.id }}">
+            <div id="replies-{{ item.comment.id }}" class="collapse show border-start border-light mt-3 ps-4">
                 {% render_xtdcomment_tree with comments=item.children %}
             </div>
             {% endif %}
