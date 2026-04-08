@@ -1,4 +1,4 @@
-// Set this in extension context, e.g. 'http://127.0.0.1:8000'. Keep empty on the site.
+// Set this in extension context, e.g. 'http://127.0.0.1:8000'. Keep empty on the web server.
 const SITE_DOMAIN = '';
 
 function buildSiteUrl(path) {
@@ -162,7 +162,12 @@ function scrollToPermalinkComment(commentEl) {
         return;
     }
 
-    const top = window.scrollY + commentEl.getBoundingClientRect().top - getNavbarScrollOffset();
+    const navbarOffset = getNavbarScrollOffset();
+    const commentRect = commentEl.getBoundingClientRect();
+    const visibleViewportHeight = Math.max(1, window.innerHeight - navbarOffset);
+    const desiredTopInViewport = navbarOffset + Math.max(0, (visibleViewportHeight - commentRect.height) / 2);
+    const top = window.scrollY + commentRect.top - desiredTopInViewport;
+
     window.scrollTo({
         top: Math.max(0, top),
         behavior: 'smooth'
