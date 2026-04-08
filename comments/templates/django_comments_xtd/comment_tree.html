@@ -3,8 +3,8 @@
 {% load comments_xtd %}
 
 <div class="comment-tree mx-0 p-0" data-csrf-token="{{ csrf_token }}">
+    
     {% for item in comments %}
-
     <div id="c{{ item.comment.id }}" class="comment mt-3 {% if not item.children %}pb-3{% endif %}">
         <div class="d-flex flex-column">
 
@@ -83,6 +83,6 @@
 
         </div>
     </div>
-
     {% endfor %}
+
 </div>

@@ -6,6 +6,10 @@
     --iridescent-4: #d7e9dc;
 }
 
+.collapsing {
+    transition: none !important;
+}
+
 a {
     color: var(--iridescent-2);
 }

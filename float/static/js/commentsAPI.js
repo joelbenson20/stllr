@@ -286,6 +286,11 @@ function handleReplyButtonClick(event) {
 
     const slotEl = document.querySelector(targetSelector);
     ensureReplyFormMounted(slotEl, replyTo);
+
+    slotEl.addEventListener('shown.bs.collapse', () => {
+        const textarea = slotEl.querySelector('textarea[name="comment"]');
+        textarea?.focus();
+    }, { once: true });
 }
 
 function closeReplyFormAfterSubmit(form, payload) {
