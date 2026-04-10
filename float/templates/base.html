@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Float - Where all the best end up</title>
+    <title>Float - The Forum across the Web</title>
 
     <link rel="stylesheet" href="{% static 'libs/bootstrap/dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'libs/bootstrap-icons/font/bootstrap-icons.min.css' %}">
@@ -43,7 +43,7 @@
                 <span class="navbar-text ms-auto fst-italic">
                     Hello, <a href="{{ user.get_absolute_url }}">@{{ user.username }}!</a>
                 </span>
-                <form class="d-flex ms-auto" method="post" action="{% url 'float_webpage' %}">
+                <form class="d-flex ms-auto" method="post" action="{% url 'webpages:float_webpage' %}">
                     {% csrf_token %}
                     <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Float a webpage..." required>
                 </form>
@@ -59,7 +59,7 @@
 
         <div id="content" class="container-fluid p-sm-5 p-3">
         {% block content %}
-            {% include 'webpage_feed.html' with webpages=webpages user=user %}
+            {% include 'webpages/feed.html' with webpages=webpages user=user %}
         {% endblock %}
         </div>
 

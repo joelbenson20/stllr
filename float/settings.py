@@ -34,7 +34,11 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1',]
+
+LOCAL_IP_ADDRESS = os.environ.get('LOCAL_IP_ADDRESS', '')
+if (LOCAL_IP_ADDRESS):
+    ALLOWED_HOSTS.append(LOCAL_IP_ADDRESS)
 
 CORS_ALLOWED_ORIGINS = ["chrome-extension://ejnoheplbbmipnokmhagihclpgnkiano"]
 CSRF_TRUSTED_ORIGINS = ["chrome-extension://ejnoheplbbmipnokmhagihclpgnkiano"]

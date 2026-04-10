@@ -17,7 +17,7 @@ class Webpage(models.Model):
         return self.canonical
     
     def get_absolute_url(self):
-        return reverse('webpage_detail', kwargs={'pk': self.pk})
+        return reverse('webpages:detail', kwargs={'pk': self.pk})
     
     @property
     def hostname(self):

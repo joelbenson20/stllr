@@ -2,6 +2,9 @@
 from django.urls import path
 from . import views
 
+app_name = 'webpages'
+
 urlpatterns = [
-    path('<int:pk>/', views.webpage_detail, name='webpage_detail'),
+    path('<int:pk>/', views.detail, name='detail'),
+    path('float/', views.float_webpage, name='float_webpage'),
 ]

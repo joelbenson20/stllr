@@ -1,6 +1,7 @@
 {% load static %}
 {% load comments %}
 {% load comments_xtd %}
+{% load sorted_comments %}
 
 <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/base.css">
 <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/comments.css">
@@ -12,7 +13,8 @@
     
 {% render_comment_form for webpage %}
 
-
 <ul class="comment-feed media-list m-0 p-0">
-    {% render_xtdcomment_tree for webpage allow_flagging allow_feedback show_feedback %}
+    {% get_xtdcomment_tree for webpage as raw_comments with_feedback %}
+    {% sort_xtdcomment_tree raw_comments as sorted_comments %}
+    {% render_xtdcomment_tree with comments=sorted_comments allow_flagging allow_feedback show_feedback %}
 </ul>
