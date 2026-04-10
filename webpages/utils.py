@@ -12,11 +12,15 @@ def getOGMetaData(url):
 
     response = requests.get(endpoint).json()
     hybrid = response.get('hybridGraph') or {}
+
+    print(hybrid)
     
     og_canonical = get_canonical(hybrid.get('url') or url)
     og_title = hybrid.get('title')
     og_description = hybrid.get('description')
-    og_image_url = hybrid.get('image')
+    og_image_url = hybrid.get('image') or hybrid.get('summary_image') \
+        or hybrid.get('summary_large_image') \
+        or hybrid.get('imageSecureUrl') 
     og_site_name = hybrid.get('site_name')
     og_fav_icon_url = hybrid.get('favicon')
     

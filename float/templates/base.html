@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Float - The Forum across the Web</title>
+    <title>Float - The Forum of the Web</title>
 
     <link rel="stylesheet" href="{% static 'libs/bootstrap/dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'libs/bootstrap-icons/font/bootstrap-icons.min.css' %}">
@@ -45,7 +45,7 @@
                 </span>
                 <form class="d-flex ms-auto" method="post" action="{% url 'webpages:post_float' %}">
                     {% csrf_token %}
-                    <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Float a webpage..." required>
+                    <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Float a page..." required>
                 </form>
                 <form class="navbar-text ms-3" id="logout-form" method="post" action="{% url 'logout' %}">
                     {% csrf_token %}

@@ -32,7 +32,7 @@
             <img class="webpage-image me-2" src="{{ webpage.image_url }}">
             {% endif %}
 
-            <p class="webpage-description small m-0">{% firstof webpage.description "No description." %}</p>
+            <p class="webpage-description small m-0">{% firstof webpage.description|truncatechars:300 "No description." %}</p>
 
         </div>
     </div>
