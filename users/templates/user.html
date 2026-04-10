@@ -9,7 +9,7 @@
     {% for comment in comments %}
     <div class="border border-light rounded my-5 p-3">
 
-        {% include 'webpage_card.html' with webpage=comment.content_object %}
+        {% include 'page/card.html' with page=comment.content_object %}
 
         {% if comment.parent_comment %}
         <p>@{{ comment.parent_comment.user.username }}: {{ comment.parent_comment.comment }}</p>
@@ -23,6 +23,6 @@
     </div>
     {% endfor %}
 
-    {% include 'forum/page/feed.html' with pages=voted_pages user=user %}
+    {% include 'page/feed.html' with pages=voted_pages user=user %}
     
 {% endblock %}

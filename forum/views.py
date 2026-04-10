@@ -1,10 +1,8 @@
 from django.shortcuts import redirect, render
 from .models import Page
-from .utils import getOGMetaData
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
-from extension.utils import get_canonical, verify_security
+from .utils import getOGMetaData, get_canonical, verify_security
 from django.db.models import Count
 
 def index(request):
@@ -17,15 +15,16 @@ def index(request):
     context = {'pages': pages}
     return render(request, 'base.html', context=context)
 
-def page_forum(request, pk):
-    page = get_object_or_404(Page, pk=pk)
+def page_forum(request):
+    canonical = request.GET.get('page')
+    page = get_object_or_404(Page, canonical=canonical)
     context = {
         "page": page,
     }
     return render(request, 'page/detail.html', context=context)
 
 @require_POST
-def post_float(request):
+def page_float(request):
     user = request.user
     url = request.POST.get('url')
     canonical = get_canonical(url)

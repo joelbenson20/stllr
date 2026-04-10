@@ -5,16 +5,16 @@
 
 <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/base.css">
 <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/comments.css">
-<link rel="stylesheet" href="http://127.0.0.1:8000/static/css/webpages.css">
+<link rel="stylesheet" href="http://127.0.0.1:8000/static/css/pages.css">
 
-{% include 'forum/page/card.html' with page=webpage user=user %}
+{% include 'page/card.html' with page=page user=user %}
 
 <hr>
     
-{% render_comment_form for webpage %}
+{% render_comment_form for page %}
 
 <ul class="comment-feed media-list m-0 p-0">
-    {% get_xtdcomment_tree for webpage as raw_comments with_feedback %}
+    {% get_xtdcomment_tree for page as raw_comments with_feedback %}
     {% sort_xtdcomment_tree raw_comments as sorted_comments %}
     {% render_xtdcomment_tree with comments=sorted_comments allow_flagging allow_feedback show_feedback %}
 </ul>

@@ -2,6 +2,7 @@ from django.db import models
 from urllib.parse import urlparse
 from django.urls import reverse
 from django_comments_xtd.moderation import moderator, XtdCommentModerator
+from django.utils.http import urlencode
 
 # Create your models here.
 class Page(models.Model):
@@ -17,7 +18,8 @@ class Page(models.Model):
         return self.canonical
     
     def get_absolute_url(self):
-        return reverse('forum:page_forum', kwargs={'pk': self.pk})
+        query_params = {'page': self.canonical}
+        return f"{reverse('forum:page_forum')}?{urlencode(query_params)}"
     
     @property
     def hostname(self):

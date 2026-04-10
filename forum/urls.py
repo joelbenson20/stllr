@@ -6,6 +6,6 @@ app_name = 'forum'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('page/<int:pk>/', views.page_forum, name='page_forum'),
-    path('float/', views.post_float, name='post_float'),
+    path('forum/', views.page_forum, name='page_forum'),
+    path('page_float/', views.page_float, name='page_float'),
 ]

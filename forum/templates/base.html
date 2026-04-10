@@ -12,8 +12,9 @@
     <link rel="stylesheet" href="{% static 'libs/bootstrap/dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'libs/bootstrap-icons/font/bootstrap-icons.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages.css' %}">
     <link rel="stylesheet" href="{% static 'css/comments.css' %}">
-    <link rel="stylesheet" href="{% static 'css/webpages.css' %}">
+
 
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'brand/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'brand/favicon-32x32.png' %}">
@@ -43,7 +44,7 @@
                 <span class="navbar-text ms-auto fst-italic">
                     Hello, <a href="{{ user.get_absolute_url }}">@{{ user.username }}!</a>
                 </span>
-                <form class="d-flex ms-auto" method="post" action="{% url 'forum:post_float' %}">
+                <form class="d-flex ms-auto" method="post" action="{% url 'forum:page_float' %}">
                     {% csrf_token %}
                     <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Float a page..." required>
                 </form>
