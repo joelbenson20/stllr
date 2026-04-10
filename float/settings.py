@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'float',
     'users.apps.UsersConfig',
     'forum.apps.ForumConfig',
-    'comments.apps.CommentsConfig',
     'extension.apps.ExtensionConfig',
     'django_comments_xtd',
     'django_comments',
