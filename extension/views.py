@@ -50,7 +50,7 @@ def extension(request):
     if (image_url):
         verify_security(image_url)
 
-    webpage = Webpage.objects.filter(canonical=canonical).first()
+    webpage = Webpage.objects.get(canonical=canonical)
 
     if (not webpage):
         webpage = Webpage.objects.create(canonical=canonical,
