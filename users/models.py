@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 from django.db import models
-from webpages.models import Webpage
+from forum.models import Page
 
 class User(AbstractUser):
 
@@ -12,12 +12,12 @@ class User(AbstractUser):
         return reverse('user', kwargs={'username': self.username})
     
     @property
-    def voted_webpages(self):
-        return Webpage.objects.filter(votes__user=self)
+    def voted_pages(self):
+        return Page.objects.filter(votes__user=self)
     
     @property
-    def voted_webpages_ids(self):
-        return set(self.webpage_votes.values_list('webpage_id', flat=True))
+    def voted_pages_ids(self):
+        return set(self.page_votes.values_list('page_id', flat=True))
 
     
 class Vote(models.Model):
@@ -27,13 +27,13 @@ class Vote(models.Model):
     class Meta:
         abstract = True
     
-class WebpageVote(Vote):
+class PageVote(Vote):
 
-    user = models.ForeignKey(User, related_name='webpage_votes', on_delete=models.CASCADE)
-    webpage = models.ForeignKey(Webpage, related_name='votes', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='page_votes', on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, related_name='votes', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.user} : {self.webpage}"
+        return f"{self.user} : {self.page}"
     
     class Meta:
-        unique_together = ('user', 'webpage')
+        unique_together = ('user', 'page')

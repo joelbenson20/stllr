@@ -5,12 +5,12 @@
 
 {% block content %}
 
-    {% include 'webpages/card.html' with webpage=webpage user=user %}<hr>
+    {% include 'page/card.html' with page=page user=user %}<hr>
     
-    {% render_comment_form for webpage %}
+    {% render_comment_form for page %}
 
     <ul class="comment-feed media-list m-0 p-0">
-        {% get_xtdcomment_tree for webpage as raw_comments with_feedback %}
+        {% get_xtdcomment_tree for page as raw_comments with_feedback %}
         {% sort_xtdcomment_tree raw_comments as sorted_comments %}
         {% render_xtdcomment_tree with comments=sorted_comments allow_flagging allow_feedback show_feedback %}
     </ul>

@@ -7,7 +7,6 @@ def user(request, username):
 
     user = get_object_or_404(User, username=username)
 
-
     comments = list(
         XtdComment.objects.filter(user=user, is_public=True)
         .order_by('-submit_date')
@@ -29,7 +28,7 @@ def user(request, username):
 
     context = {
         'user': user,
-        'voted_webpages': user.voted_webpages,
+        'voted_pages': user.voted_pages,
         'comments': comments,
     }
     

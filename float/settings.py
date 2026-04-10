@@ -48,8 +48,7 @@ CSRF_TRUSTED_ORIGINS = ["chrome-extension://ejnoheplbbmipnokmhagihclpgnkiano"]
 INSTALLED_APPS = [
     'float',
     'users.apps.UsersConfig',
-    'webpages.apps.WebpagesConfig',
-    'comments.apps.CommentsConfig',
+    'forum.apps.ForumConfig',
     'extension.apps.ExtensionConfig',
     'django_comments_xtd',
     'django_comments',
@@ -177,7 +176,7 @@ COMMENTS_XTD_MAX_THREAD_LEVEL = 3
 COMMENTS_XTD_LIST_ORDER = ('-thread_id', 'order')
 
 COMMENTS_XTD_APP_MODEL_OPTIONS = {
-    'webpages.webpage': {
+    'forum.page': {
         'allow_threading': True,
         'allow_flagging': True,
         'allow_feedback': True,

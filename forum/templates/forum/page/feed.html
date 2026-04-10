@@ -5,9 +5,8 @@
 {% endif %}
 
 <div class="webpage-feed">
-{% for webpage in webpages %}
-
-    {% include 'webpages/card.html' with webpage=webpage user=user %}
+    {% for page in pages %}
+        {% include 'forum/page/card.html' with page=page user=user %}
     
-{% endfor %}
+    {% endfor %}
 </div>

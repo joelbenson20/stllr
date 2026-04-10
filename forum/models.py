@@ -2,9 +2,10 @@ from django.db import models
 from urllib.parse import urlparse
 from django.urls import reverse
 from django_comments_xtd.moderation import moderator, XtdCommentModerator
+from django.utils.http import urlencode
 
 # Create your models here.
-class Webpage(models.Model):
+class Page(models.Model):
 
     canonical = models.CharField(max_length=250, unique=True)
     title = models.CharField(max_length=200)
@@ -17,7 +18,8 @@ class Webpage(models.Model):
         return self.canonical
     
     def get_absolute_url(self):
-        return reverse('webpages:detail', kwargs={'pk': self.pk})
+        query_params = {'page': self.canonical}
+        return f"{reverse('forum:page_forum')}?{urlencode(query_params)}"
     
     @property
     def hostname(self):
@@ -31,7 +33,7 @@ class Webpage(models.Model):
     def num_votes(self):
         return self.votes.count()
     
-class WebpageCommentModerator(XtdCommentModerator):
+class PageCommentModerator(XtdCommentModerator):
     removal_suggestion_notification = True
 
-moderator.register(Webpage, WebpageCommentModerator)
+moderator.register(Page, PageCommentModerator)
