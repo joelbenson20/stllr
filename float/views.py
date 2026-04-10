@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from webpages.models import Webpage
+from forum.models import Page
 
 def index(request):
 
     webpages = (
-        Webpage.objects
+        Page.objects
         .annotate(vote_count=Count('votes'))
         .filter(vote_count__gt=0)
         .order_by('-vote_count')[:100]

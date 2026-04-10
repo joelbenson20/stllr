@@ -23,7 +23,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('users/', include('users.urls')),
     path('comments/', include('django_comments_xtd.urls')),
-    path('webpages/', include('webpages.urls', namespace='webpages')),
+    path('forum/', include('forum.urls', namespace='forum')),
     path('extension/', include('extension.urls', namespace='extension')),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

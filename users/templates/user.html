@@ -23,6 +23,6 @@
     </div>
     {% endfor %}
 
-    {% include 'webpage_feed.html' with webpages=voted_webpages user=user %}
+    {% include 'forum/page/feed.html' with pages=voted_pages user=user %}
     
 {% endblock %}

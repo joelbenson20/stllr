@@ -4,7 +4,7 @@ from django.urls import reverse
 from django_comments_xtd.moderation import moderator, XtdCommentModerator
 
 # Create your models here.
-class Webpage(models.Model):
+class Page(models.Model):
 
     canonical = models.CharField(max_length=250, unique=True)
     title = models.CharField(max_length=200)
@@ -17,7 +17,7 @@ class Webpage(models.Model):
         return self.canonical
     
     def get_absolute_url(self):
-        return reverse('webpages:detail', kwargs={'pk': self.pk})
+        return reverse('forum:page_forum', kwargs={'pk': self.pk})
     
     @property
     def hostname(self):
@@ -31,7 +31,7 @@ class Webpage(models.Model):
     def num_votes(self):
         return self.votes.count()
     
-class WebpageCommentModerator(XtdCommentModerator):
+class PageCommentModerator(XtdCommentModerator):
     removal_suggestion_notification = True
 
-moderator.register(Webpage, WebpageCommentModerator)
+moderator.register(Page, PageCommentModerator)

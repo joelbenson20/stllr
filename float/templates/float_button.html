@@ -4,13 +4,13 @@
         data-bs-toggle="tooltip"
         data-bs-title="Users who floated this webpage..."
         >
-        {{ webpage.num_votes }}
+        {{ page.num_votes }}
     </span>
 
-    <button class="float-button btn btn-sm rounded-circle m-0 py-0 px-1" aria-label="Float webpage" title="Float webpage"
-        data-webpage-id="{{ webpage.id }}"
+    <button class="float-button btn btn-sm rounded-circle m-0 py-0 px-1" aria-label="Float page" title="Float page"
+        data-webpage-id="{{ page.id }}"
         data-csrf-token="{{ csrf_token }}"
-        {% if webpage.id in user.voted_webpages_ids %}
+        {% if page.id in user.voted_pages_ids %}
             data-floated="true"
         {% else %}
             data-floated="false"

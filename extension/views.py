@@ -4,8 +4,8 @@ from django.template.loader import render_to_string
 from django.middleware.csrf import get_token
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
-from webpages.models import Webpage
-from users.models import WebpageVote
+from forum.models import Page
+from users.models import PageVote
 import json
 from .utils import get_canonical, verify_security
 
@@ -19,19 +19,19 @@ def float_webpage(request):
     
     payload = json.loads(request.body)
     webpage_id = payload.get('webpage_id')
-    webpage = get_object_or_404(Webpage, id=webpage_id)
+    page = get_object_or_404(Page, id=webpage_id)
 
     # Check if there already exists a vote for the page by the user. If so, delete.
-    if (user.webpage_votes.filter(webpage=webpage).exists()):
-        vote = user.webpage_votes.get(webpage=webpage)
+    if (user.page_votes.filter(page=page).exists()):
+        vote = user.page_votes.get(page=page)
         vote.delete()
         response["status"] = "410"
     # Otherwise, create a new vote.
     else:
-        vote = WebpageVote.objects.create(user=user, webpage=webpage)
+        vote = PageVote.objects.create(user=user, page=page)
         response["status"] = "201"
 
-    response["num_votes"] = webpage.num_votes
+    response["num_votes"] = page.num_votes
     
     return JsonResponse(response)
 
@@ -50,10 +50,10 @@ def extension(request):
     if (image_url):
         verify_security(image_url)
 
-    webpage = Webpage.objects.get(canonical=canonical)
+    webpage = Page.objects.get(canonical=canonical)
 
     if (not webpage):
-        webpage = Webpage.objects.create(canonical=canonical,
+        webpage = Page.objects.create(canonical=canonical,
                                         title=webpage_data['title'],
                                         description=webpage_data['description'],
                                         image_url=image_url,

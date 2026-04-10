@@ -1,11 +1,20 @@
 from django.shortcuts import redirect, render
-from .models import Webpage
+from .models import Page
 from .utils import getOGMetaData
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
 from extension.utils import get_canonical, verify_security
 
-@login_required
+def page_forum(request, pk):
+
+    page = get_object_or_404(Page, pk=pk)
+    context = {
+        "page": page,
+    }
+
+    return render(request, 'forum/page/detail.html', context=context)
+
 @require_POST
 def post_float(request):
 
@@ -14,9 +23,9 @@ def post_float(request):
     canonical = get_canonical(url)
 
     try:
-        webpage = Webpage.objects.get(canonical=canonical)
+        webpage = Page.objects.get(canonical=canonical)
         return redirect('webpages:detail', pk=webpage.pk)
-    except Webpage.DoesNotExist:
+    except Page.DoesNotExist:
         pass
 
     try:
@@ -28,7 +37,7 @@ def post_float(request):
     verify_security(og_metadata['image_url'])
     verify_security(og_metadata['fav_icon_url'])
 
-    webpage = Webpage.objects.create(canonical=og_metadata['canonical'],
+    webpage = Page.objects.create(canonical=og_metadata['canonical'],
                                 title=og_metadata['title'],
                                 description=og_metadata['description'],
                                 image_url=og_metadata['image_url'],
@@ -37,16 +46,7 @@ def post_float(request):
                                 )
         
     # Add vote for the webpage by the user.
-    if (not user.webpage_votes.filter(webpage=webpage).exists()):
-        user.webpage_votes.create(webpage=webpage)
+    if (not user.page_votes.filter(page=webpage).exists()):
+        user.page_votes.create(page=webpage)
 
-    return redirect('webpages:detail', pk=webpage.pk)
-
-
-def detail(request, pk):
-
-    context = {
-        "webpage": Webpage.objects.get(pk=pk)
-    }
-
-    return render(request, 'webpages/detail.html', context=context)
+    return redirect('forum:page_forum', pk=webpage.pk)

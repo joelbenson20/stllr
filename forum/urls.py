@@ -2,9 +2,9 @@
 from django.urls import path
 from . import views
 
-app_name = 'webpages'
+app_name = 'forum'
 
 urlpatterns = [
-    path('<int:pk>/', views.detail, name='detail'),
+    path('page/<int:pk>/', views.page_forum, name='page_forum'),
     path('float/', views.post_float, name='post_float'),
 ]

@@ -43,7 +43,7 @@
                 <span class="navbar-text ms-auto fst-italic">
                     Hello, <a href="{{ user.get_absolute_url }}">@{{ user.username }}!</a>
                 </span>
-                <form class="d-flex ms-auto" method="post" action="{% url 'webpages:post_float' %}">
+                <form class="d-flex ms-auto" method="post" action="{% url 'forum:post_float' %}">
                     {% csrf_token %}
                     <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Float a page..." required>
                 </form>
@@ -59,7 +59,7 @@
 
         <div id="content" class="container-fluid p-sm-5 p-3">
         {% block content %}
-            {% include 'webpages/feed.html' with webpages=webpages user=user %}
+            {% include 'forum/page/feed.html' with pages=webpages user=user %}
         {% endblock %}
         </div>
 
