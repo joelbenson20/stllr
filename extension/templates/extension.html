@@ -8,10 +8,10 @@
 <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/pages.css">
 
 {% include 'page/card.html' with page=page user=user %}
-
-<hr>
     
 {% render_comment_form for page %}
+<br>
+<br>
 
 <ul class="comment-feed media-list m-0 p-0">
     {% get_xtdcomment_tree for page as raw_comments with_feedback %}

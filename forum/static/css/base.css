@@ -24,7 +24,7 @@ body {
 }
 
 .navbar {
-    background-color: rgba(var(--iridescent-0), 0.2);
+    background-color: rgba(var(--iridescent-0), 0.1);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
