@@ -9,7 +9,6 @@ from users.models import PageVote
 import json
 from forum.utils import get_canonical, verify_security
 
-@login_required
 @require_POST
 def page_float(request):
 
@@ -35,7 +34,6 @@ def page_float(request):
     
     return JsonResponse(response)
 
-@login_required
 @require_POST
 def extension(request):
 
@@ -72,7 +70,6 @@ def extension(request):
     return JsonResponse(response)
 
 @login_required
-@require_GET
 def get_csrf_token(request):
 
     return JsonResponse({'csrfToken': get_token(request)})

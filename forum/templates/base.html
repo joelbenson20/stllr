@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Float - The Forum of the Web</title>
+    <title>stellr - The Universal Forum</title>
 
     <link rel="stylesheet" href="{% static 'libs/bootstrap/dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'libs/bootstrap-icons/font/bootstrap-icons.min.css' %}">
@@ -29,7 +29,7 @@
 
         <nav class="navbar navbar-dark navbar-expand-sm sticky-top p-3">
             <a class="navbar-brand" href="{% url 'forum:index' %}">
-                <img class="navbar-brand-image" src="{% static 'brand/favicon-32x32.png' %}">
+                <img class="navbar-brand-image" src="{% static 'brand/stellr.gif' %}" width=128>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
@@ -46,7 +46,7 @@
                 </span>
                 <form class="d-flex ms-auto" method="post" action="{% url 'forum:page_float' %}">
                     {% csrf_token %}
-                    <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Float a page..." required>
+                    <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Enter page url" required>
                 </form>
                 <form class="navbar-text ms-3" id="logout-form" method="post" action="{% url 'logout' %}">
                     {% csrf_token %}

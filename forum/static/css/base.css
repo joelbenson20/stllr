@@ -1,9 +1,9 @@
 :root {
-    --iridescent-0: #ced9ef;
-    --iridescent-1: #cfc7fb;
-    --iridescent-2: #e2c6ee;
-    --iridescent-3: #efc8df;
-    --iridescent-4: #d7e9dc;
+    --iridescent-0: #070421;
+    --iridescent-1: #030a5d;
+    --iridescent-2: #4246aa;
+    --iridescent-3: #7c70d5;
+    --iridescent-4: #d2c6e8;
 }
 
 .collapsing {
@@ -11,20 +11,22 @@
 }
 
 a {
-    color: var(--iridescent-2);
+    color: var(--iridescent-3);
 }
-a:hover {
+a:hover,
+.btn:hover {
     opacity: 0.8;
 }
 
 body {
-    background-color: #000010;
+    background-color: var(--iridescent-0);
     color: white;
 }
 
 .navbar {
-    background-color: #000010;
-    border-bottom: 1px solid var(--iridescent-0);
+    background-color: rgba(var(--iridescent-0), 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .float-bar {
@@ -50,8 +52,9 @@ body {
 
 .badge {
     background-color: var(--iridescent-0);
-    color: black;
-    border: 2px solid var(--iridescent-0);
+    color: var(--iridescent-4);
+    font-size: 14px;
+    border: 3px solid var(--iridescent-4);
 }
 
 .floats-badge {
@@ -61,13 +64,12 @@ body {
 
 .float-icon {
     line-height: 1;
+    color: var(--iridescent-4);
 }
 
 .floats-badge:has([data-floated="true"]) {
-    background: linear-gradient(to right, var(--iridescent-0), var(--iridescent-1), var(--iridescent-2), var(--iridescent-3), var(--iridescent-4));
     filter: brightness(1.1);
-    filter: saturate(5);
-    border-color: white;
+    box-shadow: 0 0 15px var(--iridescent-4);
 }
 
 .float-count:hover {

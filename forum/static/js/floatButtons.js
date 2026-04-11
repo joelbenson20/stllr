@@ -2,26 +2,26 @@ const FLOAT_API_URL = 'http://127.0.0.1:8000/extension';
 
 function initFloatButtons() {
 
-    const float_buttons = document.querySelectorAll('button.float-button[data-webpage-id]');
+    const float_buttons = document.querySelectorAll('button.float-button[data-page-id]');
 
     float_buttons.forEach(button => {
         button.addEventListener('click', async (event) => {
             event.preventDefault();
 
-            const webpage_id = button.dataset.webpageId;
+            const page_id = button.dataset.pageId;
             const csrfToken = button.dataset.csrfToken;
-            if (!webpage_id || !csrfToken) {
+            if (!page_id || !csrfToken) {
                 return;
             }
 
-            fetch(`${FLOAT_API_URL}/float/webpage/`, {
+            fetch(`${FLOAT_API_URL}/page_float/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrfToken
                 },
                 credentials: 'include',
-                body: JSON.stringify({ webpage_id: webpage_id })
+                body: JSON.stringify({ page_id: page_id })
             })
             .then(response => response.json())
             .then(response => {

@@ -1,15 +1,15 @@
 .comment-form {
     max-width: 576px;
     border-color: var(--iridescent-0);
-    background: linear-gradient(to right, var(--iridescent-0), var(--iridescent-1), var(--iridescent-2), var(--iridescent-3), var(--iridescent-4));
+    background: linear-gradient(to left, var(--iridescent-0), var(--iridescent-1), var(--iridescent-2), var(--iridescent-3), var(--iridescent-4));
 }
 
 .comment-submit-button {
-    background-color: var(--iridescent-0);
+    background-color: var(--iridescent-4);
 }
 
 .comment-reply-link {
-    color: var(--iridescent-1);
+    color: var(--iridescent-3);
 }
 
 .comment-floated-badge {

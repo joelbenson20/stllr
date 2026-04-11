@@ -27,8 +27,12 @@ def get_canonical(url):
         if default_ports.get(scheme) != parsed.port:
             host = f'{host}:{parsed.port}'
 
-    # Normalize the path: resolve any '..' or '.' segments and strip trailing slash
-    path = posixpath.normpath(parsed.path) if parsed.path else ''
+    # Normalize the path: resolve any '..' or '.' segments.
+    # Preserve a meaningful trailing slash so '/forum/?q=..' stays distinct from '/forum?q=..'.
+    raw_path = parsed.path or ''
+    path = posixpath.normpath(raw_path) if raw_path else ''
+    if raw_path.endswith('/') and path not in ('', '/'):
+        path += '/'
     if path == '/':
         path = ''
 

@@ -8,7 +8,7 @@
         </span>
     {% endif %}
 
-    <a class="float-button btn btn-sm rounded-circle text-decoration-none m-0 py-0 px-1" href="{% url 'comments-xtd-like' item.comment.pk %}" aria-label="Float comment" title="Float comment"
+    <a class="float-button btn rounded-circle text-decoration-none m-0 py-0 px-1" href="{% url 'comments-xtd-like' item.comment.pk %}" aria-label="Float comment" title="Float comment"
         {% if item.likedit %}
             data-floated="true"
         {% else %}
