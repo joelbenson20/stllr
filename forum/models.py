@@ -3,23 +3,26 @@ from urllib.parse import urlparse
 from django.urls import reverse
 from django_comments_xtd.moderation import moderator, XtdCommentModerator
 from django.utils.http import urlencode
+from taggit.managers import TaggableManager
 
 # Create your models here.
 class Page(models.Model):
 
     canonical = models.CharField(max_length=250, unique=True)
     title = models.CharField(max_length=200)
-    description = models.TextField(max_length=400, null=True, blank=True)
-    image_url = models.URLField(max_length=250, null=True, blank=True)
-    site_name = models.CharField(max_length=100, null=True, blank=True)
-    fav_icon_url = models.URLField(max_length=250, null=True, blank=True)
+    type = models.CharField(max_length=30)
+    tags = TaggableManager()
+    description = models.TextField(max_length=400, blank=True)
+    image_url = models.URLField(max_length=250, blank=True)
+    site_name = models.CharField(max_length=100, blank=True)
+    fav_icon_url = models.URLField(max_length=250, blank=True)
 
     def __str__(self):
         return self.canonical
     
     def get_absolute_url(self):
-        query_params = {'page': self.canonical}
-        return f"{reverse('forum:page_forum')}?{urlencode(query_params)}"
+        query_params = {'p': self.canonical}
+        return f"{reverse('forum:page_detail')}?{urlencode(query_params)}"
     
     @property
     def hostname(self):

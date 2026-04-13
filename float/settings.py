@@ -47,11 +47,6 @@ CSRF_TRUSTED_ORIGINS = ["chrome-extension://ejnoheplbbmipnokmhagihclpgnkiano"]
 
 INSTALLED_APPS = [
     'float',
-    'users.apps.UsersConfig',
-    'forum.apps.ForumConfig',
-    'extension.apps.ExtensionConfig',
-    'django_comments_xtd',
-    'django_comments',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,6 +55,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages',
+    'taggit',
+    'users.apps.UsersConfig',
+    'forum.apps.ForumConfig',
+    'django_comments_xtd',
+    'django_comments',
+    'extension.apps.ExtensionConfig',
 ]
 
 MIDDLEWARE = [

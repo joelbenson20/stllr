@@ -25,8 +25,8 @@ body {
 
 .navbar {
     background-color: rgba(var(--iridescent-0), 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) brightness(80%);
+    -webkit-backdrop-filter: blur(10px) brightness(80%);
 }
 
 .float-bar {
@@ -54,7 +54,7 @@ body {
     background-color: var(--iridescent-0);
     color: var(--iridescent-4);
     font-size: 14px;
-    border: 3px solid var(--iridescent-4);
+    border: 1px solid var(--iridescent-4);
 }
 
 .floats-badge {
