@@ -68,12 +68,14 @@ def page_float(request):
     page = Page.objects.create(canonical=metadata['canonical'],
                                 title=metadata['title'],
                                 type=metadata['type'],
-                                tags=metadata['tags'],
                                 description=metadata['description'],
                                 image_url=metadata['image_url'],
                                 site_name=metadata.get('site_name', ''),
                                 fav_icon_url=metadata.get('fav_icon_url', '')
                                 )
+    if metadata.get('tags'):
+        tags_list = [t.strip() for t in metadata['tags'].split(',') if t.strip()]
+        page.tags.set(tags_list)
     # Add vote for the webpage by the user.
     if (not user.page_votes.filter(page=page).exists()):
         user.page_votes.create(page=page)

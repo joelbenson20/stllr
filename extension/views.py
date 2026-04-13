@@ -8,6 +8,7 @@ from forum.models import Page
 from users.models import PageVote
 import json
 from forum.utils import get_canonical, verify_security
+from django.db.models import Count
 
 @require_POST
 def page_float(request):
@@ -36,40 +37,55 @@ def page_float(request):
 
 @require_POST
 def extension(request):
-
-    response = {}
+    # Check if page already exists. If it does, return.
     page_data = json.loads(request.body).get('pageData')
-
-    verify_security(page_data['url'])
     canonical = get_canonical(page_data['url'])
-
-    image_url = page_data.get('imageUrl', '')
-    fav_icon_url = page_data.get('favIconUrl', '')
-    verify_security(image_url)
-    verify_security(fav_icon_url)
-
     try:
         page = Page.objects.get(canonical=canonical)
     except Page.DoesNotExist:
         page = None
 
+    print(f"New page received: {page_data}")
+
     if (not page):
+        url = page_data['url']
+        image_url = page_data.get('imageUrl') or ''
+        fav_icon_url = page_data.get('favIconUrl') or ''
+        verify_security(url)
+        verify_security(image_url)
+        verify_security(fav_icon_url)
         page = Page.objects.create(canonical=canonical,
                                         title=page_data['title'],
-                                        description=page_data['description'],
+                                        type=page_data.get('type') or '',
+                                        description=page_data.get('description') or '',
                                         image_url=image_url,
-                                        site_name=page_data.get('siteName', ''),
+                                        site_name=page_data.get('siteName') or '',
                                         fav_icon_url=fav_icon_url
                                     )
+        if page_data.get('tags'):
+            raw_tags = page_data['tags']
+            tags_list = [t.strip() for t in raw_tags.split(',') if t.strip()] if isinstance(raw_tags, str) else raw_tags
+            page.tags.set(tags_list)
+    # Get top 3 similar pages based on number of shared tags
+    page_tags_ids = page.tags.values_list('id', flat=True)
+    similar_pages = Page.objects.filter(
+        tags__in=page_tags_ids
+    ).exclude(id=page.id)
+    similar_pages = similar_pages.annotate(
+        same_tags=Count('tags')
+    ).order_by('-same_tags')[:3]
     
-    context = {'page': page, 'user': request.user}
+    context = {
+        'page': page,
+        'similar_pages': similar_pages,
+        'user': request.user,
+    }
     
-    response['html'] = render_to_string('extension.html', context=context, request=request)
-    response['status'] = '200'
-
-    return JsonResponse(response)
+    return JsonResponse({
+        'status': '200',
+        'html': render_to_string('extension.html', context=context, request=request)
+    })
 
 @login_required
 def get_csrf_token(request):
-
     return JsonResponse({'csrfToken': get_token(request)})

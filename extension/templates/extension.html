@@ -9,12 +9,15 @@
 
 {% include 'page/card.html' with page=page user=user %}
     
+<h2 class="mt-4">Comments</h2>
 {% render_comment_form for page %}
-<br>
-<br>
-
 <ul class="comment-feed media-list m-0 p-0">
     {% get_xtdcomment_tree for page as raw_comments with_feedback %}
     {% sort_xtdcomment_tree raw_comments as sorted_comments %}
     {% render_xtdcomment_tree with comments=sorted_comments allow_flagging allow_feedback show_feedback %}
 </ul>
+
+<h2 class="mt-4">Similar Pages</h2>
+{% for page in similar_pages %}
+    {% include 'page/card.html' with page=page user=user %}
+{% endfor %}
