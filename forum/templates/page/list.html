@@ -1,9 +1,5 @@
 {% load static %}
 
-{% if user.is_authenticated %}
-<input id="csrf-token" name="csrf-token" value="{{ csrf_token }}" type="hidden">
-{% endif %}
-
 <div class="webpage-feed">
     {% for page in pages %}
         {% include 'page/card.html' with page=page user=user %}

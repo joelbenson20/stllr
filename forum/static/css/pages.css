@@ -16,11 +16,14 @@
     line-height: 1;
 }
 
-.webpage-fav-icon {
+img.webpage-fav-icon {
     float: left;
-    height: 32px;
+    height: 27px;
+}
+
+i.webpage-fav-icon {
+    float: left;
     font-size: 27px;
-    border-radius: .5rem;
 }
 
 .webpage-link,

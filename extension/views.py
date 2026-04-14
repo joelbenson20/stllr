@@ -44,8 +44,7 @@ def extension(request):
         page = Page.objects.get(canonical=canonical)
     except Page.DoesNotExist:
         page = None
-
-    print(f"New page received: {page_data}")
+        print(f"New page received: {page_data}")
 
     if (not page):
         url = page_data['url']
@@ -60,12 +59,14 @@ def extension(request):
                                         description=page_data.get('description') or '',
                                         image_url=image_url,
                                         site_name=page_data.get('siteName') or '',
-                                        fav_icon_url=fav_icon_url
+                                        fav_icon_url=fav_icon_url,
+                                        html=page_data.get('html') or '',
                                     )
         if page_data.get('tags'):
             raw_tags = page_data['tags']
             tags_list = [t.strip() for t in raw_tags.split(',') if t.strip()] if isinstance(raw_tags, str) else raw_tags
             page.tags.set(tags_list)
+
     # Get top 3 similar pages based on number of shared tags
     page_tags_ids = page.tags.values_list('id', flat=True)
     similar_pages = Page.objects.filter(

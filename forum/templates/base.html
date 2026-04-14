@@ -63,7 +63,7 @@
             {% if tag %}
             <h1 class="mb-4">#{{ tag.name }}</h1>
             {% endif %}
-            {% include 'page/feed.html' with pages=pages user=user %}
+            {% include 'page/list.html' with pages=pages user=user %}
         {% endblock %}
         </div>
 

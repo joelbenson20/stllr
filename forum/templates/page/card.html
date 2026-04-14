@@ -9,9 +9,9 @@
         <div class="col m-0 p-0">
 
             {% if page.fav_icon_url %}
-            <img class="webpage-fav-icon me-1 p-0" src="{{ page.fav_icon_url }}">
+                <img class="webpage-fav-icon me-1 mt-1 p-0 bg-light rounded-circle" src="{{ page.fav_icon_url }}">
             {% else %}
-            <i class="fas fa-globe webpage-fav-icon me-1 p-0"></i>
+                <i class="webpage-fav-icon me-1 p-0 bi bi-globe"></i>
             {% endif %}
 
             <p class="webpage-site-name m-0 p-0">{% firstof page.site_name page.hostname %}</p>

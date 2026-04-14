@@ -2,7 +2,6 @@ from django.shortcuts import get_object_or_404, render
 from users.models import User
 from django_comments_xtd.models import XtdComment
 
-# Create your views here.
 def user(request, username):
 
     user = get_object_or_404(User, username=username)
@@ -10,7 +9,6 @@ def user(request, username):
     comments = list(
         XtdComment.objects.filter(user=user, is_public=True)
         .order_by('-submit_date')
-        .select_related('content_type', 'user')
     )
 
     parent_ids = {
