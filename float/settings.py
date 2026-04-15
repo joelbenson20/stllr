@@ -47,6 +47,12 @@ CSRF_TRUSTED_ORIGINS = ["chrome-extension://ejnoheplbbmipnokmhagihclpgnkiano"]
 
 INSTALLED_APPS = [
     'float',
+    'account.apps.AccountConfig',
+    'forum.apps.ForumConfig',
+    'django_comments_xtd',
+    'django_comments',
+    'taggit',
+    'extension.apps.ExtensionConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,12 +61,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages',
-    'taggit',
-    'users.apps.UsersConfig',
-    'forum.apps.ForumConfig',
-    'django_comments_xtd',
-    'django_comments',
-    'extension.apps.ExtensionConfig',
 ]
 
 MIDDLEWARE = [
@@ -164,9 +164,12 @@ STORAGES["staticfiles"] = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
 }
 
-AUTH_USER_MODEL = 'users.User'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
-LOGOUT_REDIRECT_URL = '/'
+AUTH_USER_MODEL = 'account.User'
+
+LOGIN_REDIRECT_URL = 'dashboard'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

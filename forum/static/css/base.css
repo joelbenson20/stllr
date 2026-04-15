@@ -39,7 +39,7 @@ body {
     background-color: var(--iridescent-1);
 }
 
-.logout-button {
+#logout-button {
     color: var(--iridescent-2);
     background-color: transparent;
     border: 1px solid var(--iridescent-0);

@@ -5,12 +5,12 @@
 
 {% block content %}
 
-    <h2>Page</h2>
-        {% include 'page/card.html' with page=page user=user %}
     <div class="row">
 
         <div class="col-8">
-            <h2>Discussion</h2>
+
+            {% include 'page/card.html' with page=page user=user %}
+
             {% render_comment_form for page %}
             <ul class="comment-feed media-list my-4 mx-0 p-0">
                 {% get_xtdcomment_tree for page as raw_comments with_feedback %}

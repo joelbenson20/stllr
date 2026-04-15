@@ -5,7 +5,7 @@ from django.middleware.csrf import get_token
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from forum.models import Page
-from users.models import PageVote
+from account.models import PageVote
 import json
 from forum.utils import get_canonical, verify_security
 from django.db.models import Count
@@ -60,7 +60,7 @@ def extension(request):
                                         image_url=image_url,
                                         site_name=page_data.get('siteName') or '',
                                         fav_icon_url=fav_icon_url,
-                                        html=page_data.get('html') or '',
+                                        inner_text=page_data.get('innerText') or '',
                                     )
         if page_data.get('tags'):
             raw_tags = page_data['tags']
