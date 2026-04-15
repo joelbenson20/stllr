@@ -21,6 +21,13 @@ class UserRegistrationForm(forms.ModelForm):
         if cd['password1'] != cd['password2']:
             raise forms.ValidationError("Passwords do not match.")
         return cd['password2']
+    
+    def clean_email(self):
+        User = get_user_model()
+        data = self.cleaned_data['email']
+        if User.objects.filter(email=data).exists():
+            raise forms.ValidationError("An account with this email already exists.")
+        return data
 
 class ProfileEditForm(forms.ModelForm):
     class Meta:

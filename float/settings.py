@@ -114,6 +114,10 @@ if 'DATABASE_URL' in os.environ and USE_ONLINE_STORAGE=='True':
     )
 
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'account.authentication.EmailAuthBackend',
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
