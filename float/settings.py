@@ -34,7 +34,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1',]
+ALLOWED_HOSTS = ['stellr.forum', 'localhost', '127.0.0.1',]
 
 LOCAL_IP_ADDRESS = os.environ.get('LOCAL_IP_ADDRESS', '')
 if (LOCAL_IP_ADDRESS):
@@ -196,3 +196,13 @@ COMMENTS_XTD_APP_MODEL_OPTIONS = {
 MANAGERS = (
     ("Manager", os.environ.get('MANAGER_EMAIL')),
 )
+
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-secondary',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}

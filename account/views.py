@@ -3,6 +3,7 @@ from .models import User, Profile
 from django_comments_xtd.models import XtdComment
 from .forms import UserRegistrationForm, ProfileEditForm
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 def register(request):
     if request.method == 'POST':
@@ -41,6 +42,12 @@ def edit(request):
         )
         if profile_form.is_valid():
             profile_form.save()
+            messages.success(
+                request,
+                'Profile updated successfully'
+            )
+        else:
+            messages.error(request, 'Error updating your profile')
     else:
         profile_form=ProfileEditForm(instance=request.user.profile)
     return render(
