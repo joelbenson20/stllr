@@ -56,7 +56,7 @@ def page_float(request):
         metadata = getMetadata(url)
     except Exception as e:
         print(f"Error fetching metadata for {url}: {e}")
-        return redirect(reverse('forum:index'))
+        return redirect(reverse('pages:index'))
     # With canonical url pulled from metadata, check for page again
     try:
         page = Page.objects.get(canonical=metadata['canonical'])

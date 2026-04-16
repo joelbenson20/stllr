@@ -35,7 +35,7 @@
             <p class="webpage-description small m-0">
                 {{ page.description|default_if_none:""|default:"No description."|truncatechars:300 }}
                 {% for tag in page.tags.all %}
-                    <a href="{% url 'forum:index_by_tag' tag.slug %}">#{{ tag.name }}</a>&nbsp;
+                    <a href="{% url 'pages:index_by_tag' tag.slug %}">#{{ tag.name }}</a>&nbsp;
                 {% endfor %}
             </p>
 

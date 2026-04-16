@@ -1,9 +1,9 @@
 from django.db import models
 from urllib.parse import urlparse
 from django.urls import reverse
-from django_comments_xtd.moderation import moderator, XtdCommentModerator
 from django.utils.http import urlencode
 from taggit.managers import TaggableManager
+from django.conf import settings
 
 class Page(models.Model):
 
@@ -23,7 +23,7 @@ class Page(models.Model):
     
     def get_absolute_url(self):
         query_params = {'p': self.canonical}
-        return f"{reverse('forum:page_detail')}?{urlencode(query_params)}"
+        return f"{reverse('pages:page_detail')}?{urlencode(query_params)}"
     
     @property
     def hostname(self):
@@ -37,7 +37,11 @@ class Page(models.Model):
     def num_votes(self):
         return self.votes.count()
     
-class PageCommentModerator(XtdCommentModerator):
-    removal_suggestion_notification = True
+    
+class PageVote(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_votes', on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, related_name='votes', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-moderator.register(Page, PageCommentModerator)
+    class Meta:
+        unique_together = ('user', 'page')

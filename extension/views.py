@@ -4,10 +4,9 @@ from django.template.loader import render_to_string
 from django.middleware.csrf import get_token
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from forum.models import Page
-from account.models import PageVote
+from pages.models import Page, PageVote
 import json
-from forum.utils import get_canonical, verify_security
+from pages.utils import get_canonical, verify_security
 from django.db.models import Count
 
 @require_POST
