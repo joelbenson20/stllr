@@ -3,77 +3,84 @@
 {% load comments_xtd %}
 
 <div class="comment-tree" data-csrf-token="{{ csrf_token }}">
-    
     {% for item in comments %}
-    <div id="c{{ item.comment.id }}" class="comment">
-        <div class="comment-frame d-flex flex-column rounded p-2">
+        <div id="c{{ item.comment.id }}" class="comment">
+            <div class="comment-frame d-flex flex-column rounded p-2">
 
-            <h6 class="comment-header mb-1 d-flex justify-content-between" style="font-size: 0.8rem">
-            
-                <div class="d-inline flex-grow-1">
-                    <a class="text-secondary" href="{{ item.comment.user.get_absolute_url }}">@{{ item.comment.user.username }}</a>
-                    <span class="small text-secondary">{{ item.comment.submit_date }}</span>
-                    <span>{% if item.comment.url and not item.comment.is_removed %}<a href="{{ item.comment.url }}" target="_new" class="text-decoration-none">{{ item.comment.url }}</a>{% endif %}</span>
-                </div>
-            
-                <div class="d-inline">
-                    {% if not item.comment.is_removed %}
-                        {% if perms.comments.can_moderate %}
-                            {% if item.flagged_count %}
-                                <span class="small text-danger" title="{% blocktrans count counter=item.flagged_count %}A user has flagged this comment as inappropriate.{% plural %}{{ counter }} users have flagged this comment as inappropriate.{% endblocktrans %}">{{ item.flagged_count }}</span>
-                            {% endif %}
+                <h6 class="comment-header mb-1 d-flex justify-content-between" style="font-size: 0.8rem">
+                    <div class="d-inline flex-grow-1">
+                        <a class="text-secondary" href="{{ item.comment.user.get_absolute_url }}">@{{ item.comment.user.username }}</a>
+                        <span class="small text-secondary">{{ item.comment.submit_date }}</span>
+                        <span>{% if item.comment.url and not item.comment.is_removed %}<a href="{{ item.comment.url }}" target="_new" class="text-decoration-none">{{ item.comment.url }}</a>{% endif %}</span>
+                    </div>
+                </h6>
+                
+                {% if item.comment.is_removed %}
+                    <p class="text-secondary {% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
+                        <em>{% trans "This comment has been removed." %}</em>
+                    </p>
+                {% else %}
+                    <div class="content {% if not allow_feedback and not item.comment.allow_thread %}pt-1 pb-3{% else %} py-1{% endif %}">
+                        {% include "includes/django_comments_xtd/comment_content.html" with content=item.comment.comment %}
+                    </div>
+                    
+                    <div class="my-1">
+
+                        {% if allow_feedback %}
+                            {% include "django_comments_xtd/includes/user_feedback.html" %}
                         {% endif %}
-                        {% if allow_flagging and request.user in item.flagged %}
-                            <i class="bi bi-flag text-danger" title="{% trans 'comment flagged' %}"></i>
-                        {% elif allow_flagging %}
-                            <a class="text-decoration-none" href="{% url 'comments-flag' item.comment.pk %}">
-                                <i class="bi bi-flag" title="{% trans 'flag comment' %}"></i>
+                        {% if not item.comment.is_removed and item.children %}
+                            <a class="btn btn-sm btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#replies-{{ item.comment.id }}" role="button" aria-expanded="false" aria-controls="replies-{{ item.comment.id }}">
+                                {{ item.comment.nested_count }} <i class="bi bi-chat-fill"></i>
                             </a>
                         {% endif %}
-                        {% if perms.comments.can_moderate %}
-                            {% if allow_flagging %}
-                                <span class="text-muted">&bull;</span>
-                            {% endif %}
-                            <a class="text-decoration-none" href="{% url 'comments-delete' item.comment.pk %}"><i class="bi bi-trash" title="{% trans 'remove comment' %}"></i></a>
+                        
+                        {% if item.comment.allow_thread and not item.comment.is_removed %}
+                            <button class="comment-reply-link btn btn-link btn-sm text-decoration-none mx-1 p-0" type="button" data-bs-toggle="collapse" data-bs-target="#reply-form-{{ item.comment.id }}" data-reply-to="{{ item.comment.id }}" aria-expanded="false" aria-controls="reply-form-{{ item.comment.id }}">Reply</button>
                         {% endif %}
-                    {% endif %}
-                </div>
-            </h6>
-            
-            {% if item.comment.is_removed %}
-                <p class="text-secondary {% if not allow_feedback and not item.comment.allow_thread %} pb-3{% endif %}">
-                    <em>{% trans "This comment has been removed." %}</em>
-                </p>
-            {% else %}
-                <div class="content {% if not allow_feedback and not item.comment.allow_thread %}pt-1 pb-3{% else %} py-1{% endif %}">
-                    {% include "includes/django_comments_xtd/comment_content.html" with content=item.comment.comment %}
-                </div>
-                
-                <div class="comment-badges my-1">
-                    {% if allow_feedback %}
-                        {% include "django_comments_xtd/includes/user_feedback.html" %}
-                    {% endif %}
-                    {% if not item.comment.is_removed and item.children %}
-                        <a class="btn btn-sm btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#replies-{{ item.comment.id }}" role="button" aria-expanded="false" aria-controls="replies-{{ item.comment.id }}">
-                            {{ item.comment.nested_count }} <i class="bi bi-chat-fill"></i>
-                        </a>
-                    {% endif %}
-                    {% if item.comment.allow_thread and not item.comment.is_removed %}
-                        <button class="comment-reply-link btn btn-link btn-sm text-decoration-none mx-1 p-0" type="button" data-bs-toggle="collapse" data-bs-target="#reply-form-{{ item.comment.id }}" data-reply-to="{{ item.comment.id }}" aria-expanded="false" aria-controls="reply-form-{{ item.comment.id }}">Reply</button>
-                        <div id="reply-form-{{ item.comment.id }}" class="collapse mt-2" data-reply-form-slot="{{ item.comment.id }}"></div>
-                    {% endif %}
-                </div>
+
+                        <div class="dropdown d-inline">
+                            <button class="btn btn-sm btn-dark btn-transparent rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-three-dots"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ item.comment.id }}">
+                                {% if allow_flagging and request.user in item.flagged %}
+                                    <li>
+                                        <i class="dropdown-item bi bi-flag text-danger" title="{% trans 'comment flagged' %}"></i>
+                                    </li>
+                                {% elif allow_flagging %}
+                                    <li>
+                                        <a class="dropdown-item text-decoration-none" href="{% url 'comments-flag' item.comment.pk %}">
+                                            <i class="bi bi-flag" title="{% trans 'flag comment' %}"></i> Report comment
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if perms.comments.can_moderate %}
+                                    <li>
+                                        <a class="dropdown-item text-decoration-none" href="{% url 'comments-delete' item.comment.pk %}">
+                                            <i class="bi bi-trash" title="{% trans 'remove comment' %}"></i> Remove comment
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+
+                        {% if item.comment.allow_thread and not item.comment.is_removed %}
+                            <div id="reply-form-{{ item.comment.id }}" class="collapse mt-2" data-reply-form-slot="{{ item.comment.id }}"></div>
+                        {% endif %}
+
+                    </div>
+                {% endif %}
+
+            </div>
+
+            {% if not item.comment.is_removed and item.children %}
+            <div id="replies-{{ item.comment.id }}" class="collapse show border-start border-light ps-4">
+                {% render_xtdcomment_tree with comments=item.children %}
+            </div>
             {% endif %}
 
         </div>
-
-        {% if not item.comment.is_removed and item.children %}
-        <div id="replies-{{ item.comment.id }}" class="collapse show border-start border-light ps-4">
-            {% render_xtdcomment_tree with comments=item.children %}
-        </div>
-        {% endif %}
-
-    </div>
     {% endfor %}
 
 </div>

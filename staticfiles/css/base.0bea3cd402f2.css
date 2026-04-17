@@ -6,22 +6,21 @@
     --iridescent-4: #d2c6e8;
 }
 
+.collapsing {
+    transition: none !important;
+}
+
 a {
     color: var(--iridescent-3);
+}
+a:hover,
+.btn:hover {
+    opacity: 0.8;
 }
 
 body {
     background-color: var(--iridescent-0);
     color: white;
-}
-
-.btn-transparent {
-    background-color: transparent;
-    border: none;
-}
-
-.collapsing {
-    transition: none !important;
 }
 
 .navbar {
@@ -49,19 +48,4 @@ body {
 .logout-button:hover {
     color: var(--iridescent-0);
     background-color: var(--iridescent-2);
-}
-
-.twinkle {
-    animation: twinkle 1.5s ease-in-out infinite alternate;
-}
-
-@keyframes twinkle {
-  from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #f0f;
-    opacity: 0.8;
-  }
-  to {
-    text-shadow: 0 0 20px #fff, 0 0 40px #f0f, 0 0 60px #f0f;
-    opacity: 1;
-  }
 }

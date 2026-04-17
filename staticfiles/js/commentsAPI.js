@@ -494,7 +494,69 @@ function extractFeedbackData(link) {
         commentId: Number(match[2])
     };
 }
+function extractFlagData(link) {
+    const href = link.getAttribute('href') || '';
+    const pathname = new URL(href, window.location.origin).pathname;
+    const match = pathname.match(/\/comments\/flag\/(\d+)\/?$/);
+    if (!match) {
+        return null;
+    }
 
+    return {
+        commentId: Number(match[1])
+    };
+}
+
+function applyCommentFlaggedState(link) {
+    const icon = link.querySelector('i');
+    link.removeAttribute('href');
+    link.dataset.flagged = 'true';
+    link.style.pointerEvents = 'none';
+    link.setAttribute('aria-disabled', 'true');
+    link.classList.add('text-danger');
+    if (icon) {
+        icon.classList.add('text-danger');
+        icon.title = 'comment flagged';
+    }
+}
+
+async function handleCommentFlag(event) {
+    const link = event.target.closest('a[href*="/comments/flag/"]');
+    if (!link) {
+        return;
+    }
+
+    const flagData = extractFlagData(link);
+    if (!flagData) {
+        return;
+    }
+
+    event.preventDefault();
+
+    try {
+        const response = await fetch(buildSiteUrl('/comments/api/feedback/'), {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': resolveCsrfToken(link)
+            },
+            body: JSON.stringify({
+                comment: flagData.commentId,
+                flag: 'removal'
+            })
+        });
+
+        if (response.status === 201 || response.status === 204) {
+            applyCommentFlaggedState(link);
+            return;
+        }
+
+        window.location.href = link.href;
+    } catch (error) {
+        window.location.href = link.href;
+    }
+}
 async function toggleCommentFeedback(event) {
     const link = event.target.closest('a.float-button[href*="/comments/like/"], a.float-button[href*="/comments/dislike/"]');
     if (!link) {
@@ -553,6 +615,7 @@ async function toggleCommentFeedback(event) {
 }
 
 document.addEventListener('submit', submitCommentForm);
+document.addEventListener('click', handleCommentFlag);
 document.addEventListener('click', toggleCommentFeedback);
 document.addEventListener('click', handleReplyButtonClick);
 window.addEventListener('hashchange', () => {
