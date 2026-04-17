@@ -2,13 +2,13 @@ from django.shortcuts import redirect, render, get_object_or_404
 from .models import Page
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from .utils import getMetadata, get_canonical, verify_security
+from .utils import get_meta, get_canonical, verify_security
 from django.db.models import Count
 from django.urls import reverse
 from taggit.models import Tag
 from django.http import JsonResponse
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 
 def page_feed(request, tag_slug=None):
@@ -88,39 +88,31 @@ def page_vote(request):
     return JsonResponse({'status': '500'})
 
 
-@login_required
-@require_POST
-def page_get_or_create(request):
-    url = request.POST.get('url')
-    canonical = get_canonical(url)
-    try:
-        page = Page.objects.get(canonical=canonical)
-        return redirect(page)
-    except Page.DoesNotExist:
-        pass
-    try:
-        metadata = getMetadata(url)
-    except Exception as e:
-        print(f"Error fetching metadata for {url}: {e}")
-        return redirect(reverse('pages:index'))
-    # With canonical url pulled from metadata, check for page again
-    try:
-        page = Page.objects.get(canonical=metadata['canonical'])
-        return redirect(page)
-    except:
-        pass
-    verify_security(metadata['image_url'])
-    verify_security(metadata['fav_icon_url'])
-    page = Page.objects.create(canonical=metadata['canonical'],
-                                title=metadata['title'],
-                                type=metadata['type'],
-                                description=metadata['description'],
-                                image_url=metadata['image_url'],
-                                site_name=metadata.get('site_name', ''),
-                                fav_icon_url=metadata.get('fav_icon_url', '')
-                                )
-    if metadata.get('tags'):
-        tags_list = [t.strip() for t in metadata['tags'].split(',') if t.strip()]
-        page.tags.set(tags_list)
-
-    return redirect(page)
+# @login_required
+# @require_POST
+# def page_get_or_create(request):
+#     url = request.POST.get('url')
+#     canonical = get_canonical(url)
+#     try:
+#         page = Page.objects.get(canonical=canonical)
+#         return redirect(page)
+#     except Page.DoesNotExist:
+#             html = get_html(url)
+#         if not html:
+#             return Http404
+#         else:
+#             metadata = get_meta(html)
+#             verify_security(metadata['image_url'])
+#             verify_security(metadata['fav_icon_url'])
+#             page = Page.objects.create(canonical=canonical,
+#                                         title=metadata['title'],
+#                                         type=metadata['type'],
+#                                         description=metadata['description'],
+#                                         image_url=metadata['image_url'],
+#                                         site_name=metadata.get('site_name', ''),
+#                                         fav_icon_url=metadata.get('fav_icon_url', '')
+#                                         )
+#             if metadata['tags']:
+#                 tags_list = [t.strip() for t in metadata['tags'].split(',') if t.strip()]
+#                 page.tags.set(tags_list)
+#             return redirect(page)

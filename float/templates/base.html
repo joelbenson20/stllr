@@ -47,9 +47,9 @@
                     </li>
                 </ul>
                 {% if request.user.is_authenticated %}
-                <form class="d-inline m-3" method="post" action="{% url 'pages:get_or_create' %}">
+                <form class="d-inline m-3" method="post">
                     {% csrf_token %}
-                    <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Go to forum by URL" required>
+                    <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Search forums" required>
                 </form>
                 <div class="navbar-text ms-auto">
                     Hello, <a href="{% url "dashboard" %}">{{ user.username }}!</a>

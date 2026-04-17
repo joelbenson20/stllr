@@ -192,3 +192,5 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+FIRECRAWL_API_KEY = config('FIRECRAWL_API_KEY')
