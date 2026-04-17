@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from pages.models import Page, PageVote
 import json
-from pages.utils import get_canonical, verify_security
+from pages.utils import get_canonical, verify_security, get_meta
 from django.db.models import Count
 
 @require_POST
@@ -34,34 +34,38 @@ def page_float(request):
     
     return JsonResponse(response)
 
+@login_required
 @require_POST
 def extension(request):
-    # Check if page already exists. If it does, return.
-    page_data = json.loads(request.body).get('pageData')
-    canonical = get_canonical(page_data['url'])
+    post_data = json.loads(request.body).get('pageData')
+
+    url = post_data.get('url')
+    title = post_data.get('title')
+    fav_icon_url = post_data.get('favIconUrl')
+    head = post_data.get('head')
+    inner_text = post_data.get('innerText')
+
     try:
+        canonical = get_canonical(url)
         page = Page.objects.get(canonical=canonical)
     except Page.DoesNotExist:
         page = None
-
     if (not page):
-        url = page_data['url']
-        image_url = page_data.get('imageUrl') or ''
-        fav_icon_url = page_data.get('favIconUrl') or ''
-        verify_security(url)
-        verify_security(image_url)
-        verify_security(fav_icon_url)
+        meta = get_meta(head)
+        image_url = meta['image_url']
+        fav_icon_url = fav_icon_url or meta['fav_icon_url']
         page = Page.objects.create(canonical=canonical,
-                                        title=page_data['title'],
-                                        type=page_data.get('type') or '',
-                                        description=page_data.get('description') or '',
-                                        image_url=image_url,
-                                        site_name=page_data.get('siteName') or '',
-                                        fav_icon_url=fav_icon_url,
-                                        inner_text=page_data.get('innerText') or '',
+                                        title=title or meta['title'] or '',
+                                        type=meta['type'] or '',
+                                        description=meta['description'] or '',
+                                        image_url=image_url or '',
+                                        site_name=meta['site_name'] or '',
+                                        fav_icon_url=fav_icon_url or '',
+                                        inner_text=inner_text or meta['inner_text'] or '',
                                     )
-        if page_data.get('tags'):
-            raw_tags = page_data['tags']
+        tags = meta['tags']
+        if tags:
+            raw_tags = tags
             tags_list = [t.strip() for t in raw_tags.split(',') if t.strip()] if isinstance(raw_tags, str) else raw_tags
             page.tags.set(tags_list)
 

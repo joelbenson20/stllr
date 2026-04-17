@@ -1,7 +1,9 @@
 import os
 from urllib.parse import urlparse, urlencode, parse_qsl, quote
 import posixpath
-import requests
+from firecrawl import Firecrawl
+from django.conf import settings
+from bs4 import BeautifulSoup
 
 def get_canonical(url):
 
@@ -52,43 +54,86 @@ def get_canonical(url):
 def verify_security(url):
     pass
 
-# Using OpenGraph.io
-def getMetadata(url):
-
-    encoded_url = quote(url, safe='')
-    endpoint = f"https://opengraph.io/api/3.0/site/{encoded_url}?app_id={os.getenv('OPEN_GRAPH_API_KEY')}"
-    response = requests.get(endpoint).json()
-    hybrid = response.get('hybridGraph') or {}
-    html = response.get('htmlInferred') or {}
+def get_meta(html):
+    try:
+        soup = BeautifulSoup(html, 'html.parser')
+    except Exception as e:
+        print(f"BeautifulSoup parsing error: {e}")
+        return None
     
-    print(html)
-
-    canonical = get_canonical(hybrid.get('url') or url)
-    title = hybrid.get('title')
-    type = hybrid.get('type')
+    def get_meta_tag(name, attr='property'):
+        """Get content from meta tag by name or property."""
+        tag = soup.find('meta', {attr: name})
+        return tag.get('content', '').strip() if tag else ''
+    
+    def get_text(selector, default=''):
+        """Get text from first matching selector."""
+        elem = soup.select_one(selector)
+        return elem.get_text(strip=True) if elem else default
+    
+    # Extract title - try og:title first, then <title>, then <h1>
+    title = (
+        get_meta_tag('og:title') or
+        get_text('title') or
+        get_text('h1') or
+        'Untitled'
+    )
+    
+    # Extract description - try og:description, then meta description
+    description = (
+        get_meta_tag('og:description') or
+        get_meta_tag('description', attr='name') or
+        ''
+    )
+    
+    # Extract image - try og:image first, then find first img tag
+    image_url = get_meta_tag('og:image')
+    if not image_url:
+        img_tag = soup.find('img')
+        image_url = img_tag.get('src', '') if img_tag else ''
+    
+    # Extract site name
+    site_name = (
+        get_meta_tag('og:site_name') or
+        get_text('meta[property="og:site_name"]') or
+        ''
+    )
+    
+    # Extract favicon - look for link rel="icon" or rel="shortcut icon"
+    fav_icon_url = ''
+    favicon_link = soup.find('link', rel=['icon', 'shortcut icon'])
+    if favicon_link:
+        fav_icon_url = favicon_link.get('href', '')
+    
+    # Extract keywords/tags
     tags = (
-        html.get('keywords')
-        or hybrid.get('keywords')
-        or html.get('tags')
-        or hybrid.get('tags')
+        get_meta_tag('keywords', attr='name') or
+        get_meta_tag('article:tag') or
+        ''
     )
-    description = hybrid.get('description')
-    image_url = (
-        hybrid.get('image')
-        or hybrid.get('summary_image')
-        or hybrid.get('summary_large_image')
-        or hybrid.get('imageSecureUrl')
+    
+    # Extract content type
+    content_type = (
+        get_meta_tag('og:type') or
+        get_meta_tag('content-type', attr='http-equiv') or
+        ''
     )
-    site_name = hybrid.get('site_name')
-    fav_icon_url = hybrid.get('favicon')
+    
+    # Extract all inner text (document content)
+    # Remove script and style elements
+    for script in soup(['script', 'style']):
+        script.decompose()
+    inner_text = soup.get_text(separator=' ', strip=True)
+    # Clean up excessive whitespace
+    inner_text = ' '.join(inner_text.split())
     
     return {
-        'canonical': canonical,
-        'title': title,
-        'type': type or '',
-        'tags': tags or '',
-        'description': description or '',
-        'image_url': image_url or '',
-        'site_name': site_name or '',
-        'fav_icon_url': fav_icon_url or '',
+        'title': title[:200],  # CharField max_length=200
+        'type': content_type[:30],  # CharField max_length=30
+        'description': description[:400],  # TextField max_length=400
+        'image_url': image_url[:250],  # URLField max_length=250
+        'site_name': site_name[:100],  # CharField max_length=100
+        'fav_icon_url': fav_icon_url[:250],  # URLField max_length=250
+        'tags': tags,  # Will be split by comma in views
+        'inner_text': inner_text,  # TextField, no limit
     }
