@@ -35,7 +35,7 @@
             <p class="webpage-description small m-0">
                 {{ page.description|default_if_none:""|default:"No description."|truncatechars:300 }}
                 {% for tag in page.tags.all %}
-                    <a href="{% url 'forum:index_by_tag' tag.slug %}">#{{ tag.name }}</a>&nbsp;
+                    <a href="{% url 'pages:index_by_tag' tag.slug %}">#{{ tag.name }}</a>&nbsp;
                 {% endfor %}
             </p>
 
@@ -44,7 +44,7 @@
 
     <div class="row mt-2">
         <div class="webpage-badges d-inline-block p-0">
-            {% include 'float_button.html' with page=page user=user %} 
+            {% include 'page/vote_button.html' with page=page user=user %} 
             <a class="webpage-badge badge rounded-pill text-decoration-none mx-2" href="{{ page.get_absolute_url }}">{% get_comment_count for page as comment_count %}{{ comment_count }} <i class="bi bi-chat-fill"></i></a>
         </div>
     </div>

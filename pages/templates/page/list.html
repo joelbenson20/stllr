@@ -5,3 +5,7 @@
         {% include 'page/card.html' with page=page user=user %}
     {% endfor %}
 </div>
+
+{% block scripts %}
+<script src="{% static 'js/pageVotes.js' %}"></script>
+{% endblock scripts %}

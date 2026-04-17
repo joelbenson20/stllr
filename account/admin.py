@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Profile, PageVote
+from .models import User, Profile
 
 admin.site.register(User)
 
@@ -8,5 +8,3 @@ admin.site.register(User)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'bio', 'photo']
     raw_id_fields = ['user']
-
-admin.site.register(PageVote)

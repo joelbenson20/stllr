@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load comments %}
 {% load comments_xtd %}
 {% load sorted_comments %}
@@ -28,4 +29,9 @@
 
     </div>
 
-{% endblock %}
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/pageVotes.js' %}"></script>
+<script src="{% static 'js/commentsAPI.js' %}"></script>
+{% endblock scripts %}
