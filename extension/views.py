@@ -43,7 +43,6 @@ def extension(request):
         page = Page.objects.get(canonical=canonical)
     except Page.DoesNotExist:
         page = None
-        print(f"New page received: {page_data}")
 
     if (not page):
         url = page_data['url']

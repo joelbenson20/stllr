@@ -57,10 +57,10 @@ def page_vote(request):
             else:
                 vote = user.page_votes.get(page=page)
                 vote.delete()
-            return(JsonResponse({'status': 'ok'}))
+            return JsonResponse({'status': '200'})
         except Page.DoesNotExist:
             pass
-    return JsonResponse({'status': 'error'})
+    return JsonResponse({'status': '500'})
 
 
 @login_required
