@@ -47,7 +47,7 @@
                     </li>
                 </ul>
                 {% if request.user.is_authenticated %}
-                <form class="d-inline m-3" method="post" action="{% url 'pages:page_float' %}">
+                <form class="d-inline m-3" method="post" action="{% url 'pages:get_or_create' %}">
                     {% csrf_token %}
                     <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Enter page url" required>
                 </form>
@@ -89,11 +89,8 @@
     
     <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
-    <script src="{% static 'js/floatButtons.js' %}"></script>
-    <script src="{% static 'js/commentsAPI.js' %}"></script>
-
     {% block scripts %}
-    {% endblock %}
+    {% endblock scripts%}
 </body>
 
 </html>

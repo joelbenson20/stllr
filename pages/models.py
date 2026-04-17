@@ -23,7 +23,7 @@ class Page(models.Model):
     
     def get_absolute_url(self):
         query_params = {'p': self.canonical}
-        return f"{reverse('pages:page_detail')}?{urlencode(query_params)}"
+        return f"{reverse('pages:detail')}?{urlencode(query_params)}"
     
     @property
     def hostname(self):

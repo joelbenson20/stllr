@@ -1,11 +1,12 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from django.test import tag
 from .models import Page
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from .utils import getMetadata, get_canonical, verify_security
 from django.db.models import Count
 from django.urls import reverse
 from taggit.models import Tag
+from django.http import JsonResponse
 
 def index(request, tag_slug=None):
     pages = (
@@ -42,8 +43,29 @@ def page_detail(request):
     }
     return render(request, 'page/detail.html', context=context)
 
+@login_required
 @require_POST
-def page_float(request):
+def page_vote(request):
+    user = request.user
+    page_id = request.POST.get('id')
+    action = request.POST.get('action')
+    if page_id and action:
+        try:
+            page = Page.objects.get(id=page_id)
+            if action == 'vote':
+                user.page_votes.create(page=page)
+            else:
+                vote = user.page_votes.get(page=page)
+                vote.delete()
+            return(JsonResponse({'status': 'ok'}))
+        except Page.DoesNotExist:
+            pass
+    return JsonResponse({'status': 'error'})
+
+
+@login_required
+@require_POST
+def page_get_or_create(request):
     user = request.user
     url = request.POST.get('url')
     canonical = get_canonical(url)
@@ -76,7 +98,5 @@ def page_float(request):
     if metadata.get('tags'):
         tags_list = [t.strip() for t in metadata['tags'].split(',') if t.strip()]
         page.tags.set(tags_list)
-    # Add vote for the webpage by the user.
-    if (not user.page_votes.filter(page=page).exists()):
-        user.page_votes.create(page=page)
+
     return redirect(page)

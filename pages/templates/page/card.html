@@ -44,7 +44,7 @@
 
     <div class="row mt-2">
         <div class="webpage-badges d-inline-block p-0">
-            {% include 'float_button.html' with page=page user=user %} 
+            {% include 'page/vote_button.html' with page=page user=user %} 
             <a class="webpage-badge badge rounded-pill text-decoration-none mx-2" href="{{ page.get_absolute_url }}">{% get_comment_count for page as comment_count %}{{ comment_count }} <i class="bi bi-chat-fill"></i></a>
         </div>
     </div>
