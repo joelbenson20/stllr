@@ -11,34 +11,22 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-import os
-from dotenv import load_dotenv
+from decouple import config
 import dj_database_url
+from django.contrib.messages import constants as messages
 
 SITE_ID = 1
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load .env environment variables
-env_path = os.path.join(BASE_DIR, '.env')
-if os.path.exists(env_path):
-    load_dotenv(env_path)
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['stellr.forum', 'localhost', '127.0.0.1',]
-
-LOCAL_IP_ADDRESS = os.environ.get('LOCAL_IP_ADDRESS', '')
-if (LOCAL_IP_ADDRESS):
-    ALLOWED_HOSTS.append(LOCAL_IP_ADDRESS)
 
 CORS_ALLOWED_ORIGINS = ["chrome-extension://ejnoheplbbmipnokmhagihclpgnkiano"]
 CSRF_TRUSTED_ORIGINS = ["chrome-extension://ejnoheplbbmipnokmhagihclpgnkiano"]
@@ -79,7 +67,7 @@ ROOT_URLCONF = 'float.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -104,10 +92,10 @@ DATABASES = {
     }
 }
 
-USE_ONLINE_STORAGE = os.environ.get('USE_ONLINE_STORAGE', False)
+USE_ONLINE_STORAGE = config('USE_ONLINE_STORAGE', default=False, cast=bool)
+DATABASE_URL = config('DATABASE_URL')
 
-if 'DATABASE_URL' in os.environ and USE_ONLINE_STORAGE=='True':
-
+if DATABASE_URL and USE_ONLINE_STORAGE:
     DATABASES['default'] = dj_database_url.config(
         conn_max_age=500,
         conn_health_checks=True,
@@ -161,8 +149,8 @@ STORAGES = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STORAGES["staticfiles"] = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
@@ -194,10 +182,8 @@ COMMENTS_XTD_APP_MODEL_OPTIONS = {
 }
 
 MANAGERS = (
-    ("Manager", os.environ.get('MANAGER_EMAIL')),
+    ("Manager", config('MANAGER_EMAIL')),
 )
-
-from django.contrib.messages import constants as messages
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-secondary',
