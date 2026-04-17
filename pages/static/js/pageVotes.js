@@ -1,7 +1,8 @@
-const pageVoteUrl = 'http://127.0.0.1:8000/page/vote/';
-const pageVoteButtons = document.querySelectorAll('a.page-vote-button')
-
 function initPageVoteButtons() {
+
+    const pageVoteUrl = '/page/vote/';
+    const pageVoteButtons = document.querySelectorAll('a.page-vote-button')
+
     pageVoteButtons.forEach(voteButton => {
         voteButton.addEventListener('click', function(e) {
             e.preventDefault();
@@ -26,6 +27,10 @@ function initPageVoteButtons() {
                     var voteCount = voteButton.querySelector('.vote-count');
                     var previousCount = parseInt(voteCount.textContent);
                     voteCount.textContent = previousAction === 'vote' ? previousCount + 1 : previousCount - 1;
+
+                    var icon = voteButton.querySelector('i');
+                    icon.classList.toggle('bi-star-fill')
+                    icon.classList.toggle('bi-star');
                 }
             })
         })

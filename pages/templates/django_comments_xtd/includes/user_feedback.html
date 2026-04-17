@@ -1,16 +1,8 @@
-<span class="badge floats-badge rounded-pill p-0">
-    {% if show_feedback %}
-        <span class="float-count rounded-pill ms-2 me-0" data-bs-toggle="tooltip"
-            data-bs-title="{% firstof item.likedit_users|join:'<br/>' 'Nobody has floated this comment.' %}">
-            {{ item.likedit_users|length }}
-        </span>
-    {% endif %}
-    <a class="float-button btn rounded-circle text-decoration-none m-0 py-0 px-1" href="{% url 'comments-xtd-like' item.comment.pk %}" aria-label="Float comment" title="Float comment"
-        {% if item.likedit %}
-            data-floated="true"
-        {% else %}
-            data-floated="false"
-        {% endif %}>
-        <i class="float-icon bi bi-arrow-up-circle-fill"></i>
-    </a>
-</span>
+
+
+<a class="comment-vote-button btn btn-sm btn-dark"
+    href="{% url 'comments-xtd-like' item.comment.pk %}"
+    data-voted="{% if item.likedit %}true{% else %}false{% endif %}">
+    <span class="vote-count">{{ item.likedit_users|length }}</span>
+    <i class="bi {% if item.likedit %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+</a>

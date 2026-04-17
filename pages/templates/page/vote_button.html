@@ -1,8 +1,8 @@
-<a class="page-vote-button"
+<a class="page-vote-button btn btn-sm btn-dark"
     href="#"
     data-id={{ page.id }}
     data-action="{% if page.id in user.voted_pages_ids %}un{% endif %}vote"
     data-csrf-token={{ csrf_token }}>
     <span class="vote-count">{{ page.num_votes }}</span>
-    <i class="bi bi-star-fill"></i>
+    <i class="bi {% if page.id in user.voted_pages_ids %}bi-star-fill{% else %}bi-star{% endif %}"></i>
 </a>

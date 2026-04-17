@@ -54,9 +54,9 @@
                         {% include "django_comments_xtd/includes/user_feedback.html" %}
                     {% endif %}
                     {% if not item.comment.is_removed and item.children %}
-                        <button class="badge rounded-pill mx-1" type="button" data-bs-toggle="collapse" data-bs-target="#replies-{{ item.comment.id }}" aria-expanded="false" aria-controls="replies-{{ item.comment.id }}">
+                        <a class="btn btn-sm btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#replies-{{ item.comment.id }}" role="button" aria-expanded="false" aria-controls="replies-{{ item.comment.id }}">
                             {{ item.comment.nested_count }} <i class="bi bi-chat-fill"></i>
-                        </button>
+                        </a>
                     {% endif %}
                     {% if item.comment.allow_thread and not item.comment.is_removed %}
                         <button class="comment-reply-link btn btn-link btn-sm text-decoration-none mx-1 p-0" type="button" data-bs-toggle="collapse" data-bs-target="#reply-form-{{ item.comment.id }}" data-reply-to="{{ item.comment.id }}" aria-expanded="false" aria-controls="reply-form-{{ item.comment.id }}">Reply</button>

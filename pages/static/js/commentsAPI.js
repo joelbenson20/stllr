@@ -220,12 +220,10 @@ function buildCommentElement(commentData) {
                 <p class="m-0">${safeComment}</p>
             </div>
             <div class="comment-badges my-1">
-                <span class="badge floats-badge rounded-pill p-0">
-                    <span class="float-count rounded-pill ms-2 me-0" data-bs-toggle="tooltip" data-bs-title="Nobody has floated this comment.">0</span>
-                    <a class="float-button btn btn-sm rounded-circle text-decoration-none m-0 py-0 px-1" href="${buildSiteUrl(`/comments/like/${commentData.id}/`)}" aria-label="Float comment" title="Float comment" data-floated="false">
-                        <i class="float-icon bi bi-arrow-up-circle-fill"></i>
-                    </a>
-                </span>
+                <a class="comment-vote-button" href="${buildSiteUrl(`/comments/like/${commentData.id}/`)}" data-voted="false">
+                    <span class="vote-count">0</span>
+                    <i class="bi bi-star"></i>
+                </a>
                 ${canReply ? `<button class="comment-reply-link btn btn-link btn-sm text-decoration-none mx-1 p-0" type="button" data-bs-toggle="collapse" data-bs-target="#reply-form-${commentData.id}" data-reply-to="${commentData.id}" aria-expanded="false" aria-controls="reply-form-${commentData.id}">Reply</button><div class="collapse mt-2" id="reply-form-${commentData.id}" data-reply-form-slot="${commentData.id}"></div>` : ''}
             </div>
         </div>
@@ -496,7 +494,7 @@ function extractFeedbackData(link) {
 }
 
 async function toggleCommentFeedback(event) {
-    const link = event.target.closest('a.float-button[href*="/comments/like/"], a.float-button[href*="/comments/dislike/"]');
+    const link = event.target.closest('a.float-button[href*="/comments/like/"], a.float-button[href*="/comments/dislike/"], a.comment-vote-button[href*="/comments/like/"]');
     if (!link) {
         return;
     }
@@ -523,25 +521,42 @@ async function toggleCommentFeedback(event) {
         });
 
         if (response.status === 201 || response.status === 204) {
-            const floated = response.status === 201;
-            link.dataset.floated = floated ? 'true' : 'false';
+            const voted = response.status === 201;
+            if (link.classList.contains('comment-vote-button')) {
+                link.dataset.voted = voted ? 'true' : 'false';
 
-            const icon = link.querySelector('.float-icon');
-            if (icon) {
-                if (feedbackData.flag === 'like') {
-                    icon.classList.toggle('bi-arrow-up-circle-fill', floated);
-                    icon.classList.toggle('bi-arrow-up-circle', !floated);
-                } else {
-                    icon.classList.toggle('bi-arrow-down-circle-fill', floated);
-                    icon.classList.toggle('bi-arrow-down-circle', !floated);
+                const icon = link.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('bi-star-fill', voted);
+                    icon.classList.toggle('bi-star', !voted);
                 }
-            }
 
-            const countEl = link.closest('.floats-badge')?.querySelector('.float-count');
-            if (countEl) {
-                const current = Number.parseInt(countEl.textContent, 10) || 0;
-                const next = floated ? current + 1 : Math.max(0, current - 1);
-                countEl.textContent = String(next);
+                const countEl = link.querySelector('.vote-count');
+                if (countEl) {
+                    const current = Number.parseInt(countEl.textContent, 10) || 0;
+                    const next = voted ? current + 1 : Math.max(0, current - 1);
+                    countEl.textContent = String(next);
+                }
+            } else {
+                link.dataset.floated = voted ? 'true' : 'false';
+
+                const icon = link.querySelector('.float-icon');
+                if (icon) {
+                    if (feedbackData.flag === 'like') {
+                        icon.classList.toggle('bi-arrow-up-circle-fill', voted);
+                        icon.classList.toggle('bi-arrow-up-circle', !voted);
+                    } else {
+                        icon.classList.toggle('bi-arrow-down-circle-fill', voted);
+                        icon.classList.toggle('bi-arrow-down-circle', !voted);
+                    }
+                }
+
+                const countEl = link.closest('.floats-badge')?.querySelector('.float-count');
+                if (countEl) {
+                    const current = Number.parseInt(countEl.textContent, 10) || 0;
+                    const next = voted ? current + 1 : Math.max(0, current - 1);
+                    countEl.textContent = String(next);
+                }
             }
             return;
         }
