@@ -51,12 +51,21 @@ def get_canonical(url):
 
     return normalized
 
+def get_domain_name(url):
+    parsed = urlparse(url)
+    scheme = (parsed.scheme or '').lower()
+    # Lowercase and strip leading 'www.' from the host
+    host = parsed.hostname or ''
+    if host.startswith('www.'):
+        host = host[4:]
+    return host
+
 def verify_security(url):
     pass
 
-def get_meta(html):
+def get_meta(url, head):
     try:
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(head, 'html.parser')
     except Exception as e:
         print(f"BeautifulSoup parsing error: {e}")
         return None

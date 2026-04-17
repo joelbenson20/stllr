@@ -4,9 +4,9 @@ from django.template.loader import render_to_string
 from django.middleware.csrf import get_token
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from pages.models import Page, PageVote
+from pages.models import Page, PageVote, Domain
 import json
-from pages.utils import get_canonical, verify_security, get_meta
+from pages.utils import get_canonical, verify_security, get_meta, get_domain_name
 from django.db.models import Count
 
 @require_POST
@@ -37,33 +37,44 @@ def page_float(request):
 @login_required
 @require_POST
 def extension(request):
-    post_data = json.loads(request.body).get('pageData')
+    
+    posted_data = json.loads(request.body).get('pageData')
 
-    url = post_data.get('url')
-    title = post_data.get('title')
-    fav_icon_url = post_data.get('favIconUrl')
-    head = post_data.get('head')
-    inner_text = post_data.get('innerText')
+    url = posted_data.get('url')
+    canonical = get_canonical(url)
+    domain_name = get_domain_name(url)
+    head = posted_data.get('head')
+    inner_text = posted_data.get('innerText')
 
+    page = None
     try:
-        canonical = get_canonical(url)
         page = Page.objects.get(canonical=canonical)
     except Page.DoesNotExist:
-        page = None
-    if (not page):
-        meta = get_meta(head)
-        image_url = meta['image_url']
-        fav_icon_url = fav_icon_url or meta['fav_icon_url']
-        page = Page.objects.create(canonical=canonical,
-                                        title=title or meta['title'] or '',
-                                        type=meta['type'] or '',
-                                        description=meta['description'] or '',
-                                        image_url=image_url or '',
-                                        site_name=meta['site_name'] or '',
-                                        fav_icon_url=fav_icon_url or '',
-                                        inner_text=inner_text or meta['inner_text'] or '',
-                                    )
-        tags = meta['tags']
+        scraped_data = get_meta(url, head)
+        image_url = scraped_data['image_url']
+        fav_icon_url = posted_data.get('favIconUrl') or scraped_data['fav_icon_url'] or ''
+        site_name = scraped_data.get('site_name') or ''
+
+        domain, created = Domain.objects.get_or_create(name=domain_name)
+        # Update domain if new information
+        if not domain.site_name and site_name:
+            domain.site_name = site_name
+            domain.save()
+        if not domain.fav_icon_url and fav_icon_url:
+            domain.fav_icon_url = fav_icon_url
+            domain.save()
+
+        page = Page.objects.create(
+            canonical=canonical,
+            title= posted_data.get('title') or scraped_data['title'] or '',
+            type=scraped_data['type'] or '',
+            description=scraped_data['description'] or '',
+            image_url=image_url or '',
+            domain = domain,
+            inner_text=inner_text or scraped_data['inner_text'] or '',
+        )
+
+        tags = scraped_data['tags'] or ''
         if tags:
             raw_tags = tags
             tags_list = [t.strip() for t in raw_tags.split(',') if t.strip()] if isinstance(raw_tags, str) else raw_tags

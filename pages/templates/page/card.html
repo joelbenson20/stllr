@@ -1,47 +1,49 @@
 {% load comments %}
 {% load comments_xtd %}
 
-<div class="page-card row mb-5 mx-0">
-    <div class="row m-0 p-0">
-        <div class="col m-0 p-0">
+{% if page.is_active %}
+    <div class="page-card row mb-5 mx-0">
+        <div class="row m-0 p-0">
+            <div class="col m-0 p-0">
 
-            {% if page.fav_icon_url %}
-                <img class="page-fav-icon bg-light rounded-circle me-1 my-1 p-1" src="{{ page.fav_icon_url }}">
-            {% else %}
-                <i class="page-fav-icon bi bi-globe me-1 mb-0 p-0"></i>
-            {% endif %}
+                {% if page.domain.fav_icon_url %}
+                    <img class="page-fav-icon bg-light rounded-circle me-1 my-1 p-1" src="{{ page.domain.fav_icon_url }}">
+                {% else %}
+                    <i class="page-fav-icon bi bi-globe me-1 mb-0 p-0"></i>
+                {% endif %}
 
-            <p class="page-site-name m-0 p-0">{% firstof page.site_name page.hostname %}</p>
+                <p class="page-site-name m-0 p-0">{{ page.domain }}</p>
 
-            <a class="page-link d-block text-truncate m-0 p-0" href="{{ page.link }}" target="_blank">{{ page.link }}</a>
+                <a class="page-link d-block text-truncate m-0 p-0" href="{{ page.link }}" target="_blank">{{ page.link }}</a>
 
+            </div>
         </div>
-    </div>
-    <div class="row m-0 p-0">
-        <div class="col m-0 py-1 px-0">
-            <a class="page-title" href="{{ page.link }}" target="_blank">
-                <h1 class="page-title mb-2">
-                    <span class="badge badge-sm text-bg-dark p-2">{{ page.type|capfirst }}</span>
-                    {{ page.title }}
-                </h1>
+        <div class="row m-0 p-0">
+            <div class="col m-0 py-1 px-0">
+                <a class="page-title" href="{{ page.link }}" target="_blank">
+                    <h1 class="page-title mb-2">
+                        <span class="badge badge-sm text-bg-dark p-2">{{ page.type|capfirst }}</span>
+                        {{ page.title }}
+                    </h1>
+                </a>
+                {% if page.image_url %}
+                <img class="page-image me-2" src="{{ page.image_url }}">
+                {% endif %}
+                <p class="page-description small m-0">
+                    {{ page.description|default_if_none:""|default:"No description."|truncatechars:300 }}
+                    {% for tag in page.tags.all %}
+                        <a href="{% url 'pages:index_by_tag' tag.slug %}">#{{ tag.name }}</a>&nbsp;
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+        <div class="mt-2 p-0">
+            {% include 'page/vote_button.html' with page=page user=user %} 
+            <a class="btn btn-sm btn-dark" href="{{ page.get_absolute_url }}">
+                {% get_comment_count for page as comment_count %}
+                {{ comment_count }}
+                <i class="bi bi-chat-fill"></i>
             </a>
-            {% if page.image_url %}
-            <img class="page-image me-2" src="{{ page.image_url }}">
-            {% endif %}
-            <p class="page-description small m-0">
-                {{ page.description|default_if_none:""|default:"No description."|truncatechars:300 }}
-                {% for tag in page.tags.all %}
-                    <a href="{% url 'pages:index_by_tag' tag.slug %}">#{{ tag.name }}</a>&nbsp;
-                {% endfor %}
-            </p>
         </div>
     </div>
-    <div class="mt-2 p-0">
-        {% include 'page/vote_button.html' with page=page user=user %} 
-        <a class="btn btn-sm btn-dark" href="{{ page.get_absolute_url }}">
-            {% get_comment_count for page as comment_count %}
-            {{ comment_count }}
-            <i class="bi bi-chat-fill"></i>
-        </a>
-    </div>
-</div>
+{% endif %}

@@ -1,12 +1,13 @@
 from django.contrib import admin
-from .models import Page, PageVote
+from .models import Page, PageVote, Domain
 
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     list_display = ['canonical', 'title', 'type',]
-    list_filter = ['type', 'tags', 'site_name']
-    search_fields = ['canonical', 'title', 'site_name']
+    list_filter = ['type', 'tags', 'domain']
+    search_fields = ['canonical', 'title']
     ordering = ['canonical']
     show_facets = admin.ShowFacets.ALWAYS
 
 admin.site.register(PageVote)
+admin.site.register(Domain)

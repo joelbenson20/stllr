@@ -12,9 +12,10 @@ class Page(models.Model):
     tags = TaggableManager(blank=True)
     description = models.TextField(max_length=400, blank=True)
     image_url = models.URLField(max_length=250, blank=True)
-    site_name = models.CharField(max_length=100, blank=True)
-    fav_icon_url = models.URLField(max_length=250, blank=True)
+    domain = models.ForeignKey('Domain', related_name='pages', on_delete=models.CASCADE)
     inner_text = models.TextField(blank=True)
+
+    _is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.canonical
@@ -24,9 +25,9 @@ class Page(models.Model):
         return f"{reverse('pages:detail')}?{urlencode(query_params)}"
     
     @property
-    def hostname(self):
-        return urlparse('https://' + self.canonical).hostname
-    
+    def is_active(self):
+        return self._is_active and self.domain.is_active
+
     @property
     def link(self):
         return 'https://' + self.canonical
@@ -43,3 +44,14 @@ class PageVote(models.Model):
 
     class Meta:
         unique_together = ('user', 'page')
+
+
+class Domain(models.Model):
+    name = models.CharField(unique=True, max_length=100)
+    site_name = models.CharField(max_length=100, blank=True)
+    fav_icon_url = models.URLField(max_length=250, blank=True)
+
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.site_name or self.name
