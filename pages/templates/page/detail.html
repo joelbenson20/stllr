@@ -5,13 +5,9 @@
 {% load sorted_comments %}
 
 {% block content %}
-
     <div class="row">
-
         <div class="col-8">
-
-            {% include 'page/card.html' with page=page user=user %}
-
+            {% include 'page/card.html' with pages=page user=user %}
             {% render_comment_form for page %}
             <ul class="comment-feed media-list my-4 mx-0 p-0">
                 {% get_xtdcomment_tree for page as raw_comments with_feedback %}
@@ -19,16 +15,13 @@
                 {% render_xtdcomment_tree with comments=sorted_comments allow_flagging allow_feedback show_feedback %}
             </ul>
         </div>
-
         <div class="col-4">
             <h2>Similar Pages</h2>
             {% for page in similar_pages %}
                 {% include 'page/card.html' with page=page user=user %}
             {% endfor %}
         </div>
-
     </div>
-
 {% endblock content %}
 
 {% block scripts %}

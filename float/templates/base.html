@@ -49,7 +49,7 @@
                 {% if request.user.is_authenticated %}
                 <form class="d-inline m-3" method="post" action="{% url 'pages:get_or_create' %}">
                     {% csrf_token %}
-                    <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Enter page url" required>
+                    <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Go to forum by URL" required>
                 </form>
                 <div class="navbar-text ms-auto">
                     Hello, <a href="{% url "dashboard" %}">{{ user.username }}!</a>
@@ -78,11 +78,7 @@
 
         <div id="content" class="container-fluid p-sm-5 p-3">
         {% block content %}
-            {% if tag %}
-            <h1 class="mb-4">#{{ tag.name }}</h1>
-            {% endif %}
-            {% include 'page/list.html' with pages=pages user=user %}
-        {% endblock %}
+        {% endblock content %}
         </div>
 
     </div>

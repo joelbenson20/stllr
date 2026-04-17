@@ -1,38 +1,38 @@
-.webpage-feed {
+#page-feed {
     max-width: 768px;
 }
 
-.webpage-title {
+.page-title {
     font-size: 1.5rem;
     color: var(--iridescent-4);
     text-decoration: none;
 }
-.webpage-title:hover {
+.page-title:hover {
     text-decoration: underline;
 }
 
-.webpage-link {
+.page-link {
     color: white;
     line-height: 1;
 }
 
-img.webpage-fav-icon {
+img.page-fav-icon {
     float: left;
     height: 27px;
 }
 
-i.webpage-fav-icon {
+i.page-fav-icon {
     float: left;
     font-size: 27px;
 }
 
-.webpage-link,
-.webpage-site-name {
+.page-link,
+.page-site-name {
     font-weight: 300;
     font-size: 0.75rem;
 }
 
-.webpage-image {
+.page-image {
     float: left;
     height: 3.75rem;
     border-radius: 0.5rem;

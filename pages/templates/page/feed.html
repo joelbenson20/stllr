@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    {% if tag %}
+        <h1 class="mb-4">#{{ tag.name }}</h1>
+    {% endif %}
+    <div id="page-feed">
+        {% include 'page/list.html' with pages=pages user=user %}
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/pageFeed.js' %}"></script>
+<script src="{% static 'js/pageVotes.js' %}"></script>
+{% endblock scripts %}

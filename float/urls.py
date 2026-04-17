@@ -9,7 +9,6 @@ urlpatterns = [
     path('', include('pages.urls', namespace='pages')),
     path('comments/', include('django_comments_xtd.urls')),
     path('extension/', include('extension.urls', namespace='extension')),
-    path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 if settings.DEBUG:

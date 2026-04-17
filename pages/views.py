@@ -7,8 +7,11 @@ from django.db.models import Count
 from django.urls import reverse
 from taggit.models import Tag
 from django.http import JsonResponse
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.http import HttpResponse
 
-def index(request, tag_slug=None):
+
+def page_feed(request, tag_slug=None):
     pages = (
         Page.objects
         .annotate(vote_count=Count('votes'))
@@ -19,11 +22,31 @@ def index(request, tag_slug=None):
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
         pages = pages.filter(tags__in=[tag])
-    context = {
-        'pages': pages,
-        'tag': tag,
-    }
-    return render(request, 'base.html', context=context)
+
+    paginator = Paginator(pages, 10)
+    p = request.GET.get('p')
+    cards_only = request.GET.get('cards_only')
+
+    try:
+        pages = paginator.page(p)
+    except PageNotAnInteger:
+        pages = paginator.page(1)
+    except EmptyPage:
+        if cards_only:
+            return HttpResponse('')
+        pages = paginator.page(paginator.num_pages)
+    if cards_only:
+        return render(
+            request,
+            'page/list.html',
+            {'pages': pages}
+        )
+    return render(
+        request,
+        'page/feed.html',
+        {'pages': pages}
+    )
+
 
 def page_detail(request):
     canonical = request.GET.get('p')
@@ -37,11 +60,13 @@ def page_detail(request):
     similar_pages = similar_pages.annotate(
         same_tags=Count('tags')
     ).order_by('-same_tags')[:3]
+
     context = {
         "page": page,
         "similar_pages": similar_pages,
     }
     return render(request, 'page/detail.html', context=context)
+
 
 @login_required
 @require_POST
@@ -66,7 +91,6 @@ def page_vote(request):
 @login_required
 @require_POST
 def page_get_or_create(request):
-    user = request.user
     url = request.POST.get('url')
     canonical = get_canonical(url)
     try:
