@@ -34,11 +34,7 @@ CSRF_TRUSTED_ORIGINS = ["chrome-extension://ejnoheplbbmipnokmhagihclpgnkiano"]
 # Application definition
 
 INSTALLED_APPS = [
-    'float',
     'account.apps.AccountConfig',
-    'pages.apps.PagesConfig',
-    'taggit',
-    'extension.apps.ExtensionConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages',
+    'taggit',
+    'float',
+    'pages.apps.PagesConfig',
+    'comments.apps.CommentsConfig',
+    'extension.apps.ExtensionConfig',
 ]
 
 MIDDLEWARE = [

@@ -58,8 +58,11 @@ def page_detail(request):
         same_tags=Count('tags')
     ).order_by('-same_tags')[:3]
 
+    comments = page.comments.all()
+
     context = {
         "page": page,
+        'comments': comments,
         "similar_pages": similar_pages,
     }
     return render(request, 'page/detail.html', context=context)

@@ -1,0 +1,8 @@
+<form method="post" action="{% url "comments:post" page.id %}">
+    {% csrf_token %}
+    <label>Parent ID</label>
+    <input type="number" name="parent_id" value={{ parent.id }}><br>
+    <label>Content:</label>
+    <input type="textarea" name="content">
+    <input type="submit" value="Post!">
+</form>
