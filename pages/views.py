@@ -58,7 +58,7 @@ def page_detail(request):
         same_tags=Count('tags')
     ).order_by('-same_tags')[:3]
 
-    comments = page.comments.all()
+    comments = page.comments.filter(thread_level=0)
 
     context = {
         "page": page,

@@ -16,6 +16,7 @@ def post_comment(request, page_id):
     form = CommentForm(data=request.POST)
     if form.is_valid():
         cd = form.cleaned_data
+        print('Form cleaned data:', cd)
         comment = form.save(commit=False)
         comment.user = request.user
         comment.page = page
@@ -23,4 +24,6 @@ def post_comment(request, page_id):
             comment.thread_level = comment.parent.thread_level + 1
         comment.save()
         return (JsonResponse({'status': '201'}))
+    print('Form errors:', form.errors)
+    print(request.POST)
     return JsonResponse({'status': '400'})

@@ -1,0 +1,34 @@
+<div class="comment">
+
+    <div class=comment-header mb-1>
+        <a class="text-secondary" href="{{ comment.user.get_absolute_url }}">@{{ comment.user.username }}</a>
+        <span class="small text-secondary">{{ comment.created }}</span>
+    </div>
+
+    <div class="content">
+        {{ comment.content }}
+    </div>
+
+    <div class="comment-buttons">
+        <button class="comment-reply-link btn btn-link btn-sm text-decoration-none mx-1 p-0"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#comment-form-{{ comment.id }}"
+            aria-expanded="false">
+            Reply
+        </button>
+    </div>
+
+    <div id="comment-form-{{ comment.id }}" class="collapse mt-2">
+        {% include "comments/form.html" with page=page parent=comment %}
+    </div>
+
+    {% if comment.children.exists %}
+        <div id="children-{{ comment.id }}" class="collapse show border-start border-light ps-4">
+        {% for child in comment.children.all %}
+            {% include "comments/comment.html" with page=page comment=child %}
+        {% endfor %}
+        </div>
+    {% endif %}
+    
+</div>

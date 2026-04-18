@@ -7,11 +7,15 @@
     {% if page.is_active %}
         <div class="row">
             <div class="col-8">
+
                 {% include 'page/card.html' with page=page user=user %}
-                {% include "comment/form.html" with page=page parent=None %}
+
+                {% include "comments/form.html" with page=page parent=None %}
+
                 {% for comment in comments %}
-                    <p>{{ comment.content }}</p>
+                    {% include "comments/comment.html" with page=page comment=comment %}
                 {% endfor %}
+                
             </div>
             <div class="col-4">
                 {% if similar_pages %}
@@ -26,3 +30,7 @@
         <p>The forum at this page has been suspended.</p>
     {% endif %}
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static "/js/comments.js" %}"></script>
+{% endblock scripts %}
