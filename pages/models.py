@@ -36,6 +36,10 @@ class Page(models.Model):
     def num_votes(self):
         return self.votes.count()
     
+    @property
+    def num_comments(self):
+        return self.comments.count()
+    
     
 class PageVote(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_votes', on_delete=models.CASCADE)

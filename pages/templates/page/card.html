@@ -37,7 +37,7 @@
         <div class="mt-2 p-0">
             {% include 'page/vote_button.html' with page=page user=user %}
             <a class="btn btn-sm btn-dark" href="{{ page.get_absolute_url }}">
-                {{ comments_count }}
+                {{ page.num_comments }}
                 <i class="bi bi-chat-fill"></i>
             </a>
         </div>
