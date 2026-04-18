@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .forms import CommentForm
 from django.http import JsonResponse
+from .models import Comment
 from pages.models import Page
 
 @login_required
@@ -27,3 +28,22 @@ def post_comment(request, page_id):
     print('Form errors:', form.errors)
     print(request.POST)
     return JsonResponse({'status': '400'})
+
+@login_required
+@require_POST
+def comment_vote(request):
+    user = request.user
+    comment_id = request.POST.get('id')
+    action = request.POST.get('action')
+    if comment_id and action:
+        try:
+            comment = Comment.objects.get(id=comment_id)
+            if action == 'vote':
+                user.comment_votes.create(comment=comment)
+            else:
+                vote = user.comment_votes.get(comment=comment)
+                vote.delete()
+            return JsonResponse({'status': '200'})
+        except Comment.DoesNotExist:
+            pass
+    return JsonResponse({'status': '500'})

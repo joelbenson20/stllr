@@ -1,15 +1,23 @@
 <div class="comment">
 
     <div class=comment-header mb-1>
-        <a class="text-secondary" href="{{ comment.user.get_absolute_url }}">@{{ comment.user.username }}</a>
+        <a class="small text-secondary" href="{{ comment.user.get_absolute_url }}">@{{ comment.user.username }}</a>
         <span class="small text-secondary">{{ comment.created }}</span>
     </div>
 
-    <div class="content">
+    <div class="content my-2">
         {{ comment.content }}
     </div>
 
     <div class="comment-buttons">
+        {% include "comments/vote_button.html" with comment=comment %}
+        <a class="btn btn-sm btn-dark"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#children-{{ comment.id }}"
+            aria-expanded="false">
+            <i class="bi bi-chat-fill"></i>
+        <a>
         <button class="comment-reply-link btn btn-link btn-sm text-decoration-none mx-1 p-0"
             type="button"
             data-bs-toggle="collapse"

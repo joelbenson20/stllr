@@ -27,3 +27,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.user}: {self.content}'
+    
+    @property
+    def num_votes(self):
+        return self.votes.count()
+    
+    
+class CommentVote(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comment_votes', on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, related_name='votes', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'comment')

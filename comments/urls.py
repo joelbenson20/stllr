@@ -4,5 +4,6 @@ from . import views
 app_name = 'comments'
 
 urlpatterns = [
-    path('post/<int:page_id>/', views.post_comment, name='post')
+    path('post/<int:page_id>/', views.post_comment, name='post'),
+    path('vote/', views.comment_vote, name='vote'),
 ]

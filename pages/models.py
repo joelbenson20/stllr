@@ -40,7 +40,7 @@ class Page(models.Model):
 class PageVote(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_votes', on_delete=models.CASCADE)
     page = models.ForeignKey(Page, related_name='votes', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('user', 'page')
