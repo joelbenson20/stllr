@@ -7,7 +7,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('account.urls')),
     path('', include('pages.urls', namespace='pages')),
-    path('comments/', include('django_comments_xtd.urls')),
     path('extension/', include('extension.urls', namespace='extension')),
 ]
 

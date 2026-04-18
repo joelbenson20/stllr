@@ -1,7 +1,4 @@
 {% load static %}
-{% load comments %}
-{% load comments_xtd %}
-{% load sorted_comments %}
 
 <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/base.css">
 <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/comments.css">
@@ -13,17 +10,6 @@
 
         <div class="row sticky-top glass rounded p-3 m-0">
             {% include 'page/card.html' with page=page user=user %}
-        </div>
-
-        <div class="row p-3">
-
-            {% render_comment_form for page %}
-            
-            <ul class="comment-feed media-list m-0 p-0" style="max: height 200px;">
-                {% get_xtdcomment_tree for page as raw_comments with_feedback %}
-                {% sort_xtdcomment_tree raw_comments as sorted_comments %}
-                {% render_xtdcomment_tree with comments=sorted_comments allow_flagging allow_feedback show_feedback %}
-            </ul>
         </div>
 
         {% if similar_pages %}

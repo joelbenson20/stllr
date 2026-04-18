@@ -1,27 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load comments %}
-{% load comments_xtd %}
 
 {% block content %}
     <h1 class="mb-5">{{ user.username }}</h1>
-
-    {% for comment in comments %}
-    <div class="border border-light rounded my-5 p-3">
-
-        {% include 'page/card.html' with page=comment.content_object %}
-
-        {% if comment.parent_comment %}
-        <p>@{{ comment.parent_comment.user.username }}: {{ comment.parent_comment.comment }}</p>
-        {% endif %}
-
-        <div class="{% if comment.parent_comment %}ps-3{% endif %}">
-            <p><mark>@{{ comment.user.username }}: {{ comment.comment }}</mark></p>
-            <a href="{% get_comment_permalink comment %}">Go to comment <i class="bs bi-arrow-right"></i></a>
-        </div>
-
-    </div>
-    {% endfor %}
 
     {% include 'page/list.html' with pages=voted_pages user=user %}
     
