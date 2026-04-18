@@ -3,18 +3,16 @@
 {% load comments %}
 
 {% if request.user.is_authenticated %}
-    <form class="comment-form rounded" method="POST" action="{% comment_form_target %}" data-csrf-token="{{ csrf_token }}" onsubmit="post.disabled = true; return true;">
-        
+    <form class="comment-form rounded p-0" method="POST" action="{% comment_form_target %}" data-csrf-token="{{ csrf_token }}" onsubmit="post.disabled = true; return true;">
         {% csrf_token %}
         <fieldset>
-            {% comment %} <input type="hidden" name="next" value="{% url 'comments-xtd-sent' %}" /> {% endcomment %}
             <div class="alert alert-danger" data-comment-element="errors" hidden></div>
             {% for field in form %}
                 {% if field.is_hidden %}<div>{{ field }}</div>{% endif %}
             {% endfor %}
             <div style="display:none">{{ form.honeypot }}</div>
             
-            <div class="row form-group justify-content-center m-0">
+            <div class="row form-group justify-content-center m-0 p-0">
                 <textarea class="comment-form-textarea form-control border-0 shadow-none"
                     id="id_comment"
                     name="comment"
@@ -32,7 +30,6 @@
                     </button>
                 </div>
             </div>
-            
         </fieldset>
     </form>
 {% else %}
