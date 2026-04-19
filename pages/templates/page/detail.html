@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load comments %}
 
 {% block title %} stellr | {{ page.title }}{% endblock title %}
 
@@ -12,9 +13,7 @@
 
                 {% include "comments/form.html" with page=page parent=None %}
 
-                {% for comment in comments %}
-                    {% include "comments/comment.html" with page=page comment=comment %}
-                {% endfor %}
+                {% render_comment_tree page=page %}
                 
             </div>
             <div class="col-4">

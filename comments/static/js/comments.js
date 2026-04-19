@@ -1,25 +1,48 @@
-const forms = document.querySelectorAll('.comment-form');
-forms.forEach(form => {
-    form.addEventListener('submit', (e) => {
-        e.preventDefault()
-        const formData = new FormData(form);
-        var options = {
-            method: 'POST',
-            headers: {'X-CSRFToken': formData.get('csrfToken')},
-            body: formData
+// Override comment form submissions for asynchronous processing
+document.addEventListener('submit', (e) => {
+    if (!e.target.classList.contains('comment-form')) return;
+    
+    e.preventDefault();
+    const form = e.target;
+    const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+    const formData = new FormData(form);
+    var options = {
+        method: 'POST',
+        headers: {'X-CSRFToken': csrfToken},
+        body: formData
+    }
+    fetch(form.action, options)
+    .then(response => response.json())
+    .then(response => {
+        if (response.status === '201') {
+            var parentId = form.dataset.parentId;
+
+            // Insert new comment
+            var commentTree = document.querySelector('#comment-tree');
+            if (parentId) {
+                commentTree = document.querySelector(`#children-${parentId}`);
+            }
+            commentTree.insertAdjacentHTML('afterbegin', response.comment);  
+
+            // Close form container for threaded comments
+            if (parentId) {
+                var formContainer = document.querySelector(`#comment-form-container-${parentId}`);
+                var formContainerCollapse = bootstrap.Collapse.getOrCreateInstance(formContainer);
+                formContainerCollapse.hide();
+            }
+
+            // Reset the form
+            form.reset();
         }
-        fetch(form.action, options)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
     })
+    .catch(error => console.error('Error:', error))
 })
 
 
 const commentVoteUrl = '/comments/vote/'
 const commentVoteButtons = document.querySelectorAll('a.comment-vote-button')
 
+// Override comment votes for asyncronous processing.
 commentVoteButtons.forEach(voteButton => {
     voteButton.addEventListener('click', function(e) {
         e.preventDefault();
