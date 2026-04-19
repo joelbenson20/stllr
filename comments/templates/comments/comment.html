@@ -1,6 +1,6 @@
 {% load comments %}
 
-<div class="comment">
+<div id="comment-{{ comment.id }}" class="comment">
     <div class=comment-header mb-1>
         <a class="small text-secondary" href="{{ comment.user.get_absolute_url }}">@{{ comment.user.username }}</a>
         <span class="small text-secondary">{{ comment.created }}</span>
@@ -29,7 +29,7 @@
     <div id="comment-form-container-{{ comment.id }}" class="collapse mt-2">
         {% include "comments/form.html" with page=comment.page parent=comment %}
     </div>
-        <div id="children-{{ comment.id }}" class="collapse show border-start border-light ps-5">
+        <div id="children-{{ comment.id }}" class="collapse show border-start border-light ps-3">
             {% if comment.children.exists %}
                 {% render_comment_tree comments=comment.children.all %}
             {% endif %}

@@ -1,5 +1,6 @@
 from urllib.parse import urlparse, urlencode, parse_qsl, quote
 import posixpath
+from bs4 import BeautifulSoup
 
 def get_canonical(url):
 

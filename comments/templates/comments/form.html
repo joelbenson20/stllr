@@ -1,4 +1,4 @@
-<form class="comment-form rounded p-0 my-3" method="post" action="{% url "comments:post" page.id %}" data-parent-id="{{ parent.id }}">
+<form id="comment-form-{{ parent.id }}" class="comment-form rounded p-0 my-3" method="post" action="{% url "comments:post" page.id %}" data-parent-id="{{ parent.id }}">
     {% csrf_token %}
     <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
     <div class="row form-group m-0 p-0">

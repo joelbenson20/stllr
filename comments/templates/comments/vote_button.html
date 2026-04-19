@@ -1,4 +1,4 @@
-<a class="comment-vote-button btn btn-sm btn-dark"
+<a id="comment-vote-button-{{ comment.id }}" class="comment-vote-button btn btn-sm btn-dark"
     href="#"
     data-id={{ comment.id }}
     data-action="{% if comment.id in user.voted_comments_ids %}un{% endif %}vote"

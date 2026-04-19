@@ -26,6 +26,7 @@ def post_comment(request, page_id):
         new_comment.save()
         response = {
             'status': '201',
+            'commentId': new_comment.id,
             'comment': render_to_string('comments/comment.html', {'comment': new_comment}, request=request)
         }
         return (JsonResponse(response))
