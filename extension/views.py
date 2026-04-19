@@ -92,7 +92,6 @@ def extension(request):
     context = {
         'page': page,
         'similar_pages': similar_pages,
-        'user': request.user,
     }
     
     return JsonResponse({

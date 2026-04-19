@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% load comments %}
-{% load comments_xtd %}
-{% load sorted_comments %}
 
 {% block title %} stellr | {{ page.title }}{% endblock title %}
 
@@ -10,13 +8,13 @@
     {% if page.is_active %}
         <div class="row">
             <div class="col-8">
+
                 {% include 'page/card.html' with page=page user=user %}
-                {% render_comment_form for page %}
-                <ul class="comment-feed media-list my-4 mx-0 p-0">
-                    {% get_xtdcomment_tree for page as raw_comments with_feedback %}
-                    {% sort_xtdcomment_tree raw_comments as sorted_comments %}
-                    {% render_xtdcomment_tree with comments=sorted_comments allow_flagging allow_feedback show_feedback %}
-                </ul>
+
+                {% include "comments/form.html" with page=page parent=None %}
+
+                {% render_comment_tree page=page %}
+                
             </div>
             <div class="col-4">
                 {% if similar_pages %}
@@ -31,8 +29,3 @@
         <p>The forum at this page has been suspended.</p>
     {% endif %}
 {% endblock content %}
-
-{% block scripts %}
-<script src="{% static 'js/pageVotes.js' %}"></script>
-<script src="{% static 'js/commentsAPI.js' %}"></script>
-{% endblock scripts %}

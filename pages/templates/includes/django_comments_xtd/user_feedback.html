@@ -1,8 +1,0 @@
-
-
-<a class="comment-vote-button btn btn-sm btn-dark"
-    href="{% url 'comments-xtd-like' item.comment.pk %}"
-    data-voted="{% if item.likedit %}true{% else %}false{% endif %}">
-    <span class="vote-count">{{ item.likedit_users|length }}</span>
-    <i class="bi {% if item.likedit %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-</a>

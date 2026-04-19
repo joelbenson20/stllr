@@ -36,11 +36,15 @@ class Page(models.Model):
     def num_votes(self):
         return self.votes.count()
     
+    @property
+    def num_comments(self):
+        return self.comments.count()
+    
     
 class PageVote(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_votes', on_delete=models.CASCADE)
     page = models.ForeignKey(Page, related_name='votes', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('user', 'page')
