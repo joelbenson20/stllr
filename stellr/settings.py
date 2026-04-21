@@ -28,13 +28,14 @@ DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['stellr.forum', 'localhost', '127.0.0.1',]
 
-CORS_ALLOWED_ORIGINS = ["chrome-extension://ejnoheplbbmipnokmhagihclpgnkiano"]
-CSRF_TRUSTED_ORIGINS = ["chrome-extension://ejnoheplbbmipnokmhagihclpgnkiano"]
+CHROME_EXTENSION_URL = config('CHROME_EXTENSION_URL')
+CORS_ALLOWED_ORIGINS = [ CHROME_EXTENSION_URL ]
+CSRF_TRUSTED_ORIGINS = [ CHROME_EXTENSION_URL ]
 
 # Application definition
 
 INSTALLED_APPS = [
-    'account.apps.AccountConfig',
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -103,7 +104,7 @@ if DATABASE_URL and USE_ONLINE_STORAGE:
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'account.authentication.EmailAuthBackend',
+    'users.authentication.EmailAuthBackend',
 ]
 
 # Password validation
@@ -158,7 +159,7 @@ STORAGES["staticfiles"] = {
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-AUTH_USER_MODEL = 'account.User'
+AUTH_USER_MODEL = 'users.User'
 
 LOGIN_REDIRECT_URL = 'dashboard'
 
@@ -175,5 +176,3 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
-
-FIRECRAWL_API_KEY = config('FIRECRAWL_API_KEY')

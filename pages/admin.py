@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Page, PageVote, Domain
+from .models import Page, PageStar, Domain
 
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
@@ -9,5 +9,5 @@ class PageAdmin(admin.ModelAdmin):
     ordering = ['canonical']
     show_facets = admin.ShowFacets.ALWAYS
 
-admin.site.register(PageVote)
+admin.site.register(PageStar)
 admin.site.register(Domain)

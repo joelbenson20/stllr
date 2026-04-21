@@ -55,14 +55,3 @@ def edit(request):
             'profile_form': profile_form
         }
     )
-
-def user(request, username):
-
-    user = get_object_or_404(User, username=username)
-
-    context = {
-        'user': user,
-        'voted_pages': user.voted_pages,
-    }
-    
-    return render(request, 'user.html', context)

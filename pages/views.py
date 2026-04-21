@@ -12,9 +12,8 @@ from django.http import HttpResponse
 def page_feed(request, tag_slug=None):
     pages = (
         Page.objects
-        .annotate(vote_count=Count('votes'))
-        .filter(vote_count__gt=0)
-        .order_by('-vote_count')
+        .filter(total_stars__gt=0)
+        .order_by('-total_stars')
     )
     tag = None
     if tag_slug:
@@ -69,18 +68,16 @@ def page_detail(request):
 
 @login_required
 @require_POST
-def page_vote(request):
-    user = request.user
+def page_star(request):
     page_id = request.POST.get('id')
     action = request.POST.get('action')
     if page_id and action:
         try:
             page = Page.objects.get(id=page_id)
-            if action == 'vote':
-                user.page_votes.create(page=page)
+            if action == 'star':
+                page.users_star.add(request.user)
             else:
-                vote = user.page_votes.get(page=page)
-                vote.delete()
+                page.users_star.remove(request.user)
             return JsonResponse({'status': '200'})
         except Page.DoesNotExist:
             pass

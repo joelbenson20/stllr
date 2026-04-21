@@ -15,6 +15,13 @@ class Page(models.Model):
     domain = models.ForeignKey('Domain', related_name='pages', on_delete=models.CASCADE)
     inner_text = models.TextField(blank=True)
 
+    users_star = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='pages_starred',
+        blank=True
+    )
+    total_stars = models.PositiveIntegerField(default=0)
+
     _is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -33,17 +40,13 @@ class Page(models.Model):
         return 'https://' + self.canonical
     
     @property
-    def num_votes(self):
-        return self.votes.count()
-    
-    @property
     def num_comments(self):
         return self.comments.count()
     
     
-class PageVote(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_votes', on_delete=models.CASCADE)
-    page = models.ForeignKey(Page, related_name='votes', on_delete=models.CASCADE)
+class PageStar(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_stars', on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, related_name='stars', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
