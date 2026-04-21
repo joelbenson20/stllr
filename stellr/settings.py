@@ -61,7 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'float.urls'
+ROOT_URLCONF = 'stellr.urls'
 
 TEMPLATES = [
     {
@@ -78,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'float.wsgi.application'
+WSGI_APPLICATION = 'stellr.wsgi.application'
 
 
 # Database
