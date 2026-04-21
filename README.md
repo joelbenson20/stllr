@@ -1,2 +1,2 @@
-# float
-Float web application.
+# stellr
+stellr web application.
