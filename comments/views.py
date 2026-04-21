@@ -34,18 +34,18 @@ def post_comment(request, page_id):
 
 @login_required
 @require_POST
-def comment_vote(request):
-    user = request.user
+def comment_star(request):
     comment_id = request.POST.get('id')
     action = request.POST.get('action')
     if comment_id and action:
         try:
             comment = Comment.objects.get(id=comment_id)
-            if action == 'vote':
-                user.comment_votes.create(comment=comment)
+            if action == 'star':
+                print('Starring!')
+                comment.users_star.add(request.user)
             else:
-                vote = user.comment_votes.get(comment=comment)
-                vote.delete()
+                print('Unstarring!')
+                comment.users_star.remove(request.user)
             return JsonResponse({'status': '200'})
         except Comment.DoesNotExist:
             pass

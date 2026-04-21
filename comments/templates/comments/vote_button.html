@@ -1,8 +1,8 @@
-<a id="comment-vote-button-{{ comment.id }}" class="comment-vote-button btn btn-sm btn-dark"
+<a id="comment-star-button-{{ comment.id }}" class="comment-star-button btn btn-sm btn-dark"
     href="#"
     data-id={{ comment.id }}
-    data-action="{% if comment.id in user.voted_comments_ids %}un{% endif %}vote"
+    data-action="{% if comment in user.comments_starred.all %}un{% endif %}star"
     data-csrf-token={{ csrf_token }}>
-    <span class="vote-count">{{ comment.num_votes }}</span>
-    <i class="bi {% if comment.id in user.voted_comments_ids %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+    <span class="star-count">{{ comment.total_stars }}</span>
+    <i class="bi {% if comment in user.comments_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
 </a>

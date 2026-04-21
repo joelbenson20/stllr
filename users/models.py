@@ -5,13 +5,9 @@ from django.db import models
 from comments.models import Comment
 
 class User(AbstractUser):
-    
-    @property
-    def voted_comments(self):
-        return Comment.objects.filter(votes__user=self)
-    @property
-    def voted_comments_ids(self):
-        return set(self.comment_votes.values_list('comment_id', flat=True))
+
+    def get_full_name(self):
+        return super().get_full_name()
 
 class Profile(models.Model):
     user = models.OneToOneField(

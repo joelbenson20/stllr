@@ -6,24 +6,14 @@ register = template.Library()
 @register.inclusion_tag('comments/comment_tree.html', takes_context=True)
 def render_comment_tree(context, page=None, comments=None):
     if (comments):
-        # Sort comments by vote count
-        comments = (comments
-        .annotate(vote_count=Count('votes'))
-        .order_by('-vote_count')
-        )
-        # Render comment trees
+        comments = comments.order_by('-total_stars')
         return {
             'comments': comments,
             'user': context.get('user')
         }
     elif page:
-        # Get thread level 0 of page comments
-        layer_0 = page.comments.filter(thread_level=0)
-        # Sort comments by vote count
-        layer_0 = (layer_0
-        .annotate(vote_count=Count('votes'))
-        .order_by('-vote_count')
-        )
+        # Get thread level 0 of page comments to "plant" tree
+        layer_0 = page.comments.filter(thread_level=0).order_by('-total_stars')
         return {
             'comments': layer_0,
             'user': context.get('user')

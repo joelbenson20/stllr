@@ -25,17 +25,20 @@ class Comment(models.Model):
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 
+    users_star = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='comments_starred',
+        blank=True
+    )
+    total_stars = models.PositiveIntegerField(default=0)
+
     def __str__(self):
         return f'{self.user}: {self.content}'
     
-    @property
-    def num_votes(self):
-        return self.votes.count()
     
-    
-class CommentVote(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comment_votes', on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, related_name='votes', on_delete=models.CASCADE)
+class CommentStar(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comment_stars', on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, related_name='stars', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
