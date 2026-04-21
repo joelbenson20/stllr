@@ -42,7 +42,10 @@ def page_feed(request, tag_slug=None):
     return render(
         request,
         'page/feed.html',
-        {'pages': pages}
+        {
+            'pages': pages,
+            'tag': tag
+         }
     )
 
 def page_detail(request):
