@@ -81,20 +81,15 @@ function initCommentForm(form) {
     })
  }
 
-function initCommentStarButtons() {
+ function initComments() {
     var commentStarButtons = document.querySelectorAll('.comment-star-button');
     commentStarButtons.forEach(starButton => {
         initCommentStarButton(starButton);
     });
- }
-
-  function initCommentForms() {
     var commentForms = document.querySelectorAll('.comment-form');
     commentForms.forEach(form => {
     initCommentForm(form);
     });
-}
+ }
 
- initCommentStarButtons();
-
- initCommentForms();
+initComments();
