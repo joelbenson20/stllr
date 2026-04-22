@@ -20,7 +20,7 @@
                 {{ comment.user.username }}
             </a>
             <i class="bi bi-dot text-secondary"></i>
-            <span class="small text-secondary">{{ comment.created|naturaltime }} ago</span>
+            <span class="small text-secondary">{{ comment.created|naturaltime }}</span>
         </div>
 
         <div class="content my-2">
@@ -40,18 +40,18 @@
             <button class="comment-reply-link btn btn-sm btn-link text-decoration-none me-2 p-0"
                 type="button"
                 data-bs-toggle="collapse"
-                data-bs-target="#comment-form-container-{{ comment.id }}"
+                data-bs-target="#reply-form-container-{{ comment.id }}"
                 aria-expanded="false">
                 Reply
             </button>
         </div>
-        <div id="comment-form-container-{{ comment.id }}" class="collapse mt-2">
+        <div id="reply-form-container-{{ comment.id }}" class="reply-form-container collapse mt-2">
             {% include "comments/form.html" with page=comment.page parent=comment %}
         </div>
-        {% if comment.children.exists %}
             <div id="children-{{ comment.id }}" class="collapse show">
-                {% render_comment_tree comments=comment.children.all %}
+                {% if comment.children.exists %}
+                        {% render_comment_tree comments=comment.children.all %}
+                {% endif %}
             </div>
-        {% endif %}
     </div>
 </div>

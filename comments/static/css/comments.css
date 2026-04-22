@@ -1,3 +1,25 @@
+
+.comment-section {
+    max-width: 768px;
+}
+
+.comment-form,
+.comment-form-textarea {
+    max-width: 768px;
+    background-color: white;
+    border-radius: 15px;
+}
+.comment-form-textarea {
+    resize: none;
+}
+.comment-form-buttons {
+    display: none;
+}
+
+.comment-submit-button {
+    background-color: var(--iridescent-4);
+}
+
 .comment {
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -19,21 +41,6 @@
     text-shadow: 0 0 5px white;
 }
 
-.comment-form {
-    max-width: 576px;
-    border-color: var(--iridescent-0);
-    background: linear-gradient(to left, var(--iridescent-0), var(--iridescent-1), var(--iridescent-2), var(--iridescent-3), var(--iridescent-4));
-}
-
-.comment-submit-button {
-    background-color: var(--iridescent-4);
-}
-
 .comment-reply-link {
     color: var(--iridescent-3);
-}
-
-.comment-permalink-highlight > .comment-frame {
-    background-color: color-mix(in srgb, var(--iridescent-3) 20%, transparent);
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--iridescent-0) 50%, transparent);
 }

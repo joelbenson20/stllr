@@ -11,9 +11,10 @@
 
                 {% include 'page/card.html' with page=page user=user %}
 
-                {% include "comments/form.html" with page=page parent=None %}
-
-                {% render_comment_tree page=page %}
+                <div class="comment-section my-5">
+                    {% include "comments/form.html" with page=page parent=None %}
+                    {% render_comment_tree page=page %}
+                </div>
                 
             </div>
             <div class="col-4-sm">

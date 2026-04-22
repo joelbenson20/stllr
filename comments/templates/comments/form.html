@@ -1,18 +1,17 @@
-<form id="comment-form-{{ parent.id }}" class="comment-form rounded p-0 my-3" method="post" action="{% url "comments:post" page.id %}" data-parent-id="{{ parent.id }}">
+<form id="comment-form-{{ parent.id }}" class="comment-form p-0 my-3" method="post" action="{% url "comments:post" page.id %}" data-parent-id="{{ parent.id }}">
     {% csrf_token %}
     <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
-    <div class="row form-group m-0 p-0">
-        <textarea class="comment-form-textarea form-control border-0 shadow-none m-0"
-            name = "content"
-            rows = "3"
-            placeholder="Reach for the stars..."
-            required></textarea>
-    </div>
-    <div class="row form-group m-2 p-0">
-        <div class="d-flex justify-content-end m-0 p-0">
-            <button class="comment-submit-button btn btn-sm rounded-circle" type="submit">
-                <i class="bi bi-arrow-up-circle-fill m-0 p-0"></i>
-            </button>
-        </div>
+    <textarea class="comment-form-textarea form-control border-0 shadow-none m-0"
+        name = "content"
+        rows = "1"
+        placeholder="Reach for the stars..."
+        required></textarea>
+    <div class="comment-form-buttons text-end">
+        <button class="comment-cancel-button btn btn-sm rounded-pill m-2" type="button" onclick="closeCommentForm(this)">
+            Cancel
+        </button>
+        <button class="comment-submit-button btn btn-sm rounded-pill m-2" type="submit">
+            Comment
+        </button>
     </div>
 </form>
