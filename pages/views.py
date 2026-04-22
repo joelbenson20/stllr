@@ -7,14 +7,28 @@ from taggit.models import Tag
 from django.http import JsonResponse
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse
+from .utils import get_pages_stochastic
 
-
-def page_feed(request, tag_slug=None):
-    pages = (
-        Page.objects
-        .filter(total_stars__gt=0)
-        .order_by('-total_stars')
+def firmament_view(request):
+    pages = get_pages_stochastic(count=3)
+    cards_only = request.GET.get('cards_only')
+    if cards_only:
+        return render(
+            request,
+            'page/list.html',
+            {'pages': pages}
+        )
+    return render(
+        request,
+        'page/feed.html',
+        {
+            'pages': pages,
+            'section': 'firmament'
+        }
     )
+
+def brightest_view(request, tag_slug=None):
+    pages = Page.objects.all()
     tag = None
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
@@ -43,8 +57,37 @@ def page_feed(request, tag_slug=None):
         'page/feed.html',
         {
             'pages': pages,
-            'tag': tag
+            'tag': tag,
+            'section': 'brightest'
          }
+    )
+
+def approaching_view(request):
+    pages = Page.objects.order_by('title')
+    paginator = Paginator(pages, 10)
+    p = request.GET.get('p')
+    cards_only = request.GET.get('cards_only')
+    try:
+        pages = paginator.page(p)
+    except PageNotAnInteger:
+        pages = paginator.page(1)
+    except EmptyPage:
+        if cards_only:
+            return HttpResponse('')
+        pages = paginator.page(paginator.num_pages)
+    if cards_only:
+        return render(
+            request,
+            'page/list.html',
+            {'pages': pages}
+        )
+    return render(
+        request,
+        'page/feed.html',
+        {
+            'pages': pages,
+            'section': 'approaching'
+        }
     )
 
 def page_detail(request):

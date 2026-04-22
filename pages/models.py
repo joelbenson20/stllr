@@ -23,8 +23,14 @@ class Page(models.Model):
     total_stars = models.PositiveIntegerField(default=0)
     brightness = models.FloatField(default=0)
 
-    _is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['-brightness'])
+        ]
+        ordering = ['-brightness', '?']
+    
     def __str__(self):
         return self.canonical
     
@@ -32,10 +38,6 @@ class Page(models.Model):
         query_params = {'p': self.canonical}
         return f"{reverse('pages:detail')}?{urlencode(query_params)}"
     
-    @property
-    def is_active(self):
-        return self._is_active and self.domain.is_active
-
     @property
     def link(self):
         return 'https://' + self.canonical

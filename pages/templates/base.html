@@ -37,13 +37,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link {% if section == "firmament" %}selected{% endif %}" href="#">Firmament</a>
+                        <a class="nav-link {% if section == "firmament" %}selected{% endif %}" href="{% url "pages:firmament" %}">Firmament</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if section == "brightest" %}selected{% endif %}" href="#">Brightest</a>
+                        <a class="nav-link {% if section == "brightest" %}selected{% endif %}" href="{% url "pages:brightest" %}">Brightest</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if section == "approaching" %}selected{% endif %}" href="#">Approaching</a>
+                        <a class="nav-link {% if section == "approaching" %}selected{% endif %}" href="{% url "pages:approaching" %}">Approaching</a>
                     </li>
                 </ul>
                 {% if request.user.is_authenticated %}

@@ -1,6 +1,23 @@
 from urllib.parse import urlparse, urlencode, parse_qsl, quote
 import posixpath
 from bs4 import BeautifulSoup
+from .models import Page
+import numpy as np
+
+def get_pages_stochastic(count=10):
+
+    pages = Page.objects.filter(is_active=True, domain__is_active=True).values('id', 'brightness')
+    total_pages = pages.count()
+    ids = [page['id'] for page in pages]
+    brightnesses = np.array([page['brightness'] for page in pages])
+    probabilities = brightnesses / brightnesses.sum()
+
+    chosen_ids = np.random.choice(ids, size=min(count, total_pages), p=probabilities, replace=False)
+
+    print('Chosen ids:', chosen_ids)
+    
+    return Page.objects.filter(id__in=chosen_ids)
+
 
 def get_canonical(url):
 
