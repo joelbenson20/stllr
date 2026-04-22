@@ -11,7 +11,7 @@
     </div>
     <div class="comment-buttons">
         {% include "comments/vote_button.html" with comment=comment %}
-        <a class="btn btn-sm btn-dark"
+        <a class="btn btn-xs btn-dark"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#children-{{ comment.id }}"
@@ -19,7 +19,7 @@
             <span>{{ comment.children.count }}</span>
             <i class="bi bi-chat-fill"></i>
         <a>
-        <button class="comment-reply-link btn btn-link btn-sm text-decoration-none mx-1 p-0"
+        <button class="comment-reply-link btn btn-link text-decoration-none mx-1 p-0"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#comment-form-container-{{ comment.id }}"
@@ -30,7 +30,7 @@
     <div id="comment-form-container-{{ comment.id }}" class="collapse mt-2">
         {% include "comments/form.html" with page=comment.page parent=comment %}
     </div>
-        <div id="children-{{ comment.id }}" class="collapse show border-start border-light ps-3">
+        <div id="children-{{ comment.id }}" class="collapse show border-start border-top border-light ps-3">
             {% if comment.children.exists %}
                 {% render_comment_tree comments=comment.children.all %}
             {% endif %}

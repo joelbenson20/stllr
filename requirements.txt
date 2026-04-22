@@ -17,6 +17,7 @@ django-storages==1.14.6
 django-taggit==6.1.0
 docutils==0.22.4
 dotenv==0.9.9
+easy-thumbnails==2.10.1
 filelock==3.25.2
 frozenlist==1.8.0
 h11==0.16.0

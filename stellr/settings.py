@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'storages',
     'taggit',
+    'easy_thumbnails',
     'stellr',
     'pages.apps.PagesConfig',
     'comments.apps.CommentsConfig',

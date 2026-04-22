@@ -1,9 +1,35 @@
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
-from .models import Page
+import requests
 from django.contrib.auth import get_user_model
+from django.utils.text import slugify
+from django.core.files.base import ContentFile
+from .models import Page
 
 User = get_user_model()
+
+@receiver(post_save, sender=Page)
+def download_images(sender, instance, created, **kwargs):
+    if instance.image_url and not instance.image:
+        response = requests.get(instance.image_url)
+        name = slugify(instance.canonical)
+        extension = instance.image_url.rsplit('.', 1)[1].lower()
+        image_name = f'{name}.{extension}'
+        instance.image.save(
+            image_name,
+            ContentFile(response.content)
+        )
+    domain = instance.domain
+    if domain.fav_icon_url and not domain.fav_icon:
+        response = requests.get(domain.fav_icon_url)
+        name = slugify(domain.name)
+        extension = domain.fav_icon_url.rsplit('.', 1)[1].lower()
+        image_name = f'{name}.{extension}'
+        domain.fav_icon.save(
+            image_name,
+            ContentFile(response.content)
+        )
+    return
 
 @receiver(m2m_changed, sender=Page.users_star.through)
 def users_star_changed(sender, instance, **kwargs):
@@ -17,3 +43,4 @@ def users_star_changed(sender, instance, **kwargs):
     else:
         instance.brightness = 1 / (d ** 2)
     instance.save()
+    return

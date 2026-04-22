@@ -15,6 +15,13 @@ body {
     color: white;
 }
 
+.btn-xs {
+    padding: 0.125rem 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    border-radius: 0.15rem;
+}
+
 .btn-transparent {
     background-color: transparent;
     border: none;
@@ -58,6 +65,6 @@ body {
 
 .page-star-button:has(.bi-star-fill),
 .comment-star-button:has(.bi-star-fill) {
-    box-shadow: 0 0 10px 2px white;
-    text-shadow: 0 0 10px white;
+    box-shadow: 0 0 5px 1px white;
+    text-shadow: 0 0 5px white;
 }
