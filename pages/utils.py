@@ -1,8 +1,9 @@
 from urllib.parse import urlparse, urlencode, parse_qsl, quote
 import posixpath
 from bs4 import BeautifulSoup
-from .models import Page
 import numpy as np
+from django.db.models import Case, When, IntegerField
+from .models import Page
 
 def get_pages_stochastic(count=10):
 
@@ -13,10 +14,14 @@ def get_pages_stochastic(count=10):
     probabilities = brightnesses / brightnesses.sum()
 
     chosen_ids = np.random.choice(ids, size=min(count, total_pages), p=probabilities, replace=False)
+    chosen_order = Case(
+        *[When(id=id, then=pos) for pos, id in enumerate(chosen_ids)],
+        output_field=IntegerField()
+    )
+    chosen_pages = Page.objects.filter(id__in=chosen_ids).order_by(chosen_order)
 
-    print('Chosen ids:', chosen_ids)
-    
-    return Page.objects.filter(id__in=chosen_ids)
+    print(chosen_pages)
+    return chosen_pages
 
 
 def get_canonical(url):

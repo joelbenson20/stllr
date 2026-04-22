@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from .utils import get_pages_stochastic
 
 def firmament_view(request):
-    pages = get_pages_stochastic(count=3)
+    pages = get_pages_stochastic()
     cards_only = request.GET.get('cards_only')
     if cards_only:
         return render(
