@@ -21,6 +21,7 @@ class Page(models.Model):
         blank=True
     )
     total_stars = models.PositiveIntegerField(default=0)
+    brightness = models.FloatField(default=0)
 
     _is_active = models.BooleanField(default=True)
 
@@ -38,10 +39,6 @@ class Page(models.Model):
     @property
     def link(self):
         return 'https://' + self.canonical
-    
-    @property
-    def num_comments(self):
-        return self.comments.count()
     
     
 class PageStar(models.Model):
