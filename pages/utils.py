@@ -7,7 +7,7 @@ from .models import Page
 
 def get_pages_stochastic(count=10):
 
-    pages = Page.objects.filter(is_active=True, domain__is_active=True).values('id', 'brightness')
+    pages = Page.objects.filter(brightness__gt=0, is_active=True, domain__is_active=True).values('id', 'brightness')
     total_pages = pages.count()
     ids = [page['id'] for page in pages]
     brightnesses = np.array([page['brightness'] for page in pages])

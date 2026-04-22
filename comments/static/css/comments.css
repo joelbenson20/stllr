@@ -1,3 +1,20 @@
+
+.comment-user {
+    text-decoration: none;
+}
+.comment-user:hover {
+    text-decoration: underline;
+}
+
+.comment-star-button,
+.comment-replies-button {
+    background: none;
+    border: none;
+}
+.comment-star-button:has(.bi-star-fill) {
+    text-shadow: 0 0 5px white;
+}
+
 .comment-form {
     max-width: 576px;
     border-color: var(--iridescent-0);
@@ -10,10 +27,6 @@
 
 .comment-reply-link {
     color: var(--iridescent-3);
-}
-
-.comment {
-    transition: background-color 600ms ease, box-shadow 600ms ease;
 }
 
 .comment-permalink-highlight > .comment-frame {

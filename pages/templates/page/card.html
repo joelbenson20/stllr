@@ -1,18 +1,18 @@
+{% load thumbnail %}
+
 {% if page.is_active %}
     <div class="page-card p-0 m-0">
         <div class="row m-0 p-0">
             <div class="col m-0 p-0">
-
-                {% if page.domain.fav_icon_url %}
-                    <img class="page-fav-icon bg-light rounded-circle me-1 my-1 p-1" src="{{ page.domain.fav_icon_url }}">
+                {% if page.domain.fav_icon %}
+                    {% thumbnail page.domain.fav_icon 32x32 as im %}
+                    <img class="page-fav-icon bg-light rounded-circle me-1 my-1 p-1"
+                        src="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}">
                 {% else %}
                     <i class="page-fav-icon bi bi-globe me-1 mb-0 p-0"></i>
                 {% endif %}
-
                 <p class="page-site-name m-0 p-0">{{ page.domain }}</p>
-
                 <a class="page-link d-block text-truncate m-0 p-0" href="{{ page.link }}" target="_blank">{{ page.link }}</a>
-
             </div>
         </div>
         <div class="row m-0 p-0">
@@ -23,20 +23,23 @@
                         {{ page.title }}
                     </h1>
                 </a>
-                {% if page.image_url %}
-                <img class="page-image me-2" src="{{ page.image_url }}">
+                {% if page.image %}
+                    {% thumbnail page.image 0x60 as im %}
+                    <img class="page-image me-2"
+                        src="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}">
                 {% endif %}
                 <p class="page-description small m-0">
                     {{ page.description|default_if_none:""|default:"No description."|truncatechars:300 }}
                     {% for tag in page.tags.all %}
-                        <a href="{% url 'pages:index_by_tag' tag.slug %}">#{{ tag.name }}</a>&nbsp;
+                        <a href="#">#{{ tag.name }}</a>&nbsp;
                     {% endfor %}
                 </p>
             </div>
         </div>
         <div class="mt-2 p-0">
-            {% include 'page/vote_button.html' with page=page user=user %}
-            <a class="btn btn-sm btn-dark" href="{{ page.get_absolute_url }}">
+            {% include 'page/star_button.html' with page=page user=user %}
+            <a class="btn btn-xs btn-dark me-2"
+                href="{{ request.scheme }}://{{ request.get_host }}{{ page.get_absolute_url }}">
                 <span>{{ page.comments.count }}</span>
                 <i class="bi bi-chat-fill"></i>
             </a>

@@ -9,12 +9,14 @@ def render_comment_tree(context, page=None, comments=None):
         comments = comments.order_by('-total_stars')
         return {
             'comments': comments,
-            'user': context.get('user')
+            'user': context.get('user'),
+            'request': context.get('request')
         }
     elif page:
         # Get thread level 0 of page comments to "plant" tree
         layer_0 = page.comments.filter(thread_level=0).order_by('-total_stars')
         return {
             'comments': layer_0,
-            'user': context.get('user')
-            }
+            'user': context.get('user'),
+            'request': context.get('request')
+        }
