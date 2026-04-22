@@ -62,8 +62,3 @@ body {
     color: var(--iridescent-0);
     background-color: var(--iridescent-2);
 }
-
-.page-star-button:has(.bi-star-fill) {
-    box-shadow: 0 0 5px 1px white;
-    text-shadow: 0 0 5px white;
-}
