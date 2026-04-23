@@ -12,7 +12,7 @@ class Page(models.Model):
     tags = TaggableManager(blank=True)
     description = models.TextField(max_length=400, blank=True)
     image_url = models.URLField(max_length=250, blank=True)
-    image = models.ImageField(upload_to='images/pages', blank=True)
+    image = models.ImageField(max_length=255, upload_to='images/pages', blank=True)
     domain = models.ForeignKey('Domain', related_name='pages', on_delete=models.CASCADE)
     inner_text = models.TextField(blank=True)
 
@@ -57,7 +57,7 @@ class Domain(models.Model):
     name = models.CharField(unique=True, max_length=100)
     site_name = models.CharField(max_length=100, blank=True)
     fav_icon_url = models.URLField(max_length=250, blank=True)
-    fav_icon = models.ImageField(upload_to='images/domains', blank=True)
+    fav_icon = models.ImageField(max_length=255, upload_to='images/domains', blank=True)
 
     is_active = models.BooleanField(default=True)
 

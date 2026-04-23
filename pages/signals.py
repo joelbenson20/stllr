@@ -12,23 +12,29 @@ User = get_user_model()
 def download_images(sender, instance, created, **kwargs):
     if instance.image_url and not instance.image:
         response = requests.get(instance.image_url)
-        name = slugify(instance.canonical)
+        name = slugify(instance.title) + str(instance.id)
         extension = instance.image_url.rsplit('.', 1)[1].lower()
         image_name = f'{name}.{extension}'
-        instance.image.save(
-            image_name,
-            ContentFile(response.content)
-        )
+        try:
+            instance.image.save(
+                image_name,
+                ContentFile(response.content)
+            )
+        except:
+            pass
     domain = instance.domain
     if domain.fav_icon_url and not domain.fav_icon:
         response = requests.get(domain.fav_icon_url)
-        name = slugify(domain.name)
+        name = slugify(domain.name) + str(domain.id)
         extension = domain.fav_icon_url.rsplit('.', 1)[1].lower()
         image_name = f'{name}.{extension}'
-        domain.fav_icon.save(
-            image_name,
-            ContentFile(response.content)
-        )
+        try:
+            domain.fav_icon.save(
+                image_name,
+                ContentFile(response.content)
+            )
+        except:
+            pass
     return
 
 @receiver(m2m_changed, sender=Page.users_star.through)
