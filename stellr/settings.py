@@ -45,13 +45,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'storages',
-    'taggit',
-    'easy_thumbnails',
     'stellr',
     'pages.apps.PagesConfig',
     'comments.apps.CommentsConfig',
     'extension.apps.ExtensionConfig',
+    'storages',
+    'taggit',
+    'easy_thumbnails',
+    'markdown_deux',
 ]
 
 MIDDLEWARE = [

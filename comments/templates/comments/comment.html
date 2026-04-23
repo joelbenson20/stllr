@@ -1,6 +1,7 @@
 {% load comments %}
 {% load humanize %}
 {% load thumbnail %}
+{% load markdown_deux_tags %}
 
 <div id="comment-{{ comment.id }}" class="comment row mt-3">
     <div class="col-1 d-flex justify-content-end m-0 p-0">
@@ -24,7 +25,7 @@
         </div>
 
         <div class="content my-2">
-            {{ comment.content }}
+            {{ comment.content|markdown }}
         </div>
 
         <div class="comment-buttons">
