@@ -52,13 +52,13 @@
                     <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Search forums" required>
                 </form>
                 <div class="navbar-text ms-auto">
-                    Hello, <a href="{% url "dashboard" %}">{{ user.username }}!</a>
-                    <form class="d-inline" id="logout-form" action="{% url "logout" %}" method="post">
-                        <button id="logout-button" type="submit">Logout</button>
-                        {% csrf_token %}
+                    Hello, <a href="{% url "profile" user.username %}">{{ user.username }}!</a>
+                    <form class="d-inline ms-3" id="logout-form" action="{% url "logout" %}?next={{ request.get_full_path }}" method="post">
+                         {% csrf_token %}
+                        <button class="btn btn-dark" id="logout-button" type="submit">Logout</button>
                     </form>
                 {% else %}
-                    <a class="ms-auto" href="{% url "login" %}">Log-in</a>
+                    <a class="btn btn-dark ms-auto" href="{% url "login" %}?next={{ request.get_full_path }}">Log In</a>
                 {% endif %}
                 </div>
             </div>

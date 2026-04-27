@@ -47,18 +47,3 @@ body {
     color: white;
     text-shadow: 0 0 10px white;
 }
-
-#sign-in-button {
-    background-color: var(--iridescent-1);
-}
-
-#logout-button {
-    color: var(--iridescent-2);
-    background-color: transparent;
-    border: 1px solid var(--iridescent-0);
-    transition: background-color 160ms ease, color 160ms ease;
-}
-.logout-button:hover {
-    color: var(--iridescent-0);
-    background-color: var(--iridescent-2);
-}

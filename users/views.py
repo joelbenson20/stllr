@@ -1,8 +1,9 @@
 from django.shortcuts import get_object_or_404, render
-from .models import User, Profile
+from django.contrib.auth import get_user_model
 from .forms import UserRegistrationForm, ProfileEditForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.shortcuts import redirect
 
 def register(request):
     if request.method == 'POST':
@@ -26,9 +27,12 @@ def register(request):
         {'user_form': user_form}
     )
 
-@login_required
-def dashboard(request):
-    return render(request, 'account/dashboard.html')
+def profile(request, username):
+    user = get_object_or_404(get_user_model(), username=username)
+    return render(
+        request,
+        'account/profile.html',
+        { 'profile': user.profile})
 
 @login_required
 def edit(request):
@@ -44,6 +48,7 @@ def edit(request):
                 request,
                 'Profile updated successfully'
             )
+            return redirect('profile', request.user.username)
         else:
             messages.error(request, 'Error updating your profile')
     else:

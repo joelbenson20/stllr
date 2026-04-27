@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block content %}
+
+    {% if profile.photo %}
+        {% thumbnail profile.photo 192x192 crop="smart" as im %}
+        <img class="float-start" src="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}">
+    {% else %}
+    {% endif %}
+
+    <h1>@{{ profile.user.username }}</h1>
+    <h2 class="text-secondary">{{ profile.bio }}</h2>
+    {% if request.user == profile.user %}
+        <a href="{% url "edit" %}">Edit your profile</a><br>
+        <a href="{% url "password_change" %}">Change your password</a>
+    {% endif %}
+
+{% endblock content %}

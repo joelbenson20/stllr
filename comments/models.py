@@ -32,6 +32,13 @@ class Comment(models.Model):
         blank=True
     )
     total_stars = models.PositiveIntegerField(default=0)
+    brightness = models.FloatField(default=0)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['-brightness'])
+        ]
+        ordering = ['-brightness', '?']
 
     def __str__(self):
         return f'{self.user}: {self.content}'

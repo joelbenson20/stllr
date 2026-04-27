@@ -20,11 +20,6 @@
     background-color: var(--iridescent-4);
 }
 
-.comment {
-    /* font-size: 0.875rem;
-    line-height: 1.25rem; */
-}
-
 .comment-user {
     text-decoration: none;
 }
