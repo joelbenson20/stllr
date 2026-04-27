@@ -9,5 +9,10 @@ class PageAdmin(admin.ModelAdmin):
     ordering = ['canonical']
     show_facets = admin.ShowFacets.ALWAYS
 
-admin.site.register(PageStar)
+@admin.register(PageStar)
+class PageStarAdmin(admin.ModelAdmin):
+    list_display = ('user', 'page', 'created')
+    readonly_fields = ('created',)
+    ordering = ['-created']
+
 admin.site.register(Domain)

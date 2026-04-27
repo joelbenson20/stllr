@@ -1,8 +1,9 @@
 {% load markdown_deux_tags %}
 
-<form id="comment-form-{{ parent.id }}" class="comment-form p-0 my-3" method="post" action="{% url "comments:post" page.id %}" data-parent-id="{{ parent.id }}">
+<form id="comment-form-{{ parent.id }}" class="comment-form p-0 my-3" method="post" action="{% url "comments:post" %}">
     {% csrf_token %}
     <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
+    <input type="hidden" name="page" value="{{ page.id }}">
     <textarea class="comment-form-textarea form-control border-0 shadow-none m-0"
         name = "content"
         rows = "1"

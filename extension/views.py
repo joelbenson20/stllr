@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from pages.models import Page, Domain
 import json
-from pages.utils import get_canonical, get_meta, get_domain_name
+from pages.utils import get_canonical, get_meta, get_domain_name, verify_security, InsecureURLError
 from django.db.models import Count
 
 
@@ -14,22 +14,34 @@ from django.db.models import Count
 def extension(request):
     
     posted_data = json.loads(request.body).get('pageData')
-
     url = posted_data.get('url')
     canonical = get_canonical(url)
     domain_name = get_domain_name(url)
-    head = posted_data.get('head')
-    inner_text = posted_data.get('innerText')
 
-    page = None
     try:
         page = Page.objects.get(canonical=canonical)
     except Page.DoesNotExist:
+        page = None
+        head = posted_data.get('head')
         scraped_data = get_meta(url, head)
-        image_url = scraped_data['image_url']
-        fav_icon_url = posted_data.get('favIconUrl') or scraped_data['fav_icon_url'] or ''
-        site_name = scraped_data.get('site_name') or ''
 
+        title = posted_data.get('title') or scraped_data['title']
+        type = scraped_data['type']
+        description = scraped_data['description']
+        inner_text = posted_data.get('innerText')
+        image_url = scraped_data['image_url']
+        fav_icon_url = posted_data.get('favIconUrl') or scraped_data['fav_icon_url']
+        site_name = scraped_data.get('site_name')
+
+        # Verify URL security
+        try:
+            verify_security(url) 
+            verify_security(image_url)
+            verify_security(fav_icon_url)
+        except InsecureURLError as e:
+            return JsonResponse({'status': '400', 'error': str(e)}, status=400)
+
+        # Get or create domain for new page
         domain, created = Domain.objects.get_or_create(name=domain_name)
         # Update domain if new information
         if not domain.site_name and site_name:
@@ -39,12 +51,13 @@ def extension(request):
             domain.fav_icon_url = fav_icon_url
             domain.save()
 
+        # Create new page
         page = Page.objects.create(
             canonical=canonical,
-            title= posted_data.get('title') or scraped_data['title'] or '',
-            type=scraped_data['type'] or '',
-            description=scraped_data['description'] or '',
-            image_url=image_url or '',
+            title=title,
+            type=type,
+            description=description,
+            image_url=image_url,
             domain = domain,
             inner_text=inner_text or scraped_data['inner_text'] or '',
         )

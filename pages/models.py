@@ -18,6 +18,7 @@ class Page(models.Model):
 
     users_star = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
+        through='PageStar',
         related_name='pages_starred',
         blank=True
     )

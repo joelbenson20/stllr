@@ -9,18 +9,13 @@ from django.template.loader import render_to_string
 
 @login_required
 @require_POST
-def post_comment(request, page_id):
-    page = get_object_or_404(
-        Page,
-        id=page_id,
-    )
+def post_comment(request):
     new_comment = None
     form = CommentForm(data=request.POST)
     if form.is_valid():
         cd = form.cleaned_data
         new_comment = form.save(commit=False)
         new_comment.user = request.user
-        new_comment.page = page
         if (new_comment.parent):
             new_comment.thread_level = new_comment.parent.thread_level + 1
         new_comment.save()

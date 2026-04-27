@@ -27,6 +27,7 @@ class Comment(models.Model):
 
     users_star = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
+        through='CommentStar',
         related_name='comments_starred',
         blank=True
     )

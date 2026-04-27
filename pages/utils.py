@@ -1,6 +1,7 @@
 from urllib.parse import urlparse, urlencode, parse_qsl, quote
 import posixpath
 from bs4 import BeautifulSoup
+import ipaddress
 import numpy as np
 from django.db.models import Case, When, IntegerField
 from .models import Page
@@ -8,6 +9,10 @@ from .models import Page
 def get_pages_stochastic(count=10):
 
     pages = Page.objects.filter(brightness__gt=0, is_active=True, domain__is_active=True).values('id', 'brightness')
+    
+    if not pages:
+        return None
+    
     total_pages = pages.count()
     ids = [page['id'] for page in pages]
     brightnesses = np.array([page['brightness'] for page in pages])
@@ -22,7 +27,6 @@ def get_pages_stochastic(count=10):
 
     print(chosen_pages)
     return chosen_pages
-
 
 def get_canonical(url):
 
@@ -79,9 +83,42 @@ def get_domain_name(url):
         host = host[4:]
     return host
 
-def verify_security(url):
+class InsecureURLError(Exception):
+    """Raised when a URL fails security verification"""
     pass
 
+def verify_security(url):
+    """Verify that a URL is safe to store and display
+    Checks:
+    - Hostname does not resolve to a private/loopback/reserved IP
+    - No obviously malicious schemes (javascript:, data:, etc.)
+
+    Raises InsecureURLError if the URL fails any check
+    Passes silently for None/empty URLs (optional fields like image_url)
+    """
+
+    if not url:
+        return
+    
+    parsed = urlparse(url)
+
+    hostname = parsed.hostname
+    if not hostname:
+        raise InsecureURLError(f"URL has no hostname: {url}")
+    
+    # Block private, loopback, and reserved IP addresses
+    try:
+        addr = ipaddress.ip_address(hostname)
+        if addr.is_private or addr.is_loopback or addr.is_reserved or addr.is_link_local:
+            raise InsecureURLError(f"URL points to a private/reserved address: {url}")
+    except ValueError:
+        # hostname is a domain name, not a raw IP -- that's fine
+        pass
+
+    # Block localhost variants
+    if hostname in ('localhost', '127.0.0.1', '::1', '0.0.0.0'):
+        raise InsecureURLError(f"URL points to a localhost: {url}")
+    
 def get_meta(url, head):
     try:
         soup = BeautifulSoup(head, 'html.parser')
