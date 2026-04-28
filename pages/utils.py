@@ -25,7 +25,6 @@ def get_pages_stochastic(count=10):
     )
     chosen_pages = Page.objects.filter(id__in=chosen_ids).order_by(chosen_order)
 
-    print(chosen_pages)
     return chosen_pages
 
 def get_canonical(url):
@@ -123,7 +122,6 @@ def get_meta(url, head):
     try:
         soup = BeautifulSoup(head, 'html.parser')
     except Exception as e:
-        print(f"BeautifulSoup parsing error: {e}")
         return None
     
     def get_meta_tag(name, attr='property'):

@@ -18,14 +18,10 @@ from django.contrib.messages import constants as messages
 SITE_ID = 1
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('DJANGO_SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
-THUMBNAIL_DEBUG = config('THUMBNAIL_DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['stellr.forum', 'localhost', '127.0.0.1', '192.168.50.86']
 
@@ -84,27 +80,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'stellr.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-USE_ONLINE_STORAGE = config('USE_ONLINE_STORAGE', default=False, cast=bool)
-DATABASE_URL = config('DATABASE_URL')
-
-if DATABASE_URL and USE_ONLINE_STORAGE:
-    DATABASES['default'] = dj_database_url.config(
-        conn_max_age=500,
-        conn_health_checks=True,
-    )
-
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -169,10 +144,6 @@ LOGIN_REDIRECT_URL = 'pages:index'
 LOGOUT_REDIRECT_URL = 'pages:index'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-MANAGERS = (
-    ("Manager", config('MANAGER_EMAIL')),
-)
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-secondary',

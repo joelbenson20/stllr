@@ -36,10 +36,8 @@ def comment_star(request):
         try:
             comment = Comment.objects.get(id=comment_id)
             if action == 'star':
-                print('Starring!')
                 comment.users_star.add(request.user)
             else:
-                print('Unstarring!')
                 comment.users_star.remove(request.user)
             return JsonResponse({'status': '200'})
         except Comment.DoesNotExist:
