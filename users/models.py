@@ -20,5 +20,8 @@ class Profile(models.Model):
         blank=True
     )
 
+    def get_absolute_url(self):
+        return reverse("profile", kwargs={"username": self.user.username})
+    
     def __str__(self):
         return f'Profile of {self.user.username}'

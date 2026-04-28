@@ -17,7 +17,7 @@
     <div class="col-11">
         <div class="comment-header">
             <a class="comment-user small text-light fw-bold"
-                href="http://{{ request.get_host }}{{ comment.user.get_absolute_url }}">
+                href="http://{{ request.get_host }}{{ comment.user.profile.get_absolute_url }}">
                 {{ comment.user.username }}
             </a>
             <i class="bi bi-dot text-secondary"></i>
