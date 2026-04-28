@@ -36,6 +36,7 @@
     text-shadow: 0 0 5px white;
 }
 
-.comment-reply-link {
-    color: var(--iridescent-3);
+.comment-reply-button {
+    background-color: var(--iridescent-4);
+    color: black;
 }

@@ -14,12 +14,12 @@
                 <p class="page-site-name m-0 p-0">
                     <span>{{ page.domain }}</span>
                     {% if page.domain.category or page.type %}
-                    <span class="domain-category badge text-bg-dark p-1">
+                    <span class="domain-category badge text-bg-dark">
                         {% firstof page.domain.category|capfirst page.type|capfirst %}
                     </span>
                     {% endif %}
                 </p>
-                <a class="page-link d-block text-truncate m-0 p-0" href="{{ page.link }}" target="_blank">{{ page.link }}</a>
+                <a class="page-link d-block text-truncate mt-1 p-0" href="{{ page.link }}" target="_blank">{{ page.link }}</a>
             </div>
         </div>
         <div class="row m-0 p-0">

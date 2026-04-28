@@ -33,7 +33,7 @@ def get_canonical(url):
     # Only these query parameters are preserved. Everything else (tracking params,
     # session tokens, referral IDs, etc.) is stripped before storing the URL.
     ALLOWED_QUERY_PARAMS = {
-        'q', 'query', 'search', 'page', 'p', 'id', 'v',
+        'q', 'query', 'search', 'search_query', 'page', 'p', 'id', 'v',
     }
 
     parsed = urlparse(url)

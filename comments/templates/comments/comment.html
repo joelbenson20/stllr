@@ -30,7 +30,7 @@
 
         <div class="comment-buttons">
             {% include "comments/star_button.html" with comment=comment %}
-            <a class="comment-replies-button btn btn-xs btn-dark me-2"
+            <a class="comment-replies-button btn btn-xs btn-dark me-1"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#children-{{ comment.id }}"
@@ -38,7 +38,7 @@
                 <span>{{ comment.children.count }}</span>
                 <i class="bi bi-chat-fill"></i>
             </a>
-            <button class="comment-reply-link btn btn-sm btn-link text-decoration-none me-2 p-0"
+            <button class="comment-reply-button btn btn-sm btn-xs btn-dark rounded-pill me-1"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#reply-form-container-{{ comment.id }}"

@@ -27,7 +27,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
 THUMBNAIL_DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['stellr.forum', 'localhost', '127.0.0.1',]
+ALLOWED_HOSTS = ['stellr.forum', 'localhost', '127.0.0.1', '192.168.50.86']
 
 CHROME_EXTENSION_URL = config('CHROME_EXTENSION_URL')
 CORS_ALLOWED_ORIGINS = [ CHROME_EXTENSION_URL ]
