@@ -143,6 +143,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+# Custom docker env file
+.env.prod
 
 # Spyder project settings
 .spyderproject
@@ -209,11 +211,9 @@ __marimo__/
 # Text backup files
 *.bak
 
-# Database
-*.sqlite3
-
-# dotenv file
-.env
-
 #PyCharm files
 .idea
+
+# Django static and media files
+static/
+media/

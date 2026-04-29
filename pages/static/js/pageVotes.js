@@ -1,6 +1,7 @@
+const pageVoteUrl = '/page/vote/';
+
 function initPageVoteButtons() {
 
-    const pageVoteUrl = '/page/vote/';
     const pageVoteButtons = document.querySelectorAll('a.page-vote-button')
 
     pageVoteButtons.forEach(voteButton => {
