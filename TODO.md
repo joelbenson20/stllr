@@ -1,14 +1,16 @@
 # Features
 
-- URL security verification: Verify that a URL is secure, maybe by calling some API that tests whether it's indexed by Google?
+- Handle both http and https pages: Create 'schema' field in pages model. When a user request from https, update page to default to https schema. Otherwise, if user instantiates page with http, use as schema until another user requests from https, proving that the page supports TLS/SSL.
 
-- Webpage classifier: Python script that takes in a webpage url, calls the url, and classifies the webpage into categories based on the response. (Article, Video, Social Media Post, etc. (Or maybe other features???))
+- Webpage description/tags generator: Generate a description and tags from captured 'inner text' from the page. Update the 'inner text' field if a user w/ a subscription to the page sends over more data (more 'inner text' by virtue of being past the paywall)
 
-- Webpage description generator: When a webpage does not have a <og:description> tag, I leave the description blank. It might be better for us to call the page, and based on the content generate a short AI description.
+- Commment thread expand/collapse button: Clean up the look of threads and make the collapse and expand functionality more intuitive. Long term, make comments collapsed or expanded by default based on how many stars its child elements have.
+
+- User profiles and edit pages: Polish the look of a user's profile page and profile edit page. Create a new Django app to track user actions and display a feed of that user's activity.
+
+- SMTP and email verification: Setup the admin@stllr.io email and force new users to verify their emails.
 
 # Open questions
 
-- Do we want to only support HTTPS supported webpages? I think yes.
-- What kind of statistical algorithm do we want to use to order the webpage feed?
 
 # Bugs
