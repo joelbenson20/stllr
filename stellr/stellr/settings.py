@@ -165,6 +165,7 @@ STORAGES = {
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / config('STATIC_ROOT_PATH')
+STATICFILES_DIRS = [Path(__file__).resolve().parent / 'static']
 
 STORAGES["staticfiles"] = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
