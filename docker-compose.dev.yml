@@ -1,13 +1,13 @@
-name: stellr_dev
+name: stllr_dev
 
 services:
 
   db:
     image: postgres:17
     environment:
-      POSTGRES_DB: stellr_dev
-      POSTGRES_USER: stellr_dev
-      POSTGRES_PASSWORD: stellr_dev
+      POSTGRES_DB: stllr_dev
+      POSTGRES_USER: stllr_dev
+      POSTGRES_PASSWORD: stllr_dev
     volumes:
       - ./data/db_dev:/var/lib/postgresql
     ports:
@@ -21,10 +21,10 @@ services:
   celery:
     build: .
     command: ["./wait-for-it.sh", "db:5432", "--",
-              "bash", "-c", "cd /code/stellr && celery -A stellr worker --loglevel=info"]
+              "bash", "-c", "cd /code/stllr && celery -A stllr worker --loglevel=info"]
     restart: always
     env_file:
-      - ./stellr/.env
+      - ./stllr/.env
     environment:
       - POSTGRES_HOST=db
     volumes:
@@ -36,10 +36,10 @@ services:
   celery-beat:
     build: .
     command: ["./wait-for-it.sh", "db:5432", "--",
-              "bash", "-c", "cd /code/stellr && celery -A stellr beat --loglevel=info"]
+              "bash", "-c", "cd /code/stllr && celery -A stllr beat --loglevel=info"]
     restart: always
     env_file:
-      - ./stellr/.env
+      - ./stllr/.env
     environment:
       - POSTGRES_HOST=db
     volumes:

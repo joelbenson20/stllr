@@ -1,5 +1,5 @@
 # Exceptions for static files
-!stellr/stellr/static/libs/
+!stllr/stllr/static/libs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

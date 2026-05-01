@@ -1,6 +1,6 @@
 # upstream for uWSGI
 upstream uwsgi_app {
-    server unix:/code/stellr/uwsgi_app.sock;
+    server unix:/code/stllr/uwsgi_app.sock;
 }
 
 server {
