@@ -18,8 +18,9 @@ services:
 
   web:
     build: .
+    # Done by Claude, requires review
     command: ["./wait-for-it.sh", "db:5432", "--",
-          "bash", "-c", "cd /code/stellr && python manage.py collectstatic --noinput && python manage.py migrate && uwsgi --ini /code/config/uwsgi/uwsgi.ini"]
+          "bash", "-c", "cd /code/stellr && python manage.py collectstatic --noinput && python manage.py migrate && chown www-data:www-data /code/stellr && uwsgi --ini /code/config/uwsgi/uwsgi.ini"]
     restart: always
     volumes:
       - .:/code
