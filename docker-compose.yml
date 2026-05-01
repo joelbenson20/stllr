@@ -4,7 +4,7 @@ services:
     image: postgres:17
     restart: always
     volumes:
-      - ./data/db:/var/lib/postgresql
+      - ./data/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
