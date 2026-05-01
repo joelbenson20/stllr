@@ -1,4 +1,4 @@
-const pageVoteUrl = '/page/vote/';
+const PAGE_VOTE_PATH = 'page/vote/';
 
 function initPageVoteButtons() {
 
@@ -16,7 +16,7 @@ function initPageVoteButtons() {
                 mode: 'same-origin',
                 body: formData
             }
-            fetch(pageVoteUrl, options)
+            fetch(BASE_URL + PAGE_VOTE_PATH, options)
             .then(response => response.json())
             .then(data => {
                 if (data['status'] === '200') {

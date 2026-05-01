@@ -1,5 +1,5 @@
-const COMMENT_STAR_PATH = '/comments/star/'
-const POST_COMMENT_PATH='/comments/post/'
+const COMMENT_STAR_PATH = 'comments/star/';
+const POST_COMMENT_PATH = 'comments/post/';
 
 
 function initCommentForm(form) {
@@ -13,7 +13,7 @@ function initCommentForm(form) {
             headers: {'X-CSRFToken': csrfToken},
             body: formData
         }
-        fetch(SITE_URL + POST_COMMENT_PATH, options)
+        fetch(BASE_URL + POST_COMMENT_PATH, options)
         .then(response => response.json())
         .then(response => {
             if (response.status === '201') {
@@ -84,7 +84,7 @@ function initCommentStarButton(starButton) {
                 mode: 'same-origin',
                 body: formData
             }
-            fetch(SITE_URL + COMMENT_STAR_PATH, options)
+            fetch(BASE_URL + COMMENT_STAR_PATH, options)
             .then(response => response.json())
             .then(data => {
                 console.log(data)

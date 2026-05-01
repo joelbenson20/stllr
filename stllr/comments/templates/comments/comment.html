@@ -49,10 +49,10 @@
         <div id="reply-form-container-{{ comment.id }}" class="reply-form-container collapse mt-2">
             {% include "comments/form.html" with page=comment.page parent=comment %}
         </div>
-            <div id="children-{{ comment.id }}" class="collapse show">
-                {% if comment.children.exists %}
-                        {% render_comment_tree comments=comment.children.all %}
-                {% endif %}
-            </div>
+        <div id="children-{{ comment.id }}" class="collapse show border-start">
+            {% if comment.children.exists %}
+                    {% render_comment_tree comments=comment.children.all %}
+            {% endif %}
+        </div>
     </div>
 </div>

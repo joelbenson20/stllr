@@ -1,4 +1,4 @@
-const pageStarUrl = '/page/star/';
+const PAGE_STAR_PATH = 'page/star/';
 
 function initPageStarButtons() {
 
@@ -16,7 +16,7 @@ function initPageStarButtons() {
                 mode: 'same-origin',
                 body: formData
             }
-            fetch(pageStarUrl, options)
+            fetch(BASE_URL + PAGE_STAR_PATH, options)
             .then(response => response.json())
             .then(data => {
                 if (data['status'] === '200') {
