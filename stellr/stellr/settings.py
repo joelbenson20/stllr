@@ -36,7 +36,9 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 CORS_ALLOWED_ORIGINS = [
-    config('CHROME_EXTENSION_URL')
+    'chrome-extension://afidgifkkffncbbgnfcldbiiongknnbj',
+    'chrome-extension://dfnebcejncnjonejmgkapaoepkobkehk',
+    
 ]
 CSRF_TRUSTED_ORIGINS = [
     'https://www.stellr.forum',
@@ -47,7 +49,8 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1',
     'http://127.0.0.1:8000',
-    config('CHROME_EXTENSION_URL')
+    'chrome-extension://afidgifkkffncbbgnfcldbiiongknnbj',
+    'chrome-extension://dfnebcejncnjonejmgkapaoepkobkehk',
 ]
 CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=True, cast=bool)
 SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=True, cast=bool)
