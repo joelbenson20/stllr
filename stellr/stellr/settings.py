@@ -31,16 +31,18 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 ALLOWED_HOSTS = [
     'www.stellr.forum',
     'stellr.forum',
+    '107.170.16.225',
     'localhost',
     '127.0.0.1'
 ]
 CORS_ALLOWED_ORIGINS = [
     config('CHROME_EXTENSION_URL')
 ]
-# Done by Claude, requires review
 CSRF_TRUSTED_ORIGINS = [
     'https://www.stellr.forum',
     'https://stellr.forum',
+    'http://107.170.16.225',
+    'https://107.170.16.225',
     'http://localhost',
     'http://localhost:8000',
     'http://127.0.0.1',

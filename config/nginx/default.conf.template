@@ -5,19 +5,8 @@ upstream uwsgi_app {
 
 server {
     listen          80;
-    server_name     www.stellr.forum stellr.forum;
-    return          301 https://$host$request.uri;
-}
+    server_name    107.170.16.225;
 
-server {
-    listen              443 ssl;
-    ssl_certificate     /code/stellr/ssl/cert.pem;
-    ssl_certificate_key /code/stellr/ssl/key.pem;
-    server_name         www.stellr.forum stellr.forum;
-    error_log           stderr warn;
-    access_log          /dev/stdout main;
-
-    # Done by Claude, requires review
     location / {
         include     /etc/nginx/uwsgi_params;
         uwsgi_pass  uwsgi_app;
