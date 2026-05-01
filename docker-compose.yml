@@ -1,0 +1,66 @@
+services:
+
+  db:
+    image: postgres:17
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  cache:
+    image: redis:8
+    restart: always
+    volumes:
+      - ./data/cache:/data
+
+  web:
+    build: .
+    command: ["./wait-for-it.sh", "db:5432", "--",
+          "bash", "-c", "cd /code/stellr && python manage.py collectstatic --noinput && python manage.py migrate && uwsgi --ini /code/config/uwsgi/uwsgi.ini"]
+    restart: always
+    volumes:
+      - .:/code
+    env_file:
+      - ./stellr/.env.prod
+    depends_on:
+      - db
+      - cache
+
+  celery:
+    build: .
+    command: ["./wait-for-it.sh", "db:5432", "--",
+              "bash", "-c", "cd /code/stellr && celery -A stellr worker --loglevel=info"]
+    restart: always
+    volumes:
+      - .:/code
+    env_file:
+      - ./stellr/.env.prod
+    depends_on:
+      - db
+      - cache
+
+  celery-beat:
+    build: .
+    command: ["./wait-for-it.sh", "db:5432", "--",
+              "bash", "-c", "cd /code/stellr && celery -A stellr beat --loglevel=info"]
+    restart: always
+    volumes:
+      - .:/code
+    env_file:
+      - ./stellr/.env.prod
+    depends_on:
+      - db
+      - cache
+
+  nginx:
+    image: nginx:1.28
+    restart: always
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - .:/code
+    ports:
+      - "80:80"
+      - "443:443"

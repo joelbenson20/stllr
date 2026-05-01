@@ -1,0 +1,33 @@
+# upstream for uWSGI
+upstream uwsgi_app {
+    server unix:/code/stellr/uwsgi_app.sock;
+}
+
+server {
+    listen          80;
+    server_name     www.stellr.forum stellr.forum;
+    return          301 https://$host$request.uri;
+}
+
+server {
+    listen              443 ssl;
+    ssl_certificate     /code/stellr/ssl/cert.pem;
+    ssl_certificate_key /code/stellr/ssl/key.pem;
+    server_name         www.stellr.forum stellr.forum;
+    error_log           stderr warn;
+    access_log          /dev/stdout main;
+
+    # Done by Claude, requires review
+    location / {
+        include     /etc/nginx/uwsgi_params;
+        uwsgi_pass  uwsgi_app;
+    }
+
+    location /static/ {
+        alias   /code/static/prod/;
+    }
+
+    location /media/ {
+        alias   /code/media/prod/;
+    }
+}
