@@ -10,6 +10,10 @@
 
 - SMTP and email verification: Setup the admin@stllr.io email and force new users to verify their emails.
 
+- Markdown editor: Add features to the comment editing form that allows users to perhaps view a markdown cheatsheet, upload images, select gifs (GIPHY integration?), and mention other users (=> send notifications to users?).
+
+- User input sanitization: Ensure that comments and images submitted by users are safe, i.e. not scripts that will run in the database or when served to other users. "Bleach" django library?
+
 # Open questions
 
 
