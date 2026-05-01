@@ -1,10 +1,6 @@
 {% load static %}
 {% load comments %}
 
-<link rel="stylesheet" href="http://127.0.0.1:8000/static/css/base.css">
-<link rel="stylesheet" href="http://127.0.0.1:8000/static/css/comments.css">
-<link rel="stylesheet" href="http://127.0.0.1:8000/static/css/pages.css">
-
 {% if page.is_active %}
     <div class="container-fluid p-2 m-0">
         {% include 'page/card.html' with page=page user=user %}

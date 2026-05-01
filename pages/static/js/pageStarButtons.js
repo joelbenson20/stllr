@@ -1,6 +1,7 @@
+const pageStarUrl = '/page/star/';
+
 function initPageStarButtons() {
 
-    const pageStarUrl = '/page/star/';
     const pageStarButtons = document.querySelectorAll('.page-star-button')
 
     pageStarButtons.forEach(starButton => {

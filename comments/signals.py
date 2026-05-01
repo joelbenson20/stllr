@@ -7,13 +7,13 @@ User = get_user_model()
 
 @receiver(m2m_changed, sender=Comment.users_star.through)
 def users_star_changed(sender, instance, **kwargs):
-    instance.total_stars = instance.users_star.count()
+    total_stars = instance.users_star.count()
     # Distance is defined as the number of users that have not yet starred the page
-    d = User.objects.count() - instance.total_stars
+    d = User.objects.count() - total_stars
     # If all users have liked, return the highest big integer to avoid dividing by 0
     if (d == 0):
-        instance.brightness = 1.0000000001
+        brightness = 1.0000000001
     # Otherwise, return the inverse squared value
     else:
-        instance.brightness = 1 / (d ** 2)
-    instance.save()
+        brightness = 1 / (d ** 2)
+    Comment.objects.filter(pk=instance.pk).update(total_stars=total_stars, brightness=brightness)

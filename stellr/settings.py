@@ -11,29 +11,45 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
 from decouple import config
-import dj_database_url
 from django.contrib.messages import constants as messages
 
+# Site
 SITE_ID = 1
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Debug
+DEBUG = config('DEBUG', default=False, cast=bool)
+THUMBNAIL_DEBUG = config('THUMBNAIL_DEBUG', default=False, cast=bool)
+ADMINS = [
+    ('Admin', config('ADMIN_EMAIL'))
+]
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# Security
 SECRET_KEY = config('DJANGO_SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
-THUMBNAIL_DEBUG = config('THUMBNAIL_DEBUG', default=True, cast=bool)
-
-ALLOWED_HOSTS = ['stellr.forum', 'localhost', '127.0.0.1', '192.168.50.86']
-
-CHROME_EXTENSION_URL = config('CHROME_EXTENSION_URL')
-CORS_ALLOWED_ORIGINS = [ CHROME_EXTENSION_URL ]
-CSRF_TRUSTED_ORIGINS = [ CHROME_EXTENSION_URL ]
-
-# Application definition
+ALLOWED_HOSTS = [
+    'www.stellr.forum',
+    'stellr.forum',
+    'localhost',
+    '127.0.0.1'
+]
+CORS_ALLOWED_ORIGINS = [
+    config('CHROME_EXTENSION_URL')
+]
+# Done by Claude, requires review
+CSRF_TRUSTED_ORIGINS = [
+    'https://www.stellr.forum',
+    'https://stellr.forum',
+    'http://localhost',
+    'http://localhost:8000',
+    'http://127.0.0.1',
+    'http://127.0.0.1:8000',
+    config('CHROME_EXTENSION_URL')
+]
+CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=True, cast=bool)
+SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=True, cast=bool)
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
 
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
@@ -49,6 +65,7 @@ INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'comments.apps.CommentsConfig',
     'extension.apps.ExtensionConfig',
+    'corsheaders',
     'storages',
     'taggit',
     'easy_thumbnails',
@@ -56,6 +73,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -84,27 +102,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'stellr.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-USE_ONLINE_STORAGE = config('USE_ONLINE_STORAGE', default=False, cast=bool)
-DATABASE_URL = config('DATABASE_URL')
-
-if DATABASE_URL and USE_ONLINE_STORAGE:
-    DATABASES['default'] = dj_database_url.config(
-        conn_max_age=500,
-        conn_health_checks=True,
-    )
-
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -141,6 +138,17 @@ USE_I18N = True
 
 USE_TZ = True
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('POSTGRES_DB'),
+        'USER': config('POSTGRES_USER'),
+        'PASSWORD': config('POSTGRES_PASSWORD'),
+        'HOST': config('POSTGRES_HOST'),
+        'PORT': config('POSTGRES_PORT', cast=int)
+    }
+}
+
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -153,15 +161,15 @@ STORAGES = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / config('STATIC_ROOT_PATH')
 
 STORAGES["staticfiles"] = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
 }
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / config('MEDIA_ROOT_PATH')
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -170,14 +178,25 @@ LOGOUT_REDIRECT_URL = 'pages:index'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-MANAGERS = (
-    ("Manager", config('MANAGER_EMAIL')),
-)
-
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-secondary',
     messages.INFO: 'alert-info',
     messages.SUCCESS: 'alert-success',
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
+}
+
+CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='redis://localhost:6379/0')
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = TIME_ZONE  # reuse Django's TIME_ZONE
+CELERY_TASK_TIME_LIMIT = 5 * 60  # hard kill after 5 min
+
+CELERY_BEAT_SCHEDULE = {
+    "delete-old-page-stars": {
+        "task": "pages.delete_old_page_stars",
+        "schedule": crontab(),  # every minute for testing
+    },
 }
