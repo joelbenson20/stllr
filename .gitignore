@@ -129,7 +129,11 @@ __pypackages__/
 
 # Celery stuff
 celerybeat-schedule
+celerybeat-schedule.db
+celerybeat-schedule-shm
+celerybeat-schedule-wal
 celerybeat.pid
+
 
 # SageMath parsed files
 *.sage.py
@@ -214,6 +218,12 @@ __marimo__/
 #PyCharm files
 .idea
 
-# Django static and media files
-static/
-media/
+# Django collected static and media files
+/static/
+/media/
+
+# Docker volume data (PostgreSQL, Redis)
+data/
+
+# macOS
+.DS_Store
