@@ -1,0 +1,15 @@
+.venv
+__pycache__
+*.pyc
+*.pyo
+.git
+.gitignore
+db.sqlite3
+*.log
+# Postgres/Redis volume data — never belongs in build context
+data/
+# collectstatic output — regenerated at container startup
+static/dev/
+static/prod/
+media/dev/
+media/prod/
