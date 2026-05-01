@@ -4,17 +4,15 @@ services:
     image: postgres:17
     restart: always
     volumes:
-      - ./data/db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - ./data/db_prod:/var/lib/postgresql/data
+    env_file:
+      - ./stllr/.env.prod
 
   cache:
     image: redis:8
     restart: always
     volumes:
-      - ./data/cache:/data
+      - ./data/cache_prod:/data
 
   web:
     build: .
