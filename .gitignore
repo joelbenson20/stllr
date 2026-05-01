@@ -1,6 +1,3 @@
-# Exceptions for static files
-!stllr/stllr/static/libs/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -14,6 +11,8 @@ __pycache__/
 build/
 develop-eggs/
 dist/
+!stllr/stllr/static/libs/bootstrap/dist/
+!stllr/stllr/static/libs/bootstrap/dist/**
 downloads/
 eggs/
 .eggs/
