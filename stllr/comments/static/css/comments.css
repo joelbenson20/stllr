@@ -6,7 +6,7 @@
 .comment-form-textarea {
     max-width: 768px;
     background-color: white;
-    border-radius: 15px;
+    /* border-radius: 15px; */
 }
 .comment-form-textarea {
     resize: none;

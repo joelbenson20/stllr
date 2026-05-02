@@ -62,7 +62,7 @@ function initCommentForm(form) {
             textarea.style.height = "100px";
         }
         textarea.style.resize = "vertical";
-        buttons.style.display = "block";
+        buttons.style.display = "flex";
     })
  }
 
@@ -72,15 +72,15 @@ function initCommentForm(form) {
     })
 }
 
-function initCommentStarButton(starButton) {
-    starButton.addEventListener('click', (e) => {
+function initCommentStarButton(button) {
+    button.addEventListener('click', (e) => {
             e.preventDefault();
             var formData = new FormData()
-            formData.append('id', starButton.dataset.id)
-            formData.append('action', starButton.dataset.action)
+            formData.append('id', button.dataset.id)
+            formData.append('action', button.dataset.action)
             var options = {
                 method: 'POST',
-                headers: {'X-CSRFToken': starButton.dataset.csrfToken},
+                headers: {'X-CSRFToken': button.dataset.csrfToken},
                 mode: 'same-origin',
                 body: formData
             }
@@ -89,15 +89,15 @@ function initCommentStarButton(starButton) {
             .then(data => {
                 console.log(data)
                 if (data['status'] === '200') {
-                    var previousAction = starButton.dataset.action;
+                    var previousAction = button.dataset.action;
                     var newAction = previousAction === 'star' ? 'unstar' : 'star';
-                    starButton.dataset.action = newAction
+                    button.dataset.action = newAction
 
-                    var starCount = starButton.querySelector('.star-count');
+                    var starCount = button.querySelector('.star-count');
                     var previousCount = parseInt(starCount.textContent);
                     starCount.textContent = previousAction === 'star' ? previousCount + 1 : previousCount - 1;
 
-                    var icon = starButton.querySelector('i');
+                    var icon = button.querySelector('i');
                     icon.classList.toggle('bi-star-fill')
                     icon.classList.toggle('bi-star');
                 }
@@ -114,10 +114,18 @@ function closeCommentForm(cancelButton) {
     textarea.style.resize = "none";
 }
 
+function initPreviewMarkdownButton(button) {
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+        var text = button.closest('.comment-form').querySelector('.comment-form-textarea').value
+        console.log(text);
+    });
+}
+
  function initComments() {
     var commentStarButtons = document.querySelectorAll('.comment-star-button');
-    commentStarButtons.forEach(starButton => {
-        initCommentStarButton(starButton);
+    commentStarButtons.forEach(button => {
+        initCommentStarButton(button);
     });
     var commentForms = document.querySelectorAll('.comment-form');
     commentForms.forEach(form => {
@@ -127,6 +135,10 @@ function closeCommentForm(cancelButton) {
     var replyFormContainers = document.querySelectorAll('.reply-form-container');
     replyFormContainers.forEach(replyFormContainer => {
         initReplyAutoFocus(replyFormContainer);
+    })
+    var previewMarkdownButtons = document.querySelectorAll('.comment-preview-markdown-button');
+    previewMarkdownButtons.forEach(button => {
+        initPreviewMarkdownButton(button);
     })
  }
 
