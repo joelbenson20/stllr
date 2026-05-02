@@ -109,10 +109,13 @@ function initCommentStarButton(button) {
 function closeCommentForm(cancelButton) {
     var form = cancelButton.closest('.comment-form');
     var textarea = form.querySelector('.comment-form-textarea');
+    var markdownPreviewContainer = form.querySelector('.comment-form-markdown-preview-container');
     var buttons = form.querySelector('.comment-form-buttons');
+    markdownPreviewContainer.style.display = 'none';
     buttons.style.display = "none";
     textarea.style.height = "1rem";
     textarea.style.resize = "none";
+    textarea.style.display = 'block';
 }
 
 function initPreviewMarkdownButton(button) {
