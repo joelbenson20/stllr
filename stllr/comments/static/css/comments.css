@@ -41,8 +41,7 @@
 }
 
 .comment-reply-button {
-    background-color: var(--iridescent-4);
-    color: black;
+    color: var(--iridescent-4)
 }
 
 .comment-children {
