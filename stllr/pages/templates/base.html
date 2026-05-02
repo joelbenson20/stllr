@@ -27,7 +27,7 @@
 
     <div id="window" class="container-fluid m-0 p-0">
 
-        <nav class="navbar glass navbar-dark navbar-expand-sm sticky-top p-3">
+        <nav class="navbar navbar-dark navbar-expand-sm sticky-top p-3">
             <a class="navbar-brand" href="{% url 'pages:index' %}">
                 <img class="navbar-brand-image" src="{% static 'brand/stllr.gif' %}" width=128>
             </a>
@@ -46,11 +46,16 @@
                         <a class="nav-link {% if section == "approaching" %}selected{% endif %}" href="{% url "pages:approaching" %}">Approaching</a>
                     </li>
                 </ul>
-                {% if request.user.is_authenticated %}
                 <form class="d-inline m-3" method="post">
                     {% csrf_token %}
-                    <input class="float-bar form-control form-control-md me-2" name="url" type="text" placeholder="Search forums" required>
+                    <input class="float-bar form-control form-control-md mx-auto"
+                    name="url"
+                    type="text"
+                    placeholder="{% if request.user.is_authenticated%}What's sparkling?{% else %}Sign in to access forums{% endif %}"
+                    required
+                    {% if not request.user.is_authenticated %}disabled{% endif %}>
                 </form>
+                {% if user.is_authenticated %}
                 <div class="navbar-text ms-auto">
                     Hello, <a href="{% url "profile" user.username %}">{{ user.username }}!</a>
                     <a class="btn btn-dark ms-3" href='{% url "account_logout" %}'>Sign Out</a>
@@ -73,7 +78,6 @@
                 {% endfor %}
             </div>
         {% endif %}
-
 
         <div id="content" class="container-fluid p-sm-5 p-3">
             {% block content %}
