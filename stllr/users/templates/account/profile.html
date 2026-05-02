@@ -15,7 +15,7 @@
     <h2 class="text-secondary">{{ profile.bio }}</h2>
     {% if request.user == profile.user %}
         <a href="{% url "edit" %}">Edit your profile</a><br>
-        <a href="{% url "password_change" %}">Change your password</a>
+        <a href="{% url "account_reset_password" %}">Change your password</a>
     {% endif %}
 
 {% endblock content %}

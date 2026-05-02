@@ -53,14 +53,11 @@
                 </form>
                 <div class="navbar-text ms-auto">
                     Hello, <a href="{% url "profile" user.username %}">{{ user.username }}!</a>
-                    <form class="d-inline ms-3" id="logout-form" action="{% url "logout" %}?next={{ request.get_full_path }}" method="post">
-                         {% csrf_token %}
-                        <button class="btn btn-dark" id="logout-button" type="submit">Logout</button>
-                    </form>
+                    <a class="btn btn-dark ms-3" href='{% url "account_logout" %}'>Sign Out</a>
                 {% else %}
                 <div class="ms-auto">
-                    <a class="text-light text-decoration-none mx-2" href="{% url "login" %}?next={{ request.get_full_path }}">Sign In</a>
-                    <a class="btn btn-light ms-auto" href="{% url "register" %}?next={{ request.get_full_path }}">Sign Up</a>
+                    <a class="text-light text-decoration-none mx-2" href="{% url "account_login" %}?next={{ request.get_full_path }}">Sign In</a>
+                    <a class="btn btn-light ms-auto" href="{% url "account_signup" %}?next={{ request.get_full_path }}">Sign Up</a>
                 </div>
                 {% endif %}
             </div>
