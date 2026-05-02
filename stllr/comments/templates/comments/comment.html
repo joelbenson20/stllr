@@ -29,13 +29,13 @@
             <i class="bi bi-dot text-secondary"></i>
             <span class="small text-secondary">{{ comment.created|naturaltime }}</span>
             <span class="w-100"></span>
-            <span class="comment-user-bio small text-secondary border border-secondary rounded-pill my-1 px-2">{{ comment.user.profile.bio }}</span>
+            <span class="comment-user-bio text-secondary border border-secondary rounded-pill my-1 px-2">{{ comment.user.profile.bio }}</span>
 
         </div>
 
     </div>
 
-    <div class="comment-body ps-5 pt-4">
+    <div class="comment-body ps-5 py-3 pb-0">
 
         <div class="comment-content">
             {{ comment.content|markdown }}
