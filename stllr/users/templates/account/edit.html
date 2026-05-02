@@ -4,11 +4,10 @@
 {% block title %}Edit your account{% endblock title %}
 
 {% block content %}
-    <h1>Edit your account</h1>
-    <p>You can edit your account using the following form:</p>
+    <h1>Edit your profile</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ profile_form|crispy }}
-        <button type="btn btn-submit" value="Save profile"></button>
+        {% crispy profile_form %}
+        <button class="btn btn-submit" type="submit">Save profile</button>
     </form>
 {% endblock content %}

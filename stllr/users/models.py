@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 from django.conf import settings
 from django.db import models
-from comments.models import Comment
 
 class User(AbstractUser):
 

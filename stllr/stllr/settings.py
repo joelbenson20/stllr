@@ -173,7 +173,7 @@ LOGOUT_REDIRECT_URL = 'pages:index'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-CRISPY_ALLOWED_TEMPMLATE_PACKS = 'bootstrap5'
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 MESSAGE_TAGS = {
