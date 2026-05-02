@@ -51,7 +51,7 @@
                     <input class="search-bar form-control form-control-md mx-auto"
                     name="url"
                     type="text"
-                    placeholder="{% if request.user.is_authenticated%}What's sparkling?{% else %}Sign in to access forums{% endif %}"
+                    placeholder="What's sparkling?"
                     required
                     {% if not request.user.is_authenticated %}disabled{% endif %}>
                 </form>
@@ -86,7 +86,8 @@
 
     </div>
     
-    <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static "libs/bootstrap/dist/js/bootstrap.bundle.min.js" %}"></script>
+    <script src="{% static "libs/lodash/lodash.min.js" %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
     <script src="{% static 'js/pageStarButtons.js' %}"></script>
     <script src="{% static 'js/comments.js' %}"></script>
