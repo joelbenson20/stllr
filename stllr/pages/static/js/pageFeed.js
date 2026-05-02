@@ -8,7 +8,6 @@ const loadMorePages = () => {
     if (window.pageYOffset > margin && !emptyPage && !blockRequest) {
         blockRequest = true;
         page += 1;
-        console.log('Fetching more!');
         fetch('?cards_only=1&p=' + page)
         .then(response => response.text())
         .then(html => {

@@ -1,6 +1,5 @@
 {% load markdown_deux_tags %}
 
-<div class="py-3">
 {% if user.is_authenticated %}
     <form id="comment-form-{{ parent.id }}"
         class="comment-form p-0 my-3" method="post" action="{% url "comments:post" %}">
@@ -24,4 +23,3 @@
 {% else %}
     <p class="rounded-pill bg-light text-dark ps-3 py-2">Sign in to enter the forum.</p>
 {% endif %}
-</div>
