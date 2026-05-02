@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from .models import Profile
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, HTML, Field
 
 class UserRegistrationForm(forms.ModelForm):
     password1=forms.CharField(
@@ -29,7 +31,11 @@ class UserRegistrationForm(forms.ModelForm):
             raise forms.ValidationError("An account with this email already exists.")
         return data
 
+
 class ProfileEditForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
     class Meta:
         model = Profile
         fields = ['bio', 'photo']

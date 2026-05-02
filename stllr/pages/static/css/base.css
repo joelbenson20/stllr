@@ -27,6 +27,14 @@ body {
     border: none;
 }
 
+.btn-submit {
+    background-color: var(--iridescent-2);
+    color: white;
+}
+.btn-submit:hover{
+    background-color: var(--iridescent-1);
+}
+
 .collapsing {
     transition: none !important;
 }
@@ -46,4 +54,8 @@ body {
 .nav-link.selected {
     color: white;
     text-shadow: 0 0 10px white;
+}
+
+.form-text {
+    color: gray;
 }
