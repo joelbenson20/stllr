@@ -1,8 +1,8 @@
-<a class="page-star-button btn btn-xs btn-dark me-2"
-    href="#"
+<button class="page-star-button btn btn-xs btn-dark me-2"
     data-id={{ page.id }}
     data-action="{% if page in user.pages_starred.all %}un{% endif %}star"
-    data-csrf-token={{ csrf_token }}>
+    data-csrf-token={{ csrf_token }}
+    {% if not user.is_active %}disabled{% endif %}>
     <span class="star-count">{{ page.total_stars }}</span>
     <i class="bi {% if page in user.pages_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-</a>
+</button>

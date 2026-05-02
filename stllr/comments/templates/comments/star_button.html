@@ -1,8 +1,8 @@
-<a id="comment-star-button-{{ comment.id }}" class="comment-star-button btn btn-xs btn-dark me-1"
-    href="#"
+<button id="comment-star-button-{{ comment.id }}" class="comment-star-button btn btn-xs btn-dark me-1"
     data-id={{ comment.id }}
     data-action="{% if comment in user.comments_starred.all %}un{% endif %}star"
-    data-csrf-token={{ csrf_token }}>
+    data-csrf-token={{ csrf_token }}
+    {% if not user.is_active %}disabled{% endif %}>
     <span class="star-count">{{ comment.total_stars }}</span>
     <i class="bi {% if comment in user.comments_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-</a>
+</button>

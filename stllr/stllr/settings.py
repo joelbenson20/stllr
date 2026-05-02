@@ -50,10 +50,12 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
     'stllr',
     'pages.apps.PagesConfig',
     'comments.apps.CommentsConfig',
@@ -76,6 +78,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -98,9 +101,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'stllr.wsgi.application'
 
+AUTH_USER_MODEL = 'users.User'
+
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'users.authentication.EmailAuthBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 # Password validation
@@ -120,6 +125,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_SUBJECT_PREFIX = '[stllr] '
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Internationalization
@@ -165,13 +180,6 @@ STORAGES["staticfiles"] = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / config('MEDIA_ROOT_PATH')
-
-AUTH_USER_MODEL = 'users.User'
-
-LOGIN_REDIRECT_URL = 'pages:index'
-LOGOUT_REDIRECT_URL = 'pages:index'
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'

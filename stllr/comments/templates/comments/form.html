@@ -1,20 +1,27 @@
 {% load markdown_deux_tags %}
 
-<form id="comment-form-{{ parent.id }}" class="comment-form p-0 my-3" method="post" action="{% url "comments:post" %}">
-    {% csrf_token %}
-    <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
-    <input type="hidden" name="page" value="{{ page.id }}">
-    <textarea class="comment-form-textarea form-control border-0 shadow-none m-0"
-        name = "content"
-        rows = "1"
-        placeholder="Reach for the stars..."
-        required></textarea>
-    <div class="comment-form-buttons text-end">
-        <button class="comment-cancel-button btn btn-sm rounded-pill m-2" type="button" onclick="closeCommentForm(this)">
-            Cancel
-        </button>
-        <button class="comment-submit-button btn btn-sm rounded-pill m-2" type="submit">
-            Comment
-        </button>
-    </div>
-</form>
+<div class="py-3">
+{% if user.is_authenticated %}
+    <form id="comment-form-{{ parent.id }}"
+        class="comment-form p-0 my-3" method="post" action="{% url "comments:post" %}">
+        {% csrf_token %}
+        <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
+        <input type="hidden" name="page" value="{{ page.id }}">
+        <textarea class="comment-form-textarea form-control border-0 shadow-none m-0"
+            name = "content"
+            rows = "1"
+            placeholder="Reach for the stars..."
+            required></textarea>
+        <div class="comment-form-buttons text-end">
+            <button class="comment-cancel-button btn btn-sm rounded-pill m-2" type="button" onclick="closeCommentForm(this)">
+                Cancel
+            </button>
+            <button class="comment-submit-button btn btn-sm rounded-pill m-2" type="submit">
+                Comment
+            </button>
+        </div>
+    </form>
+{% else %}
+    <p class="rounded-pill bg-light text-dark ps-3 py-2">Sign in to enter the forum.</p>
+{% endif %}
+</div>

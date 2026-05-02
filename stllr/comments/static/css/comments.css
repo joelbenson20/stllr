@@ -1,4 +1,3 @@
-
 .comment-section {
     max-width: 768px;
 }
@@ -39,4 +38,8 @@
 .comment-reply-button {
     background-color: var(--iridescent-4);
     color: black;
+}
+
+.comment-children {
+    border-width: 50px;
 }
