@@ -48,7 +48,7 @@
                 </ul>
                 <form class="d-inline m-3" method="post">
                     {% csrf_token %}
-                    <input class="float-bar form-control form-control-md mx-auto"
+                    <input class="search-bar form-control form-control-md mx-auto"
                     name="url"
                     type="text"
                     placeholder="{% if request.user.is_authenticated%}What's sparkling?{% else %}Sign in to access forums{% endif %}"
