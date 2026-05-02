@@ -15,8 +15,8 @@
     <div class="comment-header d-flex align-items-start ps-3">
 
         {% if comment.user.profile.photo %}
-            {% thumbnail comment.user.profile.photo 32x32 crop="smart" as im %}
-            <a href="{{ comment.user.get_absolute_url }}" class="me-2 flex-shrink-0">
+            {% thumbnail comment.user.profile.photo 48x48 crop="smart" as im %}
+            <a class="float-start me-2 flex-shrink-0" href="{{ comment.user.get_absolute_url }}">
                 <img src="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}">
             </a>
         {% endif %}
@@ -28,7 +28,11 @@
             </a>
             <i class="bi bi-dot text-secondary"></i>
             <span class="small text-secondary">{{ comment.created|naturaltime }}</span>
+            <span class="w-100"></span>
+            <span class="comment-user-bio small text-secondary border border-secondary rounded-pill my-1 px-2">{{ comment.user.profile.bio }}</span>
+
         </div>
+
     </div>
 
     <div class="comment-body ps-5 pt-4">
