@@ -1,8 +1,9 @@
+const parser = new DOMParser();
 var page = 1;
 var emptyPage = false;
 var blockRequest = false;
 
-window.addEventListener('scroll', function(e) {
+const loadMorePages = () => {
     var margin = document.body.clientHeight - window.innerHeight - 200;
     if (window.pageYOffset > margin && !emptyPage && !blockRequest) {
         blockRequest = true;
@@ -14,13 +15,20 @@ window.addEventListener('scroll', function(e) {
                 emptyPage = true;
             }
             else {
-                var pageFeed = document.getElementById('page-feed');
-                pageFeed.insertAdjacentHTML('beforeend', html);
+                var pageFeed = document.getElementById('pageFeed');
+                var newHTML = parser.parseFromString(html, 'text/html');
+                var newPages = newHTML.querySelectorAll('.page');
+
+                newPages.forEach(newPage => {
+                    newPageId = newPage.id
+                    if (!document.querySelector(`#${newPageId}`)){
+                        pageFeed.insertAdjacentElement('beforeend', page);
+                    }
+                })
                 blockRequest = false;
             }
         })
     }
-})
+};
 
-const scrollEvent = new Event('scroll');
-window.dispatchEvent(scrollEvent);
+window.addEventListener('scroll', _.throttle(loadMorePages, 500, { leading: true }));

@@ -7,11 +7,27 @@ from taggit.models import Tag
 from django.http import JsonResponse
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse
-from .utils import get_pages_stochastic
+from .utils import pages_order_by_stochastic
 
-def firmament_view(request):
-    pages = get_pages_stochastic()
+def firmament_view(request, tag_slug=None):
+    pages = pages_order_by_stochastic()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        pages = pages.filter(tags__in=[tag])
+
+    paginator = Paginator(pages, 100)
+    p = request.GET.get('p')
     cards_only = request.GET.get('cards_only')
+
+    try:
+        pages = paginator.page(p)
+    except PageNotAnInteger:
+        pages = paginator.page(1)
+    except EmptyPage:
+        if cards_only:
+            return HttpResponse('')
+        pages = paginator.page(paginator.num_pages)
     if cards_only:
         return render(
             request,
@@ -34,7 +50,7 @@ def brightest_view(request, tag_slug=None):
         tag = get_object_or_404(Tag, slug=tag_slug)
         pages = pages.filter(tags__in=[tag])
 
-    paginator = Paginator(pages, 10)
+    paginator = Paginator(pages, 100)
     p = request.GET.get('p')
     cards_only = request.GET.get('cards_only')
 
@@ -62,9 +78,9 @@ def brightest_view(request, tag_slug=None):
          }
     )
 
-def approaching_view(request):
+def rising_view(request):
     pages = Page.objects.order_by('title')
-    paginator = Paginator(pages, 10)
+    paginator = Paginator(pages, 100)
     p = request.GET.get('p')
     cards_only = request.GET.get('cards_only')
     try:

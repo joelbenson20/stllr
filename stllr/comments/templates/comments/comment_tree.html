@@ -1,4 +1,4 @@
-<div class="comment-tree">
+<div class="comment-tree {% if not user.is_authenticated %}blur-content{% endif %}">
     {% for comment in comments %}
         {% include "comments/comment.html" with comment=comment %}
     {% endfor %}

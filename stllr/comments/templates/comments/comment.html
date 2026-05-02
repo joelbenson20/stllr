@@ -1,35 +1,50 @@
+{% load static %}
 {% load comments %}
 {% load humanize %}
 {% load thumbnail %}
 {% load markdown_deux_tags %}
 
-<div id="comment-{{ comment.id }}" class="comment row mt-3">
-    <div class="col-1 d-flex justify-content-end m-0 p-0">
+<div id="comment-{{ comment.id }}" class="comment position-relative my-4"
+        style="background-image: url('{{ request.scheme }}://{{ request.get_host }}{% static "brand/stllr-column.png" %}')"
+    >
+
+    {% if comment.parent %}
+        {% comment %} <img class="child-comment-curl position-absolute" src="{{ request.scheme }}://{{ request.get_host }}{% static "brand/stllr-column.png" %}"> {% endcomment %}
+    {% endif %}
+
+    <div class="comment-header d-flex align-items-start ps-3">
+
         {% if comment.user.profile.photo %}
-            {% thumbnail comment.user.profile.photo 32x32 crop="smart" as im %}
-            <a href="{{ comment.user.get_absolute_url }}">
-                <img
-                    src="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}">
+            {% thumbnail comment.user.profile.photo 48x48 crop="smart" as im %}
+            <a class="float-start me-2 flex-shrink-0" href="{{ comment.user.get_absolute_url }}">
+                <img src="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}">
             </a>
-        {% else %}
         {% endif %}
-    </div>
-    <div class="col-11">
-        <div class="comment-header">
-            <a class="comment-user small text-light fw-bold"
-                href="http://{{ request.get_host }}{{ comment.user.profile.get_absolute_url }}">
+
+        <div class="d-flex align-items-center flex-wrap">
+            <a class="comment-user small text-light m-0 p-0"
+                href="{{ request.scheme }}://{{ request.get_host }}{{ comment.user.profile.get_absolute_url }}">
                 {{ comment.user.username }}
             </a>
             <i class="bi bi-dot text-secondary"></i>
             <span class="small text-secondary">{{ comment.created|naturaltime }}</span>
+            <span class="w-100"></span>
+            <span class="comment-user-bio text-secondary border border-secondary rounded-pill my-1 px-2">{{ comment.user.profile.bio }}</span>
+
         </div>
 
-        <div class="comment-content my-3">
+    </div>
+
+    <div class="comment-body ps-5 py-3 pb-0">
+
+        <div class="comment-content">
             {{ comment.content|markdown }}
         </div>
 
         <div class="comment-buttons">
+
             {% include "comments/star_button.html" with comment=comment %}
+
             <a class="comment-replies-button btn btn-xs btn-dark me-1"
                 type="button"
                 data-bs-toggle="collapse"
@@ -46,13 +61,15 @@
                 Reply
             </button>
         </div>
-        <div id="reply-form-container-{{ comment.id }}" class="reply-form-container collapse mt-2">
+
+        <div id="reply-form-container-{{ comment.id }}" class="reply-form-container collapse">
             {% include "comments/form.html" with page=comment.page parent=comment %}
         </div>
-        <div id="children-{{ comment.id }}" class="collapse show border-start">
-            {% if comment.children.exists %}
-                    {% render_comment_tree comments=comment.children.all %}
-            {% endif %}
-        </div>
     </div>
+    {% if comment.children.exists %}
+    <div id="children-{{ comment.id }}" class="comment-children collapse show">
+        {% render_comment_tree comments=comment.children.all %}
+    </div>
+{% endif %}
 </div>
+

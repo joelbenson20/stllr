@@ -1,4 +1,3 @@
-
 .comment-section {
     max-width: 768px;
 }
@@ -20,6 +19,12 @@
     background-color: var(--iridescent-4);
 }
 
+.comment,
+.comment-children {
+    background-repeat: repeat-y;
+    background-position: left;
+}
+
 .comment-user {
     text-decoration: none;
 }
@@ -27,11 +32,10 @@
     text-decoration: underline;
 }
 
-.comment-star-button,
-.comment-replies-button {
-    background: none;
-    border: none;
+.comment-user-bio {
+    font-size: 12px;
 }
+
 .comment-star-button:has(.bi-star-fill) {
     text-shadow: 0 0 5px white;
 }
@@ -39,4 +43,13 @@
 .comment-reply-button {
     background-color: var(--iridescent-4);
     color: black;
+}
+
+.comment-children {
+    padding-left: 16px;
+}
+
+.child-comment-curl {
+    left: -16px;
+    height: 32px;
 }

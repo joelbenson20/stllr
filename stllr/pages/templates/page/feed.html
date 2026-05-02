@@ -5,7 +5,7 @@
     {% if tag %}
         <h1 class="mb-4">#{{ tag.name }}</h1>
     {% endif %}
-    <div id="page-feed">
+    <div id="pageFeed">
         {% include 'page/list.html' with pages=pages user=user %}
     </div>
 {% endblock content %}

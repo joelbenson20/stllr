@@ -6,10 +6,8 @@ import numpy as np
 from django.db.models import Case, When, IntegerField
 from .models import Page
 
-def get_pages_stochastic(count=10):
-
+def pages_order_by_stochastic():
     pages = Page.objects.filter(brightness__gt=0, is_active=True, domain__is_active=True).values('id', 'brightness')
-    
     if not pages:
         return None
     
@@ -17,15 +15,14 @@ def get_pages_stochastic(count=10):
     ids = [page['id'] for page in pages]
     brightnesses = np.array([page['brightness'] for page in pages])
     probabilities = brightnesses / brightnesses.sum()
-
-    chosen_ids = np.random.choice(ids, size=min(count, total_pages), p=probabilities, replace=False)
+    chosen_ids = np.random.choice(ids, size=total_pages, p=probabilities, replace=False)
     chosen_order = Case(
         *[When(id=id, then=pos) for pos, id in enumerate(chosen_ids)],
         output_field=IntegerField()
     )
-    chosen_pages = Page.objects.filter(id__in=chosen_ids).order_by(chosen_order)
+    stochastic_pages = Page.objects.filter(id__in=chosen_ids).order_by(chosen_order)
 
-    return chosen_pages
+    return stochastic_pages
 
 def get_canonical(url):
 
