@@ -62,7 +62,7 @@ def brightest_view(request, tag_slug=None):
          }
     )
 
-def approaching_view(request):
+def rising_view(request):
     pages = Page.objects.order_by('title')
     paginator = Paginator(pages, 10)
     p = request.GET.get('p')
