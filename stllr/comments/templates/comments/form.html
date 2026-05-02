@@ -6,14 +6,18 @@
         {% csrf_token %}
         <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
         <input type="hidden" name="page" value="{{ page.id }}">
-        <textarea class="comment-form-textarea form-control border-0 shadow-none m-0"
+        <textarea class="comment-form-textarea form-control border-0 shadow-none"
             name = "content"
             rows = "1"
             placeholder="Reach for the stars..."
             required></textarea>
+        <div class="comment-form-markdown-preview-container border rounded p-2"></div>
         <div class="comment-form-buttons align-items-center">
-            <button class="comment-preview-markdown-button btn btn-light m-1">
+            <button class="comment-form-preview-markdown-button btn btn-light m-1">
                 <i class="bi bi-eye-fill"></i> Preview
+            </button>
+            <button class="comment-form-edit-markdown-button btn btn-light m-1">
+                <i class="bi bi-eye-slash"></i> Edit
             </button>
             <button class="comment-cancel-button btn btn-light rounded ms-auto m-1" type="button" onclick="closeCommentForm(this)">
                 Cancel

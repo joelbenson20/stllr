@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'comments.apps.CommentsConfig',
     'extension.apps.ExtensionConfig',
+    'api.apps.APIConfig',
     'corsheaders',
     'storages',
     'taggit',

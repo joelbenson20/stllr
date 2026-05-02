@@ -1,13 +1,14 @@
 const COMMENT_STAR_PATH = 'comments/star/';
 const POST_COMMENT_PATH = 'comments/post/';
+const MARKDOWNIFY_PATH = 'api/markdownify/';
 
 
 function initCommentForm(form) {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         const form = e.target;
-        const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
         const formData = new FormData(form);
+        const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
         var options = {
             method: 'POST',
             headers: {'X-CSRFToken': csrfToken},
@@ -117,9 +118,55 @@ function closeCommentForm(cancelButton) {
 function initPreviewMarkdownButton(button) {
     button.addEventListener('click', (e) => {
         e.preventDefault();
-        var text = button.closest('.comment-form').querySelector('.comment-form-textarea').value
-        console.log(text);
+
+        // Get form elements
+        var form = button.closest('.comment-form');
+        var csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+        var textarea = form.querySelector('.comment-form-textarea')
+        var markdownPreviewButton = form.querySelector('.comment-form-markdown-preview-button');
+        var markdownEditButton = form.querySelector('.comment-form-markdown-edit-button');
+        var markdownPreviewContainer = form.querySelector('.comment-form-markdown-preview-container');
+        
+        // Get safe markdown 
+        var formData = new FormData();
+        formData.append('content', textarea.value);
+        var options = {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrfToken},
+            body: formData
+        }
+         fetch(BASE_URL + MARKDOWNIFY_PATH, options)
+        .then(response => response.json())
+        .then(response => {
+            if (response.status === '200') {
+                // Update and display markdown preview container
+                markdownPreviewContainer.innerHTML = response.markdown;
+                markdownPreviewContainer.style.display = 'block';
+                textarea.style.display = 'none';
+            }
+        })
+
     });
+}
+
+function initEditMarkdownButton(button) {
+    console.log('initing button');
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+        var form = button.closest('.comment-form');
+        var textarea = form.querySelector('.comment-form-textarea');
+        var markdownPreviewContainer = form.querySelector('.comment-form-markdown-preview-container');
+
+        // Hide preview container, show edit container 
+        markdownPreviewContainer.innerHTML = '';
+        markdownPreviewContainer.style.display = 'none';
+        textarea.style.display = 'block';
+
+        // Focus at end of textarea content
+        const end = textarea.value.length;
+        textarea.focus();
+        textarea.setSelectionRange(end, end);
+    })
 }
 
  function initComments() {
@@ -136,9 +183,13 @@ function initPreviewMarkdownButton(button) {
     replyFormContainers.forEach(replyFormContainer => {
         initReplyAutoFocus(replyFormContainer);
     })
-    var previewMarkdownButtons = document.querySelectorAll('.comment-preview-markdown-button');
+    var previewMarkdownButtons = document.querySelectorAll('.comment-form-preview-markdown-button');
     previewMarkdownButtons.forEach(button => {
         initPreviewMarkdownButton(button);
+    })
+    var editMarkdownButtons = document.querySelectorAll('.comment-form-edit-markdown-button');
+    editMarkdownButtons.forEach(button => {
+        initEditMarkdownButton(button);
     })
  }
 
