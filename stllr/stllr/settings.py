@@ -136,7 +136,6 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
@@ -168,6 +167,28 @@ STORAGES = {
     },
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": config('REDIS_URL'),
+    }
+}
+
+CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='redis://localhost:6379/0')
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = TIME_ZONE  # reuse Django's TIME_ZONE
+CELERY_TASK_TIME_LIMIT = 5 * 60  # hard kill after 5 min
+
+CELERY_BEAT_SCHEDULE = {
+    "delete-old-page-stars": {
+        "task": "pages.delete_old_page_stars",
+        "schedule": crontab(),  # every minute for testing
+    },
+}
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
@@ -190,19 +211,4 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'alert-success',
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
-}
-
-CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://localhost:6379/0')
-CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='redis://localhost:6379/0')
-CELERY_ACCEPT_CONTENT = ["json"]
-CELERY_TASK_SERIALIZER = "json"
-CELERY_RESULT_SERIALIZER = "json"
-CELERY_TIMEZONE = TIME_ZONE  # reuse Django's TIME_ZONE
-CELERY_TASK_TIME_LIMIT = 5 * 60  # hard kill after 5 min
-
-CELERY_BEAT_SCHEDULE = {
-    "delete-old-page-stars": {
-        "task": "pages.delete_old_page_stars",
-        "schedule": crontab(),  # every minute for testing
-    },
 }

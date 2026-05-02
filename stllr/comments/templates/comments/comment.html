@@ -2,7 +2,7 @@
 {% load comments %}
 {% load humanize %}
 {% load thumbnail %}
-{% load markdown_deux_tags %}
+{% load safe_markdown %}
 
 <div id="comment-{{ comment.id }}" class="comment position-relative my-4"
         style="background-image: url('{{ request.scheme }}://{{ request.get_host }}{% static "brand/stllr-column.png" %}')"
@@ -38,7 +38,7 @@
     <div class="comment-body ps-5 py-3 pb-0">
 
         <div class="comment-content">
-            {{ comment.content|markdown }}
+            {{ comment.content|safe_markdown }}
         </div>
 
         <div class="comment-buttons">

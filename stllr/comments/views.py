@@ -6,9 +6,11 @@ from django.http import JsonResponse
 from .models import Comment
 from pages.models import Page
 from django.template.loader import render_to_string
+from django_ratelimit.decorators import ratelimit
 
 @login_required
 @require_POST
+@ratelimit(key='user', rate='10/m', method='POST', block=True)
 def post_comment(request):
     new_comment = None
     form = CommentForm(data=request.POST)
@@ -29,6 +31,7 @@ def post_comment(request):
 
 @login_required
 @require_POST
+@ratelimit(key='user', rate='3/s', method='POST', block=True)
 def comment_star(request):
     comment_id = request.POST.get('id')
     action = request.POST.get('action')
