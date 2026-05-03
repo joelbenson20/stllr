@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand navbar-dark">
+    <ul class="navbar-nav align-items-center">
+        <li id="refreshButton" class="nav-item">
+            <a class="btn btn-dark btn-sm rounded-circle ms-2" href="#" role="button">
+                <i class="bi bi-arrow-clockwise"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a id="forumLink" class="nav-link {% if section == "forum" %}active{% endif %}" role="button">Forum</a>
+        </li>
+        <li class="nav-item">
+            <a id="chatLink" class="nav-link {% if section == "chat" %}active{% endif %}" role="button">Chat</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid p-3">
+
+    {% include 'page/card.html' with page=page user=user %}
+    {% if similar_pages %}
+        <div class="row p-3">
+            <h2 class="mt-4">Similar Pages</h2>
+            {% for page in similar_pages %}
+                {% include 'page/card.html' with page=page user=user %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    {% block content %}
+    {% endblock content %}
+</div>
