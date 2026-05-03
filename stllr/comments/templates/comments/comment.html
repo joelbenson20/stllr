@@ -66,10 +66,10 @@
             {% include "comments/form.html" with page=comment.page parent=comment %}
         </div>
     </div>
-    {% if comment.children.exists %}
     <div id="children-{{ comment.id }}" class="comment-children collapse show">
-        {% render_comment_tree comments=comment.children.all %}
+        {% if comment.children.exists %}
+            {% render_comment_tree comments=comment.children.all %}
+        {% endif %}
     </div>
-{% endif %}
 </div>
 

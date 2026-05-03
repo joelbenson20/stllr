@@ -3,12 +3,11 @@ const POST_COMMENT_PATH = 'comments/post/';
 const MARKDOWNIFY_PATH = 'api/markdownify/';
 
 
-function initCommentForm(form) {
+function initFormSubmission(form) {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const form = e.target;
-        const formData = new FormData(form);
-        const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+        var formData = new FormData(form);
+        var csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
         var options = {
             method: 'POST',
             headers: {'X-CSRFToken': csrfToken},
@@ -18,25 +17,16 @@ function initCommentForm(form) {
         .then(response => response.json())
         .then(response => {
             if (response.status === '201') {
-                // In case of no parent, get the root comment tree (first one returned)
                 var commentTree = document.querySelector('.comment-tree');
-                // If comment parent, get the comment tree of the parent
                 var parentId = form.querySelector('[name=parent]').value
                 if (parentId) {
                     commentTree = document.querySelector(`#children-${parentId}`);
                 }
-                // Insert the new comment
                 commentTree.insertAdjacentHTML('afterbegin', response.comment);
 
                 // Initialize new reply form
-                var newComment = document.querySelector(`#comment-${response.commentId}`)
-                var newForm = newComment.querySelector('.comment-form');
-                var newReplyFormContainer = newComment.querySelector('.reply-form-container');
-                var newStarButton = newComment.querySelector('.comment-star-button');
-                initCommentForm(newForm);
-                initFormFocus(newForm);
-                initReplyAutoFocus(newReplyFormContainer);
-                initCommentStarButton(newStarButton);
+                var newComment = document.querySelector(`#comment-${response.commentId}`);
+                initComment(newComment);
 
                 // Close form container for threaded comments
                 if (parentId) {
@@ -53,7 +43,8 @@ function initCommentForm(form) {
         })
         .catch(error => console.error('Error:', error))
     })
- }
+    
+}
 
  function initFormFocus(form) {
     var textarea = form.querySelector('.comment-form-textarea');
@@ -88,7 +79,6 @@ function initCommentStarButton(button) {
             fetch(BASE_URL + COMMENT_STAR_PATH, options)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (data['status'] === '200') {
                     var previousAction = button.dataset.action;
                     var newAction = previousAction === 'star' ? 'unstar' : 'star';
@@ -111,6 +101,7 @@ function closeCommentForm(cancelButton) {
     var textarea = form.querySelector('.comment-form-textarea');
     var markdownPreviewContainer = form.querySelector('.comment-form-markdown-preview-container');
     var buttons = form.querySelector('.comment-form-buttons');
+
     markdownPreviewContainer.style.display = 'none';
     buttons.style.display = "none";
     textarea.style.height = "1rem";
@@ -118,19 +109,18 @@ function closeCommentForm(cancelButton) {
     textarea.style.display = 'block';
 }
 
-function initPreviewMarkdownButton(button) {
+function initCancelButton(button) {
     button.addEventListener('click', (e) => {
-        e.preventDefault();
+        closeCommentForm(button);
+    })
+}
 
-        // Get form elements
+function initmarkdownPreviewButton(button) {
+    button.addEventListener('click', (e) => {
         var form = button.closest('.comment-form');
         var csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
-        var textarea = form.querySelector('.comment-form-textarea')
-        var markdownPreviewButton = form.querySelector('.comment-form-markdown-preview-button');
-        var markdownEditButton = form.querySelector('.comment-form-markdown-edit-button');
-        var markdownPreviewContainer = form.querySelector('.comment-form-markdown-preview-container');
         
-        // Get safe markdown 
+        var textarea = form.querySelector('.comment-form-textarea');
         var formData = new FormData();
         formData.append('content', textarea.value);
         var options = {
@@ -142,28 +132,36 @@ function initPreviewMarkdownButton(button) {
         .then(response => response.json())
         .then(response => {
             if (response.status === '200') {
-                // Update and display markdown preview container
+
+                var markdownEditButton = form.querySelector('.comment-form-markdown-edit-button');
+                var markdownPreviewContainer = form.querySelector('.comment-form-markdown-preview-container');
+
                 markdownPreviewContainer.innerHTML = response.markdown;
+                button.style.display = 'none';
                 markdownPreviewContainer.style.display = 'block';
+                markdownEditButton.style.display = 'block';
                 textarea.style.display = 'none';
+
             }
         })
 
     });
 }
 
-function initEditMarkdownButton(button) {
-    console.log('initing button');
+function initmarkdownEditButton(button) {
     button.addEventListener('click', (e) => {
         e.preventDefault();
         var form = button.closest('.comment-form');
+        var markdownPreviewButton = form.querySelector('.comment-form-markdown-preview-button');
         var textarea = form.querySelector('.comment-form-textarea');
         var markdownPreviewContainer = form.querySelector('.comment-form-markdown-preview-container');
 
-        // Hide preview container, show edit container 
+        // Hide preview container and edit button, show edit container and preview button
         markdownPreviewContainer.innerHTML = '';
         markdownPreviewContainer.style.display = 'none';
+        markdownPreviewButton.style.display = 'block'
         textarea.style.display = 'block';
+        button.style.display = 'none';
 
         // Focus at end of textarea content
         const end = textarea.value.length;
@@ -172,28 +170,41 @@ function initEditMarkdownButton(button) {
     })
 }
 
- function initComments() {
-    var commentStarButtons = document.querySelectorAll('.comment-star-button');
-    commentStarButtons.forEach(button => {
-        initCommentStarButton(button);
-    });
-    var commentForms = document.querySelectorAll('.comment-form');
-    commentForms.forEach(form => {
-        initCommentForm(form);
-        initFormFocus(form);
-    });
-    var replyFormContainers = document.querySelectorAll('.reply-form-container');
-    replyFormContainers.forEach(replyFormContainer => {
-        initReplyAutoFocus(replyFormContainer);
-    })
-    var previewMarkdownButtons = document.querySelectorAll('.comment-form-preview-markdown-button');
-    previewMarkdownButtons.forEach(button => {
-        initPreviewMarkdownButton(button);
-    })
-    var editMarkdownButtons = document.querySelectorAll('.comment-form-edit-markdown-button');
-    editMarkdownButtons.forEach(button => {
-        initEditMarkdownButton(button);
-    })
+ function initCommentForm(form) {
+    initFormSubmission(form);
+    initFormFocus(form);
+
+    var replyFormContainer = form.closest('.reply-form-container');
+    var cancelButton = form.querySelector('.comment-cancel-button');
+    var markdownPreviewButton = form.querySelector('.comment-form-markdown-preview-button');
+    var markdownEditButton = form.querySelector('.comment-form-markdown-edit-button');
+
+    if (replyFormContainer) initReplyAutoFocus(replyFormContainer);
+    initCancelButton(cancelButton);
+    initmarkdownPreviewButton(markdownPreviewButton);
+    initmarkdownEditButton(markdownEditButton);
+}
+
+ function initComment(comment) {
+    initCommentStarButton(comment.querySelector('.comment-star-button'));
+
+    var commentForm = comment.querySelector('.comment-form')
+    initCommentForm(commentForm);
  }
+
+ function initComments() {
+
+    // Initialize all comments and their forms
+    var comments = document.querySelectorAll('.comment');
+    comments.forEach(comment => {
+        initComment(comment);
+    })
+
+    // Initialize the root (first) comment form
+    var rootForm = document.querySelector('.comment-form');
+    initCommentForm(rootForm);
+
+ }
+
 
 initComments();

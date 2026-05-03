@@ -13,9 +13,12 @@
 .comment-form-markdown-preview-container {
     display: none;
     background-color: var(--iridescent-0);
-    min-height: 3lh;
 }
 .comment-form-buttons {
+    display: none;
+}
+
+.comment-form-markdown-edit-button {
     display: none;
 }
 
