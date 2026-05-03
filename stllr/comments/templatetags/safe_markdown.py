@@ -8,14 +8,18 @@ register = template.Library()
 ALLOWED_TAGS = [
     'p', 'br', 'strong', 'em', 'code', 'pre', 'blockquote',
     'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'a',
+    'img',
 ]
 ALLOWED_ATTRS = {
-    'a': ['href', 'title']
+    'a': ['href', 'title'],
+    'img': ['src', 'alt', 'title'],  # Done by Claude, requires review
 }
 
 def _allow_safe_urls(tag, name, value):
     if name == 'href':
         return value.startswith(('https://', 'http://', '/', '#', 'mailto:'))
+    if name == 'src':
+        return value.startswith('/')  # only allow self-hosted (relative) URLs
     return True
 
 @register.filter(name='safe_markdown')

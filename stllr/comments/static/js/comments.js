@@ -26,7 +26,10 @@ function initFormSubmission(form) {
 
                 // Initialize new reply form
                 var newComment = document.querySelector(`#comment-${response.commentId}`);
-                initComment(newComment);
+                newStarButton = newComment.querySelector('.comment-star-button');
+                newForm = newComment.querySelector('.comment-form')
+                initCommentStarButton(newStarButton);
+                initCommentForm(newForm);
 
                 // Close form container for threaded comments
                 if (parentId) {
@@ -185,24 +188,19 @@ function initmarkdownEditButton(button) {
     initmarkdownEditButton(markdownEditButton);
 }
 
- function initComment(comment) {
-    initCommentStarButton(comment.querySelector('.comment-star-button'));
-
-    var commentForm = comment.querySelector('.comment-form')
-    initCommentForm(commentForm);
- }
-
  function initComments() {
 
-    // Initialize all comments and their forms
-    var comments = document.querySelectorAll('.comment');
-    comments.forEach(comment => {
-        initComment(comment);
+    // Initialize star buttons
+    var commentStarButtons = document.querySelectorAll('.comment-star-button');
+    commentStarButtons.forEach(button => {
+        initCommentStarButton(button);
     })
 
-    // Initialize the root (first) comment form
-    var rootForm = document.querySelector('.comment-form');
-    initCommentForm(rootForm);
+    // Initialize comment forms
+    var commentForms = document.querySelectorAll('.comment-form');
+    commentForms.forEach(form => {
+        initCommentForm(form)
+    })
 
  }
 
