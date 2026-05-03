@@ -1,0 +1,8 @@
+{% extends "extension/base.html" %}
+{% load static %}
+{% load comments %}
+
+{% block content %}
+    {% include "comments/form.html" with page=page parent=None %}
+    {% render_comment_tree page=page %}
+{% endblock content %}

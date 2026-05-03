@@ -9,6 +9,23 @@ from pages.utils import get_canonical, get_meta, get_domain_name, verify_securit
 from django.db.models import Count
 
 
+def get_csrf_token(request):
+    if (request.user.is_authenticated):
+        return JsonResponse(
+            {
+                'status': '200',
+                'csrfToken': get_token(request)
+            }
+        )
+    else:
+        return JsonResponse(
+            {
+                'status': '401',
+                'html': render_to_string('extension/login.html')
+            }
+        )
+    
+
 @login_required
 @require_POST
 def extension(request):
@@ -20,11 +37,15 @@ def extension(request):
 
     try:
         page = Page.objects.get(canonical=canonical)
+        if not page.is_active:
+            return JsonResponse(
+                {
+                    'status': '403',
+                    'html': render_to_string('extension/inactive.html')
+                }
+            )
     except Page.DoesNotExist:
-        page = None
-        head = posted_data.get('head')
-        scraped_data = get_meta(url, head)
-
+        scraped_data = get_meta(url, posted_data.get('head'))
         title = posted_data.get('title') or scraped_data['title']
         type = scraped_data['type']
         description = scraped_data['description']
@@ -33,25 +54,27 @@ def extension(request):
         fav_icon_url = posted_data.get('favIconUrl') or scraped_data['fav_icon_url']
         site_name = scraped_data.get('site_name')
 
-        # Verify URL security
         try:
             verify_security(url) 
             verify_security(image_url)
             verify_security(fav_icon_url)
         except InsecureURLError as e:
-            return JsonResponse({'status': '400', 'error': str(e)}, status=400)
+            return JsonResponse(
+                {
+                    'status': '405',
+                    'html': render_to_string('extension/unsupported.html')
+                }
+            )
 
-        # Get or create domain for new page
-        domain, created = Domain.objects.get_or_create(name=domain_name)
-        # Update domain if new information
-        if not domain.site_name and site_name:
+
+        domain, _ = Domain.objects.get_or_create(name=domain_name)
+        if site_name and not domain.site_name:
             domain.site_name = site_name
             domain.save()
-        if not domain.fav_icon_url and fav_icon_url:
+        if fav_icon_url and not domain.fav_icon_url:
             domain.fav_icon_url = fav_icon_url
             domain.save()
 
-        # Create new page
         page = Page.objects.create(
             canonical=canonical,
             title=title,
@@ -68,7 +91,6 @@ def extension(request):
             tags_list = [t.strip() for t in raw_tags.split(',') if t.strip()] if isinstance(raw_tags, str) else raw_tags
             page.tags.set(tags_list)
 
-    # Get top 3 similar pages based on number of shared tags
     page_tags_ids = page.tags.values_list('id', flat=True)
     similar_pages = Page.objects.filter(
         tags__in=page_tags_ids
@@ -80,13 +102,82 @@ def extension(request):
     context = {
         'page': page,
         'similar_pages': similar_pages,
+        'section': "info"
     }
     
     return JsonResponse({
         'status': '200',
-        'html': render_to_string('extension.html', context=context, request=request)
+        'html': render_to_string('extension/info.html', context=context, request=request)
     })
 
-@login_required
-def get_csrf_token(request):
-    return JsonResponse({'csrfToken': get_token(request)})
+@require_POST
+def forum(request):
+
+    posted_data = json.loads(request.body).get('pageData')
+    url = posted_data.get('url')
+    canonical = get_canonical(url)
+
+    try:
+        page = Page.objects.get(canonical=canonical)
+        if not page.is_active:
+            return JsonResponse(
+                {
+                    'status': '403',
+                    'html': render_to_string('extension/inactive.html')
+                }
+            )
+    except Page.DoesNotExist:
+        return JsonResponse(
+            {
+                'status': '404',
+                'html': render_to_string('extension/undiscovered.html')
+            }
+        )
+    
+    context = {
+        'page': page,
+        'section': 'forum'
+    }
+
+    return JsonResponse(
+        {
+            'status': '200',
+            'html': render_to_string('extension/forum.html', context=context, request=request)
+        }
+    )
+
+@require_POST
+def chat(request):
+
+    posted_data = json.loads(request.body).get('pageData')
+    url = posted_data.get('url')
+    canonical = get_canonical(url)
+
+    try:
+        page = Page.objects.get(canonical=canonical)
+        if not page.is_active:
+            return JsonResponse(
+                {
+                    'status': '403',
+                    'html': render_to_string('extension/inactive.html')
+                }
+            )
+    except Page.DoesNotExist:
+        return JsonResponse(
+            {
+                'status': '404',
+                'html': render_to_string('extension/undiscovered.html')
+            }
+        )
+    
+    context = {
+        'page': page,
+        'section': 'chat'
+    }
+
+    return JsonResponse(
+        {
+            'status': '200',
+            'html': render_to_string('extension/chat.html', context=context, request=request)
+        }
+    )

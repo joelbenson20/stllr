@@ -6,12 +6,19 @@
 .comment-form-textarea {
     max-width: 768px;
     background-color: white;
-    border-radius: 15px;
 }
 .comment-form-textarea {
     resize: none;
 }
+.comment-form-markdown-preview-container {
+    display: none;
+    background-color: var(--iridescent-0);
+}
 .comment-form-buttons {
+    display: none;
+}
+
+.comment-form-markdown-edit-button {
     display: none;
 }
 
@@ -41,8 +48,7 @@
 }
 
 .comment-reply-button {
-    background-color: var(--iridescent-4);
-    color: black;
+    color: var(--iridescent-4)
 }
 
 .comment-children {

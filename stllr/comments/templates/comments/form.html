@@ -2,20 +2,27 @@
 
 {% if user.is_authenticated %}
     <form id="comment-form-{{ parent.id }}"
-        class="comment-form p-0 my-3" method="post" action="{% url "comments:post" %}">
+        class="comment-form rounded p-0 my-3" method="post" action="{% url "comments:post" %}">
         {% csrf_token %}
         <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
         <input type="hidden" name="page" value="{{ page.id }}">
-        <textarea class="comment-form-textarea form-control border-0 shadow-none m-0"
+        <textarea class="comment-form-textarea form-control border-0 shadow-none"
             name = "content"
             rows = "1"
             placeholder="Reach for the stars..."
             required></textarea>
-        <div class="comment-form-buttons text-end">
-            <button class="comment-cancel-button btn btn-sm rounded-pill m-2" type="button" onclick="closeCommentForm(this)">
+        <div class="comment-form-markdown-preview-container border rounded p-2"></div>
+        <div class="comment-form-buttons align-items-center">
+            <button type="button" class="comment-form-markdown-preview-button btn btn-transparent btn-light m-1">
+                <i class="bi bi-eye-fill"></i>
+            </button>
+            <button type="button" class="comment-form-markdown-edit-button btn btn-transparent btn-light m-1">
+                <i class="bi bi-eye-slash"></i>
+            </button>
+            <button type="button" class="comment-cancel-button btn btn-transparent btn-light rounded ms-auto m-1">
                 Cancel
             </button>
-            <button class="comment-submit-button btn btn-sm rounded-pill m-2" type="submit">
+            <button type="submit" class="comment-submit-button btn btn-light rounded m-1">
                 Comment
             </button>
         </div>
