@@ -4,10 +4,6 @@ services:
 
   db:
     image: postgres:17
-    environment:
-      POSTGRES_DB: stllr_dev
-      POSTGRES_USER: stllr_dev
-      POSTGRES_PASSWORD: stllr_dev
     volumes:
       - ./data/db_dev:/var/lib/postgresql
     ports:
@@ -28,6 +24,9 @@ services:
     env_file:
       - ./stllr/.env
     environment:
+      - REDIS_URL=redis://cache:6379
+      - CELERY_BROKER_URL=redis://cache:6379/0
+      - CELERY_RESULT_BACKEND=redis://cache:6379/0
       - POSTGRES_HOST=db
     volumes:
       - .:/code
@@ -43,6 +42,9 @@ services:
     env_file:
       - ./stllr/.env
     environment:
+      - REDIS_URL=redis://cache:6379
+      - CELERY_BROKER_URL=redis://cache:6379/0
+      - CELERY_RESULT_BACKEND=redis://cache:6379/0
       - POSTGRES_HOST=db
     volumes:
       - .:/code

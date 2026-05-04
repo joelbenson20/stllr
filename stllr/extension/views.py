@@ -21,7 +21,7 @@ def get_csrf_token(request):
         return JsonResponse(
             {
                 'status': '401',
-                'html': render_to_string('extension/login.html')
+                'html': render_to_string('extension/errors/unauthenticated.html')
             }
         )
     
@@ -41,7 +41,7 @@ def extension(request):
             return JsonResponse(
                 {
                     'status': '403',
-                    'html': render_to_string('extension/inactive.html')
+                    'html': render_to_string('extension/errors/inactive.html')
                 }
             )
     except Page.DoesNotExist:
@@ -62,7 +62,7 @@ def extension(request):
             return JsonResponse(
                 {
                     'status': '405',
-                    'html': render_to_string('extension/unsupported.html')
+                    'html': render_to_string('errors/unsupported.html')
                 }
             )
 
@@ -123,14 +123,14 @@ def forum(request):
             return JsonResponse(
                 {
                     'status': '403',
-                    'html': render_to_string('extension/inactive.html')
+                    'html': render_to_string('extension/errors/inactive.html')
                 }
             )
     except Page.DoesNotExist:
         return JsonResponse(
             {
                 'status': '404',
-                'html': render_to_string('extension/undiscovered.html')
+                'html': render_to_string('extension/errors/undiscovered.html')
             }
         )
     
@@ -159,14 +159,14 @@ def chat(request):
             return JsonResponse(
                 {
                     'status': '403',
-                    'html': render_to_string('extension/inactive.html')
+                    'html': render_to_string('extension/errors/inactive.html')
                 }
             )
     except Page.DoesNotExist:
         return JsonResponse(
             {
                 'status': '404',
-                'html': render_to_string('extension/undiscovered.html')
+                'html': render_to_string('extension/errors/undiscovered.html')
             }
         )
     

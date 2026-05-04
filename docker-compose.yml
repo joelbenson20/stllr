@@ -49,6 +49,11 @@ services:
       - .:/code
     env_file:
       - ./stllr/.env.prod
+    environment:
+      - REDIS_URL=redis://cache:6379
+      - CELERY_BROKER_URL=redis://cache:6379/0
+      - CELERY_RESULT_BACKEND=redis://cache:6379/0
+      - POSTGRES_HOST=db
     depends_on:
       - db
       - cache
@@ -62,6 +67,11 @@ services:
       - .:/code
     env_file:
       - ./stllr/.env.prod
+    environment:
+      - REDIS_URL=redis://cache:6379
+      - CELERY_BROKER_URL=redis://cache:6379/0
+      - CELERY_RESULT_BACKEND=redis://cache:6379/0
+      - POSTGRES_HOST=db
     depends_on:
       - db
       - cache

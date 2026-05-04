@@ -1,0 +1,61 @@
+.comment-section {
+    max-width: 768px;
+}
+
+.comment-form,
+.comment-form-textarea {
+    max-width: 768px;
+    background-color: white;
+}
+.comment-form-textarea {
+    resize: none;
+}
+.comment-form-markdown-preview-container {
+    display: none;
+    background-color: var(--iridescent-0);
+}
+.comment-form-buttons {
+    display: none;
+}
+
+.comment-form-markdown-edit-button {
+    display: none;
+}
+
+.comment-submit-button {
+    background-color: var(--iridescent-4);
+}
+
+.comment,
+.comment-children {
+    background-repeat: repeat-y;
+    background-position: left;
+}
+
+.comment-user {
+    text-decoration: none;
+}
+.comment-user:hover {
+    text-decoration: underline;
+}
+
+.comment-user-bio {
+    font-size: 12px;
+}
+
+.comment-star-button:has(.bi-star-fill) {
+    text-shadow: 0 0 5px white;
+}
+
+.comment-reply-button {
+    color: var(--iridescent-4)
+}
+
+.comment-children {
+    padding-left: 16px;
+}
+
+.child-comment-curl {
+    left: -16px;
+    height: 32px;
+}
