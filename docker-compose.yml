@@ -28,8 +28,8 @@ services:
         cd /code/stllr
         python manage.py collectstatic --noinput
         python manage.py migrate
-        mkdir -p /code/media/prod
-        chown -R www-data:www-data /code/media
+        mkdir -p /code/stllr/media/prod
+        chown -R www-data:www-data /code/stllr/media
         chown www-data:www-data /code/stllr
         uwsgi --ini /code/config/uwsgi/uwsgi.ini
     restart: always

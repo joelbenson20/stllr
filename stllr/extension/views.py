@@ -62,7 +62,7 @@ def extension(request):
             return JsonResponse(
                 {
                     'status': '405',
-                    'html': render_to_string('errors/unsupported.html')
+                    'html': render_to_string('extension/errors/unsupported.html')
                 }
             )
 
