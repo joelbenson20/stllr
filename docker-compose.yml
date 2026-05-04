@@ -83,6 +83,7 @@ services:
     volumes:
       - ./config/nginx:/etc/nginx/templates
       - .:/code
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     ports:
       - "80:80"
       - "443:443"

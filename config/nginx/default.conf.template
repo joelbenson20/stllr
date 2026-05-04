@@ -3,9 +3,29 @@ upstream uwsgi_app {
     server unix:/code/stllr/uwsgi_app.sock;
 }
 
+# Redirect HTTP to HTTPS; allow Let's Encrypt renewal challenges
 server {
-    listen          80;
-    server_name    107.170.16.225;
+    listen      80;
+    server_name stllr.io www.stllr.io;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$$host$$request_uri;
+    }
+}
+
+server {
+    listen      443 ssl;
+    server_name stllr.io www.stllr.io;
+
+    ssl_certificate     /etc/letsencrypt/live/stllr.io/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/stllr.io/privkey.pem;
+
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
 
     location / {
         include     /etc/nginx/uwsgi_params;
