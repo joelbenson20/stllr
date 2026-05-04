@@ -1,3 +1,4 @@
+# Done by Claude, requires review
 # upstream for uWSGI
 upstream uwsgi_app {
     server unix:/code/stllr/uwsgi_app.sock;
@@ -13,7 +14,7 @@ server {
     }
 
     location / {
-        return 301 https://$$host$$request_uri;
+        return 301 https://$host$request_uri;
     }
 }
 
