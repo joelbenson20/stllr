@@ -221,8 +221,8 @@ __marimo__/
 .idea
 
 # Django collected static and media files
-/static/
-/media/
+/stllr/static/
+/stllr/media/
 
 # Docker volume data (PostgreSQL, Redis)
 data/
