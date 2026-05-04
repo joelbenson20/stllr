@@ -7,10 +7,6 @@ from django.contrib.messages import constants as messages
 SITE_ID = 1
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-ADMINS = [
-    ('Admin', config('ADMIN_EMAIL'))
-]
-
 # Security
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 
