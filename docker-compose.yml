@@ -11,12 +11,13 @@ services:
   cache:
     image: redis:8
     restart: always
+    command: redis-server --save "" --appendonly no
+    user: "999:999"
     volumes:
-      - ./data/cache_prod:/data
+      - cache_prod:/data
 
   web:
     build: .
-    # Done by Claude, requires review
     command:
       - ./wait-for-it.sh
       - db:5432
@@ -85,3 +86,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
+
+volumes:
+  cache_prod:
