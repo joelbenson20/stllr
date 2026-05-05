@@ -28,6 +28,12 @@ server {
     ssl_protocols       TLSv1.2 TLSv1.3;
     ssl_ciphers         HIGH:!aNULL:!MD5;
 
+    # Reject requests where ?next= is itself a URL containing another ?next=
+    # (only happens with bots building infinite redirect chains)
+    if ($arg_next ~* "next=") {
+        return 400;
+    }
+
     location / {
         include     /etc/nginx/uwsgi_params;
         uwsgi_pass  uwsgi_app;
