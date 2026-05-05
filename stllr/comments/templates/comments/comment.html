@@ -4,14 +4,14 @@
 {% load thumbnail %}
 {% load safe_markdown %}
 
-<div id="comment-{{ comment.id }}" class="comment position-relative my-4 {% if comment.parent %}border-start{% endif %}">
+<div id="comment-{{ comment.id }}" class="comment my-3 p-2">
 
-    <div class="comment-header d-flex align-items-start ps-3">
+    <div class="comment-header d-flex align-items-start">
 
         {% if comment.user.profile.photo %}
-            {% thumbnail comment.user.profile.photo 48x48 crop="smart" as im %}
+            {% thumbnail comment.user.profile.photo 32x32 crop="smart" as im %}
             <a class="float-start me-2 flex-shrink-0" href="{{ comment.user.get_absolute_url }}">
-                <img src="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}">
+                <img class="rounded-circle" src="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}">
             </a>
         {% endif %}
 
@@ -29,7 +29,7 @@
 
     </div>
 
-    <div class="comment-body ps-5 py-3 pb-0">
+    <div class="comment-body ps-5 pt-3 pb-0">
 
         <div class="comment-content">
             {{ comment.content|safe_markdown }}
@@ -47,7 +47,7 @@
                 <i class="bi bi-chat-left-text-fill"></i>
                 <span>{{ comment.children.count }}</span>
             </a>
-            <button class="comment-reply-button btn btn-sm btn-transparent rounded-pill fw-bold me-1"
+            <button class="comment-reply-button btn btn-sm btn-transparent btn-dark rounded-pill fw-bold me-1"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#reply-form-container-{{ comment.id }}"
@@ -60,7 +60,7 @@
             {% include "comments/form.html" with page=comment.page parent=comment %}
         </div>
     </div>
-    <div id="children-{{ comment.id }}" class="comment-children collapse show">
+    <div id="children-{{ comment.id }}" class="comment-children collapse show p-2">
         {% if comment.children.exists %}
             {% render_comment_tree comments=comment.children.all %}
         {% endif %}
