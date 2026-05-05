@@ -4,13 +4,7 @@
 {% load thumbnail %}
 {% load safe_markdown %}
 
-<div id="comment-{{ comment.id }}" class="comment position-relative my-4"
-        style="background-image: url('{{ request.scheme }}://{{ request.get_host }}{% static "brand/stllr-column.png" %}')"
-    >
-
-    {% if comment.parent %}
-        {% comment %} <img class="child-comment-curl position-absolute" src="{{ request.scheme }}://{{ request.get_host }}{% static "brand/stllr-column.png" %}"> {% endcomment %}
-    {% endif %}
+<div id="comment-{{ comment.id }}" class="comment position-relative my-4 {% if comment.parent %}border-start{% endif %}">
 
     <div class="comment-header d-flex align-items-start ps-3">
 
@@ -45,15 +39,15 @@
 
             {% include "comments/star_button.html" with comment=comment %}
 
-            <a class="comment-replies-button btn btn-xs btn-dark me-1"
+            <a class="comment-replies-button btn btn-sm btn-dark rounded-pill me-2"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#children-{{ comment.id }}"
                 aria-expanded="false">
+                <i class="bi bi-chat-left-text-fill"></i>
                 <span>{{ comment.children.count }}</span>
-                <i class="bi bi-chat-fill"></i>
             </a>
-            <button class="comment-reply-button btn btn-xs btn-transparent rounded-pill fw-bold me-1"
+            <button class="comment-reply-button btn btn-sm btn-transparent rounded-pill fw-bold me-1"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#reply-form-container-{{ comment.id }}"
