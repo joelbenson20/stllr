@@ -61,8 +61,8 @@
                     <a class="btn btn-dark ms-3" href='{% url "account_logout" %}'>Sign Out</a>
                 {% else %}
                 <div class="ms-auto">
-                    <a class="text-light text-decoration-none mx-2" href="{% url "account_login" %}?next={{ request.get_full_path }}">Sign In</a>
-                    <a class="btn btn-light ms-auto" href="{% url "account_signup" %}?next={{ request.get_full_path }}">Sign Up</a>
+                    <a class="text-light text-decoration-none mx-2" href="{% url "account_login" %}">Sign In</a>
+                    <a class="btn btn-light ms-auto" href="{% url "account_signup" %}">Sign Up</a>
                 </div>
                 {% endif %}
             </div>
