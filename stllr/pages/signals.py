@@ -5,6 +5,11 @@ from requests.exceptions import MissingSchema
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 from .models import Page
+import re
+from collections import Counter
+from nltk.corpus import stopwords as nltk_stopwords
+from nltk.tokenize import word_tokenize
+from nltk import pos_tag
 from django.contrib.postgres.search import SearchVector
 
 User = get_user_model()
@@ -64,6 +69,18 @@ def update_search_vector(sender, instance, **kwargs):
         )
     )
 
+@receiver(post_save, sender=Page)
+def update_tags(sender, instance, **kwargs):
+    stop_words = set(nltk_stopwords.words('english'))
+    raw = instance.title + instance.description + instance.inner_text
+    tokens = word_tokenize(raw)
+    tagged = pos_tag(tokens)
+    nouns = [word for word, pos in tagged if pos in ('NN', 'NNP') and word.isalpha() and word.lower() not in stop_words and len(word) > 2]
+    keywords = [word for word, count in Counter(nouns).most_common(8)]
+    print(keywords)
+    instance.tags.set(keywords)
+
+
 @receiver(m2m_changed, sender=Page.users_star.through)
 def users_star_changed(sender, instance, **kwargs):
     total_stars = instance.users_star.count()
@@ -75,8 +92,6 @@ def users_star_changed(sender, instance, **kwargs):
     # Otherwise, return the inverse squared value
     else:
         brightness = 1 / (d ** 2)
-    # Done by Claude, requires review
-    # Use update() instead of save() to avoid re-triggering post_save → download_images
     Page.objects.filter(pk=instance.pk).update(total_stars=total_stars, brightness=brightness)
     return
 

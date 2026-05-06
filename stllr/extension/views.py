@@ -86,12 +86,6 @@ def extension(request):
             inner_text=inner_text or scraped_data['inner_text'] or '',
         )
 
-        tags = scraped_data['tags'] or ''
-        if tags:
-            raw_tags = tags
-            tags_list = [t.strip() for t in raw_tags.split(',') if t.strip()] if isinstance(raw_tags, str) else raw_tags
-            page.tags.set(tags_list)
-
     page_tags_ids = page.tags.values_list('id', flat=True)
     similar_pages = Page.objects.filter(
         tags__in=page_tags_ids
