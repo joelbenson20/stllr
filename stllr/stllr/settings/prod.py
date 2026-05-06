@@ -16,6 +16,16 @@ ADMINS = [
     ('Stllr Admin', config('ADMIN_EMAIL'))
 ]
 
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler'},
+    },
+    'loggers': {
+        'django': {'handlers': ['console'], 'level': 'ERROR'},
+    }
+}
+
 EMAIL_BACKEND = 'anymail.backends.resend.EmailBackend'
 ANYMAIL = {'RESEND_API_KEY': config('RESEND_API_KEY')}
 DEFAULT_FROM_EMAIL = 'admin@stllr.io'
