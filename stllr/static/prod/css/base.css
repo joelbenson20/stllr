@@ -21,21 +21,12 @@ a {
     -webkit-backdrop-filter: blur(10px) brightness(60%);
 }
 
-.nav-link.selected {
-    color: white;
-    text-shadow: 0 0 10px white;
-}
-
 .collapsing {
     transition: height 0.25s ease;
 }
 
-
-.btn-xs {
-    padding: 0.125rem 0.25rem;
-    font-size: 0.75rem;
-    line-height: 1.5;
-    border-radius: 0.15rem;
+.rounded:not(.rounded-pill) {
+    border-radius: 16px !important;
 }
 
 .btn-transparent {
@@ -47,6 +38,10 @@ a {
     width: 300px;
     border-radius: 1rem;
     border-color: var(--iridescent-0);
+}
+
+.shine {
+    text-shadow: 0 0 10px white;
 }
 
 .blur-content {

@@ -4,6 +4,8 @@ from django.urls import reverse
 from django.utils.http import urlencode
 from taggit.managers import TaggableManager
 from django.conf import settings
+from django.contrib.postgres.search import SearchVectorField
+from django.contrib.postgres.indexes import GinIndex
 
 class Page(models.Model):
     canonical = models.CharField(max_length=250, unique=True)
@@ -15,6 +17,7 @@ class Page(models.Model):
     image = models.ImageField(max_length=255, upload_to='images/pages', blank=True)
     domain = models.ForeignKey('Domain', related_name='pages', on_delete=models.CASCADE)
     inner_text = models.TextField(blank=True)
+    search_vector = SearchVectorField(null=True, editable=False)
 
     users_star = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
@@ -29,7 +32,8 @@ class Page(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['-brightness'])
+            models.Index(fields=['-brightness']),
+            GinIndex(fields=['search_vector'], name='page_search_vector_gin'),
         ]
         ordering = ['-brightness', '?']
     

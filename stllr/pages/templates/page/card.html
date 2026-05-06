@@ -38,7 +38,7 @@
                     <p class="page-description small m-0">
                         {{ page.description|default_if_none:""|default:"No description."|truncatechars:300 }}
                         {% for tag in page.tags.all %}
-                            <a href="#">#{{ tag.name }}</a>&nbsp;
+                            <a href="/?tag={{ tag.slug }}">#{{ tag.name }}</a>&nbsp;
                         {% endfor %}
                     </p>
                 {% endif %}

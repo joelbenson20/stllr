@@ -2,19 +2,17 @@
     max-width: 768px;
 }
 
-.comment-form,
-.comment-form-textarea {
+.comment-form {
     max-width: 768px;
     background-color: white;
 }
-.comment-form-textarea {
-    resize: none;
+
+.comment-form-textarea,
+.comment-form-markdown-preview-container {
+    height: 96px;
 }
 .comment-form-markdown-preview-container {
-    display: none;
-    background-color: var(--iridescent-0);
-}
-.comment-form-buttons {
+    color: black;
     display: none;
 }
 
@@ -26,10 +24,9 @@
     background-color: var(--iridescent-4);
 }
 
-.comment,
-.comment-children {
-    background-repeat: repeat-y;
-    background-position: left;
+.comment {
+    border-radius: 16px;
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .comment-user {
