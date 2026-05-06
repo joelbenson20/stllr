@@ -72,7 +72,7 @@ def update_search_vector(sender, instance, **kwargs):
 @receiver(post_save, sender=Page)
 def update_tags(sender, instance, **kwargs):
     stop_words = set(nltk_stopwords.words('english'))
-    raw = instance.title + instance.description + instance.inner_text
+    raw = (instance.title or '') + (instance.description or '') + (instance.inner_text or '')
     tokens = word_tokenize(raw)
     tagged = pos_tag(tokens)
     nouns = [word for word, pos in tagged if pos in ('NN', 'NNP') and word.isalpha() and word.lower() not in stop_words and len(word) > 2]
