@@ -12,7 +12,7 @@ WORKDIR /code
 RUN pip install --upgrade pip
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN python -m nltk.downloader stopwords punkt_tab averaged_perceptron_tagger_eng
+RUN python -m nltk.downloader -d /usr/local/share/nltk_data stopwords punkt_tab averaged_perceptron_tagger_eng
 
 # Copy the Django project
 COPY . .
