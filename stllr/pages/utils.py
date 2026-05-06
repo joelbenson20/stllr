@@ -6,7 +6,7 @@ import numpy as np
 from django.db.models import Case, When, IntegerField
 from .models import Page
 
-def pages_order_by_stochastic():
+def pages_stochastic():
     pages = Page.objects.filter(brightness__gt=0, is_active=True, domain__is_active=True).values('id', 'brightness')
     if not pages:
         return None
