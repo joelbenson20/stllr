@@ -3,6 +3,13 @@
 {% load comments %}
 
 {% block content %}
-    {% include "comments/form.html" with page=page parent=None %}
+
+    <div class="fixed-bottom p-2">
+        {% include "comments/form.html" with page=page parent=None %}
+    </div>
+
     {% render_comment_tree page=page %}
+
+    <div id="commentFormPadding" style="height:168px"></div>
+
 {% endblock content %}

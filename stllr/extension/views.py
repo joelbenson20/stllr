@@ -103,12 +103,12 @@ def extension(request):
     context = {
         'page': page,
         'similar_pages': similar_pages,
-        'section': "info"
+        'section': 'pageInfo'
     }
     
     return JsonResponse({
         'status': '200',
-        'html': render_to_string('extension/info.html', context=context, request=request)
+        'html': render_to_string('extension/page-info.html', context=context, request=request)
     })
 
 @csrf_exempt

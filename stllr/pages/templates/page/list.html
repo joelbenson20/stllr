@@ -1,3 +1,5 @@
 {% for page in pages %}
-    {% include "page/card.html" with page=page user=user %}
+    <div class="mb-5">
+        {% include "page/card.html" with page=page user=user %}
+    </div>
 {% endfor %}
