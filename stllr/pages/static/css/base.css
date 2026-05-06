@@ -30,6 +30,10 @@ a {
     transition: height 0.25s ease;
 }
 
+.rounded:not(.rounded-pill) {
+    border-radius: 16px !important;
+}
+
 .btn-transparent {
     background-color: transparent;
     border: none;

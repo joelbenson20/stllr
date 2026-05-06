@@ -4,7 +4,7 @@
 {% load thumbnail %}
 {% load safe_markdown %}
 
-<div id="comment-{{ comment.id }}" class="comment my-3 p-2">
+<div id="comment-{{ comment.id }}" class="comment mt-3 p-2">
 
     <div class="comment-header d-flex align-items-start">
 
@@ -16,29 +16,25 @@
         {% endif %}
 
         <div class="d-flex align-items-center flex-wrap">
-            <a class="comment-user small text-light m-0 p-0"
+            <a class="comment-user small text-light"
                 href="{{ request.scheme }}://{{ request.get_host }}{{ comment.user.profile.get_absolute_url }}">
                 {{ comment.user.username }}
             </a>
             <i class="bi bi-dot text-secondary"></i>
             <span class="small text-secondary">{{ comment.created|naturaltime }}</span>
             <span class="w-100"></span>
-            <span class="comment-user-bio text-secondary border border-secondary rounded-pill my-1 px-2">{{ comment.user.profile.bio }}</span>
+            <span class="comment-user-bio text-secondary small border rounded-pill my-1 px-2">{{ comment.user.profile.bio }}</span>
 
         </div>
 
     </div>
 
-    <div class="comment-body ps-5 pt-3 pb-0">
-
+    <div class="comment-body mt-3 ms-5">
         <div class="comment-content">
             {{ comment.content|safe_markdown }}
         </div>
-
         <div class="comment-buttons">
-
             {% include "comments/star_button.html" with comment=comment %}
-
             <a class="comment-replies-button btn btn-sm btn-dark rounded-pill me-2"
                 type="button"
                 data-bs-toggle="collapse"
@@ -55,15 +51,17 @@
                 Reply
             </button>
         </div>
-
-        <div id="reply-form-container-{{ comment.id }}" class="reply-form-container collapse">
-            {% include "comments/form.html" with page=comment.page parent=comment %}
-        </div>
     </div>
-    <div id="children-{{ comment.id }}" class="comment-children collapse show p-2">
+
+    <div id="reply-form-container-{{ comment.id }}" class="reply-form-container collapse m-0 ps-2">
+        {% include "comments/form.html" with page=comment.page parent=comment %}
+    </div>
+
+    <div id="children-{{ comment.id }}" class="comment-children collapse show m-0 ps-2">
         {% if comment.children.exists %}
             {% render_comment_tree comments=comment.children.all %}
         {% endif %}
     </div>
+
 </div>
 

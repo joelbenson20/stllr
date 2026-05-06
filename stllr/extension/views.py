@@ -3,6 +3,7 @@ from django.template.loader import render_to_string
 from django.middleware.csrf import get_token
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 from pages.models import Page, Domain
 import json
 from pages.utils import get_canonical, get_meta, get_domain_name, verify_security, InsecureURLError
@@ -25,7 +26,7 @@ def get_csrf_token(request):
             }
         )
     
-
+@csrf_exempt
 @login_required
 @require_POST
 def extension(request):
@@ -110,6 +111,7 @@ def extension(request):
         'html': render_to_string('extension/info.html', context=context, request=request)
     })
 
+@csrf_exempt
 @require_POST
 def forum(request):
 
@@ -146,6 +148,7 @@ def forum(request):
         }
     )
 
+@csrf_exempt
 @require_POST
 def chat(request):
 

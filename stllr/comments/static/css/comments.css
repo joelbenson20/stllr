@@ -7,16 +7,17 @@
     max-width: 768px;
     background-color: white;
 }
-.comment-form-textarea {
-    resize: none;
+.comment-form-textarea,
+.comment-form-markdown-preview-container {
+    min-height: 96px;
 }
 .comment-form-markdown-preview-container {
     display: none;
     background-color: var(--iridescent-0);
 }
-.comment-form-buttons {
+/* .comment-form-buttons {
     display: none;
-}
+} */
 
 .comment-form-markdown-edit-button {
     display: none;

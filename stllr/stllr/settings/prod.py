@@ -18,12 +18,4 @@ ADMINS = [
 
 EMAIL_BACKEND = 'anymail.backends.resend.EmailBackend'
 ANYMAIL = {'RESEND_API_KEY': config('RESEND_API_KEY')}
-DEFAULT_FROM_EMAIL = 'noreply@stllr.io'
-
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = config('ADMIN_EMAIL')
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
-# EMAIL_TIMEOUT = 10
+DEFAULT_FROM_EMAIL = 'admin@stllr.io'
