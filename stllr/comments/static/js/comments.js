@@ -48,18 +48,6 @@ function initFormSubmission(form) {
     
 }
 
-//  function initFormFocus(form) {
-//     var textarea = form.querySelector('.comment-form-textarea');
-//     textarea.addEventListener('focus', (e) => {
-//         var buttons = form.querySelector('.comment-form-buttons');
-//         if (textarea.offsetHeight < 100) {
-//             textarea.style.height = "100px";
-//         }
-//         textarea.style.resize = "vertical";
-//         buttons.style.display = "flex";
-//     })
-//  }
-
  function initReplyAutoFocus(replyFormContainer) {
     replyFormContainer.addEventListener('shown.bs.collapse', function () {
         this.querySelector('textarea').focus();
@@ -97,25 +85,6 @@ function initCommentStarButton(button) {
             })
         })
 }
-
-// function closeCommentForm(cancelButton) {
-//     var form = cancelButton.closest('.comment-form');
-//     var textarea = form.querySelector('.comment-form-textarea');
-//     var markdownPreviewContainer = form.querySelector('.comment-form-markdown-preview-container');
-//     var buttons = form.querySelector('.comment-form-buttons');
-
-//     markdownPreviewContainer.style.display = 'none';
-//     buttons.style.display = "none";
-//     textarea.style.height = "1rem";
-//     textarea.style.resize = "none";
-//     textarea.style.display = 'block';
-// }
-
-// function initCancelButton(button) {
-//     button.addEventListener('click', (e) => {
-//         closeCommentForm(button);
-//     })
-// }
 
 function initmarkdownPreviewButton(button) {
     button.addEventListener('click', (e) => {

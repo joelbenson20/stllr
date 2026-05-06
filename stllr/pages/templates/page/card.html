@@ -34,12 +34,14 @@
                     <img class="page-image me-2"
                         src="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}">
                 {% endif %}
-                <p class="page-description small m-0">
-                    {{ page.description|default_if_none:""|default:"No description."|truncatechars:300 }}
-                    {% for tag in page.tags.all %}
-                        <a href="#">#{{ tag.name }}</a>&nbsp;
-                    {% endfor %}
-                </p>
+                {% if page.description %}
+                    <p class="page-description small m-0">
+                        {{ page.description|default_if_none:""|default:"No description."|truncatechars:300 }}
+                        {% for tag in page.tags.all %}
+                            <a href="#">#{{ tag.name }}</a>&nbsp;
+                        {% endfor %}
+                    </p>
+                {% endif %}
             </div>
         </div>
         <div class="mt-2 p-0">

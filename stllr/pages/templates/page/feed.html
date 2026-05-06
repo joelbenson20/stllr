@@ -2,12 +2,28 @@
 {% load static %}
 
 {% block content %}
-    {% if tag %}
-        <h1 class="mb-4">#{{ tag.name }}</h1>
-    {% endif %}
+
+    <div class="feed-header mb-5">
+        <div class="dropdown">
+            <button class="btn btn-transparent btn-dark btn-sm dropdown-toggle shine" id="sortMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ section|default:"firmament"|capfirst }}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="sortMenuButton">
+                <a class="dropdown-item" href="{% url "pages:firmament" %}">Firmament</a>
+                <a class="dropdown-item" href="{% url "pages:brightest" %}">Brightest</a>
+                <a class="dropdown-item" href="{% url "pages:rising" %}">Rising</a>
+            </div>
+        </div>
+
+        {% if tag %}
+            <h1 class="mb-4">#{{ tag.name }}</h1>
+        {% endif %}
+    </div>
+
     <div id="pageFeed">
         {% include 'page/list.html' with pages=pages user=user %}
     </div>
+
 {% endblock content %}
 
 {% block scripts %}

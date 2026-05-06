@@ -103,7 +103,7 @@ def rising_view(request):
         'page/feed.html',
         {
             'pages': pages,
-            'section': 'approaching'
+            'section': 'rising'
         }
     )
 

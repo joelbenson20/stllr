@@ -21,11 +21,6 @@ a {
     -webkit-backdrop-filter: blur(10px) brightness(60%);
 }
 
-.nav-link.selected {
-    color: white;
-    text-shadow: 0 0 10px white;
-}
-
 .collapsing {
     transition: height 0.25s ease;
 }
@@ -43,6 +38,10 @@ a {
     width: 300px;
     border-radius: 1rem;
     border-color: var(--iridescent-0);
+}
+
+.shine {
+    text-shadow: 0 0 10px white;
 }
 
 .blur-content {
