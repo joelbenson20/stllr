@@ -97,12 +97,12 @@ def extension(request):
     context = {
         'page': page,
         'similar_pages': similar_pages,
-        'section': 'pageInfo'
+        'section': 'forum'
     }
     
     return JsonResponse({
         'status': '200',
-        'html': render_to_string('extension/page-info.html', context=context, request=request)
+        'html': render_to_string('extension/forum.html', context=context, request=request)
     })
 
 @csrf_exempt
@@ -144,7 +144,7 @@ def forum(request):
 
 @csrf_exempt
 @require_POST
-def chat(request):
+def relay(request):
 
     posted_data = json.loads(request.body).get('pageData')
     url = posted_data.get('url')
@@ -169,12 +169,49 @@ def chat(request):
     
     context = {
         'page': page,
-        'section': 'chat'
+        'section': 'relay'
     }
 
     return JsonResponse(
         {
             'status': '200',
-            'html': render_to_string('extension/chat.html', context=context, request=request)
+            'html': render_to_string('extension/relay.html', context=context, request=request)
+        }
+    )
+
+@csrf_exempt
+@require_POST
+def similar(request):
+
+    posted_data = json.loads(request.body).get('pageData')
+    url = posted_data.get('url')
+    canonical = get_canonical(url)
+
+    try:
+        page = Page.objects.get(canonical=canonical)
+        if not page.is_active:
+            return JsonResponse(
+                {
+                    'status': '403',
+                    'html': render_to_string('extension/errors/inactive.html')
+                }
+            )
+    except Page.DoesNotExist:
+        return JsonResponse(
+            {
+                'status': '404',
+                'html': render_to_string('extension/errors/undiscovered.html')
+            }
+        )
+    
+    context = {
+        'page': page,
+        'section': 'similar'
+    }
+
+    return JsonResponse(
+        {
+            'status': '200',
+            'html': render_to_string('extension/similar.html', context=context, request=request)
         }
     )

@@ -1,0 +1,5 @@
+{% extends "extension/base.html" %}
+
+{% block content %}
+    {% include "page/list.html" with pages=page.tags.similar_objects %}
+{% endblock content %}

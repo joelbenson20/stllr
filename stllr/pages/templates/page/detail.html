@@ -7,20 +7,15 @@
 {% block content %}
     {% if page.is_active %}
         <div class="row">
-            <div class="col-8-sm">
+            <div class="col-8 border-end">
                 {% include 'page/card.html' with page=page user=user %}
                 <div class="comment-section my-5">
                     {% include "comments/form.html" with page=page parent=None %}
                     {% render_comment_tree page=page %}
                 </div>
             </div>
-            <div class="col-4-sm">
-                {% if similar_pages %}
-                    <h2>Similar Pages</h2>
-                    {% for page in similar_pages %}
-                        {% include 'page/card.html' with page=page user=user %}
-                    {% endfor %}
-                {% endif %}
+            <div class="col-3 p-3">
+                {% include "page/list.html" with pages=page.tags.similar_objects %}
             </div>
         </div>
     {% else %}

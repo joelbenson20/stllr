@@ -17,7 +17,7 @@ def feed_view(request):
     query = None
     tag = None
 
-    sort = request.GET.get('sort', 'firmamement')
+    sort = request.GET.get('sort', 'firmament')
     if sort == 'brightest':
         pages = Page.objects.all()
     elif sort == 'rising':
@@ -58,25 +58,10 @@ def feed_view(request):
         'sort': sort
     })
 
-
 def page_detail(request):
     canonical = request.GET.get('p')
     page = get_object_or_404(Page, canonical=canonical)
-
-    # Get top 3 similar pages based on number of shared tags
-    page_tags_ids = page.tags.values_list('id', flat=True)
-    similar_pages = Page.objects.filter(
-        tags__in=page_tags_ids
-    ).exclude(id=page.id)
-    similar_pages = similar_pages.annotate(
-        same_tags=Count('tags')
-    ).order_by('-same_tags')[:3]
-
-    context = {
-        "page": page,
-        "similar_pages": similar_pages,
-    }
-    return render(request, 'page/detail.html', context=context)
+    return render(request, 'page/detail.html', context={"page": page})
 
 @login_required
 @require_POST

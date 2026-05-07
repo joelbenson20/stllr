@@ -1,31 +1,35 @@
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
-<link rel="stylesheet" href="{% static 'css/pages.css' %}">
-<link rel="stylesheet" href="{% static 'css/comments.css' %}">
 
-<div class="container-fluid">
-    <nav class="navbar navbar-expand navbar-dark sticky-top flex-wrap">
-        <p class="text-secondary small w-100 text-truncate mb-0">{{ page.link }}</p>
-        <ul class="navbar-nav align-items-center">
-            <li id="refreshButton" class="nav-item">
-                <a class="btn btn-dark btn-sm rounded-circle" href="#" role="button">
-                    <i class="bi bi-arrow-clockwise"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a id="pageInfoLink" class="nav-link {% if section == "pageInfo" %}active{% endif %}" role="button">Page Info</a>
-            </li>
-            <li class="nav-item">
-                <a id="forumLink" class="nav-link {% if section == "forum" %}active{% endif %}" role="button">Forum</a>
-            </li>
-            <li class="nav-item">
-                <a id="chatLink" class="nav-link {% if section == "chat" %}active{% endif %}" role="button">Chat</a>
-            </li>
-        </ul>
-    </nav>
-    
-    {% block content %}
-    {% endblock content %}
+<div id="extensionBody">
 
+    <div class="sticky-top glass">
+
+        <div class="extension-header p-3">
+            {% include "page/card.html" %}
+        </div>
+
+        <nav id="extensionNavbar" class="navbar navbar-expand navbar-dark m-0 p-0">
+            <button id="refreshButton" class="btn btn-sm btn-transparent btn-dark rounded-circle ms-3" role="button">
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
+            <ul class="navbar-nav d-flex align-items-center w-100 justify-content-evenly">
+                <li class="nav-item">
+                    <a id="forumLink" class="nav-link text-light {% if section == "forum" %}border-bottom{% endif %}" role="button">Forum</a>
+                </li>
+                <li class="nav-item">
+                    <a id="relayLink" class="nav-link text-light {% if section == "relay" %}border-bottom{% endif %}" role="button">Relay</a>
+                </li>
+                <li class="nav-item">
+                    <a id="similarLink" class="nav-link text-light {% if section == "similar" %}border-bottom{% endif %}" role="button">Similar</a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+
+    <div class="container-fluid p-3">
+        {% block content %}
+        {% endblock content %}
+    </div>
 </div>

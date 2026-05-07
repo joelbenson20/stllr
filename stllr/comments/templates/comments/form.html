@@ -2,27 +2,27 @@
 
 {% if user.is_authenticated %}
     <form id="comment-form-{{ parent.id }}"
-        class="comment-form rounded mt-3 p-1" method="post" action="{% url "comments:post" %}">
+        class="comment-form rounded-card" method="post" action="{% url "comments:post" %}">
         {% csrf_token %}
         <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
         <input type="hidden" name="page" value="{{ page.id }}">
-        <textarea class="comment-form-textarea form-control border-0 rounded shadow-none p-3"
+        <textarea class="comment-form-textarea form-control rounded-card border-0 shadow-none p-3"
             name = "content"
             placeholder="Reach for the stars..."
             required></textarea>
         <div class="comment-form-markdown-preview-container rounded p-3">
         </div>
         <div class="comment-form-buttons d-flex align-items-center">
-            <button type="button" class="btn btn-transparent btn-light rounded">
+            <button type="button" class="btn btn-transparent btn-light rounded-circle m-1">
                 <i class="bi bi-question-circle"></i>
             </button>
-            <button type="button" class="comment-form-markdown-preview-button btn btn-transparent btn-light rounded m-1">
+            <button type="button" class="comment-form-markdown-preview-button btn btn-transparent btn-light rounded-card m-1">
                 <i class="bi bi-eye-fill"></i> Preview
             </button>
-            <button type="button" class="comment-form-markdown-edit-button btn btn-transparent btn-light rounded m-1">
+            <button type="button" class="comment-form-markdown-edit-button btn btn-transparent btn-light rounded-card m-1">
                 <i class="bi bi-eye-slash"></i> Edit
             </button>
-            <button type="submit" class="comment-submit-button btn btn-light rounded ms-auto m-1">
+            <button type="submit" class="comment-submit-button btn btn-light rounded-card ms-auto m-1">
                 Comment
             </button>
         </div>

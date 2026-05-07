@@ -1,7 +1,7 @@
 {% load thumbnail %}
 
 {% if page.is_active %}
-    <div id="p{{ page.id }}" class="page">
+    <div id="p{{ page.id }}" class="page-card rounded-card">
         <div class="row m-0 p-0">
             <div class="col m-0 p-0">
                 {% if page.domain.fav_icon %}
@@ -24,8 +24,8 @@
         </div>
         <div class="row m-0 p-0">
             <div class="col m-0 py-1 px-0">
-                <a class="page-title" href="{{ page.link }}" target="_blank">
-                    <h1 class="page-title mb-2">
+                <a class="page-title" href="{{ page.link }}">
+                    <h1 class="page-title fw-normal mb-2">
                         {{ page.title }}
                     </h1>
                 </a>
@@ -44,12 +44,17 @@
                 </p>
             </div>
         </div>
-        <div class="mt-2 p-0">
+        <div class="my-2 p-0">
             {% include 'page/star_button.html' with page=page user=user %}
             <a class="page-forum-button btn btn-sm btn-dark rounded-pill me-2"
                 href="{{ request.scheme }}://{{ request.get_host }}{{ page.get_absolute_url }}">
-                <i class="bi bi-chat-left-text-fill"></i>
+                <i class="text-info bi bi-chat-left-text-fill"></i>
                 <span>{{ page.comments.count }}</span>
+            </a>
+            <a class="page-cast-button btn btn-sm btn-dark rounded-pill me-2"
+                href="#">
+                <i class="text-danger bi bi-broadcast-pin"></i>
+                <span>0</span>
             </a>
         </div>
     </div>

@@ -53,11 +53,11 @@
         </div>
     </div>
 
-    <div id="reply-form-container-{{ comment.id }}" class="reply-form-container collapse m-0 ps-2">
+    <div id="reply-form-container-{{ comment.id }}" class="reply-form-container collapse mt-2 ps-4">
         {% include "comments/form.html" with page=comment.page parent=comment %}
     </div>
 
-    <div id="children-{{ comment.id }}" class="comment-children collapse show m-0 ps-2">
+    <div id="children-{{ comment.id }}" class="comment-children collapse show m-0 ps-4">
         {% if comment.children.exists %}
             {% render_comment_tree comments=comment.children.all %}
         {% endif %}
