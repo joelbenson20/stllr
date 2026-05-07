@@ -21,7 +21,7 @@ def feed_view(request):
     if sort == 'brightest':
         pages = Page.objects.order_by('brightness_index')
     elif sort == 'rising':
-        pages = Page.objects.order_by('title')
+        pages = Page.objects.order_by('-rise')
     else:
         pages = pages_stochastic()
 
