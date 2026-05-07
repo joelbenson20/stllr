@@ -19,7 +19,7 @@ def feed_view(request):
 
     sort = request.GET.get('sort', 'firmament')
     if sort == 'brightest':
-        pages = Page.objects.all()
+        pages = Page.objects.order_by('brightness_index')
     elif sort == 'rising':
         pages = Page.objects.order_by('title')
     else:

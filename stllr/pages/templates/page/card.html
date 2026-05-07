@@ -1,4 +1,5 @@
 {% load thumbnail %}
+{% load math_extras %}
 
 {% if page.is_active %}
     <div id="p{{ page.id }}" class="page-card rounded-card">
@@ -19,28 +20,45 @@
                     </span>
                     {% endif %}
                 </p>
-                <a class="page-link d-block text-truncate mt-1 p-0" href="{{ page.link }}" target="_blank">{{ page.link }}</a>
+                <a class="page-link d-block text-truncate mt-1 p-0" href="{{ page.link }}">{{ page.link }}</a>
+            </div>
+        </div>
+        <div class="row m-0 p-0">
+            <div class="col m-0 p-0">
+                <h1 class="page-title fw-normal mb-0">
+                    <a class="page-title" href="{{ page.link }}">
+                        {{ page.title }}
+                    </a>
+                </h1>
             </div>
         </div>
         <div class="row m-0 p-0">
             <div class="col m-0 py-1 px-0">
-                <a class="page-title" href="{{ page.link }}">
-                    <h1 class="page-title fw-normal mb-2">
-                        {{ page.title }}
-                    </h1>
-                </a>
                 {% if page.image %}
                     {% thumbnail page.image 0x60 as im %}
                     <img class="page-image me-2"
                         src="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}">
                 {% endif %}
                 <p class="page-description small m-0">
+
+                    <span class="badge bg-transparent border">
+                        <i class="bi bi-hash"></i>{{ page.brightness_index }}
+                    </span>
+                    <span class="badge bg-transparent border">
+                        {% if page.rise >= 0 %}
+                            <span class="{% if page.rise > 0 %}text-success{% else %}text-light{% endif %}"><i class="bi bi-arrow-up-short"></i>{{ page.rise }}</span>
+                        {% else %}
+                            <span class="text-danger"><i class="bi bi-arrow-down-short"></i>{{ page.rise|negate }}</span>
+                        {% endif %}
+                    </span>
+
                     {{ page.description|truncatechars:300 }}
-                </p>
-                <p class="page-tags small m-0">
-                    {% for tag in page.tags.all %}
-                        <a href="/?tag={{ tag.slug }}">#{{ tag.name }}</a>&nbsp;
-                    {% endfor %}
+
+                    <span class="page-tags m-0">
+                        {% for tag in page.tags.all %}
+                            <a href="/?tag={{ tag.slug }}">#{{ tag.name }}</a>&nbsp;
+                        {% endfor %}
+                    </span>
                 </p>
             </div>
         </div>

@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
 
+
 class Page(models.Model):
     canonical = models.CharField(max_length=250, unique=True)
     title = models.CharField(max_length=200)
@@ -26,10 +27,17 @@ class Page(models.Model):
         related_name='pages_starred',
         blank=True
     )
-    total_stars = models.PositiveIntegerField(default=0)
-    brightness = models.FloatField(default=0)
+    total_stars = models.PositiveIntegerField(default=0, editable=False)
+    brightness = models.FloatField(default=0, editable=False)
+    brightness_index = models.PositiveIntegerField(editable=False)
+    rise = models.IntegerField(default=0, editable=False)
 
     is_active = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk: # Set brightness_index for new pages, starting at bottom
+            self.brightness_index = Page.objects.count() + 1
+            super().save(*args, **kwargs)
 
     class Meta:
         indexes = [

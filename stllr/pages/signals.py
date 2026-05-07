@@ -68,6 +68,7 @@ def update_search_vector(sender, instance, **kwargs):
             SearchVector('inner_text', weight='C')
         )
     )
+    return
 
 @receiver(post_save, sender=Page)
 def update_tags(sender, instance, **kwargs):
@@ -77,8 +78,8 @@ def update_tags(sender, instance, **kwargs):
     tagged = pos_tag(tokens)
     nouns = [word for word, pos in tagged if pos in ('NN', 'NNP') and word.isalpha() and word.lower() not in stop_words and len(word) > 2]
     keywords = [word for word, count in Counter(nouns).most_common(8)]
-    print(keywords)
     instance.tags.set(keywords)
+    return
 
 
 @receiver(m2m_changed, sender=Page.users_star.through)
