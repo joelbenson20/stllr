@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% load comments %}
+
+{% block title %} stllr | {{ page.title }}{% endblock title %}
+
+{% block content %}
+    {% if page.is_active %}
+        <div class="row">
+            <div class="col-8 border-end">
+                {% include 'page/card.html' with page=page user=user %}
+                <div class="my-5">
+                    Future feature!
+                </div>
+            </div>
+            <div class="col-3 p-3">
+                {% include "page/list.html" with pages=page.tags.similar_objects %}
+            </div>
+        </div>
+    {% else %}
+        <p>The forum at this page has been suspended.</p>
+    {% endif %}
+{% endblock content %}

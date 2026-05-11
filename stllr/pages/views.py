@@ -58,10 +58,15 @@ def feed_view(request):
         'sort': sort
     })
 
-def page_detail(request):
+def page_forum(request):
     canonical = request.GET.get('p')
     page = get_object_or_404(Page, canonical=canonical)
-    return render(request, 'page/detail.html', context={"page": page})
+    return render(request, 'page/forum.html', context={"page": page})
+
+def page_relay(request):
+    canonical = request.GET.get('p')
+    page = get_object_or_404(Page, canonical=canonical)
+    return render(request, 'page/relay.html', context={"page": page})
 
 @login_required
 @require_POST

@@ -49,10 +49,6 @@ class Page(models.Model):
     def __str__(self):
         return self.canonical
     
-    def get_absolute_url(self):
-        query_params = {'p': self.canonical}
-        return f"{reverse('pages:detail')}?{urlencode(query_params)}"
-    
     @property
     def link(self):
         return 'https://' + self.canonical

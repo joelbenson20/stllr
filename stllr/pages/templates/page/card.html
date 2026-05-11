@@ -63,12 +63,12 @@
         <div class="my-2 p-0">
             {% include 'page/star_button.html' with page=page user=user %}
             <a class="page-forum-button btn btn-sm btn-dark rounded-pill me-2"
-                href="{{ request.scheme }}://{{ request.get_host }}{{ page.get_absolute_url }}">
+                href="{{ request.scheme }}://{{ request.get_host }}{% url "pages:forum" %}?p={{ page.canonical|urlencode }}">
                 <i class="text-info bi bi-chat-left-text-fill"></i>
                 <span>{{ page.comments.count }}</span>
             </a>
-            <a class="page-cast-button btn btn-sm btn-dark rounded-pill me-2"
-                href="#">
+            <a class="page-relay-button btn btn-sm btn-dark rounded-pill me-2"
+                href="{{ request.scheme }}://{{ request.get_host }}{% url "pages:relay" %}?p={{ page.canonical|urlencode }}">
                 <i class="text-danger bi bi-broadcast-pin"></i>
                 <span>0</span>
             </a>
