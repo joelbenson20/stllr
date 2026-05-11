@@ -4,8 +4,14 @@
 
 {% block content %}
 
-    {% include "comments/form.html" with page=page parent=None %}
-
     {% render_comment_tree page=page %}
+
+    <div class="fixed-bottom p-2">
+        {% include "comments/form.html" with page=page parent=None %}
+    </div>
+
+    <div style="height:144px;">
+
+    </div>
 
 {% endblock content %}

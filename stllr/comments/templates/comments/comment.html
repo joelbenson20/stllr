@@ -16,20 +16,17 @@
         {% endif %}
 
         <div class="d-flex align-items-center flex-wrap">
-            <a class="comment-user small text-light"
+            <a class="comment-user small text-secondary"
                 href="{{ request.scheme }}://{{ request.get_host }}{{ comment.user.profile.get_absolute_url }}">
-                {{ comment.user.username }}
+                @{{ comment.user.username }}
             </a>
             <i class="bi bi-dot text-secondary"></i>
             <span class="small text-secondary">{{ comment.created|naturaltime }}</span>
-            <span class="w-100"></span>
-            <span class="comment-user-bio text-secondary small border rounded-pill my-1 px-2">{{ comment.user.profile.bio }}</span>
-
         </div>
 
     </div>
 
-    <div class="comment-body mt-3 ms-5">
+    <div class="comment-body my-3 ms-5">
         <div class="comment-content">
             {{ comment.content|safe_markdown }}
         </div>

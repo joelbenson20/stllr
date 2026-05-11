@@ -22,16 +22,13 @@
                 </p>
                 <a class="page-link d-block text-truncate mt-1 p-0" href="{{ page.link }}">{{ page.link }}</a>
             </div>
+            <h1 class="page-title fw-normal m-0 p-0 {% if compact %}text-truncate{% endif %}">
+                <a class="page-title" href="{{ page.link }}">
+                    {{ page.title }}
+                </a>
+            </h1>
         </div>
-        <div class="row m-0 p-0">
-            <div class="col m-0 p-0">
-                <h1 class="page-title fw-normal mb-0">
-                    <a class="page-title" href="{{ page.link }}">
-                        {{ page.title }}
-                    </a>
-                </h1>
-            </div>
-        </div>
+        {% if not compact %}
         <div class="row m-0 p-0">
             <div class="col m-0 py-1 px-0">
                 {% if page.image %}
@@ -62,6 +59,7 @@
                 </p>
             </div>
         </div>
+        {% endif %}
         <div class="my-2 p-0">
             {% include 'page/star_button.html' with page=page user=user %}
             <a class="page-forum-button btn btn-sm btn-dark rounded-pill me-2"
