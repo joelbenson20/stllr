@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'stllr',
     'pages.apps.PagesConfig',
     'comments.apps.CommentsConfig',
+    'forums.apps.ForumsConfig',
     'chat.apps.ChatConfig',
     'extension.apps.ExtensionConfig',
     'api.apps.APIConfig',

@@ -1,5 +1,5 @@
-const COMMENT_STAR_PATH = 'comments/star/';
-const POST_COMMENT_PATH = 'comments/post/';
+const COMMENT_STAR_PATH = 'forums/star/';
+const POST_COMMENT_PATH = 'forums/post/';
 const MARKDOWNIFY_PATH = 'api/markdownify/';
 
 
