@@ -4,7 +4,7 @@ from django.utils import timezone
 from .models import Message
 
 
-class ChatConsumer(AsyncWebsocketConsumer):
+class RoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user = self.scope['user']
         self.id = self.scope['url_route']['kwargs']['page_id']
