@@ -4,7 +4,7 @@ const pageId = JSON.parse(
 const requestUser = JSON.parse(
     document.getElementById('requestUser').textContent
 );
-const url = 'ws://' + window.location.host + '/ws/chat/room/' + pageId + '/';
+const url = 'wss://' + window.location.host + '/ws/chat/room/' + pageId + '/';
 const chatSocket = new WebSocket(url);
 
 
