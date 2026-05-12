@@ -14,13 +14,4 @@ STATIC_ROOT = BASE_DIR / 'static/dev'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/dev'
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('localhost', 6379)],
-        }
-    }
-}
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
