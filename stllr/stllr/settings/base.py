@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'django.contrib.sites',
     'django.contrib.postgres',
+    'django_extensions',
     'allauth',
     'allauth.account',
     'stllr',

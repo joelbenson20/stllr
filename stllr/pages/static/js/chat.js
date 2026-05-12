@@ -7,6 +7,7 @@ const requestUser = JSON.parse(
 const url = 'ws://' + window.location.host + '/ws/chat/room/' + pageId + '/';
 const chatSocket = new WebSocket(url);
 
+
 chatSocket.onmessage = function(event) {
     const data = JSON.parse(event.data);
     const chat = document.getElementById('chat');
