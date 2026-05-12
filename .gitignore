@@ -229,3 +229,7 @@ data/
 
 # macOS
 .DS_Store
+
+# TLS/SSL Certificates
+cert.crt
+cert.key

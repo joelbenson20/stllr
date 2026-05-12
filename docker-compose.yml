@@ -41,6 +41,43 @@ services:
       - db
       - cache
 
+  daphne:
+    build: .
+    working_dir: /code/stllr
+    command:
+      - ../wait-for-it.sh
+      - db:5432
+      - "--"
+      - daphne
+      - -b
+      - 0.0.0.0
+      - -p
+      - "9001"
+      - stllr.asgi:application
+    restart: always
+    volumes:
+      - .:/code
+    env_file:
+      - ./stllr/.env.prod
+    depends_on:
+      - db
+      - cache
+
+  nginx:
+    image: nginx:1.28
+    restart: always
+    volumes:
+      # mount file directly to bypass envsubst template processing
+      - ./config/nginx/default.conf.template:/etc/nginx/conf.d/default.conf:ro
+      - .:/code
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - daphne
+      - web
+
   celery:
     build: .
     command: ["./wait-for-it.sh", "db:5432", "--",
@@ -76,18 +113,6 @@ services:
     depends_on:
       - db
       - cache
-
-  nginx:
-    image: nginx:1.28
-    restart: always
-    volumes:
-      # Done by Claude, requires review — mount file directly to bypass envsubst template processing
-      - ./config/nginx/default.conf.template:/etc/nginx/conf.d/default.conf:ro
-      - .:/code
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-    ports:
-      - "80:80"
-      - "443:443"
 
 volumes:
   cache_prod:

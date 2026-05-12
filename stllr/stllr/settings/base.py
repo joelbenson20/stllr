@@ -37,6 +37,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 INSTALLED_APPS = [
+    'daphne',
     'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,11 +48,14 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'django.contrib.sites',
     'django.contrib.postgres',
+    'django_extensions',
     'allauth',
     'allauth.account',
     'stllr',
     'pages.apps.PagesConfig',
     'comments.apps.CommentsConfig',
+    'forums.apps.ForumsConfig',
+    'chat.apps.ChatConfig',
     'extension.apps.ExtensionConfig',
     'api.apps.APIConfig',
     'corsheaders',

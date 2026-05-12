@@ -2,7 +2,7 @@
 
 {% if user.is_authenticated %}
     <form id="comment-form-{{ parent.id }}"
-        class="comment-form rounded-card" method="post" action="{% url "comments:post" %}">
+        class="comment-form rounded-card" method="post" action="{% url "forums:post" %}">
         {% csrf_token %}
         <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
         <input type="hidden" name="page" value="{{ page.id }}">

@@ -1,5 +1,7 @@
 from .base import *
 
+ASGI_APPLICATION = 'stllr.asgi.application'
+
 DEBUG = True
 THUMBNAIL_DEBUG = False
 
@@ -11,5 +13,14 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static/dev'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/dev'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('localhost', 6379)],
+        }
+    }
+}
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
