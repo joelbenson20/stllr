@@ -8,10 +8,15 @@
     {% if page.is_active %}
         <div class="row">
             <div class="col-8 border-end">
+
                 {% include 'page/card.html' with page=page user=user %}
-                <div class="my-5">
-                    Future feature!
+                
+                <div class="bg-dark overflow-auto" id="chat" style="height:300px;"></div>
+                <div id="chatInput">
+                    <input id="chatMessageInput" type="text">
+                    <input id="chatMessageSubmit" type="submit" value="Send">
                 </div>
+
             </div>
             <div class="col-3 p-3">
                 {% include "page/list.html" with pages=page.tags.similar_objects %}
@@ -21,3 +26,9 @@
         <p>The forum at this page has been suspended.</p>
     {% endif %}
 {% endblock content %}
+
+{% block scripts %}
+    {{ page.id|json_script:"pageId" }}
+    {{ request.user.username|json_script:"requestUser" }}
+    <script src="{% static 'js/chat.js' %}"></script>
+{% endblock scripts %}
