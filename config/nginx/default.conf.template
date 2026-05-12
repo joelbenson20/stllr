@@ -3,10 +3,10 @@ upstream uwsgi_app {
     server unix:/code/stllr/uwsgi_app.sock;
 }
 
-# upstream for Daphne
-upstream daphne {
-    server daphne:9001;
-}
+# Docker's internal DNS — re-resolve upstream hostnames every 30s so nginx
+# picks up new container IPs after a restart instead of caching stale ones.
+# ipv6=off avoids binding issues when containers only listen on IPv4.
+resolver 127.0.0.11 valid=30s ipv6=off;
 
 # Redirect HTTP to HTTPS; allow Let's Encrypt renewal challenges
 server {
@@ -44,7 +44,10 @@ server {
     }
 
     location /ws/ {
-        proxy_pass          http://daphne;
+        # Variable forces nginx to use the resolver on each request rather than
+        # caching daphne's IP at startup — prevents stale DNS after container restarts.
+        set $daphne_upstream http://daphne:9001;
+        proxy_pass          $daphne_upstream;
         proxy_http_version  1.1;
         proxy_set_header    Upgrade $http_upgrade;
         proxy_set_header    Connection "upgrade";
