@@ -1,0 +1,25 @@
+{% load thumbnail %}
+{% load humanize %}
+
+<div class="message m-2">
+
+    {% if message.user.profile.photo %}
+        {% thumbnail message.user.profile.photo 32x32 crop="smart" as im %}
+        <a class="float-start me-2 flex-shrink-0" href="{{ message.user.get_absolute_url }}">
+            <img class="rounded-circle" src="{{ im.url }}">
+        </a>
+    {% endif %}
+
+    <div class="d-flex align-items-center flex-wrap">
+        <a class="small text-secondary" href="{{ message.user.profile.get_absolute_url }}">
+            @{{ message.user.username }}
+        </a>
+        <i class="bi bi-dot text-secondary"></i>
+        <span class="small text-secondary">{{ message.sent_on|time:"g:i A" }}</span>
+    </div>
+
+    <div class="message-body">
+        {{ message.content }}
+    </div>
+
+</div>

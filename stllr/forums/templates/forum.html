@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% load comments %}
+
+{% block title %} stllr | {{ page.title }}{% endblock title %}
+
+{% block content %}
+    {% if page.is_active %}
+
+        <div class="py-lg-5 py-3">
+            {% include 'page/card.html' with page=page user=user %}
+        </div>
+
+        <div class="comment-section">
+            <div class="my-3">
+                {% include "comments/form.html" with page=page parent=None %}
+            </div>
+            {% render_comment_tree page=page %}
+        </div>
+
+    {% else %}
+        <p>The forum at this page has been suspended.</p>
+    {% endif %}
+{% endblock content %}
+
+{% block scripts %}
+    <script src="{% static 'js/forums.js' %}"></script>
+{% endblock scripts %}

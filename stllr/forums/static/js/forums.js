@@ -40,7 +40,6 @@ function initFormSubmission(form) {
                 // Reset and close the form
                 form.reset();
                 var cancelButton = form.querySelector('.comment-cancel-button');
-                closeCommentForm(cancelButton);
             }
         })
         .catch(error => console.error('Error:', error))

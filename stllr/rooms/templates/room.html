@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% load comments %}
+
+{% block title %} stllr | {{ page.title }}{% endblock title %}
+
+{% block content %}
+    {% if page.is_active %}
+
+        <div class="py-lg-5 py-3">
+            {% include 'page/card.html' with page=page user=user %}
+        </div>
+        
+        <div id="roomFeed" class="overflow-auto rounded-card" style="height:350px;"></div>
+
+        <form class="rounded-pill w-100 my-3">
+            <input id="roomInput"
+                class="form-control rounded-pill border-none"
+                placeholder="Make contact..."
+                type="text">
+        </form>
+
+    {% else %}
+        <p>The forum at this page has been suspended.</p>
+    {% endif %}
+{% endblock content %}
+
+{% block scripts %}
+    {{ page.id|json_script:"pageId" }}
+    {{ request.user.username|json_script:"requestUser" }}
+    <script src="{% static 'js/rooms.js' %}"></script>
+{% endblock scripts %}

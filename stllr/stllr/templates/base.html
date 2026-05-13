@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/pages.css' %}">
     <link rel="stylesheet" href="{% static 'css/forums.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rooms.css' %}">
 
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'brand/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'brand/favicon-32x32.png' %}">
@@ -27,7 +28,7 @@
     <div id="window" class="container-fluid m-0 p-0">
 
         <nav class="navbar navbar-dark navbar-expand-sm glass sticky-top p-3">
-            <a class="navbar-brand" href="{% url 'pages:index' %}">
+            <a class="navbar-brand" href="{% url 'index' %}">
                 <img class="navbar-brand-image" src="{% static 'brand/brand.png' %}" width=128>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
@@ -66,9 +67,21 @@
             </div>
         {% endif %}
 
-        <div id="content" class="container-fluid p-lg-5 p-3">
-            {% block content %}
-            {% endblock content %}
+        <div id="content" class="container-fluid">
+            <div class="row">
+                <div class="col-lg-3">
+                    {% block left %}
+                    {% endblock left %}
+                </div>
+                <div class="col-lg-6">
+                    {% block content %}
+                    {% endblock content %}
+                </div>
+                <div class="col-lg-3">
+                    {% block right %}
+                    {% endblock right %}
+                </div>
+            </div>
         </div>
 
     </div>
@@ -76,8 +89,7 @@
     <script src="{% static "libs/bootstrap/dist/js/bootstrap.bundle.min.js" %}"></script>
     <script src="{% static "libs/lodash/lodash.min.js" %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
-    <script src="{% static 'js/pageStarButtons.js' %}"></script>
-    <script src="{% static 'js/forums.js' %}"></script>
+    <script src="{% static 'js/pages.js' %}"></script>
     {% block scripts %}
     {% endblock scripts%}
 </body>

@@ -47,7 +47,8 @@ a {
     max-width: 576px;
 }
 
-.search-bar:focus {
+.search-bar:focus,
+#roomInput:focus {
     outline: none;
     border-color: white;
     box-shadow: 0 0 10px white;
