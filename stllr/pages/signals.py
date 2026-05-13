@@ -65,7 +65,7 @@ def update_search_vector(sender, instance, created, update_fields, **kwargs):
         search_vector=(
             SearchVector('title', weight='A') +
             SearchVector('description', weight='B') +
-            SearchVector('inner_text', weight='C')
+            SearchVector('content', weight='C')
         )
     )
     return

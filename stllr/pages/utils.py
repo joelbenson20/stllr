@@ -183,9 +183,9 @@ def get_meta(url, head):
     # Remove script and style elements
     for script in soup(['script', 'style']):
         script.decompose()
-    inner_text = soup.get_text(separator=' ', strip=True)
+    content = soup.get_text(separator=' ', strip=True)
     # Clean up excessive whitespace
-    inner_text = ' '.join(inner_text.split())
+    content = ' '.join(content.split())
     
     return {
         'title': title[:200],  # CharField max_length=200
@@ -195,5 +195,5 @@ def get_meta(url, head):
         'site_name': site_name[:100],  # CharField max_length=100
         'fav_icon_url': fav_icon_url[:250],  # URLField max_length=250
         'tags': tags,  # Will be split by comma in views
-        'inner_text': inner_text,  # TextField, no limit
+        'content': content,  # TextField, no limit
     }

@@ -18,7 +18,7 @@ class Page(models.Model):
     image = models.ImageField(max_length=255, upload_to='images/pages', blank=True)
     domain = models.ForeignKey('Domain', related_name='pages', on_delete=models.CASCADE)
     
-    inner_text = models.TextField(blank=True)
+    content = models.TextField(blank=True)
     search_vector = SearchVectorField(null=True, editable=False)
 
     users_star = models.ManyToManyField(

@@ -28,7 +28,7 @@ def extension(request):
         title = data.get('title') or scraped_data['title']
         type = scraped_data['type']
         description = scraped_data['description']
-        inner_text = "".join([ p for p in data.get('innerText').split('\n') if "." in p ])
+        content = "".join([ p for p in data.get('innerText').split('\n') if "." in p ])
         image_url = scraped_data['image_url']
         fav_icon_url = data.get('favIconUrl') or scraped_data['fav_icon_url']
         site_name = scraped_data.get('site_name')
@@ -61,7 +61,7 @@ def extension(request):
             description=description,
             image_url=image_url,
             domain = domain,
-            inner_text=inner_text or scraped_data['inner_text'] or '',
+            content=content or scraped_data['content'] or '',
         )
 
     tab = request.GET.get('tab')
