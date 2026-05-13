@@ -4,7 +4,7 @@ const pageId = JSON.parse(
 const requestUser = JSON.parse(
     document.getElementById('requestUser').textContent
 );
-const url = 'ws://' + window.location.host + '/ws/room/' + pageId + '/';
+const url = 'wss://' + window.location.host + '/ws/room/' + pageId + '/';
 const roomSocket = new WebSocket(url);
 const roomInput = document.getElementById('roomInput');
 const roomFeed = document.getElementById('roomFeed');
