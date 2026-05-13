@@ -2,7 +2,6 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse
 from django.contrib.postgres.search import SearchQuery
-from pages.utils import pages_stochastic
 from pages.models import Page
 from taggit.models import Tag
 
@@ -17,7 +16,7 @@ def index(request):
     elif sort == 'rising':
         pages = Page.objects.order_by('-rise')
     else:
-        pages = pages_stochastic()
+        pages = Page.firmament.all()
 
     tag_slug = request.GET.get('tag')
     if tag_slug:

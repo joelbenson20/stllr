@@ -1,14 +1,36 @@
+import numpy as np
 from django.db import models
 from urllib.parse import urlparse
 from django.urls import reverse
 from django.utils.http import urlencode
 from taggit.managers import TaggableManager
 from django.conf import settings
+from django.db import models
+from django.db.models import Case, When, IntegerField
 from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
 
 
 class Page(models.Model):
+
+    class FirmamentManager(models.Manager):
+        def get_queryset(self):
+            pages = super().get_queryset().values('id', 'brightness')
+            total_pages = pages.count()
+            ids = [page['id'] for page in pages]
+            brightnesses = np.array([page['brightness'] for page in pages])
+            probabilities = brightnesses / brightnesses.sum()
+            chosen_ids = np.random.choice(ids, size=total_pages, p=probabilities, replace=False)
+            chosen_order = Case(
+                *[When(id=id, then=pos) for pos, id in enumerate(chosen_ids)],
+                output_field=IntegerField()
+            )
+            firmament = Page.objects.filter(id__in=chosen_ids).order_by(chosen_order)
+            return firmament
+        
+    objects = models.Manager()
+    firmament = FirmamentManager()
+
     canonical = models.CharField(max_length=250, unique=True)
     title = models.CharField(max_length=200)
     type = models.CharField(max_length=30, blank=True)

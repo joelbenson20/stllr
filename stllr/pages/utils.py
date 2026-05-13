@@ -2,27 +2,6 @@ from urllib.parse import urlparse, urlencode, parse_qsl, quote
 import posixpath
 from bs4 import BeautifulSoup
 import ipaddress
-import numpy as np
-from django.db.models import Case, When, IntegerField
-from .models import Page
-
-def pages_stochastic():
-    pages = Page.objects.filter(brightness__gt=0, is_active=True, domain__is_active=True).values('id', 'brightness')
-    if not pages:
-        return None
-    
-    total_pages = pages.count()
-    ids = [page['id'] for page in pages]
-    brightnesses = np.array([page['brightness'] for page in pages])
-    probabilities = brightnesses / brightnesses.sum()
-    chosen_ids = np.random.choice(ids, size=total_pages, p=probabilities, replace=False)
-    chosen_order = Case(
-        *[When(id=id, then=pos) for pos, id in enumerate(chosen_ids)],
-        output_field=IntegerField()
-    )
-    stochastic_pages = Page.objects.filter(id__in=chosen_ids).order_by(chosen_order)
-
-    return stochastic_pages
 
 def get_canonical(url):
 
