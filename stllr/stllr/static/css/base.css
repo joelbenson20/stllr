@@ -48,8 +48,8 @@ a {
 }
 
 .search-bar:focus,
-#roomInput:focus {
+textarea:focus {
     outline: none;
-    border-color: white;
-    box-shadow: 0 0 10px white;
+    border-color: white !important;
+    box-shadow: 0 0 10px white !important;
 }

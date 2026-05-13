@@ -51,7 +51,7 @@
 
                     {{ page.description|truncatechars:300 }}
 
-                    <span class="page-tags m-0">
+                    <span class="page-tags small m-0">
                         {% for tag in page.tags.all %}
                             <a href="/?tag={{ tag.slug }}">#{{ tag.name }}</a>&nbsp;
                         {% endfor %}

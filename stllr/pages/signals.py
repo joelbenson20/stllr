@@ -7,7 +7,7 @@ from django.core.files.base import ContentFile
 from .models import Page
 import re
 from collections import Counter
-from nltk.corpus import stopwords as nltk_stopwords
+from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk import pos_tag
 from django.contrib.postgres.search import SearchVector
@@ -72,12 +72,12 @@ def update_search_vector(sender, instance, created, update_fields, **kwargs):
 
 @receiver(post_save, sender=Page)
 def update_tags(sender, instance, created, update_fields, **kwargs):
-    stop_words = set(nltk_stopwords.words('english'))
+    stop_words = set(stopwords.words('english'))
     raw = (instance.title or '') + ' ' + (instance.description or '') + ' ' + (instance.content or '')
     tokens = word_tokenize(raw)
     tagged = pos_tag(tokens)
-    nouns = [word for word, pos in tagged if pos in ('NN', 'NNP') and word.isalpha() and word.lower() not in stop_words and len(word) > 2]
-    keywords = [word for word, count in Counter(nouns).most_common(8)]
+    words = [word for word, pos in tagged if pos in ('NN', 'NNP') and word.isalpha() and word.lower() not in stop_words]
+    keywords = [word.upper() for word, count in Counter(words).most_common(10)]
     instance.tags.set(keywords)
     return
 

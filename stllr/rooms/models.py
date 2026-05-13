@@ -17,5 +17,5 @@ class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.user} on {self.page} at {self.sent_on}'
+        return f'{self.user} on {self.page} at {self.created}'
 

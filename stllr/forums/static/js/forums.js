@@ -142,15 +142,12 @@ function initmarkdownEditButton(button) {
 
  function initCommentForm(form) {
     initFormSubmission(form);
-    // initFormFocus(form);
 
     var replyFormContainer = form.closest('.reply-form-container');
-    // var cancelButton = form.querySelector('.comment-cancel-button');
     var markdownPreviewButton = form.querySelector('.comment-form-markdown-preview-button');
     var markdownEditButton = form.querySelector('.comment-form-markdown-edit-button');
 
     if (replyFormContainer) initReplyAutoFocus(replyFormContainer);
-    // initCancelButton(cancelButton);
     initmarkdownPreviewButton(markdownPreviewButton);
     initmarkdownEditButton(markdownEditButton);
 }
@@ -168,6 +165,10 @@ function initmarkdownEditButton(button) {
     commentForms.forEach(form => {
         initCommentForm(form)
     })
+
+    // Focus in root form
+    var rootCommentForm = document.querySelectorAll('.comment-form')[0];
+    rootCommentForm.querySelector('textarea').focus();
 
  }
 
