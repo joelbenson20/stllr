@@ -1,9 +1,4 @@
-.comment-section {
-    max-width: 768px;
-}
-
 .comment-form {
-    max-width: 768px;
     background-color: white;
 }
 
@@ -25,7 +20,6 @@
 }
 
 .comment {
-    border-radius: 16px;
     background-color: rgba(255, 255, 255, 0.05);
 }
 

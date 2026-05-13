@@ -2,7 +2,9 @@
 
 {% block content %}
 
-    {% include "messages/feed.html" %}
+    <div style="height:500px;">
+        {% include "messages/feed.html" %}
+    </div>
 
     <div class="fixed-bottom p-2">
         {% include "messages/form.html" with page=page %}

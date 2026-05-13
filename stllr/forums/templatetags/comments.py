@@ -2,7 +2,7 @@ from django import template
 
 register = template.Library()
 
-@register.inclusion_tag('comment/tree.html', takes_context=True)
+@register.inclusion_tag('comments/tree.html', takes_context=True)
 def render_comment_tree(context, page=None, comments=None):
     if (comments):
         return {

@@ -10,7 +10,9 @@
             {% include 'page/card.html' with page=page user=user %}
         </div>
         
-        {% include "messages/feed.html" %}
+        <div style="height:350px;">
+            {% include "messages/feed.html" %}
+        </div>
 
         {% include "messages/form.html" with page=page %}
 

@@ -9,9 +9,9 @@
                 {{ sort|capfirst }}
             </button>
             <div class="dropdown-menu" aria-labelledby="sortMenuButton">
-                <a class="dropdown-item" href="/{% if tag %}?tag={{ tag.slug }}&{% else %}?{% endif %}sort=firmament">Firmament</a>
-                <a class="dropdown-item" href="/{% if tag %}?tag={{ tag.slug }}&{% else %}?{% endif %}sort=brightest">Brightest</a>
-                <a class="dropdown-item" href="/{% if tag %}?tag={{ tag.slug }}&{% else %}?{% endif %}sort=rising">Rising</a>
+                <a class="dropdown-item" href="/{% if tag %}?tag={{ tag.slug }}&{% elif query %}?query={{ query }}&{% else %}?{% endif %}sort=firmament">Firmament</a>
+                <a class="dropdown-item" href="/{% if tag %}?tag={{ tag.slug }}&{% elif query %}?query={{ query }}&{% else %}?{% endif %}sort=brightest">Brightest</a>
+                <a class="dropdown-item" href="/{% if tag %}?tag={{ tag.slug }}&{% elif query %}?query={{ query }}&{% else %}?{% endif %}sort=rising">Rising</a>
             </div>
         </div>
         {% if tag %}
