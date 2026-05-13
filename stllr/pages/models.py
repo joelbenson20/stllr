@@ -13,12 +13,14 @@ from django.contrib.postgres.indexes import GinIndex
 
 class Page(models.Model):
 
-    class FirmamentManager(models.Manager):
-        def get_queryset(self):
-            pages = super().get_queryset().values('id', 'brightness')
+    class FirmamentQuerySet(models.QuerySet):
+        def firmament(self):
+            if not self:
+                return self.none()
+            pages = self.values('id', 'brightness')
             total_pages = pages.count()
             ids = [page['id'] for page in pages]
-            brightnesses = np.array([page['brightness'] for page in pages])
+            brightnesses = np.maximum(np.array([page['brightness'] for page in pages]), 1e-10)
             probabilities = brightnesses / brightnesses.sum()
             chosen_ids = np.random.choice(ids, size=total_pages, p=probabilities, replace=False)
             chosen_order = Case(
@@ -29,7 +31,7 @@ class Page(models.Model):
             return firmament
         
     objects = models.Manager()
-    firmament = FirmamentManager()
+    firmament = FirmamentQuerySet.as_manager()
 
     canonical = models.CharField(max_length=250, unique=True)
     title = models.CharField(max_length=200)

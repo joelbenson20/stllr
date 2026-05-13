@@ -8,12 +8,14 @@ from pages.models import Page
 
 class Comment(models.Model):
 
-    class FirmamentManager(models.Manager):
-        def get_queryset(self):
-            comments = super().get_queryset().values('id', 'brightness')
+    class FirmamentQuerySet(models.QuerySet):
+        def firmament(self):
+            if not self:
+                return self.none()
+            comments = self.values('id', 'brightness')
             total_comments = comments.count()
             ids = [comment['id'] for comment in comments]
-            brightnesses = np.array([comment['brightness'] for comment in comments])
+            brightnesses = np.maximum(np.array([comment['brightness'] for comment in comments]), 1e-10)
             probabilities = brightnesses / brightnesses.sum()
             chosen_ids = np.random.choice(ids, size=total_comments, p=probabilities, replace=False)
             chosen_order = Case(
@@ -22,9 +24,9 @@ class Comment(models.Model):
             )
             firmament = Comment.objects.filter(id__in=chosen_ids).order_by(chosen_order)
             return firmament
-        
+    
     objects = models.Manager()
-    firmament = FirmamentManager()
+    firmament = FirmamentQuerySet.as_manager()
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -56,6 +58,7 @@ class Comment(models.Model):
     brightness = models.FloatField(default=0)
 
     class Meta:
+        default_manager_name = 'firmament'
         indexes = [
             models.Index(fields=['-brightness'])
         ]

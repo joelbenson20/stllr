@@ -12,7 +12,7 @@ def render_comment_tree(context, page=None, comments=None):
         }
     elif page:
         # Get thread level 0 of page comments to "plant" tree
-        layer_0 = page.comments.filter(thread_level=0)
+        layer_0 = page.comments.filter(thread_level=0).firmament()
         return {
             'comments': layer_0,
             'user': context.get('user'),
