@@ -24,7 +24,7 @@
             </div>
             <h1 class="page-title fw-normal m-0 p-0 {% if compact %}text-truncate{% endif %}">
                 <a class="page-title" href="{{ page.link }}">
-                    {{ page.title }}
+                    {{ page.title|truncatechars:90 }}
                 </a>
             </h1>
         </div>

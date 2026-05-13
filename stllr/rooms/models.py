@@ -14,7 +14,7 @@ class Message(models.Model):
         related_name='chat_messages'
     )
     content = models.TextField()
-    sent_on = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.user} on {self.page} at {self.sent_on}'

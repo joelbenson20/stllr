@@ -15,7 +15,7 @@
             @{{ message.user.username }}
         </a>
         <i class="bi bi-dot text-secondary"></i>
-        <span class="small text-secondary">{{ message.sent_on|time:"g:i A" }}</span>
+        <span class="small text-secondary">{{ message.created|time:"g:i A" }}</span>
     </div>
 
     <div class="message-body">

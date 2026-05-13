@@ -34,10 +34,10 @@ class Page(models.Model):
     firmament = FirmamentQuerySet.as_manager()
 
     canonical = models.CharField(max_length=250, unique=True)
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=500)
     type = models.CharField(max_length=30, blank=True)
     tags = TaggableManager(blank=True)
-    description = models.TextField(max_length=400, blank=True)
+    description = models.TextField(max_length=500, blank=True)
     image_url = models.URLField(max_length=250, blank=True)
     image = models.ImageField(max_length=255, upload_to='images/pages', blank=True)
     domain = models.ForeignKey('Domain', related_name='pages', on_delete=models.CASCADE)
