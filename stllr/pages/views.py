@@ -16,7 +16,7 @@ def page_forum(request):
     page = get_object_or_404(Page, canonical=canonical)
     return render(request, 'forum.html', context={"page": page})
 
-def page_relay(request):
+def page_room(request):
     canonical = request.GET.get('p')
     page = get_object_or_404(Page, canonical=canonical)
     return render(request, 'room.html', context={"page": page})

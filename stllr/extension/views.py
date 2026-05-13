@@ -10,22 +10,6 @@ from pages.utils import get_canonical, get_meta, get_domain_name, verify_securit
 from django.db.models import Count
 
 
-def get_csrf_token(request):
-    if (request.user.is_authenticated):
-        return JsonResponse(
-            {
-                'status': '200',
-                'csrfToken': get_token(request)
-            }
-        )
-    else:
-        return JsonResponse(
-            {
-                'status': '401',
-                'html': render_to_string('extension/errors/unauthenticated.html')
-            }
-        )
-    
 @csrf_exempt
 @login_required
 @require_POST
@@ -144,7 +128,7 @@ def forum(request):
 
 @csrf_exempt
 @require_POST
-def relay(request):
+def room(request):
 
     posted_data = json.loads(request.body).get('pageData')
     url = posted_data.get('url')
@@ -169,13 +153,13 @@ def relay(request):
     
     context = {
         'page': page,
-        'section': 'relay'
+        'section': 'room'
     }
 
     return JsonResponse(
         {
             'status': '200',
-            'html': render_to_string('extension/relay.html', context=context, request=request)
+            'html': render_to_string('extension/room.html', context=context, request=request)
         }
     )
 

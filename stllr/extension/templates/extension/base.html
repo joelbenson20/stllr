@@ -5,6 +5,13 @@
 
     <div class="glass sticky-top">
 
+        <!-- Done by Claude, requires review -->
+        <div id="stllr-data" style="display:none"
+            data-page-id="{{ page.id }}"
+            data-csrf="{{ csrf_token }}"
+            data-canonical="{{ page.canonical }}">
+        </div>
+
         <div class="extension-header p-3">
             {% include "page/card.html" with compact=True %}
         </div>
@@ -18,7 +25,7 @@
                     <a id="forumLink" class="nav-link text-light {% if section == "forum" %}border-bottom{% endif %}" role="button">Forum</a>
                 </li>
                 <li class="nav-item">
-                    <a id="relayLink" class="nav-link text-light {% if section == "relay" %}border-bottom{% endif %}" role="button">Relay</a>
+                    <a id="roomLink" class="nav-link text-light {% if section == "room" %}border-bottom{% endif %}" role="button">Room</a>
                 </li>
                 <li class="nav-item">
                     <a id="similarLink" class="nav-link text-light {% if section == "similar" %}border-bottom{% endif %}" role="button">Similar</a>
@@ -32,4 +39,7 @@
         {% block content %}
         {% endblock content %}
     </div>
+
+    {% block scripts %}
+    {% endblock scripts %}
 </div>

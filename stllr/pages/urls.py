@@ -5,6 +5,6 @@ app_name = 'pages'
 
 urlpatterns = [
     path('forum/', views.page_forum, name='forum'),
-    path('relay/', views.page_relay, name='relay'),
+    path('room/', views.page_room, name='room'),
     path('page/star/', views.page_star, name='star'),
 ]

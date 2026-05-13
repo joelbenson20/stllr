@@ -1,0 +1,16 @@
+{% extends "extension/base.html" %}
+
+{% block content %}
+
+    {% include "messages/feed.html" %}
+
+    <div class="fixed-bottom p-2">
+        {% include "messages/form.html" with page=page %}
+    </div>
+
+{% endblock content %}
+
+{% block scripts %}
+    {{ page.id|json_script:"pageId" }}
+    {{ request.user.username|json_script:"requestUser" }}
+{% endblock scripts %}

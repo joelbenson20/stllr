@@ -2,12 +2,12 @@
 {% load static %}
 {% load comments %}
 
-{% block title %} stllr | {{ page.title }}{% endblock title %}
+{% block title %} stllr | forum | {{ page.title }}{% endblock title %}
 
 {% block content %}
     {% if page.is_active %}
 
-        <div class="py-lg-5 py-3">
+        <div class="mb-lg-5 mb-3">
             {% include 'page/card.html' with page=page user=user %}
         </div>
 
