@@ -5,11 +5,10 @@
 
     <div class="glass sticky-top">
 
-        <!-- Done by Claude, requires review -->
         <div id="stllr-data" style="display:none"
             data-page-id="{{ page.id }}"
-            data-csrf="{{ csrf_token }}"
-            data-canonical="{{ page.canonical }}">
+            data-page-canonical="{{ page.canonical }}"
+            data-csrf="{{ csrf_token }}">
         </div>
 
         <div class="extension-header p-3">
@@ -22,13 +21,13 @@
             </button>
             <ul class="navbar-nav d-flex align-items-center w-100 justify-content-evenly">
                 <li class="nav-item">
-                    <a id="forumLink" class="nav-link text-light {% if section == "forum" %}border-bottom{% endif %}" role="button">Forum</a>
+                    <a id="forumLink" class="nav-link text-light {% if tab == "forum" %}border-bottom{% endif %}" role="button">Forum</a>
                 </li>
                 <li class="nav-item">
-                    <a id="roomLink" class="nav-link text-light {% if section == "room" %}border-bottom{% endif %}" role="button">Room</a>
+                    <a id="roomLink" class="nav-link text-light {% if tab == "room" %}border-bottom{% endif %}" role="button">Room</a>
                 </li>
                 <li class="nav-item">
-                    <a id="similarLink" class="nav-link text-light {% if section == "similar" %}border-bottom{% endif %}" role="button">Similar</a>
+                    <a id="similarLink" class="nav-link text-light {% if tab == "similar" %}border-bottom{% endif %}" role="button">Similar</a>
                 </li>
             </ul>
         </nav>
