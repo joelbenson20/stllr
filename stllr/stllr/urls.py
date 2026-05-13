@@ -6,11 +6,11 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('', include('pages.urls', namespace='pages')),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('users/', include('users.urls')),
-    path('forums/', include('forums.urls', namespace='forums')),
+    path('forum/', include('forums.urls')),
+    path('room/', include('rooms.urls')),
     path('extension/', include('extension.urls', namespace='extension')),
     path('api/', include('api.urls', namespace='api')),
 ]
