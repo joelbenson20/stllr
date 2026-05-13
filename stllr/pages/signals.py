@@ -15,7 +15,7 @@ from django.contrib.postgres.search import SearchVector
 User = get_user_model()
 
 @receiver(post_save, sender=Page)
-def download_images(sender, instance, created, **kwargs):
+def download_images(sender, instance, created, update_fields, **kwargs):
     if instance.image_url and not instance.image:
         name = str(instance.id)
         extension = instance.image_url.rsplit('.', 1)[1].lower()
@@ -60,7 +60,7 @@ def download_images(sender, instance, created, **kwargs):
     return
 
 @receiver(post_save, sender=Page)
-def update_search_vector(sender, instance, **kwargs):
+def update_search_vector(sender, instance, created, update_fields, **kwargs):
     Page.objects.filter(pk=instance.pk).update(
         search_vector=(
             SearchVector('title', weight='A') +
@@ -71,9 +71,9 @@ def update_search_vector(sender, instance, **kwargs):
     return
 
 @receiver(post_save, sender=Page)
-def update_tags(sender, instance, **kwargs):
+def update_tags(sender, instance, created, update_fields, **kwargs):
     stop_words = set(nltk_stopwords.words('english'))
-    raw = (instance.title or '') + (instance.description or '') + (instance.inner_text or '')
+    raw = (instance.title or '') + ' ' + (instance.description or '') + ' ' + (instance.inner_text or '')
     tokens = word_tokenize(raw)
     tagged = pos_tag(tokens)
     nouns = [word for word, pos in tagged if pos in ('NN', 'NNP') and word.isalpha() and word.lower() not in stop_words and len(word) > 2]

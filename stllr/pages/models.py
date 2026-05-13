@@ -35,9 +35,9 @@ class Page(models.Model):
     is_active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
-        if not self.pk: # Set brightness_index for new pages, starting at bottom
+        if not self.pk:
             self.brightness_index = Page.objects.count() + 1
-            super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         indexes = [

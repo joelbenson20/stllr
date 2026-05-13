@@ -12,7 +12,6 @@ from pages.utils import get_canonical, get_meta, get_domain_name, verify_securit
 @login_required
 @require_POST
 def extension(request):
-
     data = json.loads(request.body).get('pageData')
     canonical = get_canonical(data.get('url'))
     try:
@@ -29,7 +28,7 @@ def extension(request):
         title = data.get('title') or scraped_data['title']
         type = scraped_data['type']
         description = scraped_data['description']
-        inner_text = data.get('innerText')
+        inner_text = "".join([ p for p in data.get('innerText').split('\n') if "." in p ])
         image_url = scraped_data['image_url']
         fav_icon_url = data.get('favIconUrl') or scraped_data['fav_icon_url']
         site_name = scraped_data.get('site_name')
