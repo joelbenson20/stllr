@@ -47,7 +47,7 @@ def create_comment(request):
         response = {
             'status': '201',
             'commentId': new_comment.id,
-            'comment': render_to_string('comments/comment.html', {'comment': new_comment}, request=request)
+            'comment': render_to_string('comment/tree.html', {'comments': [new_comment]}, request=request)
         }
         return (JsonResponse(response))
     return JsonResponse({'status': '400'})

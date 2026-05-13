@@ -13,7 +13,7 @@
 
         <div class="comment-section">
             <div class="my-3">
-                {% include "comments/form.html" with page=page parent=None %}
+                {% include "comment/form.html" with page=page parent=None %}
             </div>
             {% render_comment_tree page=page %}
         </div>
