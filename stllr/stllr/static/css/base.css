@@ -21,6 +21,20 @@ a {
     -webkit-backdrop-filter: blur(10px) brightness(33%);
 }
 
+.shine {
+    text-shadow: 0 0 10px white;
+}
+
+.spin {
+    animation: spin 2s infinite linear;
+    display: inline-block;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(359deg); }
+}
+
 .collapsing {
     transition: height 0.25s ease;
 }
@@ -32,10 +46,6 @@ a {
 .btn-transparent {
     background-color: transparent;
     border: none;
-}
-
-.shine {
-    text-shadow: 0 0 10px white;
 }
 
 .blur-content {
@@ -52,4 +62,13 @@ textarea:focus {
     outline: none;
     border-color: white !important;
     box-shadow: 0 0 10px white !important;
+}
+
+.popover-dark {
+    --bs-popover-bg: #212529;
+    --bs-popover-header-bg: #343a40;
+    --bs-popover-header-color: #fff;
+    --bs-popover-body-color: #fff;
+    --bs-popover-border-color: #495057;
+    --bs-popover-arrow-border: #495057;
 }

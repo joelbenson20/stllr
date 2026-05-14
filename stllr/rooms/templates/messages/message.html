@@ -1,7 +1,7 @@
 {% load thumbnail %}
 {% load humanize %}
 
-<div class="message rounded-car p-2">
+<div class="message rounded-car mb-3">
 
     {% if message.user.profile.photo %}
         {% thumbnail message.user.profile.photo 32x32 crop="smart" as im %}

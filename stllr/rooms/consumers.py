@@ -2,13 +2,23 @@ import json
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.utils import timezone
 from django.template.loader import render_to_string
+from django.core.cache import cache
 from asgiref.sync import sync_to_async
 from .models import Message
 
+PRESENCE_TTL = 20 # expires 2 heartbeats after last activity
 
-# Authenticate with WS ticket for browser extension
+def _presence_key(room_name):
+    return f'presence:{room_name}'
+
+def _get_users(room_name):
+    return cache.get(_presence_key(room_name)) or {}
+
+def _set_users(room_name, users):
+    cache.set(_presence_key(room_name), users, PRESENCE_TTL)
+
+# Authenticate users with WS ticket for browser extension
 @database_sync_to_async
 def get_user_from_ticket(ticket):
     from django.contrib.auth import get_user_model
@@ -28,8 +38,9 @@ class RoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user = self.scope['user']
         self.page_id = self.scope['url_route']['kwargs']['page_id']
-        self.room_group_name = f'room_{self.page_id}'
-        # Done by Claude, requires review
+        self.room_name = f'room_{self.page_id}'
+
+        # Authenticate browser extension users
         if not self.user.is_authenticated:
             params = parse_qs(self.scope.get('query_string', b'').decode())
             ticket = params.get('ticket', [None])[0]
@@ -38,45 +49,90 @@ class RoomConsumer(AsyncWebsocketConsumer):
         if not self.user.is_authenticated:
             await self.close()
             return
-        # join room group
+        
         await self.channel_layer.group_add(
-            self.room_group_name, self.channel_name
+            self.room_name, self.channel_name
         )
-        # accept the connection
+
+        # Accept connection
         await self.accept()
 
-    async def disconnect(self, close_code):
-        # Leave room group
-        await self.channel_layer.group_discard(
-            self.room_group_name, self.channel_name
+        # Send "joined the room" message
+        await self.channel_layer.group_send(
+            self.room_name,
+            {
+                'type': 'room_message',
+                'html': f'<p class="text-secondary mb-3"><i>{self.user.username} joined the room.</i></p>'
+            }
         )
 
-    # receive messages from WebSocket
+        # Update room users cache
+        users = await sync_to_async(_get_users)(self.room_name)
+        users[self.channel_name] = self.user.username
+        await sync_to_async(_set_users)(self.room_name, users)
+
+        # Send presence update to room
+        await self.channel_layer.group_send(
+            self.room_name,
+            {'type': 'presence_update', 'users': list(users.values())}
+        )
+
+    async def disconnect(self, close_code):
+
+        # Update room users cache
+        users = await sync_to_async(_get_users)(self.room_name)
+        users.pop(self.channel_name, None)
+        await sync_to_async(_set_users)(self.room_name, users)
+
+        # Leave the room
+        await self.channel_layer.group_discard(self.room_name, self.channel_name)
+
+        # Send "left the room" message
+        await self.channel_layer.group_send(
+            self.room_name,
+            {
+                'type': 'room_message',
+                'html': f'<p class="text-secondary mb-3"><i>{self.user.username} left the room.</i></p>'
+            }
+        )
+
+        # Send presence update
+        await self.channel_layer.group_send(
+            self.room_name,
+            {'type': 'presence_update', 'users': list(users.values())}
+        )
+
+
     async def receive(self, text_data):
         data = json.loads(text_data)
-        content = data['content']
-        now = timezone.now()
 
-        # persist message
+        if (data.get('type') == 'ping'):
+            users = await sync_to_async(_get_users)(self.room_name)
+            await sync_to_async(_set_users)(self.room_name, users)
+            return
+        
+        content = data['content']
         message = await Message.objects.acreate(
             user=self.user, page_id=self.page_id, content=content
         )
 
-        html = await sync_to_async(render_to_string)(
-            'messages/message.html',
-            context={'message': message},
-        )
-
-        # send message to room group
         await self.channel_layer.group_send(
-            self.room_group_name,
+            self.room_name,
             {
                 'type': 'room_message',
-                'html': html,
+                'html': await sync_to_async(render_to_string)(
+                    'messages/message.html',
+                    context={'message': message}
+                ),
             }
         )
 
-    # receive message from room group
     async def room_message(self, event):
-        # send message to WebSocket
         await self.send(json.dumps(event))
+
+    async def presence_update(self, event):
+        await self.send(json.dumps({
+            'type': 'presence_update',
+            'users': event['users'],
+            'count': len(event['users']),
+        }))

@@ -9,6 +9,7 @@ from django.core.cache import cache
 from pages.models import Page
 from forums.models import Comment
 from forums.forms import CommentForm
+from rooms.consumers import _get_users
 import secrets
 
 @login_required
@@ -87,3 +88,9 @@ def star_comment(request):
         except Comment.DoesNotExist:
             pass
     return JsonResponse({'status': '500'})
+
+@login_required
+def get_room_count(request):
+    ids = [i.strip() for i in request.GET.get('ids', '').split(',') if i.strip()]
+    counts = {page_id: len(_get_users(f'room_{page_id}')) for page_id in ids}
+    return JsonResponse(counts)

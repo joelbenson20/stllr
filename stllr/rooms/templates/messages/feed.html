@@ -1,1 +1,19 @@
-<div class="message-feed rounded-card h-100 overflow-y-auto"></div>
+<div class="position-relative h-100">
+    
+    <!-- Done by Claude, requires review -->
+    <button id="roomInfoButton"
+        class="btn btn-sm btn-transparent rounded-pill position-absolute top-0 end-0 m-3 z-1"
+        type="button"
+        data-bs-custom-class="popover-dark"
+        data-bs-toggle="popover"
+        data-bs-html="true"
+        data-bs-title="Users present"
+        data-bs-content="Loading..."
+        data-bs-placement="bottom">
+        <span id="roomUserCount" class="text-light"></span>
+        &nbsp;<i class="bi bi-broadcast text-danger spin"></i>
+    </button>
+
+    <div class="message-feed rounded-card h-100 overflow-y-auto p-3"></div>
+
+</div>

@@ -70,7 +70,7 @@
             <a class="page-room-button btn btn-sm btn-dark rounded-pill me-2"
                 href="{{ request.scheme }}://{{ request.get_host }}{% url "room" %}?p={{ page.canonical|urlencode }}">
                 <i class="text-danger bi bi-broadcast-pin"></i>
-                <span>0</span>
+                <span class="room-user-count" data-page-id="{{ page.id }}"></span>
             </a>
         </div>
     </div>

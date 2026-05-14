@@ -10,4 +10,5 @@ urlpatterns = [
     path('create/comment/', views.create_comment),
     path('star/page/', views.star_page),
     path('star/comment/', views.star_comment),
+    path('count/room/', views.get_room_count),
 ]

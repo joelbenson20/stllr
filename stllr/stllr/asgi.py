@@ -18,8 +18,6 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'stllr.settings.dev')
 
 django_asgi_app = get_asgi_application()
 
-from rooms.routing import websocket_urlpatterns
-
 WEBSOCKET_ALLOWED_ORIGINS = [
     'http://localhost',
     'http://localhost:8000',
@@ -31,12 +29,12 @@ WEBSOCKET_ALLOWED_ORIGINS = [
     'chrome-extension://mlilkidmlfonjgccanoodpmbfjflggla',
 ]
 
+from rooms.routing import websocket_urlpatterns
+
 application = ProtocolTypeRouter({
     'http': django_asgi_app,
     'websocket': OriginValidator(
-        AuthMiddlewareStack(
-            URLRouter(websocket_urlpatterns)
-        ),
+        AuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
         WEBSOCKET_ALLOWED_ORIGINS,
     ),
 })
