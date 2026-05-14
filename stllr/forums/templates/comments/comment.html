@@ -31,15 +31,18 @@
             {{ comment.content|safe_markdown }}
         </div>
         <div class="comment-buttons">
+
             {% include "comments/star_button.html" with comment=comment %}
-            <a class="comment-replies-button btn btn-sm btn-dark rounded-pill me-2"
+
+            <a class="comment-replies-button btn btn-sm btn-outline-light rounded-pill me-2"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#children-{{ comment.id }}"
                 aria-expanded="false">
-                <i class="bi bi-chat-left-text-fill"></i>
-                <span>{{ comment.children.count }}</span>
+                <i class="bi bi-chat"></i>
+                &nbsp;<span>{{ comment.children.count }}</span>
             </a>
+
             <button class="comment-reply-button btn btn-sm btn-transparent btn-dark rounded-pill fw-bold me-1"
                 type="button"
                 data-bs-toggle="collapse"
