@@ -27,8 +27,9 @@ function initRoom() {
     roomSocket.onmessage = function(event) {
         const data = JSON.parse(event.data);
         if (data.type === "room_message") {
+            const isAtBottom = messageFeed.scrollHeight - messageFeed.scrollTop <= messageFeed.clientHeight + 10;
             messageFeed.innerHTML += data.html
-            messageFeed.scrollTop = messageFeed.scrollHeight;
+            if (isAtBottom) messageFeed.scrollTop = messageFeed.scrollHeight;
         }
         else if (data.type === "presence_update") {
             const roomInfoButton = document.querySelector('#roomInfoButton');

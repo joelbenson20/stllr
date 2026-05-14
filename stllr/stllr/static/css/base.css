@@ -9,6 +9,21 @@
 body {
     background-color: var(--iridescent-0);
     color: white;
+    scrollbar-color: auto transparent;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: white;
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
 
 a {

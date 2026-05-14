@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block content %}
-
+{% block left %}
     <div class="feed-header mb-5">
         <div class="dropdown d-inline ms-auto">
             <button class="btn text-light dropdown-toggle" id="sortMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -21,6 +20,9 @@
             <span class="mx-3 p-1"><i class="bi bi-search"></i> {{ query }}</span>
         {% endif %}
     </div>
+{% endblock left %}
+
+{% block content %}
 
     {% include 'page/list.html' with pages=pages user=user %}
 

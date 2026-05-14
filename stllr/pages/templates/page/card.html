@@ -12,7 +12,7 @@
                 {% else %}
                     <i class="page-fav-icon float-start bi bi-globe me-1 mb-0 p-0"></i>
                 {% endif %}
-                <p class="page-site-name m-0 p-0">
+                <p class="page-site-name text-light m-0 p-0">
                     <span>{{ page.domain }}</span>
                     {% if page.domain.category or page.type %}
                     <span class="domain-category badge text-bg-dark">
@@ -20,9 +20,9 @@
                     </span>
                     {% endif %}
                 </p>
-                <a class="page-link d-block text-truncate mt-1 p-0" href="{{ page.link }}">{{ page.link }}</a>
+                <a class="page-link d-block text-light text-truncate mt-1 p-0" href="{{ page.link }}">{{ page.link }}</a>
             </div>
-            <h1 class="page-title fw-normal m-0 p-0 {% if compact %}text-truncate{% endif %}">
+            <h1 class="page-title fw-normal my-2 p-0 {% if compact %}text-truncate{% endif %}">
                 <a class="page-title" href="{{ page.link }}">
                     {{ page.title|truncatechars:90 }}
                 </a>
@@ -49,7 +49,7 @@
                         {% endif %}
                     </span>
 
-                    {{ page.description|truncatechars:300 }}
+                    <span class="text-light">{{ page.description|truncatechars:300 }}</span>
 
                     <span class="page-tags small m-0">
                         {% for tag in page.tags.all %}
@@ -60,18 +60,23 @@
             </div>
         </div>
         {% endif %}
-        <div class="my-2 p-0">
+
+        <div class="d-inline-flex align-items-center rounded-pill my-2">
+
             {% include 'page/star_button.html' with page=page user=user %}
-            <a class="page-forum-button btn btn-sm btn-dark rounded-pill me-2"
+
+            <a class="page-forum-button btn btn-outline-light rounded-pill me-2"
                 href="{{ request.scheme }}://{{ request.get_host }}{% url "forum" %}?p={{ page.canonical|urlencode }}">
-                <i class="text-info bi bi-chat-left-text-fill"></i>
-                <span>{{ page.comments.count }}</span>
+                <i class="bi bi-chat"></i>
+                &nbsp;<span>{{ page.comments.count }}</span>
             </a>
-            <a class="page-room-button btn btn-sm btn-dark rounded-pill me-2"
+
+            <a class="page-room-button btn btn-outline-light rounded-pill"
                 href="{{ request.scheme }}://{{ request.get_host }}{% url "room" %}?p={{ page.canonical|urlencode }}">
-                <i class="text-danger bi bi-broadcast-pin"></i>
-                <span class="room-user-count" data-page-id="{{ page.id }}"></span>
+                <i class="bi bi-broadcast spin"></i>
+                &nbsp;<span class="room-user-count" data-page-id="{{ page.id }}"></span>
             </a>
+
         </div>
     </div>
 {% endif %}

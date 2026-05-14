@@ -89,7 +89,6 @@ def star_comment(request):
             pass
     return JsonResponse({'status': '500'})
 
-@login_required
 def get_room_count(request):
     ids = [i.strip() for i in request.GET.get('ids', '').split(',') if i.strip()]
     counts = {page_id: len(_get_users(f'room_{page_id}')) for page_id in ids}

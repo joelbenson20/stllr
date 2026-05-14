@@ -44,7 +44,6 @@ async function fetchRoomCounts() {
     if (!spans.length) return;
     const ids = [...spans].map(s => s.dataset.pageId).join(',');
     const data = await fetch(BASE_URL + ROOM_COUNT_PATH + `?ids=${ids}`).then(r => r.json());
-    console.log(data)
     spans.forEach(s => {
         const count = data[s.dataset.pageId];
         if (count !== undefined) s.textContent = count;
