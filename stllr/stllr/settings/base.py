@@ -21,8 +21,9 @@ ALLOWED_HOSTS = [
 CORS_ALLOWED_ORIGINS = [
     'chrome-extension://polpgpcagljhejdbajfbjgdchdlnfepk',
     'chrome-extension://mlilkidmlfonjgccanoodpmbfjflggla',
-    
+
 ]
+
 CSRF_TRUSTED_ORIGINS = [
     'https://stllr.io',
     'https://www.stllr.io',

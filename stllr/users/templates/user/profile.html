@@ -22,7 +22,7 @@
 
         {% if profile.photo %}
             {% thumbnail profile.photo 192x192 crop="smart" as im %}
-            <img class="rounded-circle float-start me-3" src="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}">
+            <img class="rounded-circle float-start me-3" src="{{ im.url }}">
         {% endif %}
 
         <h1 class="fw-light">@{{ profile.user.username }}</h1>

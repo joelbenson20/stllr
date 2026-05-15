@@ -1,3 +1,4 @@
+<base href="{{ request.scheme }}://{{ request.get_host }}/">
 {% load static %}
 
 
@@ -16,9 +17,6 @@
         </div>
 
         <nav id="extensionNavbar" class="navbar navbar-expand navbar-dark m-0 p-0">
-            <button id="refreshButton" class="btn btn-sm btn-transparent btn-dark rounded-circle ms-3" role="button">
-                <i class="bi bi-arrow-clockwise"></i>
-            </button>
             <ul class="navbar-nav d-flex align-items-center w-100 justify-content-evenly">
                 <li class="nav-item">
                     <a id="forumLink" class="nav-link text-light {% if tab == "forum" %}border-bottom{% endif %}" role="button">Forum</a>

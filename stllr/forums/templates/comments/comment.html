@@ -11,13 +11,13 @@
         {% if comment.user.profile.photo %}
             {% thumbnail comment.user.profile.photo 32x32 crop="smart" as im %}
             <a class="float-start me-2 flex-shrink-0" href="{{ comment.user.get_absolute_url }}">
-                <img class="rounded-circle" src="{{ request.scheme }}://{{ request.get_host }}{{ im.url }}">
+                <img class="rounded-circle" src="{{ im.url }}">
             </a>
         {% endif %}
 
         <div class="d-flex align-items-center flex-wrap">
             <a class="comment-user small text-secondary"
-                href="{{ request.scheme }}://{{ request.get_host }}{{ comment.user.profile.get_absolute_url }}">
+                href="{{ comment.user.profile.get_absolute_url }}">
                 @{{ comment.user.username }}
             </a>
             <i class="bi bi-dot text-secondary"></i>
