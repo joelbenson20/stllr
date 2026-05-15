@@ -2,7 +2,8 @@
 
 {% if user.is_authenticated %}
     <form id="comment-form-{{ parent.id }}"
-        class="comment-form rounded-card" method="post">
+        class="comment-form rounded-card" method="post"
+        action="{% url 'api:create_comment' %}">
         {% csrf_token %}
         <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
         <input type="hidden" name="page" value="{{ page.id }}">
@@ -16,7 +17,8 @@
             <button type="button" class="btn btn-transparent btn-light rounded-circle m-1">
                 <i class="bi bi-question-circle"></i>
             </button>
-            <button type="button" class="comment-form-markdown-preview-button btn btn-transparent btn-light rounded-card m-1">
+            <button type="button" class="comment-form-markdown-preview-button btn btn-transparent btn-light rounded-card m-1"
+                data-endpoint="{% url 'api:markdownify' %}">
                 <i class="bi bi-eye-fill"></i> Preview
             </button>
             <button type="button" class="comment-form-markdown-edit-button btn btn-transparent btn-light rounded-card m-1">

@@ -2,6 +2,7 @@
     data-id={{ page.id }}
     data-action="{% if page in user.pages_starred.all %}un{% endif %}star"
     data-csrf-token={{ csrf_token }}
+    data-endpoint="{% url 'api:star_page' %}"
     {% if not user.is_active %}disabled{% endif %}>
     <i class="bi {% if page in user.pages_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
     &nbsp;<span class="star-count">{{ page.total_stars }}</span>

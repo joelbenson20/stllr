@@ -12,7 +12,7 @@ ALLOWED_TAGS = [
 ]
 ALLOWED_ATTRS = {
     'a': ['href', 'title'],
-    'img': ['src', 'alt', 'title'],  # Done by Claude, requires review
+    'img': ['src', 'alt', 'title'],
 }
 
 def _allow_safe_urls(tag, name, value):

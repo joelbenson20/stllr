@@ -74,7 +74,7 @@
             <a class="page-room-button btn btn-outline-light rounded-pill"
                 href="{% url "room" %}?p={{ page.canonical|urlencode }}">
                 <i class="bi bi-broadcast spin"></i>
-                &nbsp;<span class="room-user-count" data-page-id="{{ page.id }}"></span>
+                &nbsp;<span class="room-user-count" data-page-id="{{ page.id }}" data-endpoint="{% url 'api:get_room_count' %}"></span>
             </a>
 
         </div>

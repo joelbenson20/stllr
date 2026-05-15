@@ -2,6 +2,7 @@
     data-id={{ comment.id }}
     data-action="{% if comment in user.comments_starred.all %}un{% endif %}star"
     data-csrf-token={{ csrf_token }}
+    data-endpoint="{% url 'api:star_comment' %}"
     {% if not user.is_active %}disabled{% endif %}>
     <i class="bi {% if comment in user.comments_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
     &nbsp;<span class="star-count">{{ comment.total_stars }}</span>
