@@ -24,3 +24,16 @@ class Profile(models.Model):
     
     def __str__(self):
         return f'Profile of {self.user.username}'
+    
+class Contact(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'pending', 'Pending'
+        ACCEPTED = 'accepted', 'Accepted'
+
+    from_user = models.ForeignKey(User, related_name='contacts_sent', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='contacts_received', on_delete=models.CASCADE)
+    status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('from_user', 'to_user')

@@ -26,7 +26,9 @@ body {
     background-clip: padding-box;
 }
 
-a {
+
+a, a:hover,
+.nav-link, .nav-link:hover {
     color: var(--iridescent-3);
 }
 
