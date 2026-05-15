@@ -44,8 +44,14 @@
                         aria-label="Search">
                 </form>
                 {% if user.is_authenticated %}
-                    <div class="navbar-text ms-auto">
-                        Hello, <a href="{% url "profile" user.username %}">{{ user.username }}!</a>
+                    <div class="navbar-text ms-auto d-flex align-items-center gap-2">
+                        Hello,
+                        <a href="{% url "profile" user.username %}">{{ user.username }}!</a>
+                        {% if notifications.pending_requests %}
+                            <a href="{% url "comms" %}">
+                                <span class="badge rounded-pill bg-danger">{{ notifications.pending_requests }}</span>
+                            </a>
+                        {% endif %}
                         <a class="btn btn-dark ms-3" href='{% url "account_logout" %}'>Sign Out</a>
                     </div>
                 {% else %}

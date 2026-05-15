@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse
+from django.db.models import Q
 from django.contrib.postgres.search import SearchQuery
 from pages.models import Page
+from users.models import Contact, Action
 from taggit.models import Tag
 
 def index(request):
@@ -44,9 +46,21 @@ def index(request):
     if cards_only:
         return render(request, 'page/list.html', {'pages': pages})
     
+    contact_actions = []
+    if request.user.is_authenticated:
+        contacts = Contact.objects.filter(
+            Q(from_user=request.user) | Q(to_user=request.user),
+            status=Contact.Status.ACCEPTED
+        ).values_list('from_user', 'to_user')
+        contact_ids = {uid for pair in contacts for uid in pair} - {request.user.id}
+        contact_actions = Action.objects.filter(
+            user_id__in=contact_ids
+        ).select_related('user', 'page').order_by('user', '-created').distinct('user')
+
     return render(request, 'index.html', {
         'pages': pages,
         'query': query,
         'tag': tag,
-        'sort': sort
+        'sort': sort,
+        'contact_actions': contact_actions
     })

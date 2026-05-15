@@ -6,6 +6,8 @@ from django.template.loader import render_to_string
 from django.core.cache import cache
 from asgiref.sync import sync_to_async
 from .models import Message
+from users.models import Action
+from pages.models import Page
 
 PRESENCE_TTL = 20 # expires 2 heartbeats after last activity
 
@@ -40,6 +42,12 @@ class RoomConsumer(AsyncWebsocketConsumer):
         self.page_id = self.scope['url_route']['kwargs']['page_id']
         self.room_name = f'room_{self.page_id}'
 
+        # Verify page_id is a valid page
+        page = await Page.objects.aget(id=self.page_id)
+        if not page:
+            await self.close()
+            return
+
         # Authenticate browser extension users
         if not self.user.is_authenticated:
             params = parse_qs(self.scope.get('query_string', b'').decode())
@@ -56,6 +64,9 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
         # Accept connection
         await self.accept()
+
+        # Create user action
+        await Action.objects.acreate(user=self.user, verb=Action.Verb.CHECKED_IN, page=page)
 
         # Send "joined the room" message
         await self.channel_layer.group_send(

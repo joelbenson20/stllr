@@ -37,3 +37,23 @@ class Contact(models.Model):
 
     class Meta:
         unique_together = ('from_user', 'to_user')
+
+class Action(models.Model):
+    class Verb(models.TextChoices):
+        STARRED = 'starred', 'Starred'
+        POSTED = 'posted', 'Posted'
+        CHECKED_IN = 'checked_in', 'Checked In'
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actions')
+    verb = models.CharField(max_length=20, choices=Verb.choices)
+    page = models.ForeignKey('pages.Page', null=True ,blank=True, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created']
+        indexes = [
+            models.Index(fields=['-created']),
+        ]
+    
+    def __str__(self):
+        return f'{self.user.username} {self.verb} {self.page}'

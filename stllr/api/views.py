@@ -1,3 +1,4 @@
+import secrets
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django_ratelimit.decorators import ratelimit
@@ -10,7 +11,8 @@ from pages.models import Page
 from forums.models import Comment
 from forums.forms import CommentForm
 from rooms.consumers import _get_users
-import secrets
+from users.models import Action
+
 
 @login_required
 def csrf_token(request):
@@ -45,6 +47,9 @@ def create_comment(request):
         if (new_comment.parent):
             new_comment.thread_level = new_comment.parent.thread_level + 1
         new_comment.save()
+        Action.objects.create(
+            user=request.user, verb=Action.Verb.POSTED, page=new_comment.page
+        )
         response = {
             'status': '201',
             'commentId': new_comment.id,
@@ -64,6 +69,9 @@ def star_page(request):
             page = Page.objects.get(id=page_id)
             if action == 'star':
                 page.users_star.add(request.user)
+                Action.objects.create(
+                    user=request.user, verb=Action.Verb.STARRED, page=page
+                )
             else:
                 page.users_star.remove(request.user)
             return JsonResponse({'status': '200'})
