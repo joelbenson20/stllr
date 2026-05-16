@@ -9,7 +9,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('comms/', user_views.comms, name='comms'),
     path('users/', include('users.urls')),
     path('forum/', include('forums.urls')),
     path('room/', include('rooms.urls')),

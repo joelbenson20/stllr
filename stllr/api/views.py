@@ -1,28 +1,15 @@
-import secrets
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django_ratelimit.decorators import ratelimit
 from django.http import JsonResponse
-from django.middleware.csrf import get_token
 from forums.templatetags.safe_markdown import safe_markdown_filter
 from django.template.loader import render_to_string
-from django.core.cache import cache
 from pages.models import Page
 from forums.models import Comment
 from forums.forms import CommentForm
 from rooms.consumers import _get_users
 from users.models import Action
 
-
-@login_required
-def csrf_token(request):
-    return JsonResponse({'csrfToken': get_token(request)})
-
-@login_required
-def ws_ticket(request):
-    token = secrets.token_urlsafe(32)
-    cache.set(f'ws_ticket:{token}', request.user.id, timeout=30)
-    return JsonResponse({'ticket': token})
 
 @login_required
 @require_POST

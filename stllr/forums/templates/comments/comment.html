@@ -1,30 +1,10 @@
 {% load static %}
 {% load comments %}
-{% load humanize %}
-{% load thumbnail %}
 {% load safe_markdown %}
 
 <div id="comment-{{ comment.id }}" class="comment rounded-card mt-2 p-2">
 
-    <div class="comment-header d-flex align-items-start">
-
-        {% if comment.user.profile.photo %}
-            {% thumbnail comment.user.profile.photo 32x32 crop="smart" as im %}
-            <a class="float-start me-2 flex-shrink-0" href="{{ comment.user.get_absolute_url }}">
-                <img class="rounded-circle" src="{{ im.url }}">
-            </a>
-        {% endif %}
-
-        <div class="d-flex align-items-center flex-wrap">
-            <a class="comment-user small text-secondary"
-                href="{{ comment.user.profile.get_absolute_url }}">
-                @{{ comment.user.username }}
-            </a>
-            <i class="bi bi-dot text-secondary"></i>
-            <span class="small text-secondary">{{ comment.created|naturaltime }}</span>
-        </div>
-
-    </div>
+    {% include "user/header.html" with user=comment.user timestamp=comment.created %}
 
     <div class="comment-body my-3 ms-5">
         <div class="comment-content">

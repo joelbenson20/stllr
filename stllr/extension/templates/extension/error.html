@@ -1,0 +1,16 @@
+{% extends "extension/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex w-100 align-items-center justify-content-center py-5">
+    <div>
+        <a href="{% url 'index' %}">
+            <img class="d-block my-3 mx-auto" src="{% static 'brand/brand.png' %}" width=192>
+        </a>
+        <p class="text-center">
+            {% block error_message %}
+            {% endblock error_message %}
+        </p>
+    </div>
+</div>
+{% endblock content %}

@@ -1,20 +1,26 @@
-{% extends "base.html" %}
+<!-- Done by Claude, requires review -->
+{% if notifications.pending_requests %}
+    {% for pending_request in notifications.pending_requests %}
+        <div class="mb-4">
 
-{% block title %}Comms{% endblock title %}
-
-{% block content %}
-    <h1 class="fw-light mb-5">Comms</h1>
-
-    {% if pending_requests %}
-        {% for contact in pending_requests %}
-            <div class="d-flex align-items-center gap-3 mb-4">
-                <a href="{% url "profile" contact.from_user.username %}">@{{ contact.from_user.username }}</a>
-                <span>wants to be a contact</span>
-                <a href="{% url "accept_request" contact.from_user.username %}" class="btn btn-success btn-sm">Add</a>
-                <a href="{% url "remove_contact" contact.from_user.username %}" class="btn btn-light btn-sm">Decline</a>
+            <div class="float-start">
+                {% include "user/profile-picture.html" with user=pending_request.from_user size="32" dimensions="32x32" %}
             </div>
-        {% endfor %}
-    {% else %}
-            <p class="text-secondary">No incoming transmissions.</p>
-    {% endif %}
-{% endblock content %}
+
+            <a href="{% url "profile" pending_request.from_user.username %}">@{{ pending_request.from_user.username }}</a>
+            <span>wants to add you as a contact.</span>
+
+            <a class="btn btn-light btn-sm ms-auto"
+                href="{% url "accept_request" pending_request.from_user.username %}">
+                Accept
+            </a>
+            <a class="btn btn-warning btn-sm"
+                href="{% url "decline_request" pending_request.from_user.username %}">
+                Decline
+            </a>
+            
+        </div>
+    {% endfor %}
+{% else %}
+        <p class="text-secondary">No incoming transmissions.</p>
+{% endif %}

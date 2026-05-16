@@ -23,17 +23,6 @@
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-.comment-user {
-    text-decoration: none;
-}
-.comment-user:hover {
-    text-decoration: underline;
-}
-
-.comment-user-bio {
-    font-size: 12px;
-}
-
 .comment-star-button:has(.bi-star-fill) {
     text-shadow: 0 0 5px white;
 }

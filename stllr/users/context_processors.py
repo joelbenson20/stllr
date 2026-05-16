@@ -3,17 +3,17 @@ from .models import Contact
 def notifications(request):
 
     if request.user.is_authenticated:
-        pending_requests_count = Contact.objects.filter(
+        pending_requests = Contact.objects.filter(
             to_user=request.user,
             status=Contact.Status.PENDING
-        ).count()
+        ).select_related('from_user')
         return {
-             'notifications': {
-                  'pending_requests': pending_requests_count
+            'notifications': {
+                'pending_requests': pending_requests,
             }
         }
     return {
         'notifications': {
-            'pending_requests': 0
+            'pending_requests': [],
         }
     }

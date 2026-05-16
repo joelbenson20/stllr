@@ -39,7 +39,7 @@ def profile(request, username):
         ).first()
     return render(
         request,
-        'user/profile.html',
+        'profile.html',
         {
             'profile': user.profile,
             'contact': contact
@@ -67,20 +67,11 @@ def edit(request, username):
         profile_form=ProfileEditForm(instance=request.user.profile)
     return render(
         request,
-        'user/edit.html',
+        'profile-edit.html',
         {
             'profile_form': profile_form
         }
     )
-
-@login_required
-def comms(request):
-    pending_requests = Contact.objects.filter(
-        to_user=request.user,
-        status=Contact.Status.PENDING
-    ).select_related('from_user__profile')
-    return render(request, 'user/comms.html', {'pending_requests': pending_requests})
-
 
 @login_required
 def send_request(request, username):
@@ -96,6 +87,17 @@ def accept_request(request, username):
     contact.status = Contact.Status.ACCEPTED
     contact.save()
     return redirect('profile', username=username)
+
+@login_required
+def decline_request(request, username):
+    other_user = get_object_or_404(get_user_model(), username=username)
+    Contact.objects.filter(
+        from_user=request.user, to_user=other_user
+    ).delete()
+    Contact.objects.filter(
+        from_user=other_user, to_user=request.user
+    ).delete()
+    return redirect('profile', username=request.user.username)
 
 @login_required
 def remove_contact(request, username):

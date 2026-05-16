@@ -12,7 +12,7 @@
                 {% else %}
                     <i class="page-fav-icon float-start bi bi-globe me-1 mb-0 p-0"></i>
                 {% endif %}
-                <p class="page-site-name text-light m-0 p-0">
+                <p class="page-site-name m-0 p-0">
                     <span>{{ page.domain }}</span>
                     {% if page.domain.category or page.type %}
                     <span class="domain-category badge text-bg-dark">
@@ -20,7 +20,7 @@
                     </span>
                     {% endif %}
                 </p>
-                <a class="page-link d-block text-light text-truncate mt-1 p-0" href="{{ page.link }}">{{ page.link }}</a>
+                <a class="page-link d-block text-truncate mt-1 p-0" href="{{ page.link }}">{{ page.link }}</a>
             </div>
             <h1 class="page-title fw-light my-2 p-0 {% if compact %}text-truncate{% endif %}">
                 <a class="page-title" href="{{ page.link }}">
@@ -49,13 +49,8 @@
                         {% endif %}
                     </span>
 
-                    <span class="text-light">{{ page.description|truncatechars:300 }}</span>
+                    <span>&nbsp;{{ page.description|truncatechars:300 }}</span>
 
-                    <span class="page-tags small m-0">
-                        {% for tag in page.tags.all %}
-                            <a href="/?tag={{ tag.slug }}">#{{ tag.name }}</a>&nbsp;
-                        {% endfor %}
-                    </span>
                 </p>
             </div>
         </div>
@@ -74,7 +69,7 @@
             <a class="page-room-button btn btn-outline-light rounded-pill"
                 href="{% url "room" %}?p={{ page.canonical|urlencode }}">
                 <i class="bi bi-broadcast spin"></i>
-                &nbsp;<span class="room-user-count" data-page-id="{{ page.id }}" data-endpoint="{% url 'api:get_room_count' %}"></span>
+                &nbsp;<span class="room-user-count" data-page-id="{{ page.id }}" data-endpoint="{% url 'api:get_room_count' %}">?</span>
             </a>
 
         </div>

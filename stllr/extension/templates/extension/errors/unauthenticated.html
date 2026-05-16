@@ -1,5 +1,5 @@
-{% extends "extension/base.html" %}
+{% extends "extension/error.html" %}
 
-{% block content %}
-    <p> Please sign in to enter this page's forum.</p>
-{% endblock content %}
+{% block error_message %}
+    Please <a href="{% url "account_login" %}">sign in</a> on stllr, then refresh our extension.
+{% endblock error_message %}

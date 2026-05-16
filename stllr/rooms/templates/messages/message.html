@@ -3,8 +3,8 @@
 
 <div class="message rounded-car mb-3">
 
-    {% if message.user.profile.photo %}
-        {% thumbnail message.user.profile.photo 32x32 crop="smart" as im %}
+    {% if message.user.profile.background %}
+        {% thumbnail message.user.profile.background 32x32 crop="smart" as im %}
         <a class="float-start me-2 flex-shrink-0" href="{{ message.user.get_absolute_url }}">
             <img class="rounded-circle" src="{{ im.url }}">
         </a>

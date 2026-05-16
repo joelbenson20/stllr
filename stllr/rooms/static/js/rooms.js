@@ -8,6 +8,7 @@ function initRoom() {
     const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
     const url = wsProtocol + window.location.host + '/ws/room/' + pageId + '/';
     const roomSocket = new WebSocket(url);
+    // END EXTENSION-SPECIFIC CODE
 
     const messageTextarea = document.querySelector('.message-textarea');
     const messageFeed = document.querySelector('.message-feed');
@@ -32,18 +33,14 @@ function initRoom() {
             if (isAtBottom) messageFeed.scrollTop = messageFeed.scrollHeight;
         }
         else if (data.type === "presence_update") {
-            const roomInfoButton = document.querySelector('#roomInfoButton');
-            const roomUserCount = document.querySelector('#roomUserCount');
-            const popover = bootstrap.Popover.getInstance(roomInfoButton);
-            
+            const popover = bootstrap.Popover.getInstance(roomUsersPopover);
             const listHtml = data.users.map(u => `<li class="list-group-item">${u}</li>`).join('');
             const contentHtml = `<ul class="list-group list-group-flush">${listHtml}</ul>`;
-            
-            roomUserCount.innerText = data.count
-            popover.setContent({
+                        popover.setContent({
                 '.popover-header': 'Users present',
                 '.popover-body': contentHtml,
             });
+            updateRoomCounts()
         }
     };
 
@@ -70,6 +67,17 @@ function initRoom() {
     })
 
     messageTextarea.focus();
+}
+
+async function updateRoomCounts() {
+    const spans = document.querySelectorAll('.room-user-count[data-page-id]');
+    if (!spans.length) return;
+    const ids = [...spans].map(s => s.dataset.pageId).join(',');
+    const data = await fetch(new URL(spans[0].dataset.endpoint + `?ids=${ids}`, document.baseURI).href).then(r => r.json());
+    spans.forEach(s => {
+        const count = data[s.dataset.pageId];
+        if (count !== undefined) s.textContent = count;
+    });
 }
 
 initRoom();

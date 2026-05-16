@@ -1,7 +1,6 @@
 <base href="{{ request.scheme }}://{{ request.get_host }}/">
 {% load static %}
 
-
 <div id="extensionBody">
 
     <div class="glass sticky-top">
@@ -19,13 +18,13 @@
         <nav id="extensionNavbar" class="navbar navbar-expand navbar-dark m-0 p-0">
             <ul class="navbar-nav d-flex align-items-center w-100 justify-content-evenly">
                 <li class="nav-item">
-                    <a id="forumLink" class="nav-link text-light {% if tab == "forum" %}border-bottom{% endif %}" role="button">Forum</a>
+                    <a id="forumTab" class="nav-link text-light px-4 {% if tab == "forum" %}border-bottom{% endif %}" role="button">Forum</a>
                 </li>
                 <li class="nav-item">
-                    <a id="roomLink" class="nav-link text-light {% if tab == "room" %}border-bottom{% endif %}" role="button">Room</a>
+                    <a id="roomTab" class="nav-link text-light px-4 {% if tab == "room" %}border-bottom{% endif %}" role="button">Room</a>
                 </li>
                 <li class="nav-item">
-                    <a id="similarLink" class="nav-link text-light {% if tab == "similar" %}border-bottom{% endif %}" role="button">Similar</a>
+                    <a id="similarTab" class="nav-link text-light px-4 {% if tab == "similar" %}border-bottom{% endif %}" role="button">Similar</a>
                 </li>
             </ul>
         </nav>

@@ -1,10 +1,13 @@
+import secrets
+import json
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
+from django.core.cache import cache
+from django.middleware.csrf import get_token
 from pages.models import Page, Domain
-import json
 from pages.utils import get_canonical, get_meta, get_domain_name, verify_security, InsecureURLError
 
 
@@ -12,7 +15,7 @@ from pages.utils import get_canonical, get_meta, get_domain_name, verify_securit
 @login_required
 @require_POST
 def extension(request):
-    data = json.loads(request.body).get('pageData')
+    data = json.loads(request.body).get('page').get('data')
     canonical = get_canonical(data.get('url'))
     try:
         page = Page.objects.get(canonical=canonical)
@@ -20,7 +23,7 @@ def extension(request):
             return JsonResponse(
                 {
                     'status': '403',
-                    'html': render_to_string('extension/errors/inactive.html')
+                    'html': render_to_string('extension/errors/inactive.html', request=request)
                 }
             )
     except Page.DoesNotExist:
@@ -41,7 +44,7 @@ def extension(request):
             return JsonResponse(
                 {
                     'status': '405',
-                    'html': render_to_string('extension/errors/unsupported.html')
+                    'html': render_to_string('extension/errors/unsupported.html', request=request)
                 }
             )
 
@@ -64,7 +67,8 @@ def extension(request):
             content=content or scraped_data['content'] or '',
         )
 
-    tab = request.GET.get('tab')
+    # Default extension tab is 'forum'
+    tab = request.GET.get('tab', 'forum')
     
     context = {
         'page': page,
@@ -82,4 +86,34 @@ def extension(request):
     return JsonResponse({
         'status': '200',
         'html': html
+    })
+
+def csrf_token(request):
+    if (request.user.is_authenticated):
+        return JsonResponse({
+            'status': 200,
+            'token': get_token(request)
+        })
+    else:
+        return JsonResponse({
+            'status': 403,
+            'html': render_to_string('extension/errors/unauthenticated.html', request=request)
+        })
+
+@login_required
+def ws_ticket(request):
+    token = secrets.token_urlsafe(32)
+    cache.set(f'ws_ticket:{token}', request.user.id, timeout=30)
+    return JsonResponse({'ticket': token})
+
+def loading(request):
+    return JsonResponse({
+        'status': '200',
+        'html': render_to_string('extension/loading.html', request=request)
+    })
+
+def restricted(request):
+    return JsonResponse({
+        'status': '200',
+        'html': render_to_string('extension/errors/restricted.html', request=request)
     })

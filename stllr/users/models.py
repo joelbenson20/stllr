@@ -13,8 +13,7 @@ class Profile(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
-    bio = models.CharField(blank=True)
-    photo = models.ImageField(
+    background = models.ImageField(
         upload_to='users/%Y/%m/%d/',
         blank=True
     )
@@ -40,9 +39,11 @@ class Contact(models.Model):
 
 class Action(models.Model):
     class Verb(models.TextChoices):
-        STARRED = 'starred', 'Starred'
-        POSTED = 'posted', 'Posted'
-        CHECKED_IN = 'checked_in', 'Checked In'
+        STARRED = 'starred', 'starred'
+        POSTED = 'posted', 'posted to the forum at'
+        REPLIED = 'replied', 'replied to'
+        ENTERED = 'entered', 'entered the room at'
+        CHECKED_IN = 'checked_in', 'checked into the room at'
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actions')
     verb = models.CharField(max_length=20, choices=Verb.choices)
@@ -56,4 +57,4 @@ class Action(models.Model):
         ]
     
     def __str__(self):
-        return f'{self.user.username} {self.verb} {self.page}'
+        return f'{self.user.username} {self.get_verb_display()} {self.page}'

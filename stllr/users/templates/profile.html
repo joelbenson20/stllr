@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block left %}
+    {% if profile.user == request.user %}
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link bg-dark my-3" href="{% url "edit" user.username %}">Edit your profile</a>
+            </li> 
+            <li class="nav-item">
+                <a class="nav-link bg-dark my-3" href="{% url "account_reset_password" %}">Change your password</a>
+            </li>
+        </ul>
+    {% endif %}
+{% endblock left %}
+
+
+{% block content %}
+
+    {% if profile.background %}
+        {% thumbnail profile.background "1200x675" crop="center" as banner %}
+        <div class="ratio ratio-16x9 rounded-card overflow-hidden">
+            <img class="object-fit-cover w-100 h-100" src="{{ banner.url }}">
+        </div>
+    {% endif %}
+
+    <div class="profile-header position-relative">
+        <div class="profile-header d-flex align-items-end position-absolute top-0 start-0 translate-middle-y">
+
+            <img class="float-start rounded-circle border border-3 ms-5" style="width:192x;height:192px;" src="{% static 'brand/icon.png' %}">
+            
+            <div class="d-flex align-items-center">
+
+                <h1>@{{ profile.user.username }}</h1>
+
+                <div class="ms-4">
+                    {% if request.user != profile.user %}
+                        {% if not contact %}
+                            <a href="{% url "send_request" profile.user.username %}" class="btn btn-light">Add Contact</a>
+                        {% elif contact.status == 'pending' and contact.from_user == request.user %}
+                            <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-light">Cancel Request</a>
+                        {% elif contact.status == 'pending' %}
+                            <a href="{% url "accept_request" profile.user.username %}" class="btn btn-light">Accept</a>
+                            <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-warning">Decline</a>
+                        {% else %}
+                            <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-light">Remove Contact</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="p-5"></div>
+
+    <div class="activity-feed mt-5 p-3">
+        {% for action in profile.user.actions.all %}
+            <p>{{ action }}</p>
+        {% endfor %}
+    </div>
+
+{% endblock content %}
+
+{% block right %}
+    {% if user == profile.user %}
+        {% include "user/comms.html" with notifications=notifications %}
+    {% endif %}
+{% endblock right %}

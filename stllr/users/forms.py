@@ -35,7 +35,7 @@ class UserRegistrationForm(forms.ModelForm):
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['bio', 'photo']
+        fields = ['background']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -43,11 +43,11 @@ class ProfileEditForm(forms.ModelForm):
         self.helper.form_tag = False
 
         image_html = ""
-        if self.instance and self.instance.photo:
-            image_html = f'<img src="{self.instance.photo.url}" class="mb-3" style="max-height: 96px;">'
+        if self.instance and self.instance.background:
+            image_html = f'<img src="{self.instance.background.url}" class="mb-3" style="max-height: 96px;">'
 
         self.helper.layout = Layout(
-            Field('photo'),
+            Field('background'),
             HTML(image_html),
             'bio',
         )

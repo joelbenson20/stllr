@@ -6,5 +6,5 @@ admin.site.register(User)
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'bio', 'photo']
+    list_display = ['user', 'background']
     raw_id_fields = ['user']

@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{% block title %}stllr | the universal forum{% endblock title %}</title>
+    <title>{% block title %}stllr{% endblock title %}</title>
 
     <link rel="stylesheet" href="{% static 'libs/bootstrap/dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'libs/bootstrap-icons/font/bootstrap-icons.min.css' %}">
@@ -16,6 +16,21 @@
     <link rel="stylesheet" href="{% static 'css/pages.css' %}">
     <link rel="stylesheet" href="{% static 'css/forums.css' %}">
     <link rel="stylesheet" href="{% static 'css/rooms.css' %}">
+
+    <link rel="icon" href="{% static "brand/favicon/favicon.ico" %}" sizes="any">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "brand/favicon/favicon-16.png" %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static "brand/favicon/favicon-32.png" %}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static "brand/favicon/favicon-192.png" %}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{% static "brand/favicon/favicon-512.png" %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "brand/favicon/apple-touch-icon.png" %}">
+    <link rel="manifest" href="{% static "brand/favicon/site.webmanifest" %}">
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "brand/favicon/apple-touch-icon.png" %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static "brand/favicon/favicon-32x32.png" %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "brand/favicon/favicon-16x16.png" %}">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#0d1b3e">
 
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'brand/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'brand/favicon-32x32.png' %}">
@@ -30,7 +45,7 @@
 
         <nav class="navbar navbar-dark navbar-expand-sm glass sticky-top p-3">
             <a class="navbar-brand" href="{% url 'index' %}">
-                <img class="navbar-brand-image" src="{% static 'brand/brand.png' %}" width=128>
+                <img class="navbar-brand-image" src="{% static 'brand/brand.png' %}" width=192>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
@@ -46,12 +61,12 @@
                 {% if user.is_authenticated %}
                     <div class="navbar-text ms-auto d-flex align-items-center gap-2">
                         Hello,
-                        <a href="{% url "profile" user.username %}">{{ user.username }}!</a>
-                        {% if notifications.pending_requests %}
-                            <a href="{% url "comms" %}">
-                                <span class="badge rounded-pill bg-danger">{{ notifications.pending_requests }}</span>
-                            </a>
-                        {% endif %}
+                        <a href="{% url "profile" user.username %}">
+                            {{ user.username }}!
+                            {% if notifications.pending_requests %}
+                                <span class="badge rounded-pill bg-danger">{{ notifications.pending_requests.count }}</span>
+                            {% endif %}
+                        </a>
                         <a class="btn btn-dark ms-3" href='{% url "account_logout" %}'>Sign Out</a>
                     </div>
                 {% else %}
