@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% load comments %}
+{% load posts %}
 
 {% block title %} stllr | forum | {{ page.title }}{% endblock title %}
 
@@ -12,10 +12,10 @@
         </div>
 
         <div class="my-3">
-            {% include "comments/form.html" with page=page parent=None %}
+            {% include "posts/form.html" with page=page parent=None %}
         </div>
 
-        {% render_comment_tree page=page %}
+        {% render_post_tree page=page %}
 
     {% else %}
         <p>The forum at this page has been suspended.</p>

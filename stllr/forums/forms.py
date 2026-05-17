@@ -1,16 +1,16 @@
 from django import forms
-from .models import Comment
+from .models import Post
 from pages.models import Page
 
-class CommentForm(forms.ModelForm):
+class PostForm(forms.ModelForm):
     page = forms.ModelChoiceField(
         queryset=Page.objects.all(),
     )
     parent = forms.ModelChoiceField(
-        queryset=Comment.objects.all(),
+        queryset=Post.objects.all(),
         required=False,
     )
 
     class Meta:
-        model = Comment
+        model = Post
         fields = ['content', 'page', 'parent']

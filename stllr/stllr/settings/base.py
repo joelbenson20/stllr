@@ -206,8 +206,8 @@ CELERY_BEAT_SCHEDULE = {
         "task": "pages.update_brightness_index",
         "schedule": crontab(),
     },
-    "deleted-old-comment-stars": {
-        "task": "forum.delete_old_comment_stars",
+    "deleted-old-post-stars": {
+        "task": "forum.delete_old_post_stars",
         "schedule": crontab(),
     }
 }

@@ -1,15 +1,15 @@
 from django.contrib import admin
-from .models import Comment, CommentStar
+from .models import Post, PostStar
 
-@admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
     list_display = ['user', 'content', 'created']
     search_fields = ['user__username', 'content']
     readonly_fields = ['created']
     list_filter = ['created']
 
-@admin.register(CommentStar)
+@admin.register(PostStar)
 class PageStarAdmin(admin.ModelAdmin):
-    list_display = ['user', 'comment', 'created']
+    list_display = ['user', 'post', 'created']
     readonly_fields = ['created',]
     ordering = ['-created']

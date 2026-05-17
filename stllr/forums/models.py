@@ -6,23 +6,23 @@ from django.db.models import Case, When, IntegerField
 from pages.models import Page
 
 
-class Comment(models.Model):
+class Post(models.Model):
 
     class FirmamentQuerySet(models.QuerySet):
         def firmament(self):
             if not self:
                 return self.none()
-            comments = self.values('id', 'brightness')
-            total_comments = comments.count()
-            ids = [comment['id'] for comment in comments]
-            brightnesses = np.maximum(np.array([comment['brightness'] for comment in comments]), 1e-10)
+            posts = self.values('id', 'brightness')
+            total_posts = posts.count()
+            ids = [post['id'] for post in posts]
+            brightnesses = np.maximum(np.array([post['brightness'] for post in posts]), 1e-10)
             probabilities = brightnesses / brightnesses.sum()
-            chosen_ids = np.random.choice(ids, size=total_comments, p=probabilities, replace=False)
+            chosen_ids = np.random.choice(ids, size=total_posts, p=probabilities, replace=False)
             chosen_order = Case(
                 *[When(id=id, then=pos) for pos, id in enumerate(chosen_ids)],
                 output_field=IntegerField()
             )
-            firmament = Comment.objects.filter(id__in=chosen_ids).order_by(chosen_order)
+            firmament = Post.objects.filter(id__in=chosen_ids).order_by(chosen_order)
             return firmament
     
     objects = models.Manager()
@@ -30,16 +30,16 @@ class Comment(models.Model):
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name='comments',
+        related_name='posts',
         on_delete=models.CASCADE
     )
     page = models.ForeignKey(
         Page,
-        related_name='comments',
+        related_name='posts',
         on_delete=models.CASCADE
     )
     parent = models.ForeignKey(
-        'Comment',
+        'Post',
         related_name='children',
         on_delete=models.CASCADE,
         null=True
@@ -50,8 +50,8 @@ class Comment(models.Model):
 
     users_star = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        through='CommentStar',
-        related_name='comments_starred',
+        through='PostStar',
+        related_name='posts_starred',
         blank=True
     )
     total_stars = models.PositiveIntegerField(default=0)
@@ -68,10 +68,10 @@ class Comment(models.Model):
         return f'{self.user}: {self.content}'
     
     
-class CommentStar(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comment_stars', on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, related_name='stars', on_delete=models.CASCADE)
+class PostStar(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='post_stars', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='stars', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'comment')
+        unique_together = ('user', 'post')

@@ -5,8 +5,8 @@ from django.http import JsonResponse
 from forums.templatetags.safe_markdown import safe_markdown_filter
 from django.template.loader import render_to_string
 from pages.models import Page
-from forums.models import Comment
-from forums.forms import CommentForm
+from forums.models import Post
+from forums.forms import PostForm
 from rooms.consumers import _get_users
 from users.models import Action
 
@@ -24,23 +24,23 @@ def markdownify(request):
 @login_required
 @require_POST
 @ratelimit(key='user', rate='10/m', method='POST', block=True)
-def create_comment(request):
-    new_comment = None
-    form = CommentForm(data=request.POST)
+def create_post(request):
+    new_post = None
+    form = PostForm(data=request.POST)
     if form.is_valid():
         cd = form.cleaned_data
-        new_comment = form.save(commit=False)
-        new_comment.user = request.user
-        if (new_comment.parent):
-            new_comment.thread_level = new_comment.parent.thread_level + 1
-        new_comment.save()
+        new_post = form.save(commit=False)
+        new_post.user = request.user
+        if (new_post.parent):
+            new_post.thread_level = new_post.parent.thread_level + 1
+        new_post.save()
         Action.objects.create(
-            user=request.user, verb=Action.Verb.POSTED, object=new_comment
+            user=request.user, verb=Action.Verb.POSTED, object=new_post
         )
         response = {
             'status': '201',
-            'commentId': new_comment.id,
-            'comment': render_to_string('comments/tree.html', {'comments': [new_comment]}, request=request)
+            'postId': new_post.id,
+            'post': render_to_string('posts/tree.html', {'posts': [new_post]}, request=request)
         }
         return (JsonResponse(response))
     return JsonResponse({'status': '400'})
@@ -69,18 +69,18 @@ def star_page(request):
 @login_required
 @require_POST
 @ratelimit(key='user', rate='3/s', method='POST', block=True)
-def star_comment(request):
-    comment_id = request.POST.get('id')
+def star_post(request):
+    post_id = request.POST.get('id')
     action = request.POST.get('action')
-    if comment_id and action:
+    if post_id and action:
         try:
-            comment = Comment.objects.get(id=comment_id)
+            post = Post.objects.get(id=post_id)
             if action == 'star':
-                comment.users_star.add(request.user)
+                post.users_star.add(request.user)
             else:
-                comment.users_star.remove(request.user)
+                post.users_star.remove(request.user)
             return JsonResponse({'status': '200'})
-        except Comment.DoesNotExist:
+        except Post.DoesNotExist:
             pass
     return JsonResponse({'status': '500'})
 
