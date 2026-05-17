@@ -20,7 +20,7 @@ function initFormSubmission(form) {
                 postTree.insertAdjacentHTML('afterbegin', response.post);
 
                 // Initialize new reply form
-                var newPost = document.querySelector(`#post-${response.postId}`);
+                var newPost = document.querySelector(`#post${response.postId}`);
                 var newStarButton = newPost.querySelector('.post-star-button');
                 var newForm = newPost.querySelector('.post-form')
                 initPostStarButton(newStarButton);

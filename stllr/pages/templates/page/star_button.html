@@ -1,4 +1,4 @@
-<button class="page-star-button btn btn-outline-light rounded-pill me-2"
+<button class="page-star-button star-button btn btn-outline-light rounded-pill me-2"
     data-id={{ page.id }}
     data-action="{% if page in user.pages_starred.all %}un{% endif %}star"
     data-csrf-token={{ csrf_token }}

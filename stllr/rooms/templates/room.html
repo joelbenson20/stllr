@@ -4,21 +4,17 @@
 {% block title %} stllr | room | {{ page.title }}{% endblock title %}
 
 {% block content %}
-    {% if page.is_active %}
 
-        <div class="mb-sm-5 mb-3">
-            {% include 'page/card.html' with page=page user=user %}
-        </div>
-        
-        <div style="height:350px;">
-            {% include "messages/feed.html" %}
-        </div>
+    <div class="mb-sm-5 mb-3">
+        {% include 'page/card.html' with page=page user=user compact=True %}
+    </div>
+    
+    <div class="flex-grow-1">
+        {% include "messages/feed.html" %}
+    </div>
 
-        {% include "messages/form.html" with page=page %}
+    {% include "messages/form.html" %}
 
-    {% else %}
-        <p>The forum at this page has been suspended.</p>
-    {% endif %}
 {% endblock content %}
 
 {% block scripts %}

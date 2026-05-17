@@ -1,4 +1,4 @@
-<button id="post-star-button-{{ post.id }}" class="post-star-button btn btn-sm btn-outline-light rounded-pill me-2"
+<button id="post-star-button-{{ post.id }}" class="post-star-button star-button btn btn-sm btn-dark border-0 rounded-pill me-2"
     data-id={{ post.id }}
     data-action="{% if post in user.posts_starred.all %}un{% endif %}star"
     data-csrf-token={{ csrf_token }}

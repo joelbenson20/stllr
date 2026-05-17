@@ -1,21 +1,20 @@
 {% load static %}
-{% load posts %}
 {% load humanize %}
 {% load safe_markdown %}
 
-<div id="post-{{ post.id }}" class="post rounded-card mt-2 p-2">
+<div id="post{{ post.id }}" class="post rounded-card mt-2 p-2">
 
     {% include "user/header.html" with user=post.user timestamp=post.created|naturaltime %}
 
-    <div class="post-body my-3 ms-5">
-        <div class="post-content">
-            {{ post.content|safe_markdown }}
-        </div>
-        <div class="post-buttons">
+    <div class="ms-4 my-2">
+
+        {{ post.content|safe_markdown }}
+
+        <div class="d-flex align-items-center">
 
             {% include "posts/star_button.html" %}
 
-            <a class="post-replies-button btn btn-sm btn-outline-light rounded-pill me-2"
+            <a class="post-replies-button btn btn-sm btn-dark rounded-pill me-2"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#children-{{ post.id }}"
@@ -31,17 +30,19 @@
                 aria-expanded="false">
                 Reply
             </button>
+            
         </div>
+
     </div>
 
     <div id="reply-form-container-{{ post.id }}" class="reply-form-container collapse mt-2 ps-4">
         {% include "posts/form.html" with page=post.page parent=post %}
     </div>
 
-    <div id="children-{{ post.id }}" class="post-children collapse show m-0 ps-4">
-        {% if post.children.exists %}
-            {% render_post_tree posts=post.children.all %}
-        {% endif %}
+    <div id="children-{{ post.id }}" class="collapse show m-0 ps-4">
+        {% for child in post.children.all %}
+            {% include "posts/post.html" with post=child %}
+        {% endfor %}
     </div>
 
 </div>

@@ -1,34 +1,47 @@
 {% load markdown_deux_tags %}
 
 {% if user.is_authenticated %}
+
     <form id="post-form-{{ parent.id }}"
-        class="post-form rounded-card" method="post"
+        class="post-form glow-on-focus rounded-card bg-white" method="post"
         action="{% url 'api:create_post' %}">
         {% csrf_token %}
+
         <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
         <input type="hidden" name="page" value="{{ page.id }}">
+
         <textarea class="post-form-textarea form-control rounded-card border-0 shadow-none p-3"
             name = "content"
-            placeholder="What do you see in the stars?"
+            placeholder="What's written in the stars?"
             required></textarea>
-        <div class="post-form-markdown-preview-container rounded p-3">
-        </div>
+
+        <div class="post-form-markdown-preview-container rounded p-3"></div>
+
         <div class="post-form-buttons d-flex align-items-center">
+
             <button type="button" class="btn btn-transparent btn-light rounded-circle m-1">
                 <i class="bi bi-question-circle"></i>
             </button>
+
             <button type="button" class="post-form-markdown-preview-button btn btn-transparent btn-light rounded-card m-1"
                 data-endpoint="{% url 'api:markdownify' %}">
                 <i class="bi bi-eye-fill"></i> Preview
             </button>
+
             <button type="button" class="post-form-markdown-edit-button btn btn-transparent btn-light rounded-card m-1">
                 <i class="bi bi-eye-slash"></i> Edit
             </button>
+
             <button type="submit" class="post-submit-button btn btn-light rounded-card ms-auto m-1">
                 Post
             </button>
+
         </div>
+
     </form>
+
 {% else %}
-    <p class="rounded-pill bg-light text-dark ps-3 py-2">Sign in to enter the forum.</p>
+    <p class="rounded-pill bg-light text-dark ps-3 py-2">
+        Please <a href="{% url "account_login" %}">sign in</a> to post to this forum.
+    </p>
 {% endif %}

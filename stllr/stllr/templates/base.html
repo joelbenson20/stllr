@@ -32,7 +32,7 @@
 
 <body>
 
-    <div id="window" class="container-fluid m-0 p-0">
+    <div id="window" class="container-fluid d-flex flex-column min-vh-100">
 
         <nav class="navbar navbar-dark navbar-expand-sm glass sticky-top p-3">
             <a class="navbar-brand" href="{% url 'index' %}">
@@ -43,10 +43,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <form class="search-form d-flex mx-auto my-3" action="/" role="search">
-                    <input class="search-bar form-control rounded-pill me-2"
+                    <input class="search-bar glow-on-focus form-control rounded-pill border-0 me-2"
                         name="query"
                         type="search"
-                        placeholder="What's sparkling?"
+                        placeholder="Where to?"
                         aria-label="Search">
                 </form>
                 {% if user.is_authenticated %}
@@ -83,24 +83,24 @@
             </div>
         {% endif %}
 
-        <div id="content" class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 p-sm-5 p-3">
+        <div class="container-fluid d-flex flex-column flex-grow-1">
+            <div class="row flex-grow-1">
+                <div class="col-lg-3 p-md-5 p-3 d-none d-lg-flex">
                     {% block left %}
                     {% endblock left %}
                 </div>
-                <div class="col-lg-6 p-sm-5 p-3">
+                <div class="d-flex flex-column col-lg-6 p-md-5 p-3">
                     {% block content %}
                     {% endblock content %}
                 </div>
-                <div class="col-lg-3 p-sm-5 p-3">
+                <div class="col-lg-3 p-md-5 p-3 d-none d-lg-flex">
                     {% block right %}
                     {% endblock right %}
                 </div>
             </div>
         </div>
 
-        <footer class="fixed-bottom small text-secondary fw-light ms-3">
+        <footer class="fixed-bottom small text-secondary fw-light ms-3 d-none d-lg-flex">
             <div class="my-2">
                 <a href="{% url "policy" "privacy-policy" %}" class="text-secondary me-3">Privacy Policy</a>
                 <a href="{% url "policy" "user-agreement" %}" class="text-secondary">User Agreement</a>
@@ -114,6 +114,7 @@
     <script src="{% static "libs/lodash/lodash.min.js" %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
     <script src="{% static 'js/pages.js' %}"></script>
+    <script src="{% static 'js/forums.js' %}"></script>
     {% block scripts %}
     {% endblock scripts%}
 </body>
