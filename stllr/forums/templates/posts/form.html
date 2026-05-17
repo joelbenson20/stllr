@@ -1,30 +1,30 @@
 {% load markdown_deux_tags %}
 
 {% if user.is_authenticated %}
-    <form id="comment-form-{{ parent.id }}"
-        class="comment-form rounded-card" method="post"
-        action="{% url 'api:create_comment' %}">
+    <form id="post-form-{{ parent.id }}"
+        class="post-form rounded-card" method="post"
+        action="{% url 'api:create_post' %}">
         {% csrf_token %}
         <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
         <input type="hidden" name="page" value="{{ page.id }}">
-        <textarea class="comment-form-textarea form-control rounded-card border-0 shadow-none p-3"
+        <textarea class="post-form-textarea form-control rounded-card border-0 shadow-none p-3"
             name = "content"
-            placeholder="Reach for the stars..."
+            placeholder="What do you see in the stars?"
             required></textarea>
-        <div class="comment-form-markdown-preview-container rounded p-3">
+        <div class="post-form-markdown-preview-container rounded p-3">
         </div>
-        <div class="comment-form-buttons d-flex align-items-center">
+        <div class="post-form-buttons d-flex align-items-center">
             <button type="button" class="btn btn-transparent btn-light rounded-circle m-1">
                 <i class="bi bi-question-circle"></i>
             </button>
-            <button type="button" class="comment-form-markdown-preview-button btn btn-transparent btn-light rounded-card m-1"
+            <button type="button" class="post-form-markdown-preview-button btn btn-transparent btn-light rounded-card m-1"
                 data-endpoint="{% url 'api:markdownify' %}">
                 <i class="bi bi-eye-fill"></i> Preview
             </button>
-            <button type="button" class="comment-form-markdown-edit-button btn btn-transparent btn-light rounded-card m-1">
+            <button type="button" class="post-form-markdown-edit-button btn btn-transparent btn-light rounded-card m-1">
                 <i class="bi bi-eye-slash"></i> Edit
             </button>
-            <button type="submit" class="comment-submit-button btn btn-light rounded-card ms-auto m-1">
+            <button type="submit" class="post-submit-button btn btn-light rounded-card ms-auto m-1">
                 Post
             </button>
         </div>

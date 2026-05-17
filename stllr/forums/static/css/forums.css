@@ -1,41 +1,41 @@
-.comment-form {
+.post-form {
     background-color: white;
 }
 
-.comment-form-textarea,
-.comment-form-markdown-preview-container {
+.post-form-textarea,
+.post-form-markdown-preview-container {
     height: 96px;
 }
-.comment-form-markdown-preview-container {
+.post-form-markdown-preview-container {
     color: black;
     display: none;
 }
 
-.comment-form-markdown-edit-button {
+.post-form-markdown-edit-button {
     display: none;
 }
 
-.comment-submit-button {
+.post-submit-button {
     background-color: var(--iridescent-4);
 }
 
-.comment {
+.post {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-.comment-star-button:has(.bi-star-fill) {
+.post-star-button:has(.bi-star-fill) {
     text-shadow: 0 0 5px white;
 }
 
-.comment-reply-button {
+.post-reply-button {
     color: var(--iridescent-4)
 }
 
-.comment-children {
+.post-children {
     padding-left: 16px;
 }
 
-.child-comment-curl {
+.child-post-curl {
     left: -16px;
     height: 32px;
 }

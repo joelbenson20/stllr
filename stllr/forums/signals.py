@@ -1,11 +1,11 @@
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
-from .models import Comment
+from .models import Post
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-@receiver(m2m_changed, sender=Comment.users_star.through)
+@receiver(m2m_changed, sender=Post.users_star.through)
 def users_star_changed(sender, instance, **kwargs):
     total_stars = instance.users_star.count()
     # Distance is defined as the number of users that have not yet starred the page
@@ -16,4 +16,4 @@ def users_star_changed(sender, instance, **kwargs):
     # Otherwise, return the inverse squared value
     else:
         brightness = 1 / (d ** 2)
-    Comment.objects.filter(pk=instance.pk).update(total_stars=total_stars, brightness=brightness)
+    Post.objects.filter(pk=instance.pk).update(total_stars=total_stars, brightness=brightness)

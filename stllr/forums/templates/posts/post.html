@@ -1,0 +1,47 @@
+{% load static %}
+{% load posts %}
+{% load humanize %}
+{% load safe_markdown %}
+
+<div id="post-{{ post.id }}" class="post rounded-card mt-2 p-2">
+
+    {% include "user/header.html" with user=post.user timestamp=post.created|naturaltime %}
+
+    <div class="post-body my-3 ms-5">
+        <div class="post-content">
+            {{ post.content|safe_markdown }}
+        </div>
+        <div class="post-buttons">
+
+            {% include "posts/star_button.html" %}
+
+            <a class="post-replies-button btn btn-sm btn-outline-light rounded-pill me-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#children-{{ post.id }}"
+                aria-expanded="false">
+                <i class="bi bi-chat"></i>
+                &nbsp;<span>{{ post.children.count }}</span>
+            </a>
+
+            <button class="post-reply-button btn btn-sm btn-transparent btn-dark rounded-pill fw-bold me-1"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#reply-form-container-{{ post.id }}"
+                aria-expanded="false">
+                Reply
+            </button>
+        </div>
+    </div>
+
+    <div id="reply-form-container-{{ post.id }}" class="reply-form-container collapse mt-2 ps-4">
+        {% include "posts/form.html" with page=post.page parent=post %}
+    </div>
+
+    <div id="children-{{ post.id }}" class="post-children collapse show m-0 ps-4">
+        {% if post.children.exists %}
+            {% render_post_tree posts=post.children.all %}
+        {% endif %}
+    </div>
+
+</div>

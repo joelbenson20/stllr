@@ -6,7 +6,7 @@
     {% if action.object_ct.model == 'page' %}
         {% thumbnail action.object.domain.fav_icon 32x32 as im %}
         <img class="float-start bg-light rounded-circle ms-0 m-2" src="{{ im.url }}">
-    {% elif action.object_ct.model == 'comment' %}
+    {% elif action.object_ct.model == 'post' %}
         {% thumbnail action.object.page.domain.fav_icon 32x32 as im %}
         <img class="float-start bg-light rounded-circle ms-0 m-2" src="{{ im.url }}">
     {% endif %}

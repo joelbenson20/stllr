@@ -3,8 +3,8 @@
     {% include "user/profile-picture.html" with user=user size="32" dimensions="32x32" %}
 
     <div class="d-flex align-items-center flex-wrap">
-        <a class="comment-user small text-secondary"
-            href="{{ comment.user.profile.get_absolute_url }}">
+        <a class="post-user small text-secondary"
+            href="{{ post.user.profile.get_absolute_url }}">
             @{{ user.username }}
         </a>
         <i class="bi bi-dot text-secondary"></i>
