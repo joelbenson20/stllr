@@ -58,7 +58,10 @@
                                 <span class="badge rounded-pill bg-danger">{{ notifications.pending_requests.count }}</span>
                             {% endif %}
                         </a>
-                        <a class="btn btn-dark ms-3" href='{% url "account_logout" %}'>Sign Out</a>
+                        <form method="post" action="{% url 'account_logout' %}" class="d-inline ms-3">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-dark">Sign Out</button>
+                        </form>
                     </div>
                 {% else %}
                     <div class="navbar-text ms-auto">
@@ -102,7 +105,7 @@
                 <a href="{% url "policy" "privacy-policy" %}" class="text-secondary me-3">Privacy Policy</a>
                 <a href="{% url "policy" "user-agreement" %}" class="text-secondary">User Agreement</a>
             </div>
-            <p>stllr.io <i class="bi bi-c-circle"></i> All Rights Reserved.</p>
+            <p>stllr <i class="bi bi-c-circle"></i> All Rights Reserved.</p>
         </footer>
 
     </div>

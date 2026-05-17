@@ -40,7 +40,7 @@
             {% if page.image or page.description %}
                 <div class="clearfix">
                     {% thumbnail page.image 0x63 as image %}{% if image %}
-                        <img class="float-start me-2" src="{{ image.url }}">
+                        <img class="float-start rounded me-2" src="{{ image.url }}">
                     {% endif %}
                     
                     <p class="small m-0 p-0">{{ page.description|truncatechars:300 }}</p>

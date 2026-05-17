@@ -1,3 +1,6 @@
 .profile-header {
     display: flow-root;
 }
+.help-block, .form-text {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
