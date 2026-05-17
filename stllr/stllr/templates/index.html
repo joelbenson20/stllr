@@ -21,19 +21,6 @@
         {% endif %}
     </div>
 
-    {% comment %} {% if request.user.is_authenticated and contact_actions %}
-        <div class="contacts-feed">
-            {% for action in contact_actions %}
-                <div class="contact-action">
-                    <a href="{% url "profile" action.user.username %}">@{{ action.user.username }}</a>
-                    {{ action.get_verb_display }}
-                    <a href="{% url "forum" %}?p={{ action.target }}">{{ action.page.title }}</a>
-                    <span class="text-secondary">{{ action.created|timesince }} ago</span>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %} {% endcomment %}
-
 {% endblock left %}
 
 {% block content %}
