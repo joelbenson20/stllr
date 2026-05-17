@@ -1,0 +1,11 @@
+<p>{{ action }}</p>
+
+{% if action.verb == action.Verb.STARRED %}
+    <p>Star</p>
+{% endif %}
+{% if action.verb == action.Verb.POSTED %}
+    <p>Post</p>
+{% endif %}
+{% if action.verb == action.Verb.ENTERED %}
+    <p>Entered</p>
+{% endif %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.db.models import Q
 from django.contrib.postgres.search import SearchQuery
 from pages.models import Page
@@ -64,3 +64,11 @@ def index(request):
         'sort': sort,
         'contact_actions': contact_actions
     })
+
+def policy(request, policy):
+    if (policy == 'privacy-policy'):
+        return render(request, 'policies/privacy-policy.html')
+    elif (policy == 'user-agreement'):
+        return render(request, 'policies/user-agreement.html')
+    else:
+        raise Http404(f"Policy {policy} was not found.")
