@@ -14,9 +14,11 @@
             {% include "posts/form.html" with parent=None %}
         </div>
 
+        <div id="postFeed">
         {% for post in page.posts.all %}
             {% include "posts/post.html" %}
         {% endfor %}
+        </div>
 
     {% else %}
         <p>The forum at this page has been suspended.</p>

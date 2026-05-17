@@ -17,7 +17,7 @@
             <a class="post-replies-button btn btn-sm btn-dark rounded-pill me-2"
                 type="button"
                 data-bs-toggle="collapse"
-                data-bs-target="#children-{{ post.id }}"
+                data-bs-target="#children{{ post.id }}"
                 aria-expanded="false">
                 <i class="bi bi-chat"></i>
                 &nbsp;<span>{{ post.children.count }}</span>
@@ -39,7 +39,7 @@
         {% include "posts/form.html" with page=post.page parent=post %}
     </div>
 
-    <div id="children-{{ post.id }}" class="collapse show m-0 ps-4">
+    <div id="children{{ post.id }}" class="collapse show m-0 ps-4">
         {% for child in post.children.all %}
             {% include "posts/post.html" with post=child %}
         {% endfor %}

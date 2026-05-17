@@ -1,24 +1,27 @@
 :root {
-    --void-black: #060d1a;  /* empty space */
-    --night-sky: #0d1b3e;   /* "like the sky just past full dark when your eyes adjust:" -Claude */
-    --star-light: #a594d0;   /* the color of the stars */
-    --hot-light: #fffae6;   /* white-hot bright light */ /* Done by Claude, requires review */
+    --night-sky: #060d1a;
+    --star-light: #a594d0;
+    --white-hot: #fffae6;
+
+    --navbar-height: 115px;
 }
 
 body {
-    background-color: var(--void-black);
+    background-color: var(--night-sky);
     color: white;
     scrollbar-color: auto transparent;
 }
 
 [id] { scroll-margin-top: 150px; }
 
-.navbar {
-    background-color: var(--void-black);
+.glass {
+    background: none !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 18px;
 }
 
 ::-webkit-scrollbar-track {
@@ -26,10 +29,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: white;
-    border: 2px solid transparent;
+    background: rgba(165, 148, 208, 0.3); /* --star-light at low opacity */
+    border: 4px solid transparent;
     background-clip: padding-box;
+    border-radius: 9999px;
 }
+
 
 
 a, a:hover,
@@ -52,16 +57,6 @@ h1 a:hover {
 
 .bi-globe {
     font-size: 32px;
-}
-
-.glass {
-    background-color: rgba(var(--void-black), 0.1);
-    backdrop-filter: blur(10px) brightness(50%);
-    -webkit-backdrop-filter: blur(10px) brightness(50%);
-}
-
-.shine {
-    text-shadow: 0 0 10px white;
 }
 
 .spin {
@@ -95,8 +90,8 @@ h1 a:hover {
 .glow-on-focus:has(:focus),
 .glow-on-focus:focus {
     outline: none;
-    border-color: var(--hot-light) !important;
-    box-shadow: 0 0 10px var(--hot-light) !important;
+    border-color: var(--white-hot) !important;
+    box-shadow: 0 0 10px var(--white-hot) !important;
     border: none;
 }
 
@@ -110,7 +105,7 @@ h1 a:hover {
 }
 
 .star-button:has(.bi-star-fill) {
-    background-color: var(--hot-light);
+    background-color: var(--white-hot);
     color: var(--night-sky);
     box-shadow: 0 0 5px 1px white;
     text-shadow: 0 0 3px var(--night-sky);

@@ -26,7 +26,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="{% static "brand/favicon/android-chrome-512x512.png" %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static "brand/favicon/apple-touch-icon.png" %}">
     <link rel="manifest" href="{% static "brand/favicon/site.webmanifest" %}">
-    <meta name="theme-color" content="#0d1b3e">
+    <meta name="theme-color" content="#060d1a">
 
 </head>
 
@@ -34,14 +34,14 @@
 
     <div id="window" class="container-fluid d-flex flex-column min-vh-100">
 
-        <nav class="navbar navbar-dark navbar-expand-sm glass sticky-top p-3">
+        <nav class="navbar glass navbar-dark navbar-expand-sm sticky-top p-3">
             <a class="navbar-brand" href="{% url 'index' %}">
                 <img class="navbar-brand-image" src="{% static 'brand/stllr.png' %}" width=96>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" id="navbarContent">
                 <form class="search-form d-flex mx-auto my-3" action="/" role="search">
                     <input class="search-bar glow-on-focus form-control rounded-pill border-0 me-2"
                         name="query"
@@ -84,8 +84,8 @@
         {% endif %}
 
         <div class="container-fluid d-flex flex-column flex-grow-1">
-            <div class="row flex-grow-1">
-                <div class="col-lg-3 p-md-5 p-3 d-none d-lg-flex top-0">
+            <div class="row flex-grow-1 overflow-hidden">
+                <div class="col-lg-3 p-md-5 p-3 d-none d-lg-flex">
                     {% block left %}
                     {% endblock left %}
                 </div>
@@ -100,8 +100,8 @@
             </div>
         </div>
 
-        <footer class="fixed-bottom small text-secondary fw-light ms-3 d-none d-lg-block">
-            <div class="my-2">
+        <footer class="fixed-bottom flex small text-secondary fw-light ms-3 d-none d-lg-block">
+            <div class="my-2 small">
                 <a href="{% url "policy" "privacy-policy" %}" class="text-secondary me-3">Privacy Policy</a>
                 <a href="{% url "policy" "user-agreement" %}" class="text-secondary">User Agreement</a>
             </div>

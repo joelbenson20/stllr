@@ -12,10 +12,10 @@ function initFormSubmission(form) {
         .then(response => response.json())
         .then(response => {
             if (response.status === '201') {
-                var postTree = document.querySelector('.post-tree');
+                var postTree = document.querySelector('#postFeed');
                 var parentId = form.querySelector('[name=parent]').value
                 if (parentId) {
-                    postTree = document.querySelector(`#children-${parentId}`);
+                    postTree = document.querySelector(`#children${parentId}`);
                 }
                 postTree.insertAdjacentHTML('afterbegin', response.post);
 
