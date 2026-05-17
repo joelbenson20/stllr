@@ -1,4 +1,6 @@
 from django.contrib.auth.models import AbstractUser
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.conf import settings
 from django.db import models
@@ -45,14 +47,24 @@ class Action(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actions')
     verb = models.CharField(max_length=20, choices=Verb.choices)
-    page = models.ForeignKey('pages.Page', null=True ,blank=True, on_delete=models.CASCADE)
+    object_ct = models.ForeignKey(
+        ContentType,
+        blank=True,
+        null=True,
+        related_name='actions',
+        on_delete=models.CASCADE
+    )
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    object = GenericForeignKey('object_ct', 'object_id')
+
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-created']
         indexes = [
             models.Index(fields=['-created']),
+            models.Index(fields=['object_ct', 'object_id']),
         ]
-    
+
     def __str__(self):
-        return f'{self.user.username} {self.get_verb_display()} {self.page}'
+        return f'{self.user.username} {self.get_verb_display()} {self.object}'

@@ -5,7 +5,7 @@
 
     {% include "user/header.html" with user=message.user timestamp=message.created|time:"g:i A" %}
 
-    <div class="message-body">
+    <div class="message-body ps-5">
         {{ message.content }}
     </div>
 

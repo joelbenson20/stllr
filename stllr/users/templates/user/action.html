@@ -1,6 +1,6 @@
 <p>{{ action }}</p>
 
-{% if action.verb == action.Verb.STARRED %}
+{% comment %} {% if action.verb == action.Verb.STARRED %}
     <p>Star</p>
 {% endif %}
 {% if action.verb == action.Verb.POSTED %}
@@ -8,4 +8,4 @@
 {% endif %}
 {% if action.verb == action.Verb.ENTERED %}
     <p>Entered</p>
-{% endif %}
+{% endif %} {% endcomment %}

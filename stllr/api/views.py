@@ -35,7 +35,7 @@ def create_comment(request):
             new_comment.thread_level = new_comment.parent.thread_level + 1
         new_comment.save()
         Action.objects.create(
-            user=request.user, verb=Action.Verb.POSTED, page=new_comment.page
+            user=request.user, verb=Action.Verb.POSTED, object=new_comment
         )
         response = {
             'status': '201',
@@ -57,7 +57,7 @@ def star_page(request):
             if action == 'star':
                 page.users_star.add(request.user)
                 Action.objects.create(
-                    user=request.user, verb=Action.Verb.STARRED, page=page
+                    user=request.user, verb=Action.Verb.STARRED, object=page
                 )
             else:
                 page.users_star.remove(request.user)

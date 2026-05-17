@@ -66,7 +66,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
         # Create user action
-        await Action.objects.acreate(user=self.user, verb=Action.Verb.ENTERED, page=page)
+        await Action.objects.acreate(user=self.user, verb=Action.Verb.ENTERED, object=page)
 
         # Send "entered the room" message
         await self.channel_layer.group_send(

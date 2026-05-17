@@ -11,4 +11,5 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Action)
 class ActionAdmin(admin.ModelAdmin):
-    list_display = ['user', 'verb', 'page']
+    list_display = ['user', 'verb', 'object', 'created']
+    list_filter = ['verb', 'created']
