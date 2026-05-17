@@ -2,71 +2,63 @@
 {% load math_extras %}
 
 {% if page.is_active %}
-    <div id="p{{ page.id }}" class="page-card rounded-card">
-        <div class="row m-0 p-0">
-            <div class="col m-0 p-0">
-                {% if page.domain.fav_icon %}
-                    {% thumbnail page.domain.fav_icon 32x32 as im %}
-                    <img class="page-fav-icon float-start bg-light rounded-circle me-1 my-1 p-1"
-                        src="{{ im.url }}">
-                {% else %}
-                    <i class="page-fav-icon float-start bi bi-globe me-1 mb-0 p-0"></i>
-                {% endif %}
-                <p class="page-site-name m-0 p-0">
-                    <span>{{ page.domain }}</span>
-                    {% if page.domain.category or page.type %}
-                    <span class="domain-category badge text-bg-dark">
-                        {% firstof page.domain.category|capfirst page.type|capfirst %}
-                    </span>
+    <div id="p{{ page.id }}">
+
+        <div class="d-flex align-items-center">
+            {% thumbnail page.domain.fav_icon 32x32 as icon %}{% if icon %}
+                <img src="{{ icon.url }}" class="page-fav-icon bg-light rounded-circle flex-shrink-0">
+            {% else %}
+                <i class="bi bi-globe flex-shrink-0"></i>
+            {% endif %}
+
+            <div class="overflow-hidden ms-2">
+                
+                <div class="small">
+                    {{ page.domain }}
+                    {% if page.domain.category %}
+                        <span class="badge small bg-dark">{{ page.domain.category }}</span>
+                    {% elif page.type %}
+                        <span class="badge small bg-dark">{{ page.type }}</span>
                     {% endif %}
-                </p>
-                <a class="page-link d-block text-truncate mt-1 p-0" href="{{ page.link }}">{{ page.link }}</a>
-            </div>
-            <h1 class="page-title fw-light my-2 p-0 {% if compact %}text-truncate{% endif %}">
-                <a class="page-title" href="{{ page.link }}">
-                    {{ page.title|truncatechars:90 }}
+                </div>
+
+                <a class="d-block small text-truncate text-white text-decoration-none" href="{{ page.link }}">
+                    {{ page.link }}
                 </a>
-            </h1>
-        </div>
-        {% if not compact %}
-        <div class="row m-0 p-0">
-            <div class="col m-0 py-1 px-0">
-                {% if page.image %}
-                    {% thumbnail page.image 0x60 as im %}
-                    <img class="page-image me-2"
-                        src="{{ im.url }}">
-                {% endif %}
-                <p class="page-description small m-0">
 
-                    <span class="badge bg-transparent border">
-                        <i class="bi bi-hash"></i>{{ page.brightness_index }}
-                    </span>
-                    <span class="badge bg-transparent border">
-                        {% if page.rise >= 0 %}
-                            <span class="{% if page.rise > 0 %}text-success{% else %}text-light{% endif %}"><i class="bi bi-arrow-up-short"></i>{{ page.rise }}</span>
-                        {% else %}
-                            <span class="text-danger"><i class="bi bi-arrow-down-short"></i>{{ page.rise|negate }}</span>
-                        {% endif %}
-                    </span>
-
-                    <span>&nbsp;{{ page.description|truncatechars:300 }}</span>
-
-                </p>
             </div>
+
         </div>
+
+        <h1 class="{% if compact %}text-truncate{% endif %}">
+            <a href="{{ page.link }}">
+                {{ page.title|truncatechars:90 }}
+            </a>
+        </h1>
+
+        {% if not compact %}
+            {% if page.image or page.description %}
+                <div class="clearfix">
+                    {% thumbnail page.image 0x63 as image %}{% if image %}
+                        <img class="float-start me-2" src="{{ image.url }}">
+                    {% endif %}
+                    
+                    <p class="small m-0 p-0">{{ page.description|truncatechars:300 }}</p>
+                </div>
+            {% endif %}
         {% endif %}
 
-        <div class="d-inline-flex align-items-center rounded-pill my-2">
+        <div class="d-flex align-items-center rounded-pill mt-3">
 
-            {% include 'page/star_button.html' with page=page user=user %}
+            {% include 'page/star_button.html' %}
 
-            <a class="page-forum-button btn btn-outline-light rounded-pill me-2"
+            <a class="btn btn-outline-light rounded-pill me-2"
                 href="{% url "forum" %}?p={{ page.canonical|urlencode }}">
                 <i class="bi bi-chat-fill"></i>
                 &nbsp;<span>{{ page.comments.count }}</span>
             </a>
 
-            <a class="page-room-button btn btn-outline-light rounded-pill"
+            <a class="btn btn-outline-light rounded-pill"
                 href="{% url "room" %}?p={{ page.canonical|urlencode }}">
                 <i class="bi bi-broadcast spin"></i>
                 &nbsp;<span class="room-user-count" data-page-id="{{ page.id }}" data-endpoint="{% url 'api:get_room_count' %}">?</span>

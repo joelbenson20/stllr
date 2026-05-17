@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="{% static 'css/pages.css' %}">
     <link rel="stylesheet" href="{% static 'css/forums.css' %}">
     <link rel="stylesheet" href="{% static 'css/rooms.css' %}">
+    {% block css %}
+    {% endblock css %}
 
     <link rel="icon" href="{% static "brand/favicon/favicon.ico" %}" sizes="any">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static "brand/favicon/favicon-16x16.png" %}">
@@ -95,8 +97,8 @@
             </div>
         </div>
 
-        <footer class="fixed-bottom small text-secondary fw-light px-3">
-            <div class="d-flex align-items-center my-2">
+        <footer class="fixed-bottom small text-secondary fw-light ms-3">
+            <div class="my-2">
                 <a href="{% url "policy" "privacy-policy" %}" class="text-secondary me-3">Privacy Policy</a>
                 <a href="{% url "policy" "user-agreement" %}" class="text-secondary">User Agreement</a>
             </div>
