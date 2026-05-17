@@ -1,6 +1,6 @@
 {% extends "extension/base.html" %}
 {% load static %}
-{% load posts %}
+
 
 {% block content %}
 
@@ -8,7 +8,9 @@
         {% include "posts/form.html" parent=None %}
     </div>
 
-    {% render_post_tree page=page %}
+    {% for post in page.posts.all %}
+        {% include "posts/post.html" %}
+    {% endfor %}
 
     <div style="height:144px;"></div>
 

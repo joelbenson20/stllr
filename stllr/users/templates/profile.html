@@ -30,23 +30,23 @@
     <div class="profile-header position-relative">
         <div class="profile-header d-flex align-items-end position-absolute top-0 start-0 translate-middle-y">
 
-            <img class="float-start rounded-circle border border-3 ms-5" style="width:192x;height:192px;" src="{% static 'brand/icon.png' %}">
+            <img class="float-start rounded-circle border border-3 ms-3 profile-avatar" src="{% static 'brand/icon.png' %}">
             
             <div class="d-flex align-items-center">
 
                 <h1>@{{ profile.user.username }}</h1>
 
-                <div class="ms-4">
+                <div class="ms-4 d-none d-md-flex">
                     {% if request.user != profile.user %}
                         {% if not contact %}
-                            <a href="{% url "send_request" profile.user.username %}" class="btn btn-light">Add Contact</a>
+                            <a href="{% url "send_request" profile.user.username %}" class="btn btn-sm btn-light">Add Contact</a>
                         {% elif contact.status == 'pending' and contact.from_user == request.user %}
-                            <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-light">Cancel Request</a>
+                            <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-sm btn-light">Cancel Request</a>
                         {% elif contact.status == 'pending' %}
-                            <a href="{% url "accept_request" profile.user.username %}" class="btn btn-light">Accept</a>
+                            <a href="{% url "accept_request" profile.user.username %}" class="btn btn-sm btn-light">Accept</a>
                             <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-warning">Decline</a>
                         {% else %}
-                            <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-light">Remove Contact</a>
+                            <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-sm btn-light">Remove Contact</a>
                         {% endif %}
                     {% endif %}
                 </div>

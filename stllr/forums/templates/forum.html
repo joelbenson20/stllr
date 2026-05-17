@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load posts %}
 
 {% block title %} stllr | forum | {{ page.title }}{% endblock title %}
 
@@ -8,20 +7,18 @@
     {% if page.is_active %}
 
         <div class="mb-sm-5 mb-3">
-            {% include 'page/card.html' with page=page user=user %}
+            {% include 'page/card.html' with compact=True %}
         </div>
 
         <div class="my-3">
-            {% include "posts/form.html" with page=page parent=None %}
+            {% include "posts/form.html" with parent=None %}
         </div>
 
-        {% render_post_tree page=page %}
+        {% for post in page.posts.all %}
+            {% include "posts/post.html" %}
+        {% endfor %}
 
     {% else %}
         <p>The forum at this page has been suspended.</p>
     {% endif %}
 {% endblock content %}
-
-{% block scripts %}
-    <script src="{% static 'js/forums.js' %}"></script>
-{% endblock scripts %}

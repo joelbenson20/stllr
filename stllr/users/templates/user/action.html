@@ -11,32 +11,41 @@
         <img class="float-start bg-light rounded-circle ms-0 m-2" src="{{ im.url }}">
     {% endif %}
 
-    <p class="m-0 p-0">
+    <div>
+
+        {% if action.verb == action.Verb.STARRED %}
+
+            <a href="action.object.get_absolute_url" class="d-inline">
+                {{ action.object.title }}
+            </a>
+
+        {% elif action.verb == action.Verb.POSTED %}
+
+            <a href="action.object.get_absolute_url" class="d-inline">
+                {{ action.object.page.title }}
+            </a>
+
+        {% elif action.verb == action.Verb.ENTERED %}
+
+            <a href="action.object.get_absolute_url" class="d-inline">
+                {{ action.object.title }}
+            </a>
+
+        {% endif %}
+
+    </div>
+
+    <p>
+        @{{ action.user.username }}
         {{ action.get_verb_display }}
         <span class="text-secondary">{{ action.created|naturaltime }}</span>
     </p>
 
-    <div>
-
-    {% if action.verb == action.Verb.STARRED %}
-
-        <a href="action.object.get_absolute_url" class="d-inline">
-            {{ action.object.title }}
-        </a>
-
-    {% elif action.verb == action.Verb.POSTED %}
-
-        <a href="action.object.get_absolute_url" class="d-inline">
-            {{ action.object.page.title }}
-        </a>
-
-    {% elif action.verb == action.Verb.ENTERED %}
-
-        <a href="action.object.get_absolute_url" class="d-inline">
-            {{ action.object.title }}
-        </a>
-
+    {% if action.object_ct.model == 'post' %}
+        <div class="ms-4">
+            {% include "posts/post.html" with post=action.object %}
+        </div>
     {% endif %}
-    </div>
+
 
 </div>

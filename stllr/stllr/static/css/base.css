@@ -1,30 +1,18 @@
 :root {
-    /* --iridescent-0: #070421;
-    --iridescent-1: #030a5d;
-    --iridescent-2: #4246aa;
-    --iridescent-3: #7c70d5;
-    --iridescent-4: #d2c6e8; */
-    /* --iridescent-0: #091e36;
-    --iridescent-1: #35336b;
-    --iridescent-2: #6a71a5;
-    --iridescent-3: #e7bb67;
-    --iridescent-4: #ffec9c; */
-    /* Star color theme — deep space to stellar white */
-    --iridescent-0: #060d1a;  /*"like the sky just past full dark when your eyes adjust:" */
-    --iridescent-1: #0d1b3e;   /* midnight navy — dark sky */
-    --iridescent-2: #1e3a6e;   /* nebula blue */
-    --iridescent-3: #d2c6e8;   /* stellar gold — main star color */
-    --iridescent-4: #fff5cc;   /* near-white hot light */
+    --void-black: #060d1a;  /* empty space */
+    --night-sky: #0d1b3e;   /* "like the sky just past full dark when your eyes adjust:" -Claude */
+    --star-light: #a594d0;   /* the color of the stars */
+    --hot-light: #fffae6;   /* white-hot bright light */ /* Done by Claude, requires review */
 }
 
 body {
-    background-color: var(--iridescent-0);
+    background-color: var(--void-black);
     color: white;
     scrollbar-color: auto transparent;
 }
 
 .navbar {
-    background-color: var(--iridescent-0);
+    background-color: var(--void-black);
 }
 
 ::-webkit-scrollbar {
@@ -44,7 +32,7 @@ body {
 
 a, a:hover,
 .nav-link, .nav-link:hover {
-    color: var(--iridescent-3);
+    color: var(--star-light);
 }
 
 h1:has(a) {
@@ -52,7 +40,7 @@ h1:has(a) {
     font-size: 30px;
 }
 h1 a {
-    color: var(--iridescent-3);
+    color: var(--star-light);
     font-weight: 300;
     text-decoration: none;
 }
@@ -65,7 +53,7 @@ h1 a:hover {
 }
 
 .glass {
-    background-color: rgba(var(--iridescent-0), 0.1);
+    background-color: rgba(var(--void-black), 0.1);
     backdrop-filter: blur(10px) brightness(50%);
     -webkit-backdrop-filter: blur(10px) brightness(50%);
 }
@@ -102,11 +90,12 @@ h1 a:hover {
     max-width: 576px;
 }
 
-.search-bar:focus,
-textarea:focus {
+.glow-on-focus:has(:focus),
+.glow-on-focus:focus {
     outline: none;
-    border-color: white !important;
-    box-shadow: 0 0 10px white !important;
+    border-color: var(--hot-light) !important;
+    box-shadow: 0 0 10px var(--hot-light) !important;
+    border: none;
 }
 
 .popover-dark {
@@ -116,4 +105,15 @@ textarea:focus {
     --bs-popover-body-color: #fff;
     --bs-popover-border-color: #495057;
     --bs-popover-arrow-border: #495057;
+}
+
+.star-button:has(.bi-star-fill) {
+    background-color: var(--hot-light);
+    color: var(--night-sky);
+    box-shadow: 0 0 5px 1px white;
+    text-shadow: 0 0 3px var(--night-sky);
+}
+
+.help-block, .form-text {
+    color: rgba(255, 255, 255, 0.5) !important;
 }

@@ -1,10 +1,10 @@
-.post-form {
-    background-color: white;
+.post {
+    background-color: rgba(255, 255, 255, 0.05)
 }
 
 .post-form-textarea,
 .post-form-markdown-preview-container {
-    height: 96px;
+    height: 4rem;
 }
 .post-form-markdown-preview-container {
     color: black;
@@ -16,26 +16,9 @@
 }
 
 .post-submit-button {
-    background-color: var(--iridescent-4);
-}
-
-.post {
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.post-star-button:has(.bi-star-fill) {
-    text-shadow: 0 0 5px white;
+    background-color: var(--star-light);
 }
 
 .post-reply-button {
-    color: var(--iridescent-4)
-}
-
-.post-children {
-    padding-left: 16px;
-}
-
-.child-post-curl {
-    left: -16px;
-    height: 32px;
+    color: var(--star-light)
 }
