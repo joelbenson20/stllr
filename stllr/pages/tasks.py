@@ -15,7 +15,6 @@ def delete_old_page_stars():
     
     cutoff = timezone.now() - STAR_LIFE
     deleted_count, _ = PageStar.objects.filter(created__lt=cutoff).delete()
-    logger.info("Deleted %d PageStar rows older than %s", deleted_count, cutoff.isoformat())
     return deleted_count
 
 @shared_task(name="pages.update_brightness_index")
@@ -34,5 +33,5 @@ def update_brightness_index():
         page.brightness_index = page.new_brightness_index
 
     Page.objects.bulk_update(pages, ['rise', 'brightness_index'])
-    logger.info("Updated the brightness index.")
+    
     return

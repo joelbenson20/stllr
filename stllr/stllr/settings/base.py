@@ -201,16 +201,16 @@ CELERY_TASK_TIME_LIMIT = 5 * 60  # hard kill after 5 min
 CELERY_BEAT_SCHEDULE = {
     "delete-old-page-stars": {
         "task": "pages.delete_old_page_stars",
-        "schedule": crontab(),  # every minute for testing TODO: Decide production schedule
+        "schedule": crontab(),
     },
     "update-brightness-index": {
         "task": "pages.update_brightness_index",
         "schedule": crontab(),
     },
-    "deleted-old-post-stars": {
+    "delete-old-post-stars": {
         "task": "forum.delete_old_post_stars",
         "schedule": crontab(),
-    }
+    },
 }
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'

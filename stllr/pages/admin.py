@@ -3,7 +3,7 @@ from .models import Page, PageStar, Domain
 
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
-    list_display = ['canonical', 'title', 'type',]
+    list_display = ['canonical', 'title', 'type', 'brightness']
     list_filter = ['type', 'tags', 'domain']
     readonly_fields = ['tags']
     search_fields = ['canonical', 'title']

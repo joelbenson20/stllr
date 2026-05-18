@@ -5,7 +5,6 @@ from requests.exceptions import MissingSchema
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 from .models import Page
-import re
 from collections import Counter
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -81,18 +80,14 @@ def update_tags(sender, instance, created, update_fields, **kwargs):
     instance.tags.set(keywords)
     return
 
-
 @receiver(m2m_changed, sender=Page.users_star.through)
-def users_star_changed(sender, instance, **kwargs):
-    total_stars = instance.users_star.count()
-    # Distance is defined as the number of users that have not yet starred the page
+def update_brightness_on_star_change(sender, instance, action, **kwargs):
+    if action not in ('post_add', 'post_remove', 'post_clear'):
+        return
+    User = get_user_model()
+    page = instance
+    total_stars = page.users_star.count()
     d = User.objects.count() - total_stars
-    # If all users have liked, return the highest big integer to avoid dividing by 0
-    if (d == 0):
-        brightness = 1.0000000001
-    # Otherwise, return the inverse squared value
-    else:
-        brightness = 1 / (d ** 2)
-    Page.objects.filter(pk=instance.pk).update(total_stars=total_stars, brightness=brightness)
-    return
+    brightness = 1e15 if d == 0 else 1 / (d ** 2)
+    Page.objects.filter(pk=page.pk).update(total_stars=total_stars, brightness=brightness)
 

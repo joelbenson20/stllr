@@ -12,6 +12,5 @@ def delete_old_post_stars():
     from .models import PostStar
 
     cutoff = timezone.now() - STAR_LIFE
-    deleted_count, _ = PostStar.objects.filter(created__lt=cutoff).delete()
-    logger.info("Deleted %d PostStar rows older than %s", deleted_count, cutoff.isoformat())
-    return deleted_count
+    PostStar.objects.filter(created__lt=cutoff).delete()
+    return

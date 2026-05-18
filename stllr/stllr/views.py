@@ -14,11 +14,11 @@ def index(request):
 
     sort = request.GET.get('sort', 'firmament')
     if sort == 'brightest':
-        pages = Page.objects.order_by('brightness_index')
+        pages = Page.objects.order_by('-brightness', '?')
     elif sort == 'rising':
-        pages = Page.objects.order_by('-rise')
+        pages = Page.objects.order_by('-rise', '?')
     else:
-        pages = Page.firmament.all()
+        pages = Page.firmament.firmament()
 
     tag_slug = request.GET.get('tag')
     if tag_slug:

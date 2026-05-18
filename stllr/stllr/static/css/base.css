@@ -1,9 +1,7 @@
 :root {
     --night-sky: #060d1a;
     --star-light: #a594d0;
-    --white-hot: #fffae6;
-
-    --navbar-height: 115px;
+    --white-hot: #ede8ff;
 }
 
 body {
@@ -29,13 +27,11 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(165, 148, 208, 0.3); /* --star-light at low opacity */
+    background: rgba(165, 148, 208, 0.33);
     border: 4px solid transparent;
     background-clip: padding-box;
     border-radius: 9999px;
 }
-
-
 
 a, a:hover,
 .nav-link, .nav-link:hover {
