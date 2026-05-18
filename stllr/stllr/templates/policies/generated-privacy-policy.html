@@ -23,6 +23,9 @@
             <a class="nav-link" href="#cookies">Cookies</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="#browser-extension">Browser Extension</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="#what-we-do-with-your-data">What We Do With Your Data</a>
         </li>
         <li class="nav-item">
@@ -80,7 +83,40 @@
     </table>
 
     <h2 id="cookies">Cookies</h2>
-    <p>Stllr uses cookies exclusively to maintain your login session, so you do not need to sign in every time you visit our website or use our browser extension. We also use a CSRF (Cross-Site Request Forgery) token cookie to protect your account from certain web attacks. We do <strong>not</strong> use cookies to track your browsing activity across websites, and no personal data is stored within the cookies themselves.</p>
+    <p>
+        Stllr uses cookies exclusively to maintain your login session, so you do not need to sign in every time you visit our website or use our browser extension. We also use a CSRF (Cross-Site Request Forgery) token cookie to protect your account from certain web attacks. We do <strong>not</strong> use cookies to track your browsing activity across websites, and no personal data is stored within the cookies themselves.
+    </p>
+
+    <h2 id="browser-extension">Browser Extension</h2>
+    <p>
+        The Stllr browser extension brings our service into your browser, allowing you to access a page's forum and chat room directly from the side panel. We have designed the extension to operate with minimum data necessary, and to be transparent about exactly what it accesses and when.
+    </p>
+    <p>
+        The extension does not run in the background and does not monitor your browsing. It only reads information about a webpage when you explicitly click the Stllr icon in your browser toolbar. Until you click the icon, the extension does not access the contents of any tab.
+    </p>
+    <p>
+        When you do click the icon, the extension sends the following information about the active page to our servers, so we can identify the page and load the correct social space:
+    </p>
+    <ul>
+    <li>Page URL: the address of the webpage, used to look up its social space.</li>
+    <li>Page Title and Favicon: used to display the page within the extension's interface.</li>
+   <li>Page Content: the page's text and the HTML of the document head, used to generate page thumbnails, produce keywords and similar page clusters, and evaluate the page against our content and security criteria for pages we have not seen before.</li>
+    </ul>
+    <p>
+        Page data is not stored against your account. Although your Stllr session cookie is sent along with the request so that you can star pages, post in forums, and chat, the page data itself is processed independently of your identity and is not retained in a form that links it to the user who sent it. We do not build a record of the pages you visit, do not share page data with third parties, and do not use it for advertising.
+    </p>
+    <p>
+        The extension requests only the browser permissions necessary to operate this functionality:
+    </p>
+    <ul>
+        <li>activeTab and scripting: to read the URL, title, and content of the active page when you click the icon.</li>
+        <li>sidePanel: to display the Stllr interface in the browser's side panel.</li>
+        <li>storage: to pass page context from the extension's background process to the side panel during a session.</li>
+        <li>Host permissions for https://stllr.io/*: to communicate with our servers.</li>
+    </ul>
+    <p>
+        The extension does not request access to any other domain.
+    </p>
 
     <h2 id="what-we-do-with-your-data">What We Do With Your Data</h2>
     <p>The data we collect is used solely to provide our service — enabling stars, forums, and chat rooms on webpages across the internet. Your public actions (stars, posts, messages) are displayed on your public profile and on the relevant page forums. We do not use your data for advertising, and we do not sell or share it with third parties for commercial purposes.</p>

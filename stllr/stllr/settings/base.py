@@ -21,7 +21,7 @@ ALLOWED_HOSTS = [
 CORS_ALLOWED_ORIGINS = [
     'chrome-extension://polpgpcagljhejdbajfbjgdchdlnfepk',
     'chrome-extension://mlilkidmlfonjgccanoodpmbfjflggla',
-
+    'chrome-extension://hmpgjgepcimfdojfbffhaedmkndomfml',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -35,6 +35,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
     'chrome-extension://polpgpcagljhejdbajfbjgdchdlnfepk',
     'chrome-extension://mlilkidmlfonjgccanoodpmbfjflggla',
+    'chrome-extension://hmpgjgepcimfdojfbffhaedmkndomfml',
 ]
 
 INSTALLED_APPS = [

@@ -27,6 +27,7 @@ WEBSOCKET_ALLOWED_ORIGINS = [
     'https://www.stllr.io',
     'chrome-extension://polpgpcagljhejdbajfbjgdchdlnfepk',
     'chrome-extension://mlilkidmlfonjgccanoodpmbfjflggla',
+    'chrome-extension://hmpgjgepcimfdojfbffhaedmkndomfml'
 ]
 
 from rooms.routing import websocket_urlpatterns
