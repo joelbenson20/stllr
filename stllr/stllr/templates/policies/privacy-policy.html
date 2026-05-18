@@ -57,33 +57,53 @@
 
     <h2 id="introduction">Introduction</h2>
     <p>Privacy is an important concern, and the security of our users' data is important to us...</p>
+    --Privacy is important
+            --Balance: Users should have control of their data, but should not be able to manipulate their public appearance
+            --Because one of our main principals is nonpersonalization, we do not track user browsing beyond their public actions:
+                --stars
+                --forum posts
+                --room messages
 
     <h2 id="public-layer">A Public Layer on the Internet</h2>
     <p>Stllr.io is a public layer designed on top of the internet. As such, users operate our services under the agreement that their activity is in the public domain...</p>
 
+    --Stllr is designed to create a social layer on top of all webpages around the internet.
+            --Users of Stllr believe in a social layer of the internet, where online actions are consiered in the 'public' domain.
+            --Therefore, it is important that users understand the nature of the data we collect and the control they have over their own data.
+
+            --What actions other users will see
+
     <h2 id="data-we-collect">Data We Collect</h2>
     <p>The data stllr.io collects is limited to user profile data, star actions, forum posts, and room presence. This data is already assumed by the user to be public data and therefore available to all third parties... Users may delete their own star actions and forum posts, thereby removing them from their public-facing profile and all pages. However, these objects may still be persisted in our databases to enable our review of users' compliance with our user agreement.Email verification is mandatory on sign up, helping us validate human users and unique account identities.</p>
-    {% comment %} Table: data Type / Why We Collect It / How Long We Keep It 
-    Account: username, email, hashed password
-    Profile: optional background image
-    Activity: star actions, forum posts, room messages, Action feed logging timestamps of starred/posted/entered events, permanently logged against your user ID
-    Contacts: mutually agreed relationships between users
-    {% endcomment %}
+
+    --Table: account information: username, email, optional background image
+            -- posted content: forum posts, room messages
+            -- account actions: users stars, reactions, removals, hiding, reporting
+            -- We DO NOT collect browsing data, page view data. Our services have no need for this information.
 
     <h2 id="how-we-collect-your-data">How We Collect Your Data</h2>
-    <p></p>
+    --Public user actions are logged and saved.
 
     <h2 id="cookies">Cookies</h2>
     <p>Stllr.io uses cookies to persist user sessions, meaning users do not need to log in every time they open our website or our browser extension. We do not use cookies to track user actions or browsing across websites. The data that stllr.io collects with regard to user activity is limited to those actions that are already agreed to be public knowledge: star actions, forum posts, and room presence... CSRF Protection. Cookies are session identifiers => no personal data is stored in the cookies themselves.</p>
 
+    --We use cookies to persist user sessions after the user closes the browser. We do not use cookies that track our users' browsing.
+
+
     <h2 id="what-we-do-with-your-data">What We Do With Your Data</h2>
     <p>data we collect is only used insofar that it enables our Service (providing star buttons, forums, and rooms on webpages across the internet.)</p>
+
+    Publicly display it on your profile, unless you have 'removed' it. Then, we persist that data for at least a month, in accordance with our content moderation policy.
 
     <h2 id="third-party-services">Third Party Services</h2>
     <p>Services we use may have access to user account data, such as hosting provider DigitalOcean.  CCPA (California) right to know what's sold/shared and opt out</p>
 
+    Our third party services may have access to your data: DigitalOcean.
+
     <h2 id="controlling-your-data">Controlling Your Data</h2>
     <p>You can edit your profile, change your username, email, and background photo. You can remove user actions (i.e. delete stars, posts, and messages) but these objects may be stored in our database for at least 30 days to enable review of users' compliance with our user agreement.</p>
+
+    Users may remove stars, posts, and messages at any time, after which they will not be displayed on their user profile or in forums. Once a message has been sent in a room, it cannot be removed from the view of users that were in the room at that time. Messages, however, are never displayed to users who joined the room after the message was sent. After removal from public display, stars, posts, and messages are stored in our databases for at least 30 days to enable content moderation.
 
     <h2 id="retrieving-your-data">Retrieving Your Data</h2>
     <p>Users that wish to retrieve all data associated with their account may email us and their data will be sent to them within thirty days at the email they have on file.</p>
