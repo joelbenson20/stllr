@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}stllr | privacy policy {% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock css %}
+
+{% block left %}
+
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" href="#introduction">Introduction</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#social-layer">A Social Layer on the Internet</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#data-we-collect">Data We Collect</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#cookies">Cookies</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#what-we-do-with-your-data">What We Do With Your Data</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#third-party-services">Third Party Services</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#controlling-your-data">Controlling Your Data</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#retrieving-your-data">Retrieving Your Data</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#children">Children</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#policy-updates">Updates to this Policy</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#contact">Contact Us</a>
+        </li>
+    </ul>
+
+{% endblock left %}
+
+{% block content %}
+
+<!-- Done by Claude, requires review -->
+    <h1>Privacy Policy</h1>
+    <p class="fst-italic">Last Updated: May 16, 2026</p>
+
+    <h2 id="introduction">Introduction</h2>
+    <p>At Stllr, the privacy and security of our users' data is a priority. One of our core principles is non-personalization: we do not track your browsing habits, build advertising profiles, or sell your data to third parties. The data we collect is limited to what is necessary to operate our service, and we give users meaningful control over their own information.</p>
+
+    <h2 id="social-layer">A Social Layer on the Internet</h2>
+    <p>Stllr is designed to be a social layer on top of the internet — a single shared forum and chat room attached to every webpage. Because Stllr is a public, community-facing platform, users operate our service under the understanding that certain actions (starring pages, posting in forums, and presence in chat rooms) are inherently public. This policy explains exactly what that means, what data we collect, and the control you retain over it.</p>
+
+    <h2 id="data-we-collect">Data We Collect</h2>
+    <p>We collect only what is necessary to provide and maintain our service. We do <strong>not</strong> collect general browsing data or track users across websites via our browser extension.</p>
+
+    <table class="table table-dark my-3">
+        <tbody>
+            <tr>
+                <th scope="row">Account Information</th>
+                <td>Your email address, username, and an optional background image. Your email is used for account verification and is never displayed publicly.</td>
+            </tr>
+            <tr>
+                <th scope="row">Public User Actions</th>
+                <td>Actions that are visible to other users by design: page stars (votes), forum posts, and chat room messages. By taking these actions, you agree that they are public. Page stars and forum posts are displayed in an activity feed on the user's profile page. Chat room messages are publicly displayed only to the other users present in the same chat room at the that time the message is sent.</td>
+            </tr>
+            <tr>
+                <th scope="row">Non-Public User Actions</th>
+                <td>Actions that are not publicly displayed to other users: adding contacts, muting users, hiding content, and reporting users, pages, or posts. These are used solely to operate private social features and for ensuring compliance with our user agreement.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="cookies">Cookies</h2>
+    <p>Stllr uses cookies exclusively to maintain your login session, so you do not need to sign in every time you visit our website or use our browser extension. We also use a CSRF (Cross-Site Request Forgery) token cookie to protect your account from certain web attacks. We do <strong>not</strong> use cookies to track your browsing activity across websites, and no personal data is stored within the cookies themselves.</p>
+
+    <h2 id="what-we-do-with-your-data">What We Do With Your Data</h2>
+    <p>The data we collect is used solely to provide our service — enabling stars, forums, and chat rooms on webpages across the internet. Your public actions (stars, posts, messages) are displayed on your public profile and on the relevant page forums. We do not use your data for advertising, and we do not sell or share it with third parties for commercial purposes.</p>
+    <p>If you remove a public action, it will no longer appear on your profile or in any forum. However, removed content may be retained in our databases for up to 90 days or as required by law.</p>
+
+    <h2 id="third-party-services">Third Party Services</h2>
+    <p>We use the following third-party services to operate Stllr. These providers may have incidental access to user data as part of hosting and infrastructure:</p>
+    <ul>
+        <li><strong>DigitalOcean</strong> — cloud hosting and database infrastructure.</li>
+        <li><strong>Resend</strong> — transactional email delivery (e.g. account verification emails).</li>
+
+    </ul>
+    <p>We do not share your personal data with any third party for marketing or advertising purposes.</p>
+
+    <h2 id="controlling-your-data">Controlling Your Data</h2>
+    <p>You may update your account information (username, email, background image) at any time from your profile settings. You may also remove any of your public actions — stars, forum posts, and chat messages — at any time, after which they will no longer be visible on your profile or in any forum.</p>
+    <p>Note that once a message has been sent in a chat room, it cannot be retroactively removed from the view of users who were present at the time it was sent. Messages are never shown to users who joined the room after the message was sent.</p>
+    <p>Removed content is retained in our databases for up to 90 days or as required by law.</p>
+
+    <h2 id="retrieving-your-data">Retrieving Your Data</h2>
+    <p>You may request a copy of all data associated with your account at any time by emailing us at <a href="mailto:admin@stllr.io">admin@stllr.io</a>. We will send your data to the email address on file within 30 days of receiving your request.</p>
+
+    <h2 id="children">Children</h2>
+    <p>Stllr is not directed at children under the age of 13. We do not knowingly collect personal information from anyone under 13. If you believe a minor has created an account, please contact us at <a href="mailto:admin@stllr.io">admin@stllr.io</a> and we will promptly remove the account and associated data.</p>
+
+    <h2 id="policy-updates">Updates to this Policy</h2>
+    <p>This policy may be updated at any time. We encourage users to check this page periodically. We may notify users of material changes via a notice on our website or by email.</p>
+
+    <h2 id="contact">Contact Us</h2>
+    <p>Questions or concerns about this policy? Email us at <a href="mailto:admin@stllr.io">admin@stllr.io</a>.</p>
+
+{% endblock content %}

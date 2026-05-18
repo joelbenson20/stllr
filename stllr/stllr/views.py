@@ -55,7 +55,7 @@ def index(request):
 
 def policy(request, policy):
     if (policy == 'privacy-policy'):
-        return render(request, 'policies/privacy-policy.html')
+        return render(request, 'policies/generated-privacy-policy.html')
     elif (policy == 'user-agreement'):
         return render(request, 'policies/user-agreement.html')
     else:

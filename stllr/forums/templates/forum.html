@@ -15,9 +15,9 @@
         </div>
 
         <div id="postFeed">
-        {% for post in page.posts.all %}
-            {% include "posts/post.html" %}
-        {% endfor %}
+            {% for post in page.posts.all %}
+                {% include "posts/post.html" %}
+            {% endfor %}
         </div>
 
     {% else %}

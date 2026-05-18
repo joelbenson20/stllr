@@ -5,12 +5,14 @@
 {% block content %}
 
     <div class="fixed-bottom p-2">
-        {% include "posts/form.html" parent=None %}
+        {% include "posts/form.html" with parent=None %}
     </div>
 
-    {% for post in page.posts.all %}
-        {% include "posts/post.html" %}
-    {% endfor %}
+    <div id="postFeed">
+        {% for post in page.posts.all %}
+            {% include "posts/post.html" %}
+        {% endfor %}
+    </div>
 
     <div style="height:144px;"></div>
 

@@ -3,49 +3,40 @@
 
 <div class="mb-5">
 
-    {% if action.object_ct.model == 'page' %}
-        {% thumbnail action.object.domain.fav_icon 32x32 as im %}
-        <img class="float-start bg-light rounded-circle ms-0 m-2" src="{{ im.url }}">
-    {% elif action.object_ct.model == 'post' %}
-        {% thumbnail action.object.page.domain.fav_icon 32x32 as im %}
-        <img class="float-start bg-light rounded-circle ms-0 m-2" src="{{ im.url }}">
-    {% endif %}
+    <div class="d-flex align-items-start gap-2">
 
-    <div>
-
-        {% if action.verb == action.Verb.STARRED %}
-
-            <a href="action.object.get_absolute_url" class="d-inline">
-                {{ action.object.title }}
-            </a>
-
-        {% elif action.verb == action.Verb.POSTED %}
-
-            <a href="action.object.get_absolute_url" class="d-inline">
-                {{ action.object.page.title }}
-            </a>
-
-        {% elif action.verb == action.Verb.ENTERED %}
-
-            <a href="action.object.get_absolute_url" class="d-inline">
-                {{ action.object.title }}
-            </a>
-
+        {% if action.object_ct.model == 'page' %}
+            {% thumbnail action.object.domain.fav_icon 32x32 as im %}
+            <img class="bg-light rounded-circle flex-shrink-0" src="{{ im.url }}">
+        {% elif action.object_ct.model == 'post' %}
+            {% thumbnail action.object.page.domain.fav_icon 32x32 as im %}
+            <img class="bg-light rounded-circle flex-shrink-0" src="{{ im.url }}">
         {% endif %}
 
-    </div>
+        <div>
+            <div class="mb-0">
+                @{{ action.user.username }}
+                {{ action.get_verb_display }}
+                <span class="text-secondary">{{ action.created|naturaltime }}</span>
+            </div>
 
-    <p>
-        @{{ action.user.username }}
-        {{ action.get_verb_display }}
-        <span class="text-secondary">{{ action.created|naturaltime }}</span>
-    </p>
+            <div>
+                {% if action.verb == action.Verb.STARRED %}
+                    <a href="action.object.get_absolute_url">{{ action.object.title }}</a>
+                {% elif action.verb == action.Verb.POSTED %}
+                    <a href="action.object.get_absolute_url">{{ action.object.page.title }}</a>
+                {% elif action.verb == action.Verb.ENTERED %}
+                    <a href="action.object.get_absolute_url">{{ action.object.title }}</a>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
 
     {% if action.object_ct.model == 'post' %}
         <div class="ms-4">
             {% include "posts/post.html" with post=action.object %}
         </div>
     {% endif %}
-
 
 </div>
