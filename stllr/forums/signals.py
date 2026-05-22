@@ -1,15 +1,11 @@
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from django.contrib.auth import get_user_model
-from .models import Post
+from .models import PostStar
 
-@receiver(m2m_changed, sender=Post.users_star.through)
-def update_brightness_on_star_change(sender, instance, action, **kwargs):
-    if action not in ('post_add', 'post_remove', 'post_clear'):
-        return
-    User = get_user_model()
-    post = instance
-    total_stars = post.users_star.count()
-    d = User.objects.count() - total_stars
-    brightness = 1e15 if d == 0 else 1 / (d ** 2)
-    Post.objects.filter(pk=post.pk).update(total_stars=total_stars, brightness=brightness)
+
+@receiver(post_save, sender=PostStar)
+@receiver(post_delete, sender=PostStar)
+def update_post_total_stars(sender, instance, **kwargs):
+    post = instance.post
+    post.total_stars = post.stars.count()
+    post.save(update_fields=['total_stars'])

@@ -4,8 +4,8 @@ from django_ratelimit.decorators import ratelimit
 from django.http import JsonResponse
 from forums.templatetags.safe_markdown import safe_markdown_filter
 from django.template.loader import render_to_string
-from pages.models import Page
-from forums.models import Post
+from pages.models import Page, PageStar
+from forums.models import Post, PostStar
 from forums.forms import PostForm
 from rooms.consumers import _get_users
 from users.models import Action
@@ -55,12 +55,12 @@ def star_page(request):
         try:
             page = Page.objects.get(id=page_id)
             if action == 'star':
-                page.users_star.add(request.user)
+                PageStar.objects.get_or_create(page=page, user=request.user)
                 Action.objects.create(
                     user=request.user, verb=Action.Verb.STARRED, object=page
                 )
             else:
-                page.users_star.remove(request.user)
+                PageStar.objects.filter(page=page, user=request.user).first().delete()
             return JsonResponse({'status': '200'})
         except Page.DoesNotExist:
             pass
@@ -76,9 +76,9 @@ def star_post(request):
         try:
             post = Post.objects.get(id=post_id)
             if action == 'star':
-                post.users_star.add(request.user)
+                PostStar.objects.get_or_create(post=post, user=request.user)
             else:
-                post.users_star.remove(request.user)
+                PostStar.objects.filter(post=post, user=request.user).first().delete()
             return JsonResponse({'status': '200'})
         except Post.DoesNotExist:
             pass

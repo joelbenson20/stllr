@@ -12,10 +12,28 @@ STAR_LIFE = timedelta(days=7)
 @shared_task(name="pages.delete_old_page_stars")
 def delete_old_page_stars():
     from .models import PageStar
-    
+
     cutoff = timezone.now() - STAR_LIFE
-    deleted_count, _ = PageStar.objects.filter(created__lt=cutoff).delete()
-    return deleted_count
+    for star in PageStar.objects.filter(created__lt=cutoff):
+        star.delete()
+
+    return
+
+@shared_task(name="pages.update_page_brightnesses")
+def update_page_brightnesses():
+    from .models import Page
+    from django.contrib.auth import get_user_model
+
+    User = get_user_model()
+    user_count = User.objects.count()
+
+    pages = list(Page.objects.all())
+    for page in pages:
+        d = user_count - page.total_stars
+        page.brightness = 1e15 if d == 0 else 1 / (d ** 2)
+
+    Page.objects.bulk_update(pages, ['brightness'])
+    return len(pages)
 
 @shared_task(name="pages.update_brightness_index")
 def update_brightness_index():
