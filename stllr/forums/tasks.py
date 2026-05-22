@@ -17,7 +17,12 @@ def update_post_brightnesses():
     posts = list(Post.objects.all())
     for post in posts:
         d = user_count - post.total_stars
-        post.brightness = 1e15 if d == 0 else 1 / (d ** 2)
+        if d == 0:
+            post.brightness = 1e15
+        elif d == user_count:
+            post.brightness = 1e-15
+        else:
+            post.brightness = 1 / (d ** 2)
 
     Post.objects.bulk_update(posts, ['brightness'])
     return len(posts)

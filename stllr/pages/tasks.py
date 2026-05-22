@@ -30,8 +30,13 @@ def update_page_brightnesses():
     pages = list(Page.objects.all())
     for page in pages:
         d = user_count - page.total_stars
-        page.brightness = 1e15 if d == 0 else 1 / (d ** 2)
-
+        if (d == 0):
+            page.brightness = 1e15
+        elif (d == user_count):
+            page.brightness = 1e-15
+        else:
+            page.brightness = 1 / (d ** 2)
+        
     Page.objects.bulk_update(pages, ['brightness'])
     return len(pages)
 
