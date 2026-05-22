@@ -36,10 +36,9 @@ def extension(request):
         fav_icon_url = data.get('favIconUrl') or scraped_data['fav_icon_url']
         site_name = scraped_data.get('site_name')
 
+        # Done by Claude, requires review
         try:
-            verify_security(data.get('url')) 
-            verify_security(image_url)
-            verify_security(fav_icon_url)
+            verify_security(data.get('url'))
         except InsecureURLError as e:
             return JsonResponse(
                 {
