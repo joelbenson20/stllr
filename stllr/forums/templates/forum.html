@@ -16,7 +16,9 @@
 
         <div id="postFeed">
             {% for post in page.posts.all %}
-                {% include "posts/post.html" %}
+                {% if post.thread_level == 0 %}
+                    {% include "posts/post.html" %}
+                {% endif %}
             {% endfor %}
         </div>
 
