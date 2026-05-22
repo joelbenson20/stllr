@@ -12,7 +12,7 @@ from django.contrib.postgres.search import SearchVector
 
 @receiver(post_save, sender=Page)
 def download_images(sender, instance, created, update_fields, **kwargs):
-    if 'image_url' in update_fields or update_fields is None:
+    if update_fields is None or 'image_url' in update_fields:
         if instance.image_url and not instance.image:
             name = str(instance.id)
             extension = instance.image_url.rsplit('.', 1)[1].lower()

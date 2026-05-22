@@ -43,8 +43,9 @@ class RoomConsumer(AsyncWebsocketConsumer):
         self.room_name = f'room_{self.page_id}'
 
         # Verify page_id is a valid page
-        page = await Page.objects.aget(id=self.page_id)
-        if not page:
+        try:
+            page = await Page.objects.aget(id=self.page_id)
+        except Page.DoesNotExist:
             await self.close()
             return
 
