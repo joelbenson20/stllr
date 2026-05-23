@@ -11,13 +11,13 @@
         </div>
 
         <div class="my-3">
-            {% include "posts/form.html" with parent=None %}
+            {% include "post/form.html" with parent=None %}
         </div>
 
         <div id="postFeed">
             {% for post in page.posts.all %}
                 {% if post.thread_level == 0 %}
-                    {% include "posts/post.html" %}
+                    {% include "post/card.html" %}
                 {% endif %}
             {% endfor %}
         </div>

@@ -33,7 +33,7 @@
 
     {% if action.object_ct.model == 'post' %}
         <div class="ms-4">
-            {% include "posts/post.html" with post=action.object %}
+            {% include "post/card.html" with post=action.object %}
         </div>
     {% endif %}
 

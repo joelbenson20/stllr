@@ -12,7 +12,7 @@
 
         <div class="d-flex align-items-center">
 
-            {% include "posts/star_button.html" %}
+            {% include "post/star_button.html" %}
 
             <a class="post-replies-button btn btn-sm btn-dark rounded-pill me-2"
                 type="button"
@@ -27,7 +27,7 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#reply-form-container-{{ post.id }}"
-                aria-expanded="false">
+                aria-expanded="{% if expanded %}true{% else %}false{% endif %}">
                 Reply
             </button>
             
@@ -35,13 +35,13 @@
 
     </div>
 
-    <div id="reply-form-container-{{ post.id }}" class="reply-form-container collapse mt-2 ps-4">
-        {% include "posts/form.html" with page=post.page parent=post %}
+    <div id="reply-form-container-{{ post.id }}" class="reply-form-container collapse mt-3 ps-4">
+        {% include "post/form.html" with page=post.page parent=post %}
     </div>
 
-    <div id="children{{ post.id }}" class="collapse show m-0 ps-4">
-        {% for child in post.children.all %}
-            {% include "posts/post.html" with post=child %}
+    <div id="children{{ post.id }}" class="collapse {% if expanded %}show{% endif %} ps-4">
+        {% for child in children|default:post.children.all %}
+            {% include "post/card.html" with post=child %}
         {% endfor %}
     </div>
 

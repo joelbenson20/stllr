@@ -40,7 +40,7 @@ def create_post(request):
         response = {
             'status': '201',
             'postId': new_post.id,
-            'post': render_to_string('posts/tree.html', {'posts': [new_post]}, request=request)
+            'post': render_to_string('post/tree.html', {'posts': [new_post]}, request=request)
         }
         return (JsonResponse(response))
     return JsonResponse({'status': '400'})
