@@ -16,4 +16,8 @@ class PageStarAdmin(admin.ModelAdmin):
     readonly_fields = ('created',)
     ordering = ['-created']
 
-admin.site.register(Domain)
+@admin.register(Domain)
+class DomainAdmin(admin.ModelAdmin):
+    list_display = ['site_name', 'name', 'category']
+    search_fields = ['name', 'site_name']
+    ordering = ['name']

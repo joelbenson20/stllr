@@ -103,6 +103,7 @@ class Domain(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORIES, blank=True)
     fav_icon_url = models.URLField(max_length=250, blank=True)
     fav_icon = models.ImageField(max_length=255, upload_to='images/domains', blank=True)
+    fav_icon_bg_light = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
 
