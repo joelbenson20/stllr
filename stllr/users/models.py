@@ -41,7 +41,7 @@ class Contact(models.Model):
 
 class Action(models.Model):
     class Verb(models.TextChoices):
-        STARRED = 'starred', 'starred'
+        STARRED = 'starred', 'starred the page'
         POSTED = 'posted', 'posted to the forum'
         ENTERED = 'entered', 'entered the room'
 

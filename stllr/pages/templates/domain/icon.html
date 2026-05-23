@@ -1,0 +1,7 @@
+{% load thumbnail %}
+
+{% thumbnail domain.fav_icon dimensions as icon %}{% if icon %}
+    <img src="{{ icon.url }}" class="page-fav-icon {% if domain.fav_icon_bg_light %}bg-light{% endif %} rounded-circle flex-shrink-0">
+{% else %}
+    <i class="bi bi-globe flex-shrink-0"></i>
+{% endif %}

@@ -6,11 +6,9 @@
     <div class="d-flex align-items-start gap-2">
 
         {% if action.object_ct.model == 'page' %}
-            {% thumbnail action.object.domain.fav_icon 32x32 as im %}
-            <img class="bg-light rounded-circle flex-shrink-0" src="{{ im.url }}">
+            {% include "domain/icon.html" with domain=action.object.domain dimensions="32x32" %}
         {% elif action.object_ct.model == 'post' %}
-            {% thumbnail action.object.page.domain.fav_icon 32x32 as im %}
-            <img class="bg-light rounded-circle flex-shrink-0" src="{{ im.url }}">
+            {% include "domain/icon.html" with domain=action.object.page.domain dimensions="32x32" %}
         {% endif %}
 
         <div>
