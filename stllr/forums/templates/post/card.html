@@ -1,6 +1,6 @@
 {% load static %}
 {% load humanize %}
-{% load safe_markdown %}
+{% load utility_tags %}
 
 <div id="post{{ post.id }}" class="post rounded-card mt-2 p-2">
 
@@ -40,9 +40,13 @@
     </div>
 
     <div id="children{{ post.id }}" class="collapse {% if expanded %}show{% endif %} ps-4">
-        {% for child in children|default:post.children.all %}
-            {% include "post/card.html" with post=child %}
-        {% endfor %}
+        {% if reply %}
+            {% include "post/card.html" with post=reply expanded=False reply=None %}
+        {% else %}
+            {% for child in post.children.all %}
+                {% include "post/card.html" with post=child reply=None %}
+            {% endfor %}
+        {% endif %}
     </div>
 
 </div>

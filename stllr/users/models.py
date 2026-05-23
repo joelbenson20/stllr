@@ -43,6 +43,7 @@ class Action(models.Model):
     class Verb(models.TextChoices):
         STARRED = 'starred', 'starred the page'
         POSTED = 'posted', 'posted to the forum'
+        REPLIED = 'replied', 'replied in the forum'
         ENTERED = 'entered', 'entered the room'
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actions')

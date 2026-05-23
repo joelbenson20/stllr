@@ -1,5 +1,6 @@
 {% load thumbnail %}
 {% load humanize %}
+{% load utility_tags %}
 
 <div class="mb-5">
 
@@ -21,7 +22,7 @@
             <div>
                 {% if action.verb == action.Verb.STARRED %}
                     <a href="action.object.get_absolute_url">{{ action.object.title }}</a>
-                {% elif action.verb == action.Verb.POSTED %}
+                {% elif action.verb == action.Verb.POSTED or action.verb == action.Verb.REPLIED %}
                     <a href="action.object.get_absolute_url">{{ action.object.page.title }}</a>
                 {% elif action.verb == action.Verb.ENTERED %}
                     <a href="action.object.get_absolute_url">{{ action.object.title }}</a>
@@ -33,7 +34,11 @@
 
     {% if action.object_ct.model == 'post' %}
         <div class="ms-4">
-            {% include "post/card.html" with post=action.object %}
+            {% if action.object.parent %}
+                {% include "post/card.html" with post=action.object.parent reply=action.object expanded=True %}
+            {% else %}
+                {% include "post/card.html" with post=action.object %}
+            {% endif %}
         </div>
     {% endif %}
 

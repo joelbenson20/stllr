@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django_ratelimit.decorators import ratelimit
 from django.http import JsonResponse
-from forums.templatetags.safe_markdown import safe_markdown_filter
+from forums.templatetags.utility_tags import safe_markdown_filter
 from django.template.loader import render_to_string
 from pages.models import Page, PageStar
 from forums.models import Post, PostStar
@@ -34,9 +34,14 @@ def create_post(request):
         if (new_post.parent):
             new_post.thread_level = new_post.parent.thread_level + 1
         new_post.save()
-        Action.objects.create(
-            user=request.user, verb=Action.Verb.POSTED, object=new_post
-        )
+        if (new_post.parent):
+            Action.objects.create(
+                user=request.user, verb=Action.Verb.REPLIED, object=new_post
+            )
+        else:
+            Action.objects.create(
+                user=request.user, verb=Action.Verb.POSTED, object=new_post
+            )
         response = {
             'status': '201',
             'postId': new_post.id,
