@@ -4,6 +4,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
@@ -14,6 +17,7 @@ urlpatterns = [
     path('room/', include('rooms.urls')),
     path('extension/', include('extension.urls', namespace='extension')),
     path('api/', include('api.urls', namespace='api')),
+    path('sentry-debug/', trigger_error)
 ]
 
 if settings.DEBUG:
