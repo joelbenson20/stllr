@@ -73,6 +73,7 @@ regex==2026.4.4
 reportlab==4.5.0
 requests==2.33.1
 rlPyCairo==0.4.0
+sentry-sdk==2.60.0
 service-identity==24.2.0
 six==1.17.0
 soupsieve==2.8.3
