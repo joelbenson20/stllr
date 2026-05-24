@@ -4,6 +4,27 @@
 
 {% block title %}@{{ profile.user.username }} - stllr{% endblock title %}
 
+{% block css %}
+    {% if profile.background %}
+    <style>
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{{ profile.background.url }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            opacity: 0.05;
+            z-index: -1;
+        }
+    </style>
+    {% endif %}
+{% endblock css %}
+
 {% block left %}
     {% if profile.user == request.user %}
         <ul class="nav flex-column">
@@ -20,43 +41,29 @@
 
 {% block content %}
 
-    {% if profile.background %}
-        {% thumbnail profile.background "1200x675" crop="center" as banner %}
-        <div class="ratio ratio-16x9 rounded-card overflow-hidden">
+    <div class="position-relative rounded-card overflow-hidden" style="aspect-ratio: 16/9;">
+        {% if profile.background %}{% thumbnail profile.background "1200x675" crop="center" as banner %}
             <img class="object-fit-cover w-100 h-100" src="{{ banner.url }}">
-        </div>
-    {% endif %}
-
-    <div class="profile-header position-relative">
-        <div class="profile-header d-flex align-items-end position-absolute top-0 start-0 translate-middle-y">
-
-            <img class="float-start rounded-circle border border-3 ms-3 profile-avatar" src="{% static 'brand/icon.png' %}">
-            
-            <div class="d-flex align-items-center">
-
-                <h1>@{{ profile.user.username }}</h1>
-
-                <div class="ms-4 d-none d-md-flex">
-                    {% if request.user != profile.user %}
-                        {% if not contact %}
-                            <a href="{% url "send_request" profile.user.username %}" class="btn btn-sm btn-light">Add Contact</a>
-                        {% elif contact.status == 'pending' and contact.from_user == request.user %}
-                            <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-sm btn-light">Cancel Request</a>
-                        {% elif contact.status == 'pending' %}
-                            <a href="{% url "accept_request" profile.user.username %}" class="btn btn-sm btn-light">Accept</a>
-                            <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-warning">Decline</a>
-                        {% else %}
-                            <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-sm btn-light">Remove Contact</a>
-                        {% endif %}
-                    {% endif %}
-                </div>
-
-            </div>
-
-        </div>
+        {% endif %}
+        <img class="position-absolute bottom-0 start-50 translate-middle-x profile-avatar" src="{% static 'brand/icon.png' %}">
     </div>
 
-    <div class="p-5"></div>
+    <h1>@{{ profile.user.username }}</h1>
+
+    <div class="ms-4 d-none d-md-flex">
+        {% if request.user != profile.user %}
+            {% if not contact %}
+                <a href="{% url "send_request" profile.user.username %}" class="btn btn-sm btn-light">Add Contact</a>
+            {% elif contact.status == 'pending' and contact.from_user == request.user %}
+                <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-sm btn-light">Cancel Request</a>
+            {% elif contact.status == 'pending' %}
+                <a href="{% url "accept_request" profile.user.username %}" class="btn btn-sm btn-light">Accept</a>
+                <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-warning">Decline</a>
+            {% else %}
+                <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-sm btn-light">Remove Contact</a>
+            {% endif %}
+        {% endif %}
+    </div>
 
     <div class="mt-5 p-3">
         {% for action in profile.user.actions.all %}

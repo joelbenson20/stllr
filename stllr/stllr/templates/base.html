@@ -39,9 +39,8 @@
 
 <body>
 
-    <div id="window" class="container-fluid d-flex flex-column min-vh-100">
-
-        <nav class="navbar glass navbar-dark navbar-expand-sm sticky-top p-3">
+    <!-- Done by Claude, requires review -->
+    <nav class="navbar glass navbar-dark navbar-expand-sm sticky-top p-3">
             <a class="navbar-brand" href="{% url 'index' %}">
                 <img class="navbar-brand-image" src="{% static 'brand/stllr.png' %}" width=96>
             </a>
@@ -78,7 +77,9 @@
                     </div>
                 {% endif %}
             </div>
-        </nav>
+    </nav>
+
+    <div id="window" class="container-fluid d-flex flex-column min-vh-100">
 
         {% if messages %}
             <div class="container-fluid m-0 p-0">
