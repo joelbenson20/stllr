@@ -5,20 +5,37 @@ from .models import Profile
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, HTML, Field
 
-RESERVED_USERNAMES = {'stllr', 'stella', 'moderator', 'mod'}
+# Done by Claude, requires review
+RESERVED_USERNAMES = {
+    # Brand/identity
+    'stllr', 'stlr', 'stllrr', 'steller', 'stellar', 'stlllr',
+    'stlla', 'stla', 'stllaa', 'stella', 'stllla',
+    'admin', 'administrator', 'support', 'help', 'info', 'contact',
+    'team', 'staff', 'official',
+    # Authority roles
+    'moderator', 'mod', 'owner', 'founder', 'ceo',
+    'bot', 'system', 'root', 'superuser',
+    # Trust/legal surface
+    'security', 'privacy', 'legal', 'trust', 'safety',
+    'announcement', 'announcements', 'news',
+    'api', 'dev', 'developer',
+    # Routing/display hazards
+    'me', 'null', 'undefined', 'anonymous',
+    'everyone', 'all', 'here',
+}
 
-def validate_username(username, instance=None):
+def validate_username(username, user=None):
 
     if not re.fullmatch(r'[A-Za-z0-9_]+', username):
         raise forms.ValidationError("Username may only contain letters, numbers, and underscores.")
     
-    if username.lower() in RESERVED_USERNAMES:
+    if username.lower() in RESERVED_USERNAMES and not (user and user.is_staff):
         raise forms.ValidationError("This username is reserved and cannot be used.")
     
     User = get_user_model()
     qs = User.objects.filter(username__iexact=username)
-    if instance and instance.pk:
-        qs = qs.exclude(pk=instance.pk)
+    if user and user.pk:
+        qs = qs.exclude(pk=user.pk)
     if qs.exists():
         raise forms.ValidationError("This username is already taken.")
 
@@ -57,14 +74,12 @@ class UserRegistrationForm(forms.ModelForm):
         return data
 
 class UserEditForm(forms.ModelForm):
-    # Done by Claude, requires review
     username = forms.CharField(help_text="Only letters, numbers, and underscores allowed.")
 
     class Meta:
         model = get_user_model()
         fields = ['username']
 
-    # Done by Claude, requires review
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
