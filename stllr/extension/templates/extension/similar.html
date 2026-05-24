@@ -1,5 +1,6 @@
 {% extends "extension/base.html" %}
 
 {% block content %}
-    {% include "page/list.html" with pages=page.tags.similar_objects %}
+    <!-- Done by Claude, requires review -->
+    {% include "page/list.html" with pages=similar_pages %}
 {% endblock content %}

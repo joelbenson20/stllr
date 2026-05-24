@@ -80,6 +80,11 @@ def extension(request):
     elif (tab == 'room'):
         html = render_to_string('extension/room.html', context=context, request=request)
     elif (tab == 'similar'):
+        # Done by Claude, requires review
+        # similar_objects() has a taggit bug with generic FKs; query Page directly
+        context['similar_pages'] = Page.objects.filter(
+            tags__in=page.tags.all(), is_active=True
+        ).exclude(pk=page.pk).distinct()
         html = render_to_string('extension/similar.html', context=context, request=request)
 
     return JsonResponse({
