@@ -5,9 +5,16 @@ from .models import Profile
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, HTML, Field
 
+RESERVED_USERNAMES = {'stllr', 'stella', 'moderator', 'mod'}
+
 def validate_username(username, instance=None):
+
     if not re.fullmatch(r'[A-Za-z0-9_]+', username):
         raise forms.ValidationError("Username may only contain letters, numbers, and underscores.")
+    
+    if username.lower() in RESERVED_USERNAMES:
+        raise forms.ValidationError("This username is reserved and cannot be used.")
+    
     User = get_user_model()
     qs = User.objects.filter(username__iexact=username)
     if instance and instance.pk:
