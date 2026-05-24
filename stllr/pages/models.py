@@ -7,6 +7,7 @@ from taggit.managers import TaggableManager
 from django.conf import settings
 from django.db import models
 from django.db.models import Case, When, IntegerField
+from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
 
@@ -57,6 +58,8 @@ class Page(models.Model):
     rise = models.IntegerField(default=0, editable=False)
 
     is_active = models.BooleanField(default=True)
+    # Done by Claude, requires review
+    actions = GenericRelation('users.Action')
 
     def save(self, *args, **kwargs):
         if not self.pk:

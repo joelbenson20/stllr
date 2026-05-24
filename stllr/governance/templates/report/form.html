@@ -8,7 +8,11 @@
     <h5 class="fw-semibold mb-0">Report {{ content_type|capfirst }}:</h5>
 
     <div class="my-4">
-        {% include "page/card.html" %}
+        {% if page %}
+            {% include "page/card.html" %}
+        {% elif post %}
+            {% include "post/card.html" %}
+        {% endif %}
     </div>
 
     <form method="post" class="d-flex flex-column gap-3">

@@ -32,7 +32,8 @@
 
     </div>
 
-    {% if action.object_ct.model == 'post' %}
+    <!-- Done by Claude, requires review -->
+    {% if action.object_ct.model == 'post' and action.object %}
         <div class="ms-4">
             {% if action.object.parent %}
                 {% include "post/card.html" with post=action.object.parent reply=action.object expanded=True %}

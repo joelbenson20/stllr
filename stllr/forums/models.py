@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.db import models
 from django.db.models import Case, When, IntegerField
+from django.contrib.contenttypes.fields import GenericRelation
 from pages.models import Page
 
 
@@ -56,6 +57,8 @@ class Post(models.Model):
     )
     total_stars = models.PositiveIntegerField(default=0)
     brightness = models.FloatField(default=0)
+    # Done by Claude, requires review
+    actions = GenericRelation('users.Action')
 
     class Meta:
         default_manager_name = 'firmament'

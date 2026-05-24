@@ -26,7 +26,7 @@ def report_page(request, page_id):
     else:
         form = PageReportForm()
 
-    return render(request, "page_report/form.html", {"form": form, "page": page})
+    return render(request, "report/form.html", {"form": form, "content_type": "page", "page": page})
 
 @login_required
 def report_post(request, post_id):
@@ -46,7 +46,7 @@ def report_post(request, post_id):
     else:
         form = PostReportForm()
 
-    return render(request, "report/form.html", {"form": form, "post": post})
+    return render(request, "report/form.html", {"form": form, "content_type": "post", "post": post})
 
 
 def report_success(request, content_type):
