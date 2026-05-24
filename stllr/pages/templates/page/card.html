@@ -51,7 +51,7 @@
             {% include 'page/star_button.html' %}
 
             <a class="btn btn-outline-light rounded-pill me-2"
-                href="{% url "forum" %}?p={{ page.canonical|urlencode }}">
+                href="{% url "forums:forum" %}?p={{ page.canonical|urlencode }}">
                 <i class="bi bi-chat-fill"></i>
                 &nbsp;<span>{{ page.posts.count }}</span>
             </a>
@@ -69,7 +69,7 @@
                         aria-expanded="false">
                         <i class="bi bi-three-dots"></i>
             </button>
-            <ul class="dropdown-menu" aria-labelledby="p{{ page.id }}Dropdown">
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="p{{ page.id }}Dropdown">
                 <li>
                     <a class="dropdown-item" href="{% url "governance:report_page" page.id %}" target="_blank">
                         <i class="bi bi-flag-fill"></i> Report

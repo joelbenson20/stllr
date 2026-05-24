@@ -59,7 +59,8 @@ class Page(models.Model):
 
     is_active = models.BooleanField(default=True)
     # Done by Claude, requires review
-    actions = GenericRelation('users.Action')
+    # Done by Claude, requires review
+    actions = GenericRelation('users.Action', content_type_field='object_ct', object_id_field='object_id')
 
     def save(self, *args, **kwargs):
         if not self.pk:

@@ -8,7 +8,13 @@
 
     <div class="ms-4 my-2">
 
-        {{ post.content|safe_markdown }}
+        <!-- Done by Claude, requires review -->
+        {% if post.removed %}
+            <!-- Done by Claude, requires review -->
+            <p class="text-secondary fst-italic small">This post has been removed by {{ post.get_removed_by_display }}.</p>
+        {% else %}
+            {{ post.content|safe_markdown }}
+        {% endif %}
 
         <div class="d-flex align-items-center">
 
@@ -38,12 +44,19 @@
                         aria-expanded="false">
                         <i class="bi bi-three-dots"></i>
             </button>
-            <ul class="dropdown-menu" aria-labelledby="post{{ post.id }}Dropdown">
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="post{{ post.id }}Dropdown">
                 <li>
                     <a class="dropdown-item" href="{% url "governance:report_post" post.id %}" target="_blank">
                         <i class="bi bi-flag-fill"></i> Report
                     </a>
                 </li>
+                {% if post.user == request.user %}
+                    <li>
+                        <a class="dropdown-item" href="{% url "forums:remove_post" post.id %}" target="_blank">
+                            <span class="text-danger"><i class="bi bi-x-square-fill"></i> Remove</span>
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
             
         </div>

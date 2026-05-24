@@ -58,7 +58,14 @@ class Post(models.Model):
     total_stars = models.PositiveIntegerField(default=0)
     brightness = models.FloatField(default=0)
     # Done by Claude, requires review
-    actions = GenericRelation('users.Action')
+    removed = models.BooleanField(default=False)
+    removed_by = models.CharField(
+        max_length=16,
+        choices=[('author', 'the author'), ('moderator', 'a moderator')],
+        null=True,
+        blank=True
+    )
+    actions = GenericRelation('users.Action', content_type_field='object_ct', object_id_field='object_id')
 
     class Meta:
         default_manager_name = 'firmament'

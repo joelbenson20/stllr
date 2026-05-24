@@ -10,8 +10,8 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('users/', include('users.urls')),
     path('policies/<str:policy>/', views.policy, name='policy'),
-    path('forum/', include('forums.urls')),
-    path('room/', include('rooms.urls')),
+    path('forums/', include('forums.urls', namespace='forums')),
+    path('rooms/', include('rooms.urls')),
     path('extension/', include('extension.urls', namespace='extension')),
     path('api/', include('api.urls', namespace='api')),
     path('governance/', include('governance.urls', namespace='governance')),  # Done by Claude, requires review

@@ -52,11 +52,6 @@ def create_post(request):
 
 @login_required
 @require_POST
-def remove_post(request):
-    return JsonResponse({'status': '500'})
-
-@login_required
-@require_POST
 @ratelimit(key='user', rate='3/s', method='POST', block=True)
 def star_page(request):
     page_id = request.POST.get('id')

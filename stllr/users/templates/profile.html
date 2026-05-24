@@ -2,7 +2,7 @@
 {% load static %}
 {% load thumbnail %}
 
-{% block title %}Dashboard{% endblock title %}
+{% block title %}@{{ profile.user.username }} - stllr{% endblock title %}
 
 {% block left %}
     {% if profile.user == request.user %}
