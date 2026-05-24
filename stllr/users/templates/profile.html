@@ -29,10 +29,13 @@
     {% if profile.user == request.user %}
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link bg-dark my-3" href="{% url "edit" user.username %}">Edit your account</a>
-            </li> 
+                <a class="nav-link bg-dark my-3" href="{% url "edit" user.username %}">Edit account</a>
+            </li>
             <li class="nav-item">
-                <a class="nav-link bg-dark my-3" href="{% url "account_reset_password" %}">Change your password</a>
+                <a class="nav-link bg-dark my-3" href="{% url "account_email" %}">Manage email address</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link bg-dark my-3" href="{% url "account_reset_password" %}">Reset password</a>
             </li>
         </ul>
     {% endif %}
@@ -48,9 +51,9 @@
         <img class="position-absolute bottom-0 start-50 translate-middle-x profile-avatar" src="{% static 'brand/icon.png' %}">
     </div>
 
-    <h1>@{{ profile.user.username }}</h1>
+    <div class="d-flex align-items-center justify-content-center my-3">
+        <h1 class="d-inline me-3">@{{ profile.user.username }}</h1>
 
-    <div class="ms-4 d-none d-md-flex">
         {% if request.user != profile.user %}
             {% if not contact %}
                 <a href="{% url "send_request" profile.user.username %}" class="btn btn-sm btn-light">Add Contact</a>
@@ -64,6 +67,7 @@
             {% endif %}
         {% endif %}
     </div>
+
 
     <div class="mt-5 p-3">
         {% for action in profile.user.actions.all %}

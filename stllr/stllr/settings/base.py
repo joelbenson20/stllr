@@ -126,6 +126,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Done by Claude, requires review
+ACCOUNT_ADAPTER = 'users.adapters.AccountAdapter'
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
