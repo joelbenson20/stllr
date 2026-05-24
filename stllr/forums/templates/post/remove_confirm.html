@@ -4,16 +4,19 @@
 {% block title %}stllr | remove post{% endblock title %}
 
 {% block content %}
-<div class="d-flex flex-column align-items-start gap-4 mt-4">
+<div class="d-flex flex-column gap-4 mt-4">
 
     <div>
         <h5 class="text-danger mb-1"><i class="bi bi-x-square-fill me-2"></i>Remove post?</h5>
-        <p class="text-secondary small mb-0">This action cannot be undone. Close this tab to cancel.</p>
+        <div class="text-secondary small mb-0">
+            <p>This action cannot be undone. A removed post is not deleted from our databases - it is displayed as <i>removed</i> by the party that removed it.</p>
+            <p class="text-">Close this tab to cancel.</p>
+        </div>
     </div>
 
     {% include "post/card.html" %}
 
-    <form method="post">
+    <form class="d-flex justify-content-end" method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger">Remove</button>
     </form>

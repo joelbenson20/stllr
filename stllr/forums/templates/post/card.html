@@ -8,9 +8,7 @@
 
     <div class="ms-4 my-2">
 
-        <!-- Done by Claude, requires review -->
         {% if post.removed %}
-            <!-- Done by Claude, requires review -->
             <p class="text-secondary fst-italic small">This post has been removed by {{ post.get_removed_by_display }}.</p>
         {% else %}
             {{ post.content|safe_markdown }}
@@ -46,17 +44,25 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="post{{ post.id }}Dropdown">
                 <li>
-                    <a class="dropdown-item" href="{% url "governance:report_post" post.id %}" target="_blank">
-                        <i class="bi bi-flag-fill"></i> Report
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-share-fill me-2"></i>Share
                     </a>
                 </li>
-                {% if post.user == request.user %}
+                {% if not post.removed %}
                     <li>
-                        <a class="dropdown-item" href="{% url "forums:remove_post" post.id %}" target="_blank">
-                            <span class="text-danger"><i class="bi bi-x-square-fill"></i> Remove</span>
+                        <a class="dropdown-item" href="{% url "governance:report_post" post.id %}" target="_blank">
+                            <i class="bi bi-flag-fill me-2"></i>Report
                         </a>
                     </li>
+                    {% if post.user == request.user %}
+                        <li>
+                            <a class="dropdown-item" href="{% url "forums:remove_post" post.id %}" target="_blank">
+                                <span class="text-danger"><i class="bi bi-x-square-fill me-2"></i>Remove</span>
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endif %}
+
             </ul>
             
         </div>

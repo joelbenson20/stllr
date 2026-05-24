@@ -71,13 +71,18 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="p{{ page.id }}Dropdown">
                 <li>
-                    <a class="dropdown-item" href="{% url "governance:report_page" page.id %}" target="_blank">
-                        <i class="bi bi-flag-fill"></i> Report
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-share-fill me-2"></i>Share
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item" href="#">
                         <i class="bi bi-bookmark-fill"></i> Bookmark
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{% url "governance:report_page" page.id %}" target="_blank">
+                        <i class="bi bi-flag-fill"></i> Report
                     </a>
                 </li>
             </ul>
