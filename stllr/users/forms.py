@@ -16,6 +16,8 @@ def validate_username(username, instance=None):
         raise forms.ValidationError("This username is already taken.")
 
 class UserRegistrationForm(forms.ModelForm):
+    # Done by Claude, requires review
+    username = forms.CharField(help_text="Only letters, numbers, and underscores allowed.")
     password1=forms.CharField(
         label='Password',
         widget=forms.PasswordInput
@@ -48,6 +50,9 @@ class UserRegistrationForm(forms.ModelForm):
         return data
 
 class UserEditForm(forms.ModelForm):
+    # Done by Claude, requires review
+    username = forms.CharField(help_text="Only letters, numbers, and underscores allowed.")
+
     class Meta:
         model = get_user_model()
         fields = ['username']

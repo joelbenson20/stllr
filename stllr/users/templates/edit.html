@@ -4,10 +4,16 @@
 {% block title %}edit your account - stllr{% endblock title %}
 
 {% block content %}
+
+    <h5>Edit your account</h5>
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% crispy user_form %}
         {% crispy profile_form %}
-        <button class="btn btn-primary float-end" type="submit">Save profile</button>
+        <div class="d-flex justify-content-end gap-2">
+            <a href="{% url 'profile' request.user.username %}" class="btn btn-secondary">Cancel</a>
+            <button class="btn btn-primary" type="submit">Save</button>
+        </div>
     </form>
 {% endblock content %}
