@@ -14,6 +14,7 @@ urlpatterns = [
     path('room/', include('rooms.urls')),
     path('extension/', include('extension.urls', namespace='extension')),
     path('api/', include('api.urls', namespace='api')),
+    path('governance/', include('governance.urls', namespace='governance')),  # Done by Claude, requires review
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Report Submitted — stllr{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column align-items-center justify-content-center gap-3 py-5 text-center">
+    <i class="bi bi-check-circle fs-1 text-success"></i>
+    <h5 class="fw-semibold mb-0">Report submitted</h5>
+    <p class="text-secondary mb-0">Thank you for your service to the government of our online spaces. We will review this {{ content_type }} against our policies. You may now close this tab to continue your browsing.</p>
+</div>
+{% endblock %}

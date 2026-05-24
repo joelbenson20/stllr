@@ -71,7 +71,7 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="p{{ page.id }}Dropdown">
                 <li>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="{% url "governance:report_page" page.id %}" target="_blank">
                         <i class="bi bi-flag-fill"></i> Report
                     </a>
                 </li>

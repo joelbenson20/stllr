@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}report {{ content_type }} — stllr{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column gap-3 py-4">
+
+    <h5 class="fw-semibold mb-0">Report {{ content_type|capfirst }}:</h5>
+
+    <div class="my-4">
+        {% include "page/card.html" %}
+    </div>
+
+    <form method="post" class="d-flex flex-column gap-3">
+        {% csrf_token %}
+        <input type="hidden" name="page" value="{{ page.id }}">
+
+        <div>
+            <label class="form-label small fw-semibold">Policy</label>
+            {{ form.policy }}
+        </div>
+
+        <div>
+            <label class="form-label small fw-semibold">Justification <span class="text-secondary fw-normal">(optional)</span></label>
+            {{ form.justification }}
+        </div>
+
+        <button type="submit" class="btn btn-dark rounded-card align-self-end px-4">Submit report</button>
+    </form>
+
+</div>
+{% endblock %}

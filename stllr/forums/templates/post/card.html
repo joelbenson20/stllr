@@ -23,6 +23,21 @@
                 &nbsp;<span>{{ post.children.count }}</span>
             </a>
 
+            <button id="post{{ post.id }}Dropdown"
+                        class="dropdown-toggle no-caret btn btn-transparent btn-dark rounded-circle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="post{{ post.id }}Dropdown">
+                <li>
+                    <a class="dropdown-item" href="{% url "governance:report_post" post.id %}" target="_blank">
+                        <i class="bi bi-flag-fill"></i> Report
+                    </a>
+                </li>
+            </ul>
+
             <button class="post-reply-button btn btn-sm btn-transparent btn-dark rounded-pill fw-bold me-1"
                 type="button"
                 data-bs-toggle="collapse"
