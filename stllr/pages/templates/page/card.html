@@ -23,6 +23,7 @@
                     {{ page.link }}
                 </a>
 
+
             </div>
 
         </div>
@@ -55,11 +56,31 @@
                 &nbsp;<span>{{ page.posts.count }}</span>
             </a>
 
-            <a class="btn btn-outline-light rounded-pill"
+            <a class="btn btn-outline-light rounded-pill me-2"
                 href="{% url "room" %}?p={{ page.canonical|urlencode }}">
                 <i class="bi bi-broadcast spin"></i>
                 &nbsp;<span class="room-user-count" data-page-id="{{ page.id }}" data-endpoint="{% url 'api:get_room_count' %}">?</span>
             </a>
+
+            <button id="p{{ page.id }}Dropdown"
+                        class="dropdown-toggle no-caret btn btn-transparent btn-dark rounded-circle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="p{{ page.id }}Dropdown">
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-flag-fill"></i> Report
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-bookmark-fill"></i> Bookmark
+                    </a>
+                </li>
+            </ul>
 
         </div>
     </div>

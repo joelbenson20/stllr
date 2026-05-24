@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'forums.apps.ForumsConfig',
     'rooms.apps.RoomsConfig',
+    'governance.apps.GovernanceConfig',
     'extension.apps.ExtensionConfig',
     'api.apps.APIConfig',
     'corsheaders',
