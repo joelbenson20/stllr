@@ -4,8 +4,8 @@ from django.contrib.auth import get_user_model
 from .models import Profile
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, HTML, Field
+from allauth.socialaccount.forms import SignupForm as SocialSignupFormBase
 
-# Done by Claude, requires review
 RESERVED_USERNAMES = {
     # Brand/identity
     'stllr', 'stlr', 'stllrr', 'steller', 'stellar', 'stlllr',
@@ -38,6 +38,28 @@ def validate_username(username, user=None):
         qs = qs.exclude(pk=user.pk)
     if qs.exists():
         raise forms.ValidationError("This username is already taken.")
+
+class SocialSignupForm(SocialSignupFormBase):
+    username = forms.CharField(
+        max_length=30,
+        help_text="Only letters, numbers, and underscores allowed.",
+    )
+    background = forms.ImageField(required=False, label="Profile background (optional)")
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        validate_username(username)
+        return username
+
+    def custom_signup(self, request, user):
+        user.username = self.cleaned_data['username']
+        user.save(update_fields=['username'])
+        background = self.cleaned_data.get('background')
+        if background:
+            profile, _ = Profile.objects.get_or_create(user=user)
+            profile.background = background
+            profile.save()
+
 
 class UserRegistrationForm(forms.ModelForm):
     # Done by Claude, requires review

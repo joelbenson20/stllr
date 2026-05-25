@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n crispy_forms_tags %}
+
+<!-- Done by Claude, requires review -->
+{% block title %}choose a username — stllr{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-6">
+        <h2 class="mb-1">One last step</h2>
+        <p class="text-secondary mb-4">Choose a username for your stllr account.</p>
+
+        <form method="post" action="{% url 'socialaccount_signup' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="d-grid gap-2 mt-3">
+                <button type="submit" class="btn btn-dark">Continue</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
