@@ -8,4 +8,5 @@ urlpatterns = [
     path('<str:username>/accept/', views.accept_request, name='accept_request'),
     path('<str:username>/decline/', views.decline_request, name='decline_request'),
     path('<str:username>/remove/', views.remove_contact, name='remove_contact'),
+    path('action/<int:action_id>/remove/', views.remove_action, name='remove_action'),  # Done by Claude, requires review
 ]

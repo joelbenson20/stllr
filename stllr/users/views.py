@@ -4,7 +4,7 @@ from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import redirect
-from .models import Contact
+from .models import Contact, Action
 
 def register(request):
     if request.method == 'POST':
@@ -42,7 +42,8 @@ def profile(request, username):
         'profile.html',
         {
             'profile': user.profile,
-            'contact': contact
+            'contact': contact,
+            'actions': user.actions.filter(removed=False),  # Done by Claude, requires review
         }
     )
 
@@ -116,3 +117,12 @@ def remove_contact(request, username):
         from_user=other_user, to_user=request.user
     ).delete()
     return redirect('profile', username=username)
+
+# Done by Claude, requires review
+@login_required
+def remove_action(request, action_id):
+    action = get_object_or_404(Action, id=action_id, user=request.user)
+    action.removed = True
+    action.save(update_fields=['removed'])
+    messages.success(request, "Removed from your activity feed.")
+    return redirect('profile', username=request.user.username)

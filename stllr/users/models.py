@@ -59,6 +59,7 @@ class Action(models.Model):
     object = GenericForeignKey('object_ct', 'object_id')
 
     created = models.DateTimeField(auto_now_add=True)
+    removed = models.BooleanField(default=False)  # Done by Claude, requires review
 
     class Meta:
         ordering = ['-created']

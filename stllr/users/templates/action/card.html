@@ -2,6 +2,8 @@
 {% load humanize %}
 {% load utility_tags %}
 
+<!-- Done by Claude, requires review -->
+{% if not action.removed %}
 <div class="mb-5">
 
     <div class="d-flex align-items-start gap-2">
@@ -12,11 +14,35 @@
             {% include "domain/icon.html" with domain=action.object.page.domain dimensions="32x32" %}
         {% endif %}
 
-        <div>
-            <div class="mb-0">
-                @{{ action.user.username }}
-                {{ action.get_verb_display }}
-                <span class="text-secondary">{{ action.created|naturaltime }}</span>
+        <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="mb-0">
+                    @{{ action.user.username }}
+                    {{ action.get_verb_display }}
+                    <span class="text-secondary">{{ action.created|naturaltime }}</span>
+                </div>
+
+                {% if action.user == request.user %}
+                <div class="dropdown">
+                    <button id="action{{ action.id }}Dropdown"
+                            class="dropdown-toggle no-caret btn btn-transparent btn-dark rounded-circle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        <i class="bi bi-three-dots"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="action{{ action.id }}Dropdown">
+                        <li>
+                            <form method="post" action="{% url 'remove_action' action.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item">
+                                    <span class="text-danger"><i class="bi bi-x-square-fill me-2"></i>Remove from feed</span>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                {% endif %}
             </div>
 
             <div>
@@ -32,7 +58,6 @@
 
     </div>
 
-    <!-- Done by Claude, requires review -->
     {% if action.object_ct.model == 'post' and action.object %}
         <div class="ms-4">
             {% if action.object.parent %}
@@ -44,3 +69,4 @@
     {% endif %}
 
 </div>
+{% endif %}
