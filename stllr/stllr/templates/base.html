@@ -72,8 +72,8 @@
                     </div>
                 {% else %}
                     <div class="navbar-text ms-auto">
-                        <a class="btn btn-dark mx-2" href="{% url "account_login" %}">Sign In</a>
-                        <a class="btn btn-light text-dark ms-auto" href="{% url "account_signup" %}">Sign Up</a>
+                        <a class="btn btn-dark mx-2" href="{% url "account_login" %}?next={{ request.path }}">Sign In</a><!-- Done by Claude, requires review -->
+                        <a class="btn btn-light text-dark ms-auto" href="{% url "account_signup" %}?next={{ request.path }}">Sign Up</a><!-- Done by Claude, requires review -->
                     </div>
                 {% endif %}
             </div>
