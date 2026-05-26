@@ -96,6 +96,7 @@ class Domain(models.Model):
     CATEGORIES = [
         ('article', 'Article'),
         ('video', 'Video'),
+        ('television', 'TV'),
         ('social', 'Social'),
         ('shopping', 'Shopping'),
         ('reference', 'Reference'),
