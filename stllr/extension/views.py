@@ -29,14 +29,12 @@ def extension(request):
     except Page.DoesNotExist:
         scraped_data = get_meta(data.get('url'), data.get('head'))
         title = data.get('title') or scraped_data['title']
-        type = scraped_data['type']
         description = scraped_data['description']
         content = "".join([ p for p in data.get('innerText').split('\n') if "." in p ])
         image_url = scraped_data['image_url']
         fav_icon_url = data.get('favIconUrl') or scraped_data['fav_icon_url']
         site_name = scraped_data.get('site_name')
 
-        # Done by Claude, requires review
         try:
             verify_security(data.get('url'))
         except InsecureURLError as e:
@@ -59,7 +57,6 @@ def extension(request):
         page = Page.objects.create(
             canonical=canonical,
             title=title,
-            type=type,
             description=description,
             image_url=image_url,
             domain = domain,
@@ -80,8 +77,6 @@ def extension(request):
     elif (tab == 'room'):
         html = render_to_string('extension/room.html', context=context, request=request)
     elif (tab == 'similar'):
-        # Done by Claude, requires review
-        # similar_objects() has a taggit bug with generic FKs; query Page directly
         context['similar_pages'] = Page.objects.filter(
             tags__in=page.tags.all(), is_active=True
         ).exclude(pk=page.pk).distinct()

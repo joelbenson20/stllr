@@ -36,7 +36,6 @@ class Page(models.Model):
 
     canonical = models.CharField(max_length=250, unique=True)
     title = models.CharField(max_length=500)
-    type = models.CharField(max_length=30, blank=True)
     tags = TaggableManager(blank=True)
     description = models.TextField(max_length=500, blank=True)
     image_url = models.URLField(max_length=250, blank=True)

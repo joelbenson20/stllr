@@ -151,13 +151,6 @@ def get_meta(url, head):
         ''
     )
     
-    # Extract content type
-    content_type = (
-        get_meta_tag('og:type') or
-        get_meta_tag('content-type', attr='http-equiv') or
-        ''
-    )
-    
     # Extract all inner text (document content)
     # Remove script and style elements
     for script in soup(['script', 'style']):
@@ -168,7 +161,6 @@ def get_meta(url, head):
     
     return {
         'title': title[:200],  # CharField max_length=200
-        'type': content_type[:30],  # CharField max_length=30
         'description': description[:400],  # TextField max_length=400
         'image_url': image_url[:250],  # URLField max_length=250
         'site_name': site_name[:100],  # CharField max_length=100

@@ -10,14 +10,10 @@
 
             <div class="overflow-hidden ms-2">
                 
-                <!-- Done by Claude, requires review -->
                 <div class="small d-flex align-items-center gap-1">
                     {{ page.domain }}
                     {% if page.domain.category %}
-                        <!-- Done by Claude, requires review -->
                         <span class="badge small bg-dark">{{ page.domain.get_category_display }}</span>
-                    {% elif page.type %}
-                        <span class="badge small bg-dark">{{ page.type }}</span>
                     {% endif %}
                 </div>
 
