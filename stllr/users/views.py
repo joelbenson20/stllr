@@ -4,7 +4,8 @@ from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import redirect
-from .models import Contact, Action
+from django.views.decorators.csrf import csrf_exempt
+from .models import Contact, Action, Mute
 
 def register(request):
     if request.method == 'POST':
@@ -117,6 +118,18 @@ def remove_contact(request, username):
         from_user=other_user, to_user=request.user
     ).delete()
     return redirect('profile', username=username)
+
+# Done by Claude, requires review
+# csrf_exempt: extension popups send Origin: null — replaced by JS fetch + X-CSRFToken header when extension JS ships
+@csrf_exempt
+@login_required
+def mute_user(request, username):
+    target = get_object_or_404(get_user_model(), username=username)
+    if target != request.user:
+        mute, created = Mute.objects.get_or_create(muter=request.user, muted=target)
+        if not created:
+            mute.delete()
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 # Done by Claude, requires review
 @login_required

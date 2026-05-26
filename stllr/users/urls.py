@@ -9,4 +9,5 @@ urlpatterns = [
     path('<str:username>/decline/', views.decline_request, name='decline_request'),
     path('<str:username>/remove/', views.remove_contact, name='remove_contact'),
     path('action/<int:action_id>/remove/', views.remove_action, name='remove_action'),  # Done by Claude, requires review
+    path('<str:username>/mute/', views.mute_user, name='mute_user'),  # Done by Claude, requires review
 ]

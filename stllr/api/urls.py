@@ -9,4 +9,5 @@ urlpatterns = [
     path('star/page/', views.star_page, name='star_page'),
     path('star/post/', views.star_post, name='star_post'),
     path('count/room/', views.get_room_count, name='get_room_count'),
+    path('mute/user/', views.mute_user, name='mute_user'),  # Done by Claude, requires review
 ]

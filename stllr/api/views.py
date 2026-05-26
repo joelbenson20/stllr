@@ -8,7 +8,10 @@ from pages.models import Page, PageStar
 from forums.models import Post, PostStar
 from forums.forms import PostForm
 from rooms.consumers import _get_users
-from users.models import Action
+from users.models import Action, Mute
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 @login_required
@@ -86,6 +89,27 @@ def star_post(request):
                 PostStar.objects.filter(post=post, user=request.user).first().delete()
             return JsonResponse({'status': '200'})
         except Post.DoesNotExist:
+            pass
+    return JsonResponse({'status': '500'})
+
+# Done by Claude, requires review
+@login_required
+@require_POST
+@ratelimit(key='user', rate='10/m', method='POST', block=True)
+def mute_user(request):
+    user_id = request.POST.get('id')
+    action = request.POST.get('action')
+    if user_id and action:
+        try:
+            target = User.objects.get(id=user_id)
+            if target == request.user:
+                return JsonResponse({'status': '400'})
+            if action == 'mute':
+                Mute.objects.get_or_create(muter=request.user, muted=target)
+            else:
+                Mute.objects.filter(muter=request.user, muted=target).delete()
+            return JsonResponse({'status': '200'})
+        except User.DoesNotExist:
             pass
     return JsonResponse({'status': '500'})
 

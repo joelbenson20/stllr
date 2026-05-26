@@ -39,6 +39,15 @@ class Contact(models.Model):
     class Meta:
         unique_together = ('from_user', 'to_user')
 
+# Done by Claude, requires review
+class Mute(models.Model):
+    muter = models.ForeignKey(User, related_name='muting', on_delete=models.CASCADE)
+    muted = models.ForeignKey(User, related_name='muted_by', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('muter', 'muted')
+
 class Action(models.Model):
     class Verb(models.TextChoices):
         STARRED = 'starred', 'starred the page'
