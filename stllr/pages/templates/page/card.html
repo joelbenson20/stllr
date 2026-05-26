@@ -6,7 +6,7 @@
 
         <div class="d-flex align-items-center">
             
-            {% include "domain/icon.html" with domain=page.domain dimensions="32x32" %}
+            {% include "domain/icon.html" with domain=page.domain dimensions="32x32" size=32 %}
 
             <div class="overflow-hidden ms-2">
                 
@@ -17,9 +17,14 @@
                     {% endif %}
                 </div>
 
-                <a class="d-block small text-truncate text-white text-decoration-none" href="{{ page.link }}">
-                    {{ page.link }}
-                </a>
+                <div class="d-flex align-items-center gap-1">
+                    {% if "https" not in page.supported_protocols and "http" in page.supported_protocols %}
+                        <span class="badge bg-warning text-dark text-nowrap" style="font-size:0.6em"><i class="bi bi-shield-x"></i> Not Secure</span>
+                    {% endif %}
+                    <a class="small text-truncate text-white text-decoration-none" href="{{ page.link }}">
+                        {{ page.link }}
+                    </a>
+                </div>
 
             </div>
 

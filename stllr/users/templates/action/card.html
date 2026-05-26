@@ -9,9 +9,9 @@
     <div class="d-flex align-items-start gap-2">
 
         {% if action.object_ct.model == 'page' %}
-            {% include "domain/icon.html" with domain=action.object.domain dimensions="32x32" %}
+            {% include "domain/icon.html" with domain=action.object.domain dimensions="32x32" size=32 %}
         {% elif action.object_ct.model == 'post' %}
-            {% include "domain/icon.html" with domain=action.object.page.domain dimensions="32x32" %}
+            {% include "domain/icon.html" with domain=action.object.page.domain dimensions="32x32" size=32 %}
         {% endif %}
 
         <div class="flex-grow-1">

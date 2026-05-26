@@ -1,5 +1,6 @@
 import secrets
 import json
+from urllib.parse import urlparse
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
@@ -16,9 +17,15 @@ from pages.utils import get_canonical, get_meta, get_domain_name, verify_securit
 @require_POST
 def extension(request):
     data = json.loads(request.body).get('page').get('data')
-    canonical = get_canonical(data.get('url'))
+    url = data.get('url')
+    # Done by Claude, requires review
+    protocol = urlparse(url).scheme.lower()
+    canonical = get_canonical(url)
     try:
         page = Page.objects.get(canonical=canonical)
+        if protocol and protocol not in page.supported_protocols:
+            page.supported_protocols.append(protocol)
+            page.save(update_fields=['supported_protocols'])
         if not page.is_active:
             return JsonResponse(
                 {
@@ -27,7 +34,7 @@ def extension(request):
                 }
             )
     except Page.DoesNotExist:
-        scraped_data = get_meta(data.get('url'), data.get('head'))
+        scraped_data = get_meta(url, data.get('head'))
         title = data.get('title') or scraped_data['title']
         description = scraped_data['description']
         content = "".join([ p for p in data.get('innerText').split('\n') if "." in p ])
@@ -36,7 +43,7 @@ def extension(request):
         site_name = scraped_data.get('site_name')
 
         try:
-            verify_security(data.get('url'))
+            verify_security(url)
         except InsecureURLError as e:
             return JsonResponse(
                 {
@@ -45,7 +52,7 @@ def extension(request):
                 }
             )
 
-        domain_name = get_domain_name(data.get('url'))
+        domain_name = get_domain_name(url)
         domain, _ = Domain.objects.get_or_create(name=domain_name)
         if site_name and not domain.site_name:
             domain.site_name = site_name
@@ -59,8 +66,10 @@ def extension(request):
             title=title,
             description=description,
             image_url=image_url,
-            domain = domain,
+            domain=domain,
             content=content or scraped_data['content'] or '',
+            # Done by Claude, requires review
+            supported_protocols=[protocol] if protocol else [],
         )
 
     # Default extension tab is 'forum'

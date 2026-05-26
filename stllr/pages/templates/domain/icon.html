@@ -1,7 +1,8 @@
-{% load thumbnail %}
+{% load static thumbnail %}
 
 {% thumbnail domain.fav_icon dimensions as icon %}{% if icon %}
     <img src="{{ icon.url }}" class="page-fav-icon {% if domain.fav_icon_bg_light %}bg-light{% endif %} rounded-circle flex-shrink-0">
 {% else %}
-    <i class="bi bi-globe flex-shrink-0"></i>
+    <!-- Done by Claude, requires review -->
+    <img src="{% static 'img/favicon-default.webp' %}" class="page-fav-icon rounded-circle flex-shrink-0" width="{{ size }}" height="{{ size }}" style="transform: rotate(23.5deg);">
 {% endif %}

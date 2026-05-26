@@ -119,7 +119,6 @@ def remove_contact(request, username):
     ).delete()
     return redirect('profile', username=username)
 
-# Done by Claude, requires review
 # csrf_exempt: extension popups send Origin: null — replaced by JS fetch + X-CSRFToken header when extension JS ships
 @csrf_exempt
 @login_required
@@ -131,7 +130,6 @@ def mute_user(request, username):
             mute.delete()
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
-# Done by Claude, requires review
 @login_required
 def remove_action(request, action_id):
     action = get_object_or_404(Action, id=action_id, user=request.user)

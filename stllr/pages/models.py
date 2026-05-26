@@ -10,10 +10,10 @@ from django.db.models import Case, When, IntegerField
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.fields import ArrayField
 
 
 class Page(models.Model):
-
     class FirmamentQuerySet(models.QuerySet):
         def firmament(self):
             if not self:
@@ -31,10 +31,15 @@ class Page(models.Model):
             firmament = Page.objects.filter(id__in=chosen_ids).order_by(chosen_order)
             return firmament
         
+    class Protocol(models.TextChoices):
+        HTTP = 'http', 'http://'
+        HTTPS = 'https', 'https://'
+        
     objects = models.Manager()
     firmament = FirmamentQuerySet.as_manager()
 
     canonical = models.CharField(max_length=250, unique=True)
+    supported_protocols = ArrayField(models.CharField(max_length=10), default=list, blank=True)
     title = models.CharField(max_length=500)
     tags = TaggableManager(blank=True)
     description = models.TextField(max_length=500, blank=True)
@@ -57,8 +62,7 @@ class Page(models.Model):
     rise = models.IntegerField(default=0, editable=False)
 
     is_active = models.BooleanField(default=True)
-    # Done by Claude, requires review
-    # Done by Claude, requires review
+
     actions = GenericRelation('users.Action', content_type_field='object_ct', object_id_field='object_id')
 
     def save(self, *args, **kwargs):
@@ -78,7 +82,11 @@ class Page(models.Model):
     
     @property
     def link(self):
-        return 'https://' + self.canonical
+        if self.Protocol.HTTPS in self.supported_protocols:
+            return self.Protocol.HTTPS + '://' + self.canonical
+        if self.Protocol.HTTP in self.supported_protocols:
+            return self.Protocol.HTTP + '://' + self.canonical
+        return self.Protocol.HTTPS + '://' + self.canonical
     
     
 class PageStar(models.Model):
