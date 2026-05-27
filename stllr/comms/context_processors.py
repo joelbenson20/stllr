@@ -1,4 +1,4 @@
-from .models import Contact, Mute
+from users.models import Contact, Mute
 
 def notifications(request):
 
@@ -18,7 +18,6 @@ def notifications(request):
         }
     }
 
-# Done by Claude, requires review
 def contacts(request):
     if request.user.is_authenticated:
         from django.db.models import Q

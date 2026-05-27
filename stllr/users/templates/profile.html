@@ -75,9 +75,3 @@
     </div>
 
 {% endblock content %}
-
-{% block right %}
-    {% if user == profile.user %}
-        {% include "user/comms.html" with notifications=notifications %}
-    {% endif %}
-{% endblock right %}
