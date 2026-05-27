@@ -2,7 +2,6 @@
 {% load humanize %}
 {% load utility_tags %}
 
-<!-- Done by Claude, requires review -->
 <div id="post{{ post.id }}" class="post rounded-card mt-2 p-2" data-author-id="{{ post.user.id }}">
 
     {% include "user/header.html" with user=post.user timestamp=post.created|naturaltime %}
@@ -29,7 +28,7 @@
                 data-bs-toggle="collapse"
                 data-bs-target="#children{{ post.id }}"
                 aria-expanded="false">
-                <i class="bi bi-chat"></i>
+                <i class="bi bi-diagram-3-fill"></i>
                 &nbsp;<span>{{ post.children.count }}</span>
             </a>
 

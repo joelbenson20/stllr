@@ -3,43 +3,37 @@
 
 {% block content %}
 
-    <div class="col-8">
-        <form class="d-flex w-100 mb-3" action="{% url 'explore' %}" role="search">
-            <input class="search-bar glow-on-focus form-control form-control-lg rounded-pill border-0"
-                name="query"
-                type="search"
-                placeholder="Where to?"
-                aria-label="Search"
-                value="{{ query|default:'' }}"
-                autocomplete="off">
-        </form>
+    <form class="d-flex w-100 mb-3" action="{% url 'explore' %}" role="search">
+        <input class="search-bar glow-on-focus form-control form-control-lg rounded-pill border-0"
+            name="query"
+            type="search"
+            placeholder="Where to?"
+            aria-label="Search"
+            value="{{ query|default:'' }}"
+            autocomplete="off">
+    </form>
 
-        <div class="d-flex align-items-center gap-2">
-            <div class="dropdown">
-                <button class="btn btn-sm btn-outline-light dropdown-toggle" id="sortMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ sort|capfirst }}
-                </button>
-                <div class="dropdown-menu" aria-labelledby="sortMenuButton">
-                    <a class="dropdown-item" href="{% url 'explore' %}?{% if tag %}tag={{ tag.slug }}&{% elif query %}query={{ query }}&{% endif %}sort=firmament">Firmament</a>
-                    <a class="dropdown-item" href="{% url 'explore' %}?{% if tag %}tag={{ tag.slug }}&{% elif query %}query={{ query }}&{% endif %}sort=brightest">Brightest</a>
-                    <a class="dropdown-item" href="{% url 'explore' %}?{% if tag %}tag={{ tag.slug }}&{% elif query %}query={{ query }}&{% endif %}sort=rising">Rising</a>
-                </div>
+    <div class="d-flex align-items-center gap-2">
+        <div class="dropdown">
+            <button class="btn btn-sm btn-outline-light dropdown-toggle" id="sortMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ sort|capfirst }}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="sortMenuButton">
+                <a class="dropdown-item" href="{% url 'explore' %}?{% if tag %}tag={{ tag.slug }}&{% elif query %}query={{ query }}&{% endif %}sort=firmament">Firmament</a>
+                <a class="dropdown-item" href="{% url 'explore' %}?{% if tag %}tag={{ tag.slug }}&{% elif query %}query={{ query }}&{% endif %}sort=brightest">Brightest</a>
+                <a class="dropdown-item" href="{% url 'explore' %}?{% if tag %}tag={{ tag.slug }}&{% elif query %}query={{ query }}&{% endif %}sort=rising">Rising</a>
             </div>
-            {% if tag %}
-                <span class="text-secondary"># {{ tag.name }}</span>
-            {% endif %}
-            {% if query %}
-                <span class="text-secondary"><i class="bi bi-search"></i> {{ query }}</span>
-            {% endif %}
         </div>
-
-        <div class="mt-5">
-            {% include 'page/list.html' with pages=pages user=user %}
-        </div>
-
+        {% if tag %}
+            <span class="text-secondary"># {{ tag.name }}</span>
+        {% endif %}
+        {% if query %}
+            <span class="text-secondary"><i class="bi bi-search"></i> {{ query }}</span>
+        {% endif %}
     </div>
 
-    <div class="col-4">
+    <div class="mt-5">
+        {% include 'page/list.html' with pages=pages user=user %}
     </div>
 
 

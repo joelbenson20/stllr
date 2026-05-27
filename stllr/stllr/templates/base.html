@@ -60,15 +60,19 @@
                     <span class="fs-5 fw-semibold">Explore</span>
                 </a>
                 {% if user.is_authenticated %}
-                <a href="{% url 'contacts' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
-                    <i class="bi bi-people fs-3"></i>
-                    <span class="fs-5 fw-semibold">Contacts</span>
-                </a>
-                <a href="{% url 'bookmarks' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
-                    <i class="bi bi-bookmark fs-3"></i>
-                    <span class="fs-5 fw-semibold">Bookmarks</span>
-                </a>
-                {% endif %}
+                    <a href="{% url 'bookmarks' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
+                        <i class="bi bi-bookmark fs-3"></i>
+                        <span class="fs-5 fw-semibold">Bookmarks</span>
+                    </a>
+                    <a href="{% url 'comms' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
+                        <i class="bi bi-soundwave fs-3"></i>
+                        <span class="fs-5 fw-semibold">Comms</span>
+                    </a>
+                    <a href="{% url 'contacts' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
+                        <i class="bi bi-people fs-3"></i>
+                        <span class="fs-5 fw-semibold">Contacts</span>
+                    </a>
+                    {% endif %}
             </nav>
 
             {% block left %}

@@ -18,12 +18,6 @@
             </button>
             <div class="collapse px-2 pb-2" id="contact-{{ item.user.username }}">
                 <div class="d-flex gap-2 pt-1 ps-1">
-                    <button class="btn btn-sm btn-outline-light" disabled>
-                        <i class="bi bi-bell"></i> Ping
-                    </button>
-                    <button class="btn btn-sm btn-outline-secondary" disabled>
-                        <i class="bi bi-chat"></i> Message
-                    </button>
                     <a href="{% url 'profile' item.user.username %}" class="btn btn-sm btn-outline-light">
                         <i class="bi bi-person"></i> Profile
                     </a>

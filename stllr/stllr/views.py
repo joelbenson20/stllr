@@ -78,6 +78,11 @@ def explore(request):
 def contacts(request):
     return render(request, 'contacts.html')
 
+# Done by Claude, requires review
+@login_required
+def comms(request):
+    return render(request, 'comms.html')
+
 @login_required
 def bookmarks(request):
     bookmarked_pages = Page.objects.filter(bookmarks__user=request.user).order_by('-bookmarks__created')
