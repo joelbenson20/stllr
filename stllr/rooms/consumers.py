@@ -5,7 +5,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.template.loader import render_to_string
 from django.core.cache import cache
 from asgiref.sync import sync_to_async
-from .models import Message
+from .models import Broadcast  # Done by Claude, requires review
 from users.models import Action
 from pages.models import Page
 
@@ -124,7 +124,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
             return
         
         content = data['content']
-        message = await Message.objects.acreate(
+        # Done by Claude, requires review
+        broadcast = await Broadcast.objects.acreate(
             user=self.user, page_id=self.page_id, content=content
         )
 
@@ -133,8 +134,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'room_message',
                 'html': await sync_to_async(render_to_string)(
-                    'messages/message.html',
-                    context={'message': message}
+                    'rooms/broadcast.html',
+                    context={'broadcast': broadcast}
                 ),
             }
         )

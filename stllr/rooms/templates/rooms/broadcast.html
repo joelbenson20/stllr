@@ -1,0 +1,13 @@
+{% load thumbnail %}
+{% load humanize %}
+
+<!-- Done by Claude, requires review -->
+<div class="message rounded-car mb-3">
+
+    {% include "user/header.html" with user=broadcast.user timestamp=broadcast.created|time:"g:i A" %}
+
+    <div class="message-body ps-5">
+        {{ broadcast.content }}
+    </div>
+
+</div>
