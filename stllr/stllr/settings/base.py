@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'stllr',
     'pages.apps.PagesConfig',
+    'comms.apps.CommsConfig',
     'forums.apps.ForumsConfig',
     'rooms.apps.RoomsConfig',
     'governance.apps.GovernanceConfig',
