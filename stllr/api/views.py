@@ -4,7 +4,7 @@ from django_ratelimit.decorators import ratelimit
 from django.http import JsonResponse
 from forums.templatetags.utility_tags import safe_markdown_filter
 from django.template.loader import render_to_string
-from pages.models import Page, PageStar
+from pages.models import Page, PageStar, PageBookmark
 from forums.models import Post, PostStar
 from forums.forms import PostForm
 from rooms.consumers import _get_users
@@ -23,6 +23,44 @@ def markdownify(request):
         'markdown': safe_markdown_filter(content),
     }
     return JsonResponse(response)
+
+@login_required
+@require_POST
+@ratelimit(key='user', rate='3/s', method='POST', block=True)
+def star_page(request):
+    page_id = request.POST.get('id')
+    action = request.POST.get('action')
+    if page_id and action:
+        try:
+            page = Page.objects.get(id=page_id)
+            if action == 'star':
+                PageStar.objects.get_or_create(page=page, user=request.user)
+                Action.objects.create(
+                    user=request.user, verb=Action.Verb.STARRED, object=page
+                )
+            else:
+                PageStar.objects.filter(page=page, user=request.user).first().delete()
+            return JsonResponse({'status': '200'})
+        except Page.DoesNotExist:
+            pass
+    return JsonResponse({'status': '500'})
+
+@login_required
+@require_POST
+def bookmark_page(request):
+    page_id = request.POST.get('id')
+    action = request.POST.get('action')
+    if page_id and action:
+        try:
+            page = Page.objects.get(id=page_id)
+            if action == 'bookmark':
+                PageBookmark.objects.get_or_create(page=page, user=request.user)
+            else:
+                PageBookmark.objects.filter(page=page, user=request.user).first().delete()
+            return JsonResponse({'status': '200'})
+        except Page.DoesNotExist:
+            pass
+    return JsonResponse({'status': '500'})
 
 @login_required
 @require_POST
@@ -56,27 +94,6 @@ def create_post(request):
 @login_required
 @require_POST
 @ratelimit(key='user', rate='3/s', method='POST', block=True)
-def star_page(request):
-    page_id = request.POST.get('id')
-    action = request.POST.get('action')
-    if page_id and action:
-        try:
-            page = Page.objects.get(id=page_id)
-            if action == 'star':
-                PageStar.objects.get_or_create(page=page, user=request.user)
-                Action.objects.create(
-                    user=request.user, verb=Action.Verb.STARRED, object=page
-                )
-            else:
-                PageStar.objects.filter(page=page, user=request.user).first().delete()
-            return JsonResponse({'status': '200'})
-        except Page.DoesNotExist:
-            pass
-    return JsonResponse({'status': '500'})
-
-@login_required
-@require_POST
-@ratelimit(key='user', rate='3/s', method='POST', block=True)
 def star_post(request):
     post_id = request.POST.get('id')
     action = request.POST.get('action')
@@ -92,7 +109,6 @@ def star_post(request):
             pass
     return JsonResponse({'status': '500'})
 
-# Done by Claude, requires review
 @login_required
 @require_POST
 @ratelimit(key='user', rate='10/m', method='POST', block=True)
@@ -117,3 +133,4 @@ def get_room_count(request):
     ids = [i.strip() for i in request.GET.get('ids', '').split(',') if i.strip()]
     counts = {page_id: len(_get_users(f'room_{page_id}')) for page_id in ids}
     return JsonResponse(counts)
+

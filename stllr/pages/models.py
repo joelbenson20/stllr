@@ -56,6 +56,13 @@ class Page(models.Model):
         related_name='pages_starred',
         blank=True
     )
+    # Done by Claude, requires review
+    users_bookmark = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='PageBookmark',
+        related_name='pages_bookmarked',
+        blank=True
+    )
     total_stars = models.PositiveIntegerField(default=0, editable=False)
     brightness = models.FloatField(default=0, editable=False)
     brightness_index = models.PositiveIntegerField(editable=False)
@@ -92,6 +99,14 @@ class Page(models.Model):
 class PageStar(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_stars', on_delete=models.CASCADE)
     page = models.ForeignKey(Page, related_name='stars', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'page')
+
+class PageBookmark(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_bookmarks', on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, related_name='bookmarks', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -74,19 +74,28 @@
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="p{{ page.id }}Dropdown">
                 <li>
                     <a class="dropdown-item" href="#">
-                        <i class="bi bi-share-fill me-2"></i>Share
+                        <i class="bi bi-share-fill me-2"></i>Share page
                     </a>
                 </li>
-                <li>
-                    <a class="dropdown-item" href="#">
-                        <i class="bi bi-bookmark-fill"></i> Bookmark
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="{% url "governance:report_page" page.id %}" target="_blank">
-                        <i class="bi bi-flag-fill"></i> Report
-                    </a>
-                </li>
+                {% if request.user.is_authenticated %}
+                    <li>
+                        <a class="dropdown-item page-bookmark-button"
+                            href="{% url 'pages:toggle_bookmark' page.id %}?action={% if page in user.pages_bookmarked.all %}unbookmark{% else %}bookmark{% endif %}"
+                            target="_blank"
+                            data-page-id="{{ page.id }}"
+                            data-action="{% if page in user.pages_bookmarked.all %}unbookmark{% else %}bookmark{% endif %}"
+                            data-csrf-token="{{ csrf_token }}"
+                            data-endpoint="{% url 'api:bookmark_page' %}">
+                            <i class="bi {% if page in user.pages_bookmarked.all %}bi-bookmark-fill{% else %}bi-bookmark{% endif %}"></i>
+                            <span>{% if page in user.pages_bookmarked.all %}Remove Bookmark{% else %}Bookmark page{% endif %}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url "governance:report_page" page.id %}" target="_blank">
+                            <i class="bi bi-flag-fill"></i> Report page
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
 
         </div>

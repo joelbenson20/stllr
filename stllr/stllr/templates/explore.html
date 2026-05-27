@@ -3,8 +3,7 @@
 
 {% block content %}
 
-    <!-- Done by Claude, requires review -->
-    <div class="mb-4">
+    <div class="col-8">
         <form class="d-flex w-100 mb-3" action="{% url 'explore' %}" role="search">
             <input class="search-bar glow-on-focus form-control form-control-lg rounded-pill border-0"
                 name="query"
@@ -33,9 +32,16 @@
                 <span class="text-secondary"><i class="bi bi-search"></i> {{ query }}</span>
             {% endif %}
         </div>
+
+        <div class="mt-5">
+            {% include 'page/list.html' with pages=pages user=user %}
+        </div>
+
     </div>
 
-    {% include 'page/list.html' with pages=pages user=user %}
+    <div class="col-4">
+    </div>
+
 
 {% endblock content %}
 

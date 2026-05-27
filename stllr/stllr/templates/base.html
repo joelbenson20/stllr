@@ -39,14 +39,14 @@
 
 <body>
 
-    <!-- Left sidebar: offcanvas on mobile, fixed on lg+ via CSS -->
+    <!-- Left sidebar: offcanvas on mobile, fixed on md+ via CSS -->
     <div class="offcanvas offcanvas-start left-sidebar" id="leftNav" tabindex="-1">
-        <div class="offcanvas-header d-lg-none justify-content-end pb-0">
+        <div class="offcanvas-header d-md-none justify-content-end pb-0">
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="d-flex flex-column h-100 p-3">
 
-            <a class="navbar-brand mb-4 d-none d-lg-block" href="{% url 'home' %}">
+            <a class="navbar-brand mb-4 d-none d-md-block" href="{% url 'home' %}">
                 <img src="{% static 'brand/stllr.png' %}" width=96>
             </a>
 
@@ -63,6 +63,10 @@
                 <a href="{% url 'contacts' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
                     <i class="bi bi-people fs-3"></i>
                     <span class="fs-5 fw-semibold">Contacts</span>
+                </a>
+                <a href="{% url 'bookmarks' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
+                    <i class="bi bi-bookmark fs-3"></i>
+                    <span class="fs-5 fw-semibold">Bookmarks</span>
                 </a>
                 {% endif %}
             </nav>
@@ -104,11 +108,11 @@
     <div id="mainContent">
 
         <!-- Mobile top bar -->
-        <div class="d-flex d-lg-none align-items-center gap-2 p-3 glass sticky-top navbar-dark">
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftNav" aria-controls="leftNav">
+        <div class="d-flex d-md-none align-items-center gap-2 p-3 glass sticky-top navbar-dark">
+            <button class="navbar-toggler border-0 position-absolute" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftNav" aria-controls="leftNav">
                 <span class="navbar-toggler-icon text-secondary"></span>
             </button>
-            <a class="navbar-brand mb-0" href="{% url 'home' %}">
+            <a class="navbar-brand mb-0 mx-auto" href="{% url 'home' %}">
                 <img src="{% static 'brand/stllr.png' %}" width=80>
             </a>
         </div>
@@ -124,9 +128,18 @@
             </div>
         {% endif %}
 
-        <div class="p-md-5 p-3">
-            {% block content %}
-            {% endblock content %}
+        <div class="d-md-flex">
+
+            <div class="col-md-8 p-md-5 p-3">
+                {% block content %}
+                {% endblock content %}
+            </div>
+
+            <div class="col-4 d-none d-md-block p-md-5 p-3">
+                {% block right %}
+                {% endblock right %}
+            </div>
+            
         </div>
 
     </div>

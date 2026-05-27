@@ -97,6 +97,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'users.context_processors.notifications',
                 'users.context_processors.muted_users',  # Done by Claude, requires review
+                'users.context_processors.contacts',  # Done by Claude, requires review
             ],
         },
     },

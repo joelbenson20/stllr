@@ -4,7 +4,7 @@ from django.http import HttpResponse, Http404
 from django.db.models import Q
 from django.contrib.postgres.search import SearchQuery
 from pages.models import Page
-from users.models import Contact, Action
+from django.contrib.auth.decorators import login_required
 from taggit.models import Tag
 
 def home(request):
@@ -31,7 +31,6 @@ def home(request):
         'pages': pages,
     })
 
-# Done by Claude, requires review
 def explore(request):
     sort = request.GET.get('sort', 'firmament')
     if sort == 'brightest':
@@ -74,6 +73,15 @@ def explore(request):
         'tag': tag,
         'sort': sort,
     })
+
+@login_required
+def contacts(request):
+    return render(request, 'contacts.html')
+
+@login_required
+def bookmarks(request):
+    bookmarked_pages = Page.objects.filter(bookmarks__user=request.user).order_by('-bookmarks__created')
+    return render(request, 'bookmarks.html', {'pages': bookmarked_pages})
 
 def policy(request, policy):
     if (policy == 'privacy-policy'):

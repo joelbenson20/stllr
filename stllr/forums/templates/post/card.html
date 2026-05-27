@@ -9,7 +9,6 @@
 
     <div class="ms-4 my-2">
 
-        <!-- Done by Claude, requires review -->
         <div class="post-content {% if post.user.id in muted_user_ids %}d-none{% endif %}">
             {% if post.removed %}
                 <p class="text-secondary fst-italic small">This post has been removed by {{ post.get_removed_by_display }}.</p>

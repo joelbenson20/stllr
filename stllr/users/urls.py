@@ -2,7 +2,6 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('contacts/', views.contacts, name='contacts'),  # Done by Claude, requires review
     path('<str:username>/', views.profile, name='profile'),
     path('<str:username>/edit/', views.edit, name='edit'),
     path('<str:username>/add/', views.send_request, name='send_request'),
