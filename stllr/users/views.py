@@ -130,6 +130,11 @@ def mute_user(request, username):
             mute.delete()
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
+# Done by Claude, requires review
+@login_required
+def contacts(request):
+    return render(request, 'contacts.html')
+
 @login_required
 def remove_action(request, action_id):
     action = get_object_or_404(Action, id=action_id, user=request.user)

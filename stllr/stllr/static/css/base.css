@@ -4,7 +4,8 @@
     --white-hot: #ede8ff;
 }
 
-body {
+body,
+#leftNav {
     background-color: var(--night-sky);
     color: white;
     scrollbar-color: auto transparent;
@@ -16,6 +17,10 @@ body {
     background: none !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+}
+
+.search-form {
+    max-width: 576px;
 }
 
 ::-webkit-scrollbar {
@@ -82,11 +87,6 @@ h1 a:hover {
     border: none;
 }
 
-.search-form {
-    width: 100%;
-    max-width: 576px;
-}
-
 .glow-on-focus:has(:focus),
 .glow-on-focus:focus {
     outline: none;
@@ -113,4 +113,39 @@ h1 a:hover {
 
 .help-block, .form-text {
     color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Done by Claude, requires review */
+.sidebar-link {
+    color: white;
+}
+.sidebar-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Done by Claude, requires review */
+:root {
+    --sidebar-width: 280px;
+}
+
+.left-sidebar {
+    width: var(--sidebar-width) !important;
+}
+
+@media (min-width: 992px) {
+    .left-sidebar {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        overflow-y: auto;
+        transform: none !important;
+        visibility: visible !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    #mainContent {
+        margin-left: var(--sidebar-width);
+    }
 }

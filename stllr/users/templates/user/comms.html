@@ -3,7 +3,10 @@
         <div class="mb-4">
 
             <div class="float-start">
-                {% include "user/profile-picture.html" with user=pending_request.from_user size="32" dimensions="32x32" %}
+                <!-- Done by Claude, requires review -->
+                <a href="{% url "profile" pending_request.from_user.username %}">
+                    {% include "user/profile-picture.html" with user=pending_request.from_user size="32" dimensions="32x32" %}
+                </a>
             </div>
 
             <a href="{% url "profile" pending_request.from_user.username %}">@{{ pending_request.from_user.username }}</a>
