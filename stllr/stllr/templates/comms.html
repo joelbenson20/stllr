@@ -9,7 +9,7 @@
         {% for notif in user_notifications %}
             <div class="p-3 rounded-3 border {% if not notif.read %}border-primary{% endif %}">
                 {% with actors=notif.notification_actors.all %}
-                    <span class="fw-semibold">{{ actors.0.actor.username }}</span>
+                    <a href="{% url 'profile' actors.0.actor.username %}" class="fw-semibold text-decoration-none">{{ actors.0.actor.username }}</a>
                     {% if notif.actor_count > 1 %}
                         and {{ notif.actor_count|add:"-1" }} other{{ notif.actor_count|add:"-1"|pluralize }}
                     {% endif %}
