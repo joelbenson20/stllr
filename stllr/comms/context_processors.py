@@ -1,4 +1,5 @@
 from users.models import Contact, Mute
+from comms.models import Notification
 
 def notifications(request):
 
@@ -7,14 +8,20 @@ def notifications(request):
             to_user=request.user,
             status=Contact.Status.PENDING
         ).select_related('from_user')
+        unread_count = Notification.objects.filter(
+            recipient=request.user,
+            read=False
+        ).count()
         return {
             'notifications': {
                 'pending_requests': pending_requests,
+                'unread_count': unread_count,
             }
         }
     return {
         'notifications': {
             'pending_requests': [],
+            'unread_count': 0,
         }
     }
 

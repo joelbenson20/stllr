@@ -68,6 +68,9 @@
                     <a href="{% url 'comms' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
                         <i class="bi bi-soundwave fs-3"></i>
                         <span class="fs-5 fw-semibold">Comms</span>
+                        {% if notifications.unread_count %}
+                            <span class="badge rounded-pill, bg-danger ms-auto">{{ notifications.unread_count }}</span>
+                        {% endif %}
                     </a>
                     <a href="{% url 'contacts' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
                         <i class="bi bi-people fs-3"></i>

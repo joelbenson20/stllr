@@ -78,10 +78,16 @@ def explore(request):
 def contacts(request):
     return render(request, 'contacts.html')
 
-# Done by Claude, requires review
 @login_required
 def comms(request):
-    return render(request, 'comms.html')
+    from comms.models import Notification
+    user_notifications = list(
+        Notification.objects
+        .filter(recipient=request.user)
+        .prefetch_related('notification_actors__actor')
+    )
+    Notification.objects.filter(recipient=request.user).update(read=True)
+    return render(request, 'comms.html', {'user_notifications': user_notifications})
 
 @login_required
 def bookmarks(request):

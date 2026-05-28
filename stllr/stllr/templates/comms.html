@@ -4,5 +4,28 @@
 
 {% block content %}
 <h4 class="fw-bold mb-4">Comms</h4>
-<p class="text-secondary">Comms is coming soon.</p>
+{% if user_notifications %}
+    <div class="d-flex flex-column gap-2">
+        {% for notif in user_notifications %}
+            <div class="p-3 rounded-3 border {% if not notif.read %}border-primary{% endif %}">
+                {% with actors=notif.notification_actors.all %}
+                    <span class="fw-semibold">{{ actors.0.actor.username }}</span>
+                    {% if notif.actor_count > 1 %}
+                        and {{ notif.actor_count|add:"-1" }} other{{ notif.actor_count|add:"-1"|pluralize }}
+                    {% endif %}
+                {% endwith %}
+                {% if notif.event == 'post_starred' %}
+                    starred your post
+                {% elif notif.event == 'post_replied' %}
+                    replied to your post
+                {% elif notif.event == 'contact_request' %}
+                    sent you a contact request
+                {% endif %}
+                <span class="text-secondary ms-2 small">{{ notif.updated|timesince }} ago</span>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-secondary">No notifications.</p>
+{% endif %}
 {% endblock content %}

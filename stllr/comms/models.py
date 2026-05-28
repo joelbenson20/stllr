@@ -39,7 +39,7 @@ class Notification(models.Model):
         ordering = ['-updated']
 
     def __str__(self):
-        return f'{self.recipient.username}: {self.verb}'
+        return f'{self.recipient.username}: {self.event}'
     
 class NotificationActor(models.Model):
     notification = models.ForeignKey(
