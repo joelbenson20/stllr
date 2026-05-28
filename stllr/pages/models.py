@@ -120,6 +120,7 @@ class Domain(models.Model):
         ('news', 'News'),
         ('video', 'Video'),
         ('television', 'TV'),
+        ('music', 'Music'),
         ('social', 'Social'),
         ('shopping', 'Shopping'),
         ('reference', 'Reference'),
