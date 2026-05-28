@@ -54,7 +54,8 @@ class Action(models.Model):
         REPLIED = 'replied', 'replied in the forum'
         ENTERED = 'entered', 'entered the room'
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actions')
+    # Done by Claude, requires review
+    actor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actions')
     verb = models.CharField(max_length=20, choices=Verb.choices)
     object_ct = models.ForeignKey(
         ContentType,
@@ -77,4 +78,4 @@ class Action(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.user.username} {self.get_verb_display()} {self.object}'
+        return f'{self.actor.username} {self.get_verb_display()} {self.object}'

@@ -36,7 +36,7 @@ def star_page(request):
             if action == 'star':
                 PageStar.objects.get_or_create(page=page, user=request.user)
                 Action.objects.create(
-                    user=request.user, verb=Action.Verb.STARRED, object=page
+                    actor=request.user, verb=Action.Verb.STARRED, object=page  # Done by Claude, requires review
                 )
             else:
                 PageStar.objects.filter(page=page, user=request.user).first().delete()
@@ -77,11 +77,11 @@ def create_post(request):
         new_post.save()
         if (new_post.parent):
             Action.objects.create(
-                user=request.user, verb=Action.Verb.REPLIED, object=new_post
+                actor=request.user, verb=Action.Verb.REPLIED, object=new_post  # Done by Claude, requires review
             )
         else:
             Action.objects.create(
-                user=request.user, verb=Action.Verb.POSTED, object=new_post
+                actor=request.user, verb=Action.Verb.POSTED, object=new_post  # Done by Claude, requires review
             )
         response = {
             'status': '201',

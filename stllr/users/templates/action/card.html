@@ -17,12 +17,12 @@
         <div class="flex-grow-1">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="mb-0">
-                    @{{ action.user.username }}
+                    @{{ action.actor.username }}
                     {{ action.get_verb_display }}
                     <span class="text-secondary">{{ action.created|naturaltime }}</span>
                 </div>
 
-                {% if action.user == request.user %}
+                {% if action.actor == request.user %}
                 <div class="dropdown">
                     <button id="action{{ action.id }}Dropdown"
                             class="dropdown-toggle no-caret btn btn btn-transparent btn-dark rounded-circle"

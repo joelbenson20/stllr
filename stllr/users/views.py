@@ -132,7 +132,7 @@ def mute_user(request, username):
 
 @login_required
 def remove_action(request, action_id):
-    action = get_object_or_404(Action, id=action_id, user=request.user)
+    action = get_object_or_404(Action, id=action_id, actor=request.user)  # Done by Claude, requires review
     action.removed = True
     action.save(update_fields=['removed'])
     messages.success(request, "Removed from your activity feed.")

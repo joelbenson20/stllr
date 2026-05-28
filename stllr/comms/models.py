@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 class Notification(models.Model):
     class Event(models.TextChoices):
         CONTACT_REQUEST = 'contact_request', 'Contact Request'
+        CONTACT_ACCEPTED = 'contact_accepted', 'Contact Accepted'  # Done by Claude, requires review
         POST_STARRED = 'post_starred', 'Post Starred'
         POST_REPLIED = 'post_replied', 'Post Replied'
 
