@@ -3,6 +3,8 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
+# Done by Claude, requires review
+from forums.views import post_detail
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -15,7 +17,8 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('policies/<str:policy>/', views.policy, name='policy'),
     path('pages/', include('pages.urls', namespace='pages')),  # Done by Claude, requires review
-    path('forums/', include('forums.urls', namespace='forums')),
+    path('forum/', include('forums.urls', namespace='forums')),
+    path('post/<int:post_id>/', post_detail, name='post_detail'),  # Done by Claude, requires review
     path('rooms/', include('rooms.urls')),
     path('extension/', include('extension.urls', namespace='extension')),
     path('api/', include('api.urls', namespace='api')),

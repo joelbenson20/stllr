@@ -2,7 +2,8 @@
 {% load humanize %}
 {% load utility_tags %}
 
-<div id="post{{ post.id }}" class="post rounded-card mt-2 p-2" data-author-id="{{ post.user.id }}">
+<!-- Done by Claude, requires review -->
+<div id="post{{ post.id }}" class="post rounded-card mt-2 p-2" data-author-id="{{ post.user.id }}" data-post-url="{% url 'post_detail' post.id %}" style="cursor:pointer">
 
     {% include "user/header.html" with user=post.user timestamp=post.created|naturaltime %}
 
@@ -48,8 +49,9 @@
                         <i class="bi bi-three-dots"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="post{{ post.id }}Dropdown">
+                <!-- Done by Claude, requires review -->
                 <li>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="{% url 'post_detail' post.id %}">
                         <i class="bi bi-share-fill me-2"></i>Share post
                     </a>
                 </li>

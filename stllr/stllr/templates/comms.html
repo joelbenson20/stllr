@@ -17,10 +17,11 @@
                         {% if notif.actor_count > 1 %}
                             and {{ notif.actor_count|add:"-1" }} other{{ notif.actor_count|add:"-1"|pluralize }}
                         {% endif %}
+                        <!-- Done by Claude, requires review -->
                         {% if notif.event == 'post_starred' %}
-                            starred your post
+                            starred your <a href="{% url 'post_detail' notif.object.id %}" class="fw-semibold">post</a>
                         {% elif notif.event == 'post_replied' %}
-                            replied to your post
+                            replied to your <a href="{% url 'post_detail' notif.object.id %}" class="fw-semibold">post</a>
                         {% elif notif.event == 'contact_request' %}
                             sent you a contact request
                         {% elif notif.event == 'contact_accepted' %}

@@ -25,11 +25,15 @@ function initFormSubmission(form) {
                 var newForm = newPost.querySelector('.post-form')
                 initPostStarButton(newStarButton);
                 initPostForm(newForm);
+                initPostCardLink(newPost); // Done by Claude, requires review
 
                 // Close form container for threaded posts
                 if (parentId) {
                     var parentFormContainer = document.querySelector(`#reply-form-container-${parentId}`);
                     parentFormContainer.classList.remove('show');
+                    // Done by Claude, requires review
+                    var replyCountSpan = document.querySelector(`#post${parentId} .post-replies-button span`);
+                    if (replyCountSpan) replyCountSpan.textContent = parseInt(replyCountSpan.textContent) + 1;
                 }
 
                 // Reset and close the form
@@ -147,6 +151,14 @@ function initmarkdownEditButton(button) {
     initmarkdownEditButton(markdownEditButton);
 }
 
+function initPostCardLink(card) {
+    card.addEventListener('click', e => {
+        if (!e.target.closest('a, button, form')) {
+            window.location.href = card.dataset.postUrl;
+        }
+    });
+}
+
  function initForum() {
 
     // Initialize star buttons
@@ -165,7 +177,9 @@ function initmarkdownEditButton(button) {
     var rootPostForm = document.querySelectorAll('.post-form')[0];
     rootPostForm.querySelector('textarea').focus();
 
- }
+    // Init post card links
+    document.querySelectorAll('.post[data-post-url]').forEach(initPostCardLink);
 
+ }
 
 initForum();

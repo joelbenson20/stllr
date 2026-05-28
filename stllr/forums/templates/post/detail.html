@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% load utility_tags %}
+
+<!-- Done by Claude, requires review -->
+{% block title %}stllr | post by {{ post.user.username }}{% endblock title %}
+
+{% block content %}
+
+<div class="mb-3">
+    <a href="{% url 'forums:forum' %}?p={{ post.page.canonical }}" class="btn btn-sm btn-dark rounded-pill">
+        <i class="bi bi-arrow-left me-1"></i>Back to forum
+    </a>
+</div>
+
+<!-- Done by Claude, requires review -->
+<div class="mb-sm-5 mb-3">
+    {% include "page/card.html" with page=post.page compact=True %}
+</div>
+
+<div>
+    {% include "post/card.html" with expanded=True %}
+</div>
+
+{% endblock content %}
