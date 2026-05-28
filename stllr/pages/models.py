@@ -117,12 +117,13 @@ class Domain(models.Model):
 
     CATEGORIES = [
         ('article', 'Article'),
+        ('news', 'News'),
         ('video', 'Video'),
         ('television', 'TV'),
         ('social', 'Social'),
         ('shopping', 'Shopping'),
         ('reference', 'Reference'),
-        ('news', 'News'),
+        ('app', 'App'),
     ]
 
     name = models.CharField(unique=True, max_length=100)
