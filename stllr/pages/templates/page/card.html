@@ -78,16 +78,17 @@
                     </a>
                 </li>
                 {% if request.user.is_authenticated %}
+                    <!-- Done by Claude, requires review -->
                     <li>
-                        <a class="dropdown-item page-bookmark-button"
-                            href="{% url 'pages:toggle_bookmark' page.id %}?action={% if page in user.pages_bookmarked.all %}unbookmark{% else %}bookmark{% endif %}"
+                        <a class="dropdown-item page-pin-button"
+                            href="{% url 'pages:toggle_pin' page.id %}?action={% if page in user.pages_pinned.all %}unpin{% else %}pin{% endif %}"
                             target="_blank"
                             data-page-id="{{ page.id }}"
-                            data-action="{% if page in user.pages_bookmarked.all %}unbookmark{% else %}bookmark{% endif %}"
+                            data-action="{% if page in user.pages_pinned.all %}unpin{% else %}pin{% endif %}"
                             data-csrf-token="{{ csrf_token }}"
-                            data-endpoint="{% url 'api:bookmark_page' %}">
-                            <i class="bi {% if page in user.pages_bookmarked.all %}bi-bookmark-fill{% else %}bi-bookmark{% endif %}"></i>
-                            <span>{% if page in user.pages_bookmarked.all %}Remove Bookmark{% else %}Bookmark page{% endif %}</span>
+                            data-endpoint="{% url 'api:pin_page' %}">
+                            <i class="bi bi-broadcast-pin"></i>
+                            <span>{% if page in user.pages_pinned.all %}Remove Pin{% else %}Pin this page{% endif %}</span>
                         </a>
                     </li>
                     <li>

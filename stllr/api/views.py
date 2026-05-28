@@ -4,7 +4,7 @@ from django_ratelimit.decorators import ratelimit
 from django.http import JsonResponse
 from forums.templatetags.utility_tags import safe_markdown_filter
 from django.template.loader import render_to_string
-from pages.models import Page, PageStar, PageBookmark
+from pages.models import Page, PageStar, PagePin  # Done by Claude, requires review
 from forums.models import Post, PostStar
 from forums.forms import PostForm
 from rooms.consumers import _get_users
@@ -47,16 +47,16 @@ def star_page(request):
 
 @login_required
 @require_POST
-def bookmark_page(request):
+def pin_page(request):  # Done by Claude, requires review
     page_id = request.POST.get('id')
     action = request.POST.get('action')
     if page_id and action:
         try:
             page = Page.objects.get(id=page_id)
-            if action == 'bookmark':
-                PageBookmark.objects.get_or_create(page=page, user=request.user)
+            if action == 'pin':
+                PagePin.objects.get_or_create(page=page, user=request.user)
             else:
-                PageBookmark.objects.filter(page=page, user=request.user).first().delete()
+                PagePin.objects.filter(page=page, user=request.user).first().delete()
             return JsonResponse({'status': '200'})
         except Page.DoesNotExist:
             pass

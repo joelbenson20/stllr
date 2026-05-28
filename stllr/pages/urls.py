@@ -4,5 +4,5 @@ from . import views
 app_name = 'pages'
 
 urlpatterns = [
-    path('bookmark/<int:page_id>/', views.toggle_bookmark, name='toggle_bookmark'),
+    path('pin/<int:page_id>/', views.toggle_pin, name='toggle_pin'),  # Done by Claude, requires review
 ]

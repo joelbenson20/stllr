@@ -90,9 +90,9 @@ def comms(request):
     return render(request, 'comms.html', {'user_notifications': user_notifications})
 
 @login_required
-def bookmarks(request):
-    bookmarked_pages = Page.objects.filter(bookmarks__user=request.user).order_by('-bookmarks__created')
-    return render(request, 'bookmarks.html', {'pages': bookmarked_pages})
+def pins(request):  # Done by Claude, requires review
+    pinned_pages = Page.objects.filter(pins__user=request.user).order_by('-pins__created')
+    return render(request, 'pins.html', {'pages': pinned_pages})
 
 def policy(request, policy):
     if (policy == 'privacy-policy'):

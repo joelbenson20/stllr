@@ -57,10 +57,10 @@ class Page(models.Model):
         blank=True
     )
     # Done by Claude, requires review
-    users_bookmark = models.ManyToManyField(
+    users_pin = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        through='PageBookmark',
-        related_name='pages_bookmarked',
+        through='PagePin',
+        related_name='pages_pinned',
         blank=True
     )
     total_stars = models.PositiveIntegerField(default=0, editable=False)
@@ -104,9 +104,10 @@ class PageStar(models.Model):
     class Meta:
         unique_together = ('user', 'page')
 
-class PageBookmark(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_bookmarks', on_delete=models.CASCADE)
-    page = models.ForeignKey(Page, related_name='bookmarks', on_delete=models.CASCADE)
+# Done by Claude, requires review
+class PagePin(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_pins', on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, related_name='pins', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:

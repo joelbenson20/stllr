@@ -47,8 +47,9 @@ async function fetchRoomCounts() {
     });
 }
 
-function initBookmarkButtons() {
-    document.querySelectorAll('.page-bookmark-button').forEach(button => {
+// Done by Claude, requires review
+function initPinButtons() {
+    document.querySelectorAll('.page-pin-button').forEach(button => {
         button.addEventListener('click', function (e) {
             e.preventDefault();
             const formData = new FormData();
@@ -63,13 +64,12 @@ function initBookmarkButtons() {
             .then(response => response.json())
             .then(data => {
                 if (data['status'] === '200') {
-                    const isBookmarking = button.dataset.action === 'bookmark';
-                    button.dataset.action = isBookmarking ? 'unbookmark' : 'bookmark';
-                    button.querySelector('span').textContent = isBookmarking ? 'Remove Bookmark' : 'Bookmark page';
-                    // Done by Claude, requires review
+                    const isPinning = button.dataset.action === 'pin';
+                    button.dataset.action = isPinning ? 'unpin' : 'pin';
+                    button.querySelector('span').textContent = isPinning ? 'Remove Pin' : 'Pin page';
                     const icon = button.querySelector('i');
-                    icon.classList.toggle('bi-bookmark-fill', isBookmarking);
-                    icon.classList.toggle('bi-bookmark', !isBookmarking);
+                    icon.classList.toggle('bi-pin-fill', isPinning);
+                    icon.classList.toggle('bi-pin', !isPinning);
                 }
             });
         });
@@ -78,7 +78,7 @@ function initBookmarkButtons() {
 
 function initPages() {
     initPageStarButtons();
-    initBookmarkButtons();
+    initPinButtons();
     fetchRoomCounts();
 }
 

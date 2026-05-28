@@ -52,7 +52,6 @@
 
             <nav class="sidebar-nav flex-grow-1">
                 <a href="{% url 'home' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
-                    <!-- Done by Claude, requires review -->
                     <img src="{% static 'icons/home.svg' %}" width="32" height="32" style="filter: invert(1);">
                     <span class="fs-5 fw-semibold">Home</span>
                 </a>
@@ -61,9 +60,9 @@
                     <span class="fs-5 fw-semibold">Explore</span>
                 </a>
                 {% if user.is_authenticated %}
-                    <a href="{% url 'bookmarks' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
-                        <i class="bi bi-bookmark fs-3"></i>
-                        <span class="fs-5 fw-semibold">Bookmarks</span>
+                    <a href="{% url 'pins' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
+                        <i class="bi bi-broadcast-pin fs-3"></i>
+                        <span class="fs-5 fw-semibold">Pins</span>
                     </a>
                     <a href="{% url 'comms' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
                         <i class="bi bi-soundwave fs-3"></i>

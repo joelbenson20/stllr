@@ -11,7 +11,7 @@ urlpatterns = [
     path('explore/', views.explore, name='explore'),
     path('contacts/', views.contacts, name='contacts'),
     path('comms/', views.comms, name='comms'),  # Done by Claude, requires review
-    path('bookmarks', views.bookmarks, name='bookmarks'),
+    path('pins', views.pins, name='pins'),  # Done by Claude, requires review
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('users/', include('users.urls')),
