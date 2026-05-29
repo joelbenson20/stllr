@@ -4,11 +4,14 @@ var emptyPage = false;
 var blockRequest = false;
 
 const loadMorePages = () => {
-    var margin = document.body.clientHeight - window.innerHeight - 200;
+    var margin = document.body.clientHeight - window.innerHeight - 300;
     if (window.pageYOffset > margin && !emptyPage && !blockRequest) {
         blockRequest = true;
         page += 1;
-        fetch('?cards_only=1&p=' + page)
+        const params = new URLSearchParams(window.location.search);
+        params.set('cards_only', '1');
+        params.set('p', page);
+        fetch('?' + params.toString())
         .then(response => response.text())
         .then(html => {
             if (html === '') {
@@ -19,10 +22,11 @@ const loadMorePages = () => {
                 var newHTML = parser.parseFromString(html, 'text/html');
                 var newPages = newHTML.querySelectorAll('.page');
 
+                // Done by Claude, requires review
                 newPages.forEach(newPage => {
                     newPageId = newPage.id
                     if (!document.querySelector(`#${newPageId}`)){
-                        pageFeed.insertAdjacentElement('beforeend', page);
+                        pageFeed.insertAdjacentElement('beforeend', newPage);
                     }
                 })
                 blockRequest = false;

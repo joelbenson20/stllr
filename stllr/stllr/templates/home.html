@@ -4,11 +4,15 @@
 
 {% block content %}
 
-        {% include 'page/list.html' with pages=pages user=user %}
+        <div id="pageFeed">
+            {% include 'page/list.html' with pages=pages user=user %}
+        </div>
 
 {% endblock content %}
 
 
 {% block scripts %}
+
     <script src="{% static 'js/index.js' %}"></script>
+    
 {% endblock scripts %}

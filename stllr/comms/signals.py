@@ -24,7 +24,7 @@ def notify_post_replied(sender, instance, created, **kwargs):
         recipient=instance.parent.author,
         event=Notification.Event.POST_REPLIED,
         object=instance.parent,
-        actor=instance.user
+        actor=instance.author
     )
 
 @receiver(post_save, sender=Contact)

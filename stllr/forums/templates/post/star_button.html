@@ -1,9 +1,0 @@
-<button id="post-star-button-{{ post.id }}" class="post-star-button star-button btn btn-sm btn-dark border-0 rounded-pill me-2"
-    data-id={{ post.id }}
-    data-action="{% if post in user.posts_starred.all %}un{% endif %}star"
-    data-csrf-token={{ csrf_token }}
-    data-endpoint="{% url 'api:star_post' %}"
-    {% if not user.is_active %}disabled{% endif %}>
-    <i class="bi {% if post in user.posts_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-    &nbsp;<span class="star-count">{{ post.total_stars }}</span>
-</button>

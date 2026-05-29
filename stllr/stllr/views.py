@@ -11,7 +11,7 @@ def home(request):
 
     pages = Page.firmament.firmament()
 
-    paginator = Paginator(pages, 100)
+    paginator = Paginator(pages, 20)
     p = request.GET.get('p')
     cards_only = request.GET.get('cards_only')
 
@@ -49,7 +49,7 @@ def explore(request):
         search_query = SearchQuery(query, search_type='websearch')
         pages = pages.filter(search_vector=search_query)
 
-    paginator = Paginator(pages, 100)
+    paginator = Paginator(pages, 20)
     p = request.GET.get('p')
     cards_only = request.GET.get('cards_only')
 
@@ -88,7 +88,7 @@ def comms(request):
     return render(request, 'comms.html', {'user_notifications': user_notifications})
 
 @login_required
-def pins(request):  # Done by Claude, requires review
+def pins(request):
     pinned_pages = Page.objects.filter(pins__user=request.user).order_by('-pins__created')
     return render(request, 'pins.html', {'pages': pinned_pages})
 

@@ -10,7 +10,7 @@
 
         <div class="post-content {% if post.author.id in muted_user_ids %}d-none{% endif %}">
             {% if post.removed %}
-                <p class="text-secondary fst-italic small">This post has been removed by {{ post.get_removed_by_display }}.</p>
+                <p class="text-secondary fst-italic small">This post was removed by {{ post.get_removed_by_display }}.</p>
             {% else %}
                 {{ post.content|safe_markdown }}
             {% endif %}
@@ -21,7 +21,15 @@
 
         <div class="d-flex align-items-center">
 
-            {% include "post/star_button.html" %}
+            <button id="post-star-button-{{ post.id }}" class="post-star-button star-button btn btn-sm btn-dark border-0 rounded-pill me-2"
+                data-id={{ post.id }}
+                data-action="{% if post in user.posts_starred.all %}un{% endif %}star"
+                data-csrf-token={{ csrf_token }}
+                data-endpoint="{% url 'api:star_post' %}"
+                {% if not user.is_active %}disabled{% endif %}>
+                <i class="bi {% if post in user.posts_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                &nbsp;<span class="star-count">{{ post.total_stars }}</span>
+            </button>
 
             <a class="post-replies-button btn btn-sm btn-dark rounded-pill me-2"
                 type="button"
