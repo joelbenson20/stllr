@@ -13,14 +13,14 @@
             </div>
             {% if action.object %}
                 {% if action.object_ct.model == 'post' %}
-                    <div class="text-truncate small">
+                    <div class="text-break small">
                         <a href="{% url 'forums:forum' action.object.page.id %}">
                             <span style="height:1em;width:1em;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;">{% include "domain/icon.html" with domain=action.object.page.domain dimensions="14x14" size=14 %}</span>
                             {{ action.object.page.title }}
                         </a>
                     </div>
                 {% elif action.object_ct.model == 'page' %}
-                    <div class="text-truncate small">
+                    <div class="text-break small">
                         <a href="{% url 'forums:forum' action.object.id %}">
                             <span style="height:1em;width:1em;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;">{% include "domain/icon.html" with domain=action.object.domain dimensions="14x14" size=14 %}</span>
                             {{ action.object.title }}
