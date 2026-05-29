@@ -39,6 +39,11 @@
 
 {% endblock content %}
 
+{% block right %}
+    <!-- Done by Claude, requires review -->
+    {% include "side_panels/contacts_statuses.html" %}
+{% endblock right %}
+
 {% block scripts %}
     <script src="{% static 'js/index.js' %}"></script>
 {% endblock scripts %}
