@@ -11,11 +11,21 @@ from django.middleware.csrf import get_token
 from pages.models import Page, Domain
 from pages.utils import get_canonical, get_meta, get_domain_name, verify_security, InsecureURLError
 
+SUPPORTED_EXTENSION_VERSIONS = ['1.0']
 
 @csrf_exempt
 @login_required
 @require_POST
 def extension(request):
+    extension_version = request.META.get('HTTP_X_EXTENSION_VERSION', '1.0') # Version 1.0 does not send the request header
+    if extension_version not in SUPPORTED_EXTENSION_VERSIONS:
+        return JsonResponse(
+            {
+                'status': '400',
+                'html': render_to_string('extension/errors/update_required.html', request=request)
+            }
+        )
+
     data = json.loads(request.body).get('page').get('data')
     url = data.get('url')
     # Done by Claude, requires review
