@@ -9,9 +9,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import cache
 from django.middleware.csrf import get_token
 from pages.models import Page, Domain
-from pages.utils import get_canonical, get_meta, get_domain_name, verify_security, InsecureURLError
+from pages.utils import get_canonical, get_domain_name, verify_security, InsecureURLError  # Done by Claude, requires review
 
-SUPPORTED_EXTENSION_VERSIONS = ['1.0']
+SUPPORTED_EXTENSION_VERSIONS = ['2.0']
 
 @csrf_exempt
 @login_required
@@ -28,7 +28,6 @@ def extension(request):
 
     data = json.loads(request.body).get('page').get('data')
     url = data.get('url')
-    # Done by Claude, requires review
     protocol = urlparse(url).scheme.lower()
     canonical = get_canonical(url)
     try:
@@ -44,17 +43,10 @@ def extension(request):
                 }
             )
     except Page.DoesNotExist:
-        scraped_data = get_meta(url, data.get('head'))
-        title = data.get('title') or scraped_data['title']
-        description = scraped_data['description']
-        content = "".join([ p for p in data.get('innerText').split('\n') if "." in p ])
-        image_url = scraped_data['image_url']
-        fav_icon_url = data.get('favIconUrl') or scraped_data['fav_icon_url']
-        site_name = scraped_data.get('site_name')
-
+        # Done by Claude, requires review
         try:
             verify_security(url)
-        except InsecureURLError as e:
+        except InsecureURLError:
             return JsonResponse(
                 {
                     'status': '405',
@@ -62,6 +54,8 @@ def extension(request):
                 }
             )
 
+        fav_icon_url = data.get('favIconUrl')
+        site_name = data.get('siteName')
         domain_name = get_domain_name(url)
         domain, _ = Domain.objects.get_or_create(name=domain_name)
         if site_name and not domain.site_name:
@@ -73,12 +67,11 @@ def extension(request):
 
         page = Page.objects.create(
             canonical=canonical,
-            title=title,
-            description=description,
-            image_url=image_url,
+            title=data.get('title') or '',
+            description=data.get('description') or '',
+            image_url=data.get('imageUrl') or '',
             domain=domain,
-            content=content or scraped_data['content'] or '',
-            # Done by Claude, requires review
+            content=data.get('content') or '',
             supported_protocols=[protocol] if protocol else [],
         )
 
