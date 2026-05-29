@@ -4,10 +4,6 @@ import requests
 from requests.exceptions import MissingSchema
 from django.core.files.base import ContentFile
 from .models import Page, PageStar
-from collections import Counter
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from nltk import pos_tag
 from django.contrib.postgres.search import SearchVector
 
 @receiver(post_save, sender=Page)
@@ -64,18 +60,6 @@ def update_search_vector(sender, instance, created, update_fields, **kwargs):
                 SearchVector('content', weight='C')
             )
         )
-
-@receiver(post_save, sender=Page)
-def update_tags(sender, instance, created, update_fields, **kwargs):
-    if update_fields is None or any(f in update_fields for f in ('title', 'description', 'content')):
-        stop_words = set(stopwords.words('english'))
-        raw = (instance.title or '') + ' ' + (instance.description or '') + ' ' + (instance.content or '')
-        tokens = word_tokenize(raw)
-        tagged = pos_tag(tokens)
-        words = [word for word, pos in tagged if pos in ('NN', 'NNP') and word.isalpha() and word.lower() not in stop_words]
-        keywords = [word.upper() for word, count in Counter(words).most_common(10)]
-        instance.tags.set(keywords)
-
 
 @receiver(post_save, sender=PageStar)
 @receiver(post_delete, sender=PageStar)

@@ -4,8 +4,7 @@ from .models import Page, PageStar, Domain
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     list_display = ['canonical', 'title', 'brightness']
-    list_filter = ['tags', 'domain']
-    readonly_fields = ['tags']
+    list_filter = ['domain']
     search_fields = ['canonical', 'title']
     ordering = ['canonical']
     show_facets = admin.ShowFacets.ALWAYS

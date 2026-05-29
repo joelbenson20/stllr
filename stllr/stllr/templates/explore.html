@@ -19,14 +19,11 @@
                 {{ sort|capfirst }}
             </button>
             <div class="dropdown-menu" aria-labelledby="sortMenuButton">
-                <a class="dropdown-item" href="{% url 'explore' %}?{% if tag %}tag={{ tag.slug }}&{% elif query %}query={{ query }}&{% endif %}sort=firmament">Firmament</a>
-                <a class="dropdown-item" href="{% url 'explore' %}?{% if tag %}tag={{ tag.slug }}&{% elif query %}query={{ query }}&{% endif %}sort=brightest">Brightest</a>
-                <a class="dropdown-item" href="{% url 'explore' %}?{% if tag %}tag={{ tag.slug }}&{% elif query %}query={{ query }}&{% endif %}sort=rising">Rising</a>
+                <a class="dropdown-item" href="{% url 'explore' %}?{% if query %}query={{ query }}&{% endif %}sort=firmament">Firmament</a>
+                <a class="dropdown-item" href="{% url 'explore' %}?{% if query %}query={{ query }}&{% endif %}sort=brightest">Brightest</a>
+                <a class="dropdown-item" href="{% url 'explore' %}?{% if query %}query={{ query }}&{% endif %}sort=rising">Rising</a>
             </div>
         </div>
-        {% if tag %}
-            <span class="text-secondary"># {{ tag.name }}</span>
-        {% endif %}
         {% if query %}
             <span class="text-secondary"><i class="bi bi-search"></i> {{ query }}</span>
         {% endif %}

@@ -144,13 +144,6 @@ def get_meta(url, head):
     if favicon_link:
         fav_icon_url = favicon_link.get('href', '')
     
-    # Extract keywords/tags
-    tags = (
-        get_meta_tag('keywords', attr='name') or
-        get_meta_tag('article:tag') or
-        ''
-    )
-    
     # Extract all inner text (document content)
     # Remove script and style elements
     for script in soup(['script', 'style']):
@@ -165,6 +158,5 @@ def get_meta(url, head):
         'image_url': image_url[:250],  # URLField max_length=250
         'site_name': site_name[:100],  # CharField max_length=100
         'fav_icon_url': fav_icon_url[:250],  # URLField max_length=250
-        'tags': tags,  # Will be split by comma in views
         'content': content,  # TextField, no limit
     }

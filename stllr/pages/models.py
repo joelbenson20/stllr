@@ -1,12 +1,8 @@
 import numpy as np
 from django.db import models
-from urllib.parse import urlparse
-from django.urls import reverse
-from django.utils.http import urlencode
-from taggit.managers import TaggableManager
 from django.conf import settings
-from django.db import models
 from django.db.models import Case, When, IntegerField
+from django.db.models.expressions import RawSQL
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
@@ -41,7 +37,6 @@ class Page(models.Model):
     canonical = models.CharField(max_length=250, unique=True)
     supported_protocols = ArrayField(models.CharField(max_length=10), default=list, blank=True)
     title = models.CharField(max_length=500)
-    tags = TaggableManager(blank=True)
     description = models.TextField(max_length=500, blank=True)
     image_url = models.URLField(max_length=250, blank=True)
     image = models.ImageField(max_length=255, upload_to='images/pages', blank=True)
@@ -93,6 +88,26 @@ class Page(models.Model):
         if self.Protocol.HTTP in self.supported_protocols:
             return self.Protocol.HTTP + '://' + self.canonical
         return self.Protocol.HTTPS + '://' + self.canonical
+
+    # Done by Claude, requires review
+    def get_similar_pages(self, limit=10):
+        if not self.search_vector:
+            return Page.objects.none()
+        return (
+            Page.objects
+            .filter(is_active=True)
+            .exclude(pk=self.pk)
+            .annotate(
+                score=RawSQL(
+                    "ts_rank(search_vector, to_tsquery('english', array_to_string("
+                    "ARRAY(SELECT lexeme FROM unnest((SELECT search_vector FROM pages_page WHERE id = %s))), ' | '"
+                    "))) * brightness",
+                    [self.pk]
+                )
+            )
+            .filter(score__gt=0)
+            .order_by('-score')[:limit]
+        )
     
     
 class PageStar(models.Model):

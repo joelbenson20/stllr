@@ -86,9 +86,8 @@ def extension(request):
     elif (tab == 'room'):
         html = render_to_string('extension/room.html', context=context, request=request)
     elif (tab == 'similar'):
-        context['similar_pages'] = Page.objects.filter(
-            tags__in=page.tags.all(), is_active=True
-        ).exclude(pk=page.pk).distinct()
+        # Done by Claude, requires review
+        context['similar_pages'] = page.get_similar_pages()
         html = render_to_string('extension/similar.html', context=context, request=request)
 
     return JsonResponse({

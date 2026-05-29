@@ -1,11 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse, Http404
 from django.db.models import Q
 from django.contrib.postgres.search import SearchQuery
 from pages.models import Page
 from django.contrib.auth.decorators import login_required
-from taggit.models import Tag
 
 def home(request):
 
@@ -38,12 +37,6 @@ def explore(request):
     else:
         pages = Page.firmament.firmament()
 
-    tag_slug = request.GET.get('tag')
-    tag = None
-    if tag_slug:
-        tag = get_object_or_404(Tag, slug=tag_slug)
-        pages = pages.filter(tags__in=[tag])
-
     query = request.GET.get('query')
     if query:
         search_query = SearchQuery(query, search_type='websearch')
@@ -68,7 +61,6 @@ def explore(request):
     return render(request, 'explore.html', {
         'pages': pages,
         'query': query,
-        'tag': tag,
         'sort': sort,
     })
 
