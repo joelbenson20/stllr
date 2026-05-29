@@ -47,7 +47,6 @@ async function fetchRoomCounts() {
     });
 }
 
-// Done by Claude, requires review
 function initPinButtons() {
     document.querySelectorAll('.page-pin-button').forEach(button => {
         button.addEventListener('click', function (e) {

@@ -10,7 +10,7 @@ def notify_post_starred(sender, instance, created, **kwargs):
     if not created:
         return
     notify(
-        recipient=instance.post.user,
+        recipient=instance.post.author,
         event=Notification.Event.POST_STARRED,
         object=instance.post,
         actor=instance.user
@@ -21,7 +21,7 @@ def notify_post_replied(sender, instance, created, **kwargs):
     if not created or instance.parent is None:
         return
     notify(
-        recipient=instance.parent.user,
+        recipient=instance.parent.author,
         event=Notification.Event.POST_REPLIED,
         object=instance.parent,
         actor=instance.user

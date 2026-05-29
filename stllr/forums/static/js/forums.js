@@ -1,3 +1,58 @@
+function initPostCardLink(card) {
+    card.addEventListener('click', e => {
+        if (!e.target.closest('a, button, form')) {
+            window.location.href = card.dataset.postUrl;
+        }
+    });
+}
+
+function initPostForm(form) {
+    initFormSubmission(form);
+    const replyFormContainer = form.closest('.reply-form-container');
+    if (replyFormContainer) initReplyAutoFocus(replyFormContainer);
+    initMarkdownToggle(form);
+}
+
+function initMarkdownToggle(form) {
+    const textarea = form.querySelector('.post-form-textarea');
+    const previewContainer = form.querySelector('.post-form-markdown-preview-container');
+    const previewButton = form.querySelector('.post-form-markdown-preview-button');
+    const editButton = form.querySelector('.post-form-markdown-edit-button');
+
+    previewButton.addEventListener('click', () => {
+        const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+        const formData = new FormData();
+        formData.append('content', textarea.value);
+        fetch(new URL(previewButton.dataset.endpoint, document.baseURI).href, {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrfToken},
+            body: formData
+        })
+        .then(r => r.json())
+        .then(response => {
+            if (response.status === '200') {
+                previewContainer.innerHTML = response.markdown;
+                previewContainer.style.display = 'block';
+                previewButton.style.display = 'none';
+                editButton.style.display = 'block';
+                textarea.style.display = 'none';
+            }
+        });
+    });
+
+    editButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        previewContainer.innerHTML = '';
+        previewContainer.style.display = 'none';
+        previewButton.style.display = 'block';
+        editButton.style.display = 'none';
+        textarea.style.display = 'block';
+        const end = textarea.value.length;
+        textarea.focus();
+        textarea.setSelectionRange(end, end);
+    });
+}
+
 function initFormSubmission(form) {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -46,12 +101,6 @@ function initFormSubmission(form) {
     
 }
 
- function initReplyAutoFocus(replyFormContainer) {
-    replyFormContainer.addEventListener('shown.bs.collapse', function () {
-        this.querySelector('textarea').focus();
-    })
-}
-
 function initPostStarButton(button) {
     button.addEventListener('click', (e) => {
             e.preventDefault();
@@ -84,82 +133,13 @@ function initPostStarButton(button) {
         })
 }
 
-function initmarkdownPreviewButton(button) {
-    button.addEventListener('click', (e) => {
-        var form = button.closest('.post-form');
-        var csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
-        
-        var textarea = form.querySelector('.post-form-textarea');
-        var formData = new FormData();
-        formData.append('content', textarea.value);
-        var options = {
-            method: 'POST',
-            headers: {'X-CSRFToken': csrfToken},
-            body: formData
-        }
-         fetch(new URL(button.dataset.endpoint, document.baseURI).href, options)
-        .then(response => response.json())
-        .then(response => {
-            if (response.status === '200') {
-
-                var markdownEditButton = form.querySelector('.post-form-markdown-edit-button');
-                var markdownPreviewContainer = form.querySelector('.post-form-markdown-preview-container');
-
-                markdownPreviewContainer.innerHTML = response.markdown;
-                button.style.display = 'none';
-                markdownPreviewContainer.style.display = 'block';
-                markdownEditButton.style.display = 'block';
-                textarea.style.display = 'none';
-
-            }
-        })
-
-    });
-}
-
-function initmarkdownEditButton(button) {
-    button.addEventListener('click', (e) => {
-        e.preventDefault();
-        var form = button.closest('.post-form');
-        var markdownPreviewButton = form.querySelector('.post-form-markdown-preview-button');
-        var textarea = form.querySelector('.post-form-textarea');
-        var markdownPreviewContainer = form.querySelector('.post-form-markdown-preview-container');
-
-        // Hide preview container and edit button, show edit container and preview button
-        markdownPreviewContainer.innerHTML = '';
-        markdownPreviewContainer.style.display = 'none';
-        markdownPreviewButton.style.display = 'block'
-        textarea.style.display = 'block';
-        button.style.display = 'none';
-
-        // Focus at end of textarea content
-        const end = textarea.value.length;
-        textarea.focus();
-        textarea.setSelectionRange(end, end);
+function initReplyAutoFocus(replyFormContainer) {
+    replyFormContainer.addEventListener('shown.bs.collapse', function () {
+        this.querySelector('textarea').focus();
     })
 }
 
- function initPostForm(form) {
-    initFormSubmission(form);
-
-    var replyFormContainer = form.closest('.reply-form-container');
-    var markdownPreviewButton = form.querySelector('.post-form-markdown-preview-button');
-    var markdownEditButton = form.querySelector('.post-form-markdown-edit-button');
-
-    if (replyFormContainer) initReplyAutoFocus(replyFormContainer);
-    initmarkdownPreviewButton(markdownPreviewButton);
-    initmarkdownEditButton(markdownEditButton);
-}
-
-function initPostCardLink(card) {
-    card.addEventListener('click', e => {
-        if (!e.target.closest('a, button, form')) {
-            window.location.href = card.dataset.postUrl;
-        }
-    });
-}
-
- function initForum() {
+function initForum() {
 
     // Initialize star buttons
     var postStarButtons = document.querySelectorAll('.post-star-button');
@@ -180,6 +160,6 @@ function initPostCardLink(card) {
     // Init post card links
     document.querySelectorAll('.post[data-post-url]').forEach(initPostCardLink);
 
- }
+}
 
 initForum();

@@ -29,7 +29,7 @@ class Post(models.Model):
     objects = models.Manager()
     firmament = FirmamentQuerySet.as_manager()
 
-    user = models.ForeignKey(
+    author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name='posts',
         on_delete=models.CASCADE
@@ -75,7 +75,7 @@ class Post(models.Model):
         ordering = ['-brightness', '?']
 
     def __str__(self):
-        return f'{self.user}: {self.content}'
+        return f'{self.author}: {self.content}'
     
     
 class PostStar(models.Model):

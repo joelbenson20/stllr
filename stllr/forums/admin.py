@@ -3,8 +3,9 @@ from .models import Post, PostStar
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['user', 'content', 'created']
-    search_fields = ['user__username', 'content']
+    # Done by Claude, requires review
+    list_display = ['author', 'content', 'created']
+    search_fields = ['author__username', 'content']
     readonly_fields = ['created']
     list_filter = ['created']
 

@@ -2,9 +2,14 @@
     background-color: rgba(255, 255, 255, 0.05)
 }
 
+/* Done by Claude, requires review */
 .post-form-textarea,
 .post-form-markdown-preview-container {
     height: 4rem;
+}
+
+.post-form-textarea::placeholder {
+    color: rgba(0, 0, 0, 0.4);
 }
 .post-form-markdown-preview-container {
     color: black;

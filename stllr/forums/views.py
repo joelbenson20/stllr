@@ -17,12 +17,12 @@ def forum(request, page_id):
 @login_required
 def remove_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    if request.user != post.user and not request.user.is_staff:
+    if request.user != post.author and not request.user.is_staff:
         raise PermissionDenied
     if request.method == 'POST':
         # Done by Claude, requires review
         post.removed = True
-        post.removed_by = 'author' if request.user == post.user else 'moderator'
+        post.removed_by = 'author' if request.user == post.author else 'moderator'
         post.save(update_fields=['removed', 'removed_by'])
         return redirect('forums:remove_post_success')
     return render(request, 'post/remove_confirm.html', {'post': post})

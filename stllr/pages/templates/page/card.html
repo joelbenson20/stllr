@@ -50,13 +50,20 @@
 
         <div class="d-flex align-items-center rounded-pill mt-3">
 
-            {% include 'page/star_button.html' %}
+            <button class="page-star-button star-button btn btn-outline-light rounded-pill me-2"
+                data-id={{ page.id }}
+                data-action="{% if page in user.pages_starred.all %}un{% endif %}star"
+                data-csrf-token={{ csrf_token }}
+                data-endpoint="{% url 'api:star_page' %}"
+                {% if not user.is_active %}disabled{% endif %}>
+                <i class="bi {% if page in user.pages_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                &nbsp;<span class="star-count">{{ page.total_stars }}</span>
+            </button>
 
-            <!-- Done by Claude, requires review -->
             <a class="btn btn-outline-light rounded-pill me-2"
                 href="{% url "forums:forum" page.id %}">
                 <i class="bi bi-diagram-3-fill"></i>
-                &nbsp;<span>{{ page.posts.count }}</span>
+                &nbsp;<span class="post-count">{{ page.posts.count }}</span>
             </a>
 
             <a class="btn btn-outline-light rounded-pill me-2"
@@ -66,14 +73,17 @@
             </a>
 
             <button id="p{{ page.id }}Dropdown"
-                        class="dropdown-toggle no-caret btn btn-transparent btn-dark rounded-circle"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="bi bi-three-dots"></i>
+                class="dropdown-toggle no-caret btn btn-transparent btn-dark rounded-circle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="bi bi-three-dots"></i>
             </button>
+
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="p{{ page.id }}Dropdown">
+
                 {% include "share_button.html" with object_type="page" object_id=page.id %}
+
                 {% if request.user.is_authenticated %}
                     <li>
                         <a class="dropdown-item page-pin-button"
@@ -84,7 +94,7 @@
                             data-csrf-token="{{ csrf_token }}"
                             data-endpoint="{% url 'api:pin_page' %}">
                             <i class="bi bi-broadcast-pin"></i>
-                            <span>{% if page in user.pages_pinned.all %}Remove Pin{% else %}Pin this page{% endif %}</span>
+                            <span>{% if page in user.pages_pinned.all %}Remove pin{% else %}Pin page{% endif %}</span>
                         </a>
                     </li>
                     <li>

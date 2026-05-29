@@ -73,7 +73,7 @@ def create_post(request):
     if form.is_valid():
         cd = form.cleaned_data
         new_post = form.save(commit=False)
-        new_post.user = request.user
+        new_post.author = request.user
         if (new_post.parent):
             new_post.thread_level = new_post.parent.thread_level + 1
         new_post.save()
