@@ -67,9 +67,6 @@ function initPinButtons() {
                     const isPinning = button.dataset.action === 'pin';
                     button.dataset.action = isPinning ? 'unpin' : 'pin';
                     button.querySelector('span').textContent = isPinning ? 'Remove Pin' : 'Pin page';
-                    const icon = button.querySelector('i');
-                    icon.classList.toggle('bi-pin-fill', isPinning);
-                    icon.classList.toggle('bi-pin', !isPinning);
                 }
             });
         });

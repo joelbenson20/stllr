@@ -1,17 +1,24 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}contacts - stllr{% endblock title %}
 
 {% block content %}
-<h4 class="fw-bold mb-4">Contacts</h4>
-{% include "contact/list.html" %}
+
+    <h4 class="fw-bold mb-4">Contacts</h4>
+
+    {% include "contact/list.html" %}
 {% endblock content %}
 
 {% block right %}
 
-{% if notifications.pending_requests %}
+<h6 class="text-uppercase small fw-bold mb-3">Find Users</h6>
+<input type="text" id="userSearchInput" class="form-control form-control-sm bg-transparent border-secondary text-white mb-2" placeholder="Search by username…" autocomplete="off">
+<div id="userSearchResults"></div>
 
-    <h6 class="text-muted text-uppercase small fw-bold mb-3">Pending Requests</h6>
+{% if notifications.pending_requests %}
+<div class="border-top border-secondary mt-3 mb-3"></div>
+    <h6 class="text-secondary text-uppercase small fw-bold mb-3">Pending Requests</h6>
 
     {% for contact in notifications.pending_requests %}
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -35,3 +42,22 @@
 {% endif %}
 
 {% endblock right %}
+
+{% block scripts %}
+<script>
+const searchInput = document.getElementById('userSearchInput');
+const searchResults = document.getElementById('userSearchResults');
+let searchTimeout;
+
+searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    const q = searchInput.value.trim();
+    if (!q) { searchResults.innerHTML = ''; return; }
+    searchTimeout = setTimeout(async () => {
+        const res = await fetch(`/api/search/users/?q=${encodeURIComponent(q)}`);
+        const data = await res.json();
+        searchResults.innerHTML = data.html;
+    }, 300);
+});
+</script>
+{% endblock scripts %}

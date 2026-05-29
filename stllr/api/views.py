@@ -129,6 +129,51 @@ def mute_user(request):
             pass
     return JsonResponse({'status': '500'})
 
+# Done by Claude, requires review
+@login_required
+def search_users(request):
+    q = request.GET.get('q', '').strip()
+    users = []
+    if q:
+        users = list(
+            User.objects.filter(
+                username__icontains=q
+            ).exclude(id=request.user.id).select_related('profile')[:10]
+        )
+    html = render_to_string('user/search_results.html', {'users': users}, request=request)
+    return JsonResponse({'html': html})
+
+
+@login_required
+@require_POST
+def send_contact_request(request):
+    import json
+    try:
+        data = json.loads(request.body)
+        username = data.get('username', '').strip()
+    except (json.JSONDecodeError, AttributeError):
+        return JsonResponse({'error': 'Invalid data'}, status=400)
+
+    if not username:
+        return JsonResponse({'error': 'Username required'}, status=400)
+
+    to_user = get_object_or_404(User, username=username)
+    if to_user == request.user:
+        return JsonResponse({'error': 'Cannot add yourself'}, status=400)
+
+    existing = Contact.objects.filter(
+        from_user=request.user, to_user=to_user
+    ).first() or Contact.objects.filter(
+        from_user=to_user, to_user=request.user
+    ).first()
+
+    if existing:
+        return JsonResponse({'error': 'Contact relationship already exists'}, status=400)
+
+    Contact.objects.create(from_user=request.user, to_user=to_user)
+    return JsonResponse({'status': 'ok'})
+
+
 def get_room_count(request):
     ids = [i.strip() for i in request.GET.get('ids', '').split(',') if i.strip()]
     counts = {page_id: len(_get_users(f'room_{page_id}')) for page_id in ids}

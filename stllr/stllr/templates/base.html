@@ -40,7 +40,7 @@
 <body>
 
     <!-- Left sidebar: offcanvas on mobile, fixed on md+ via CSS -->
-    <div class="offcanvas offcanvas-start left-sidebar" id="leftNav" tabindex="-1">
+    <div class="offcanvas offcanvas-start left-sidebar border-dark" id="leftNav" tabindex="-1">
         <div class="offcanvas-header d-md-none justify-content-end pb-0">
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
@@ -108,17 +108,31 @@
         </div>
     </div>
 
+    <!-- Right panel: offcanvas on mobile, fixed on md+ via CSS -->
+    <div class="offcanvas offcanvas-end right-sidebar border-dark" id="rightPanel" tabindex="-1">
+        <div class="offcanvas-header d-md-none justify-content-start pb-0">
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="d-flex flex-column h-100 p-3">
+            {% block right %}
+            {% endblock right %}
+        </div>
+    </div>
+
     <!-- Main content -->
     <div id="mainContent">
 
         <!-- Mobile top bar -->
         <div class="d-flex d-md-none align-items-center gap-2 p-3 glass sticky-top navbar-dark">
-            <button class="navbar-toggler border-0 position-absolute" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftNav" aria-controls="leftNav">
+            <button class="navbar-toggler border-0 position-absolute start-0 ms-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftNav" aria-controls="leftNav">
                 <span class="navbar-toggler-icon text-secondary"></span>
             </button>
             <a class="navbar-brand mb-0 mx-auto" href="{% url 'home' %}">
                 <img src="{% static 'brand/stllr.png' %}" width=80>
             </a>
+            <button class="navbar-toggler border-0 position-absolute end-0 me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#rightPanel" aria-controls="rightPanel">
+                <span class="navbar-toggler-icon text-secondary"></span>
+            </button>
         </div>
 
         {% if messages %}
@@ -132,18 +146,9 @@
             </div>
         {% endif %}
 
-        <div class="d-md-flex">
-
-            <div class="col-md-8 p-md-5 p-3">
-                {% block content %}
-                {% endblock content %}
-            </div>
-
-            <div class="col-4 d-none d-md-block p-md-5 p-3">
-                {% block right %}
-                {% endblock right %}
-            </div>
-            
+        <div class="p-md-5 p-3">
+            {% block content %}
+            {% endblock content %}
         </div>
 
     </div>
