@@ -1,0 +1,32 @@
+<!-- Done by Claude, requires review -->
+{% if user.is_authenticated %}
+<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true"
+    data-endpoint="{% url 'api:share_object' %}"
+    data-csrf-token="{{ csrf_token }}">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title" id="shareModalLabel">Share with a contact</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% if contacts_list %}
+                    <div class="d-flex flex-column gap-2">
+                        {% for item in contacts_list %}
+                        <button class="share-contact-btn btn btn-outline-secondary text-start d-flex align-items-center gap-2 w-100"
+                            data-contact-id="{{ item.user.id }}"
+                            data-username="{{ item.user.username }}">
+                            {% include "user/profile-picture.html" with user=item.user size="32" dimensions="32x32" %}
+                            <span>@{{ item.user.username }}</span>
+                            <span class="share-btn-status ms-auto"></span>
+                        </button>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-secondary mb-0">You have no contacts to share with.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

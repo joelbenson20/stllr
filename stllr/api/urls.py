@@ -12,4 +12,5 @@ urlpatterns = [
     path('count/room/', views.get_room_count, name='get_room_count'),
     path('mute/user/', views.mute_user, name='mute_user'),  # Done by Claude, requires review
     path('search/users/', views.search_users, name='search_users'),  # Done by Claude, requires review
+    path('share/', views.share_object, name='share_object'),
 ]

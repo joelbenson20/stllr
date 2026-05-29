@@ -26,7 +26,12 @@
                             sent you a contact request
                         {% elif notif.event == 'contact_accepted' %}
                             accepted your contact request
+                        {% elif notif.event == 'page_shared' %}
+                            shared a <a href="{{ notif.object.link }}" class="fw-semibold">page</a> with you
+                        {% elif notif.event == 'post_shared' %}
+                            shared a <a href="{% url 'post_detail' notif.object.id %}" class="fw-semibold">post</a> with you
                         {% endif %}
+                        <!-- Done by Claude, requires review -->
                         <span class="text-secondary ms-2 small">{{ notif.updated|timesince }} ago</span>
                     </div>
                 </div>

@@ -73,13 +73,8 @@
                         <i class="bi bi-three-dots"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="p{{ page.id }}Dropdown">
-                <li>
-                    <a class="dropdown-item" href="#">
-                        <i class="bi bi-share-fill me-2"></i>Share page
-                    </a>
-                </li>
+                {% include "share_button.html" with object_type="page" object_id=page.id %}
                 {% if request.user.is_authenticated %}
-                    <!-- Done by Claude, requires review -->
                     <li>
                         <a class="dropdown-item page-pin-button"
                             href="{% url 'pages:toggle_pin' page.id %}?action={% if page in user.pages_pinned.all %}unpin{% else %}pin{% endif %}"

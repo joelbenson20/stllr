@@ -1,0 +1,12 @@
+<!-- Done by Claude, requires review -->
+{% if request.user.is_authenticated %}
+<li>
+    <button class="dropdown-item d-flex align-items-center gap-2 share-btn"
+        data-object-type="{{ object_type }}"
+        data-object-id="{{ object_id }}"
+        data-bs-toggle="modal"
+        data-bs-target="#shareModal">
+        <i class="bi bi-share-fill"></i>Share {{ object_type }}
+    </button>
+</li>
+{% endif %}

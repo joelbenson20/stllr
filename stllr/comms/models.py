@@ -10,6 +10,8 @@ class Notification(models.Model):
         CONTACT_ACCEPTED = 'contact_accepted', 'Contact Accepted'  # Done by Claude, requires review
         POST_STARRED = 'post_starred', 'Post Starred'
         POST_REPLIED = 'post_replied', 'Post Replied'
+        POST_SHARED = 'post_shared', 'Post Shared'
+        PAGE_SHARED = 'page_shared', 'Page Shared'
 
     recipient = models.ForeignKey(
         settings.AUTH_USER_MODEL,
