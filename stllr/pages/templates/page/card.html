@@ -52,8 +52,9 @@
 
             {% include 'page/star_button.html' %}
 
+            <!-- Done by Claude, requires review -->
             <a class="btn btn-outline-light rounded-pill me-2"
-                href="{% url "forums:forum" %}?p={{ page.canonical|urlencode }}">
+                href="{% url "forums:forum" page.id %}">
                 <i class="bi bi-diagram-3-fill"></i>
                 &nbsp;<span>{{ page.posts.count }}</span>
             </a>

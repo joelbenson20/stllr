@@ -56,7 +56,6 @@ class Page(models.Model):
         related_name='pages_starred',
         blank=True
     )
-    # Done by Claude, requires review
     users_pin = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         through='PagePin',
@@ -104,7 +103,6 @@ class PageStar(models.Model):
     class Meta:
         unique_together = ('user', 'page')
 
-# Done by Claude, requires review
 class PagePin(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_pins', on_delete=models.CASCADE)
     page = models.ForeignKey(Page, related_name='pins', on_delete=models.CASCADE)

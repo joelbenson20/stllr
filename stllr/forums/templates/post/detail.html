@@ -9,7 +9,8 @@
 {% block content %}
 
 <div class="mb-3">
-    <a href="{% url 'forums:forum' %}?p={{ post.page.canonical }}" class="btn btn-sm btn-dark rounded-pill">
+    <!-- Done by Claude, requires review -->
+    <a href="{% url 'forums:forum' post.page.id %}" class="btn btn-sm btn-dark rounded-pill">
         <i class="bi bi-arrow-left me-1"></i>Go to forum
     </a>
 </div>

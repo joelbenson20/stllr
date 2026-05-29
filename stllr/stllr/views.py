@@ -27,8 +27,27 @@ def home(request):
     if cards_only:
         return render(request, 'page/list.html', {'pages': pages})
 
+    # Done by Claude, requires review
+    contact_actions = []
+    if request.user.is_authenticated:
+        from users.models import Action
+        contact_users = request.user.get_contacts()
+        actions = (
+            Action.objects
+            .filter(actor__in=contact_users, removed=False)
+            .select_related('actor', 'actor__profile', 'object_ct')
+            .order_by('actor_id', '-created')
+        )
+        seen = set()
+        for action in actions:
+            if action.actor_id not in seen:
+                seen.add(action.actor_id)
+                contact_actions.append(action)
+        contact_actions.sort(key=lambda a: a.created, reverse=True)
+
     return render(request, 'home.html', {
         'pages': pages,
+        'contact_actions': contact_actions,
     })
 
 def explore(request):

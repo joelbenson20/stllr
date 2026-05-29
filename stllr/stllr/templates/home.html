@@ -1,11 +1,49 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block content %}
 
         {% include 'page/list.html' with pages=pages user=user %}
 
 {% endblock content %}
+
+{% block right %}
+
+    {% if user.is_authenticated %}
+    <h6 class="text-secondary text-uppercase fw-semibold mb-3 small">Contacts</h6>
+    {% if contact_actions %}
+        {% for action in contact_actions %}
+        <div class="d-flex align-items-start gap-2 mb-4">
+            {% include "user/profile-picture.html" with user=action.actor size="36" dimensions="36x36" %}
+            <div class="min-w-0">
+                <div>
+                    <a href="{% url 'profile' action.actor.username %}" class="text-white fw-semibold text-decoration-none">@{{ action.actor.username }}</a>
+                    <span class="text-secondary small"> {{ action.get_verb_display }}</span>
+                </div>
+                {% if action.object %}
+                    {% if action.object_ct.model == 'post' %}
+                        <div class="text-truncate small">
+                            <!-- Done by Claude, requires review -->
+                            <a href="{% url 'forums:forum' action.object.page.id %}" class="text-secondary text-decoration-none">{{ action.object.page.title }}</a>
+                        </div>
+                    {% elif action.object_ct.model == 'page' %}
+                        <div class="text-truncate small">
+                            <!-- Done by Claude, requires review -->
+                            <a href="{% url 'forums:forum' action.object.id %}" class="text-secondary text-decoration-none">{{ action.object.title }}</a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                <div class="text-secondary" style="font-size:0.75rem;">{{ action.created|naturaltime }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-secondary small">No contact activity yet.</p>
+    {% endif %}
+    {% endif %}
+
+{% endblock right %}
 
 {% block scripts %}
     <script src="{% static 'js/index.js' %}"></script>

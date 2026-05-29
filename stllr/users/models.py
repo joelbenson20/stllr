@@ -4,11 +4,20 @@ from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
 
 class User(AbstractUser):
 
     def get_full_name(self):
         return super().get_full_name()
+
+    # Done by Claude, requires review
+    def get_contacts(self):
+        """Returns a queryset of accepted contact Users (both directions)."""
+        return type(self).objects.filter(
+            Q(contacts_received__from_user=self, contacts_received__status=Contact.Status.ACCEPTED) |
+            Q(contacts_sent__to_user=self, contacts_sent__status=Contact.Status.ACCEPTED)
+        ).distinct()
 
 class Profile(models.Model):
     user = models.OneToOneField(
@@ -49,7 +58,7 @@ class Mute(models.Model):
 
 class Action(models.Model):
     class Verb(models.TextChoices):
-        STARRED = 'starred', 'starred the page'
+        STARRED = 'starred', 'starred'
         POSTED = 'posted', 'posted to the forum'
         REPLIED = 'replied', 'replied in the forum'
         ENTERED = 'entered', 'entered the room'
