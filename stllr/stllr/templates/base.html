@@ -78,9 +78,6 @@
                     {% endif %}
             </nav>
 
-            {% block left %}
-            {% endblock left %}
-
             {% if user.is_authenticated %}
                 <a href="{% url 'profile' user.username %}" class="d-flex align-items-center gap-2 mt-3 p-2 rounded-3 sidebar-link text-decoration-none">
                     {% include "user/profile-picture.html" with user=user size="36" dimensions="36x36" %}

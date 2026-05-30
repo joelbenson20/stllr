@@ -5,6 +5,20 @@
 {% block title %}@{{ profile.user.username }} - stllr{% endblock title %}
 
 {% block css %}
+    <style>
+        .banner-bleed {
+            margin-top: -1rem;
+            margin-left: -1rem;
+            margin-right: -1rem;
+        }
+        @media (min-width: 768px) {
+            .banner-bleed {
+                margin-top: -3rem;
+                margin-left: -3rem;
+                margin-right: -3rem;
+            }
+        }
+    </style>
     {% if profile.background %}
     <style>
         body::before {
@@ -25,26 +39,18 @@
     {% endif %}
 {% endblock css %}
 
-{% block left %}
+{% block right %}
     {% if profile.user == request.user %}
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link bg-dark my-3" href="{% url "edit" user.username %}">Edit your profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link bg-dark my-3" href="{% url "account_email" %}">Manage email addresses</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link bg-dark my-3" href="{% url "account_reset_password" %}">Reset password</a>
-            </li>
-        </ul>
+        {% include "profile/tabs.html" %}
+    {% else %}
+        {% include "side_panels/contacts_statuses.html" %}
     {% endif %}
-{% endblock left %}
+{% endblock right %}
 
 
 {% block content %}
 
-    <div class="position-relative rounded-card overflow-hidden" style="aspect-ratio: 16/9;">
+    <div class="position-relative overflow-hidden banner-bleed border-bottom border-grid" style="aspect-ratio: 16/9;">
         {% if profile.background %}{% thumbnail profile.background "1200x675" crop="center" as banner %}
             <img class="object-fit-cover w-100 h-100" src="{{ banner.url }}">
         {% endif %}

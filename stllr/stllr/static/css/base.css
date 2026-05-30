@@ -2,6 +2,12 @@
     --night-sky: #060d1a;
     --star-light: #a594d0;
     --white-hot: #ede8ff;
+    --border-grid: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.border-grid {
+    --bs-border-color: rgba(255, 255, 255, 0.08);
+    --bs-border-width: 1px;
 }
 
 body,
@@ -153,7 +159,7 @@ h1 a:hover {
         overflow-y: auto;
         transform: none !important;
         visibility: visible !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        border-right: var(--border-grid);
     }
 
     .right-sidebar {
@@ -164,7 +170,7 @@ h1 a:hover {
         overflow-y: auto;
         transform: none !important;
         visibility: visible !important;
-        border-left: 1px solid rgba(255, 255, 255, 0.08);
+        border-left: var(--border-grid);
     }
 
     #mainContent {

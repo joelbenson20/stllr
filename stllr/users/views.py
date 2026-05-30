@@ -40,7 +40,7 @@ def profile(request, username):
         ).first()
     return render(
         request,
-        'profile.html',
+        'profile/detail.html',  # Done by Claude, requires review
         {
             'profile': user.profile,
             'contact': contact,
@@ -75,7 +75,7 @@ def edit(request, username):
         profile_form=ProfileEditForm(instance=request.user.profile)
     return render(
         request,
-        'edit.html',
+        'profile/edit.html',  # Done by Claude, requires review
         {
             'user_form': user_form,
             'profile_form': profile_form
