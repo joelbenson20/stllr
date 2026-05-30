@@ -9,14 +9,15 @@
     <link rel="stylesheet" href="{% static 'css/rooms.css' %}">
     <link rel="stylesheet" href="{% static 'css/extension.css' %}">
 
-    <div class="glass sticky-top">
+    <div class="sticky-top glass m-0 p-0">
+
         <div id="stllr-data" style="display:none"
             data-page-id="{{ page.id }}"
             data-page-canonical="{{ page.canonical }}"
             data-csrf="{{ csrf_token }}">
         </div>
 
-        <div class="extension-header p-3">
+        <div class="p-3 pb-0">
             {% include "page/card.html" with compact=True %}
         </div>
 
