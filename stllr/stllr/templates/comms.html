@@ -10,34 +10,41 @@
             <!-- Done by Claude, requires review -->
             <div class="p-3 rounded-3 border {% if not notif.read %}border-primary{% endif %}">
                 {% with actors=notif.notification_actors.all %}
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-start gap-3">
                     {% include "user/profile-picture.html" with user=actors.0.actor size="40" dimensions="40x40" %}
-                    <div>
-                        <a href="{% url 'profile' actors.0.actor.username %}" class="fw-semibold text-decoration-none">{{ actors.0.actor.username }}</a>
-                        {% if notif.actor_count > 1 %}
-                            and {{ notif.actor_count|add:"-1" }} other{{ notif.actor_count|add:"-1"|pluralize }}
+                    <div class="min-w-0 flex-grow-1">
+                        <div>
+                            <a href="{% url 'profile' actors.0.actor.username %}" class="fw-semibold text-decoration-none">{{ actors.0.actor.username }}</a>
+                            {% if notif.actor_count > 1 %}
+                                and {{ notif.actor_count|add:"-1" }} other{{ notif.actor_count|add:"-1"|pluralize }}
+                            {% endif %}
+                            <!-- Done by Claude, requires review -->
+                            {% if notif.event == 'post_starred' %}
+                                starred your post
+                            {% elif notif.event == 'post_replied' %}
+                                replied to your post
+                            {% elif notif.event == 'contact_request' %}
+                                sent you a contact request
+                            {% elif notif.event == 'contact_accepted' %}
+                                accepted your contact request
+                            {% elif notif.event == 'page_shared' %}
+                                shared a page with you
+                            {% elif notif.event == 'post_shared' %}
+                                shared a post with you
+                            <!-- Done by Claude, requires review -->
+                            {% elif notif.event == 'page_also_starred' %}
+                                also starred a page you starred
+                            {% elif notif.event == 'post_also_starred' %}
+                                also starred a post you starred
+                            {% endif %}
+                            <span class="text-secondary ms-1 small">{{ notif.updated|timesince }} ago</span>
+                        </div>
+                        <!-- Done by Claude, requires review -->
+                        {% if notif.event == 'post_starred' or notif.event == 'post_replied' or notif.event == 'post_shared' or notif.event == 'post_also_starred' %}
+                            {% include "post/preview.html" with post=notif.object %}
+                        {% elif notif.event == 'page_shared' or notif.event == 'page_also_starred' %}
+                            {% include "page/preview.html" with page=notif.object %}
                         {% endif %}
-                        <!-- Done by Claude, requires review -->
-                        {% if notif.event == 'post_starred' %}
-                            starred your <a href="{% url 'post_detail' notif.object.id %}" class="fw-semibold">post</a>
-                        {% elif notif.event == 'post_replied' %}
-                            replied to your <a href="{% url 'post_detail' notif.object.id %}" class="fw-semibold">post</a>
-                        {% elif notif.event == 'contact_request' %}
-                            sent you a contact request
-                        {% elif notif.event == 'contact_accepted' %}
-                            accepted your contact request
-                        {% elif notif.event == 'page_shared' %}
-                            shared a <a href="{{ notif.object.link }}" class="fw-semibold">page</a> with you
-                        {% elif notif.event == 'post_shared' %}
-                            shared a <a href="{% url 'post_detail' notif.object.id %}" class="fw-semibold">post</a> with you
-                        <!-- Done by Claude, requires review -->
-                        {% elif notif.event == 'page_also_starred' %}
-                            also starred a <a href="{% url 'forum' %}?p={{ notif.object.canonical }}" class="fw-semibold">page</a> you starred
-                        {% elif notif.event == 'post_also_starred' %}
-                            also starred a <a href="{% url 'post_detail' notif.object.id %}" class="fw-semibold">post</a> you starred
-                        {% endif %}
-                        <!-- Done by Claude, requires review -->
-                        <span class="text-secondary ms-2 small">{{ notif.updated|timesince }} ago</span>
                     </div>
                 </div>
                 {% endwith %}
