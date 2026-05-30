@@ -12,6 +12,9 @@ class Notification(models.Model):
         POST_REPLIED = 'post_replied', 'Post Replied'
         POST_SHARED = 'post_shared', 'Post Shared'
         PAGE_SHARED = 'page_shared', 'Page Shared'
+        # Done by Claude, requires review
+        PAGE_ALSO_STARRED = 'page_also_starred', 'Page Also Starred'
+        POST_ALSO_STARRED = 'post_also_starred', 'Post Also Starred'
 
     recipient = models.ForeignKey(
         settings.AUTH_USER_MODEL,

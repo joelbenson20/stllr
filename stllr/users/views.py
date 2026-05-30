@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
-from .models import Contact, Action, Mute
+from .models import ContactRelation, Action, Mute
 
 def register(request):
     if request.method == 'POST':
@@ -33,9 +33,9 @@ def profile(request, username):
     user = get_object_or_404(get_user_model(), username=username)
     contact = None
     if request.user.is_authenticated and request.user != user:
-        contact = Contact.objects.filter(
+        contact = ContactRelation.objects.filter(
             from_user=request.user, to_user=user
-        ).first() or Contact.objects.filter(
+        ).first() or ContactRelation.objects.filter(
             from_user=user, to_user=request.user
         ).first()
     return render(
@@ -86,24 +86,24 @@ def edit(request, username):
 def send_request(request, username):
     to_user = get_object_or_404(get_user_model(), username=username)
     if to_user != request.user:
-         Contact.objects.create(from_user=request.user, to_user=to_user)
+         ContactRelation.objects.create(from_user=request.user, to_user=to_user)
     return redirect('profile', username=username)
 
 @login_required
 def accept_request(request, username):
     from_user = get_object_or_404(get_user_model(), username=username)
-    contact = get_object_or_404(Contact, from_user=from_user, to_user=request.user, status=Contact.Status.PENDING)
-    contact.status = Contact.Status.ACCEPTED
+    contact = get_object_or_404(ContactRelation, from_user=from_user, to_user=request.user, status=ContactRelation.Status.PENDING)
+    contact.status = ContactRelation.Status.ACCEPTED
     contact.save()
     return redirect('profile', username=username)
 
 @login_required
 def decline_request(request, username):
     other_user = get_object_or_404(get_user_model(), username=username)
-    Contact.objects.filter(
+    ContactRelation.objects.filter(
         from_user=request.user, to_user=other_user
     ).delete()
-    Contact.objects.filter(
+    ContactRelation.objects.filter(
         from_user=other_user, to_user=request.user
     ).delete()
     return redirect('profile', username=request.user.username)
@@ -111,10 +111,10 @@ def decline_request(request, username):
 @login_required
 def remove_contact(request, username):
     other_user = get_object_or_404(get_user_model(), username=username)
-    Contact.objects.filter(
+    ContactRelation.objects.filter(
         from_user=request.user, to_user=other_user
     ).delete()
-    Contact.objects.filter(
+    ContactRelation.objects.filter(
         from_user=other_user, to_user=request.user
     ).delete()
     return redirect('profile', username=username)

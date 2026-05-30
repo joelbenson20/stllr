@@ -1,4 +1,3 @@
-// Done by Claude, requires review
 function initShareModal() {
     const shareModal = document.getElementById('shareModal');
     if (!shareModal) return;
@@ -56,4 +55,8 @@ function initShareModal() {
     });
 }
 
-initShareModal();
+function initModals() {
+    initShareModal();
+}
+
+initModals();

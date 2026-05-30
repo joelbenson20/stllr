@@ -11,14 +11,14 @@
             <div class="modal-body">
                 {% if contacts_list %}
                     <div class="d-flex flex-column gap-2">
-                        {% for item in contacts_list %}
-                        <button class="share-contact-btn btn btn-outline-secondary text-start d-flex align-items-center gap-2 w-100"
-                            data-contact-id="{{ item.user.id }}"
-                            data-username="{{ item.user.username }}">
-                            {% include "user/profile-picture.html" with user=item.user size="32" dimensions="32x32" %}
-                            <span>@{{ item.user.username }}</span>
-                            <span class="share-btn-status ms-auto"></span>
-                        </button>
+                        {% for contact in contacts_list %}
+                            <button class="share-contact-btn btn btn-outline-secondary text-start d-flex align-items-center gap-2 w-100"
+                                data-contact-id="{{ contact.id }}"
+                                data-username="{{ contact.username }}">
+                                {% include "user/profile-picture.html" with user=contact size="32" dimensions="32x32" %}
+                                <span>@{{ contact.username }}</span>
+                                <span class="share-btn-status ms-auto"></span>
+                            </button>
                         {% endfor %}
                     </div>
                 {% else %}

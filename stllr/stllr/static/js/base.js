@@ -1,4 +1,4 @@
-const BASE_URL = '/';
+const STLLR_URL = '/';
 
 const tooltipTriggerList = document.querySelectorAll(
   '[data-bs-toggle="tooltip"]',

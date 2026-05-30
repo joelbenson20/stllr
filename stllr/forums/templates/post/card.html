@@ -56,7 +56,18 @@
                         <i class="bi bi-three-dots"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="post{{ post.id }}Dropdown">
-                {% include "share_button.html" with object_type="post" object_id=post.id %}
+                <!-- Done by Claude, requires review -->
+                {% if request.user.is_authenticated %}
+                <li>
+                    <button class="dropdown-item d-flex align-items-center gap-2 share-btn"
+                        data-object-type="post"
+                        data-object-id="{{ post.id }}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#shareModal">
+                        <i class="bi bi-share-fill"></i>Share post
+                    </button>
+                </li>
+                {% endif %}
                 {% if not post.removed %}
                     <li>
                         <a class="dropdown-item" href="{% url "governance:report_post" post.id %}" target="_blank">

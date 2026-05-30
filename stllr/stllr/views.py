@@ -70,14 +70,10 @@ def contacts(request):
 
 @login_required
 def comms(request):
+    # Done by Claude, requires review
     from comms.models import Notification
-    user_notifications = list(
-        Notification.objects
-        .filter(recipient=request.user)
-        .prefetch_related('notification_actors__actor')
-    )
-    Notification.objects.filter(recipient=request.user).update(read=True)
-    return render(request, 'comms.html', {'user_notifications': user_notifications})
+    Notification.objects.filter(recipient=request.user, read=False).update(read=True)
+    return render(request, 'comms.html')
 
 @login_required
 def pins(request):

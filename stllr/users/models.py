@@ -11,12 +11,11 @@ class User(AbstractUser):
     def get_full_name(self):
         return super().get_full_name()
 
-    # Done by Claude, requires review
     def get_contacts(self):
         """Returns a queryset of accepted contact Users (both directions)."""
         return type(self).objects.filter(
-            Q(contacts_received__from_user=self, contacts_received__status=Contact.Status.ACCEPTED) |
-            Q(contacts_sent__to_user=self, contacts_sent__status=Contact.Status.ACCEPTED)
+            Q(contacts_received__from_user=self, contacts_received__status=ContactRelation.Status.ACCEPTED) |
+            Q(contacts_sent__to_user=self, contacts_sent__status=ContactRelation.Status.ACCEPTED)
         ).distinct()
 
 class Profile(models.Model):
@@ -35,7 +34,7 @@ class Profile(models.Model):
     def __str__(self):
         return f'Profile of {self.user.username}'
     
-class Contact(models.Model):
+class ContactRelation(models.Model):
     class Status(models.TextChoices):
         PENDING = 'pending', 'Pending'
         ACCEPTED = 'accepted', 'Accepted'

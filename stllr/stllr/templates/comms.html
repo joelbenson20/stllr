@@ -4,9 +4,9 @@
 
 {% block content %}
 <h4 class="fw-bold mb-4">Comms</h4>
-{% if user_notifications %}
+{% if notifications.all %}
     <div class="d-flex flex-column gap-2">
-        {% for notif in user_notifications %}
+        {% for notif in notifications.all %}
             <!-- Done by Claude, requires review -->
             <div class="p-3 rounded-3 border {% if not notif.read %}border-primary{% endif %}">
                 {% with actors=notif.notification_actors.all %}
@@ -30,6 +30,11 @@
                             shared a <a href="{{ notif.object.link }}" class="fw-semibold">page</a> with you
                         {% elif notif.event == 'post_shared' %}
                             shared a <a href="{% url 'post_detail' notif.object.id %}" class="fw-semibold">post</a> with you
+                        <!-- Done by Claude, requires review -->
+                        {% elif notif.event == 'page_also_starred' %}
+                            also starred a <a href="{% url 'forum' %}?p={{ notif.object.canonical }}" class="fw-semibold">page</a> you starred
+                        {% elif notif.event == 'post_also_starred' %}
+                            also starred a <a href="{% url 'post_detail' notif.object.id %}" class="fw-semibold">post</a> you starred
                         {% endif %}
                         <!-- Done by Claude, requires review -->
                         <span class="text-secondary ms-2 small">{{ notif.updated|timesince }} ago</span>

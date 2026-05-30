@@ -10,7 +10,7 @@ from pages.models import Page, PageStar, PagePin  # Done by Claude, requires rev
 from forums.models import Post, PostStar
 from forums.forms import PostForm
 from rooms.consumers import _get_users
-from users.models import Action, Mute, Contact
+from users.models import Action, Mute, ContactRelation
 from comms.notifications import notify
 from comms.models import Notification
 
@@ -163,16 +163,16 @@ def send_contact_request(request):
     if to_user == request.user:
         return JsonResponse({'error': 'Cannot add yourself'}, status=400)
 
-    existing = Contact.objects.filter(
+    existing = ContactRelation.objects.filter(
         from_user=request.user, to_user=to_user
-    ).first() or Contact.objects.filter(
+    ).first() or ContactRelation.objects.filter(
         from_user=to_user, to_user=request.user
     ).first()
 
     if existing:
-        return JsonResponse({'error': 'Contact relationship already exists'}, status=400)
+        return JsonResponse({'error': 'ContactRelation relationship already exists'}, status=400)
 
-    Contact.objects.create(from_user=request.user, to_user=to_user)
+    ContactRelation.objects.create(from_user=request.user, to_user=to_user)
     return JsonResponse({'status': 'ok'})
 
 
