@@ -11,7 +11,7 @@ from django.middleware.csrf import get_token
 from pages.models import Page, Domain
 from pages.utils import get_canonical, get_domain_name, verify_security, InsecureURLError  # Done by Claude, requires review
 
-SUPPORTED_EXTENSION_VERSIONS = ['2.0']
+SUPPORTED_EXTENSION_VERSIONS = ['1.1']
 
 @csrf_exempt
 @login_required
@@ -21,9 +21,11 @@ def extension(request):
     if extension_version not in SUPPORTED_EXTENSION_VERSIONS:
         return JsonResponse(
             {
-                'status': '400',
+                # Done by Claude, requires review
+                'status': 400,
                 'html': render_to_string('extension/errors/update_required.html', request=request)
-            }
+            },
+            status=400
         )
 
     data = json.loads(request.body).get('page').get('data')
@@ -38,9 +40,11 @@ def extension(request):
         if not page.is_active:
             return JsonResponse(
                 {
-                    'status': '403',
+                    # Done by Claude, requires review
+                    'status': 403,
                     'html': render_to_string('extension/errors/inactive.html', request=request)
-                }
+                },
+                status=403
             )
     except Page.DoesNotExist:
         # Done by Claude, requires review
@@ -49,9 +53,11 @@ def extension(request):
         except InsecureURLError:
             return JsonResponse(
                 {
-                    'status': '405',
+                    # Done by Claude, requires review
+                    'status': 405,
                     'html': render_to_string('extension/errors/unsupported.html', request=request)
-                }
+                },
+                status=405
             )
 
         fav_icon_url = data.get('favIconUrl')
@@ -89,12 +95,12 @@ def extension(request):
     elif (tab == 'room'):
         html = render_to_string('extension/room.html', context=context, request=request)
     elif (tab == 'similar'):
-        # Done by Claude, requires review
         context['similar_pages'] = page.get_similar_pages()
         html = render_to_string('extension/similar.html', context=context, request=request)
 
     return JsonResponse({
-        'status': '200',
+        # Done by Claude, requires review
+        'status': 200,
         'html': html
     })
 
@@ -106,9 +112,10 @@ def csrf_token(request):
         })
     else:
         return JsonResponse({
+            # Done by Claude, requires review
             'status': 403,
             'html': render_to_string('extension/errors/unauthenticated.html', request=request)
-        })
+        }, status=403)
 
 @login_required
 def ws_ticket(request):
@@ -116,14 +123,8 @@ def ws_ticket(request):
     cache.set(f'ws_ticket:{token}', request.user.id, timeout=30)
     return JsonResponse({'ticket': token})
 
-def loading(request):
-    return JsonResponse({
-        'status': '200',
-        'html': render_to_string('extension/loading.html', request=request)
-    })
-
 def restricted(request):
     return JsonResponse({
-        'status': '200',
+        'status': 200,
         'html': render_to_string('extension/errors/restricted.html', request=request)
     })

@@ -1,16 +1,16 @@
-{% extends "extension/base.html" %}
+<base href="{{ request.scheme }}://{{ request.get_host }}/">
 {% load static %}
 
-{% block content %}
-<div class="d-flex w-100 align-items-center justify-content-center py-5">
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+<div class="d-flex justify-content-center" style="padding-top: 33vh;">
     <div>
         <a href="{% url 'home' %}">
-            <img class="d-block my-3 mx-auto" src="{% static 'brand/stllr.png' %}" width=192>
+            <img class="d-block my-3 mx-auto" src="{% static 'brand/icon.png' %}" width=192>
         </a>
-        <p class="text-center">
+        <div class="text-center">
             {% block error_message %}
             {% endblock error_message %}
-        </p>
+        </div>
     </div>
 </div>
-{% endblock content %}
