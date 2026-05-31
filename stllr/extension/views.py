@@ -12,7 +12,7 @@ from pages.models import Page, Domain
 from forums.models import Post
 from pages.utils import get_canonical, get_domain_name, verify_security, InsecureURLError
 
-SUPPORTED_EXTENSION_VERSIONS = ['2.0']
+SUPPORTED_EXTENSION_VERSIONS = ['3.0']
 
 @csrf_exempt
 @login_required
@@ -22,10 +22,10 @@ def extension(request):
     if extension_version not in SUPPORTED_EXTENSION_VERSIONS:
         return JsonResponse(
             {
-                'status': 400,
-                'html': render_to_string('extension/errors/update_required.html', request=request)
+                'status': 426,
+                'html': render_to_string('extension/errors/awaiting_review.html', request=request)
             },
-            status=400
+            status=426
         )
 
     data = json.loads(request.body).get('page').get('data')

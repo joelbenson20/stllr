@@ -132,7 +132,6 @@ function initPostStarButton(button) {
         })
 }
 
-// Done by Claude, requires review
 function initMuteButton(button) {
     button.addEventListener('click', () => {
         const formData = new FormData();
@@ -170,7 +169,7 @@ function initReplyAutoFocus(form) {
     }
 }
 
-function initForums() {
+export function initForums() {
 
     // Star buttons
     var postStarButtons = document.querySelectorAll('.post-star-button');
@@ -193,5 +192,3 @@ function initForums() {
     document.querySelectorAll('.post[data-post-url]').forEach(initPostCardLink);
 
 }
-
-initForums();

@@ -3,64 +3,18 @@
     --star-light: #a594d0;
     --white-hot: #ede8ff;
     --border-grid: 1px solid rgba(255, 255, 255, 0.08);
-    --sidebar-width: 280px;
 }
 
 [id] { scroll-margin-top: 150px; }
 
-body,
-.left-sidebar,
-.right-sidebar {
+html {
+    background-color: var(--night-sky);
+}
+
+body {
     background-color: var(--night-sky);
     color: white;
     scrollbar-color: auto transparent;
-}
-
-.left-sidebar,
-.right-sidebar {
-    width: var(--sidebar-width) !important;
-}
-
-.sidebar-link {
-    color: white;
-}
-.sidebar-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-}
-
-@media (min-width: 768px) {
-    .left-sidebar {
-        position: fixed !important;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        overflow-y: auto;
-        transform: none !important;
-        visibility: visible !important;
-        border-right: var(--border-grid);
-    }
-
-    .right-sidebar {
-        position: fixed !important;
-        top: 0;
-        right: 0;
-        height: 100vh;
-        overflow-y: auto;
-        transform: none !important;
-        visibility: visible !important;
-        border-left: var(--border-grid);
-    }
-
-    #mainContent {
-        margin-left: var(--sidebar-width);
-        margin-right: var(--sidebar-width);
-    }
-}
-
-.border-grid {
-    --bs-border-color: rgba(255, 255, 255, 0.08);
-    --bs-border-width: 1px;
 }
 
 .glass {
@@ -71,6 +25,11 @@ body,
 
 .search-form {
     max-width: 576px;
+}
+
+.border-grid {
+    --bs-border-color: rgba(255, 255, 255, 0.08);
+    --bs-border-width: 1px;
 }
 
 ::-webkit-scrollbar {
@@ -212,13 +171,11 @@ h1 a:hover {
 }
 
 /* Rooms */
-.message-feed {
-    background-color: rgba(255, 255, 255, 0.05);
+.broadcast-textarea {
+    height: 6rem;
+    resize: none;
 }
 
-.message-textarea {
-    height: 4rem;
-    resize: none;
-    background-color: rgba(255, 255, 255, 0.05);
-    color: white;
+.broadcast-form textarea::placeholder {
+    color: rgba(0, 0, 0, 0.4);
 }

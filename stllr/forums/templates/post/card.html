@@ -57,7 +57,6 @@
                             </a>
                         </li>
                         {% if request.user.is_authenticated and post.author != request.user %}
-                            <!-- Done by Claude, requires review -->
                             <li>
                                 <button type="button" class="post-mute-button dropdown-item"
                                     data-action="{% if post.author.id in muted_user_ids %}unmute{% else %}mute{% endif %}"

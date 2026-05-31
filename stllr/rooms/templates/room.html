@@ -3,14 +3,16 @@
 
 {% block title %} stllr | room | {{ page.title }}{% endblock title %}
 
+{% block content_wrapper_class %}flex-grow-1 d-flex flex-column overflow-hidden{% endblock %}
+
 {% block content %}
 
-    <div class="mb-sm-5 mb-3">
+    <div class="mb-sm-5 mb-3 flex-shrink-0">
         {% include 'page/card.html' with page=page user=user compact=True standalone=True %}
     </div>
-    
-    <div class="flex-grow-1" style="max-height: 50vh">
-        {% include "room/feed.html" %}
+
+    <div class="flex-grow-1 overflow-hidden">
+        {% include "room/window.html" %}
     </div>
 
 {% endblock content %}

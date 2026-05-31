@@ -1,7 +1,7 @@
 <base href="{{ request.scheme }}://{{ request.get_host }}/">
 {% load static %}
 
-<div id="extensionBody">
+<div id="extensionBody" class="d-flex flex-column vh-100">
 
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/forums.css' %}">
@@ -33,8 +33,7 @@
         </nav>
     </div>
 
-
-    <div class="container-fluid p-3">
+    <div class="container-fluid p-3 flex-grow-1 {% block content_wrapper_class %}overflow-y-auto{% endblock %}">
         {% block content %}
         {% endblock content %}
     </div>

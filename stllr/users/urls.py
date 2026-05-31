@@ -1,4 +1,3 @@
-# Done by Claude, requires review
 from django.urls import path, include
 from . import views
 

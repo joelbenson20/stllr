@@ -66,9 +66,7 @@ function initRoomUsersModal() {
     });
 }
 
-function initModals() {
+export function initModals() {
     initShareModal();
     initRoomUsersModal();
 }
-
-initModals();

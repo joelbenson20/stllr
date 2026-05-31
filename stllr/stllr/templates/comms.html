@@ -7,7 +7,7 @@
 {% if notifications.all %}
     <div class="d-flex flex-column gap-2">
         {% for notif in notifications.all %}
-            <div class="p-3 rounded-3 border {% if not notif.read %}border-primary{% endif %}">
+            <div class="p-3 rounded-3 {% if not notif.read %}border border-primary{% endif %}">
                 {% with actors=notif.notification_actors.all %}
                 <div class="d-flex align-items-start gap-3">
                     {% include "user/profile-picture.html" with user=actors.0.actor size="40" dimensions="40x40" %}

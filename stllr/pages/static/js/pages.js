@@ -79,12 +79,9 @@ function initPageCardLink(card) {
     });
 }
 
-function initPages() {
+export function initPages() {
     initPageStarButtons();
     initPinButtons();
     fetchRoomCounts();
     document.querySelectorAll('.page[data-forum-url]').forEach(initPageCardLink);
 }
-
-
-initPages();

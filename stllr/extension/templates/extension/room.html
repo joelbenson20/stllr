@@ -1,9 +1,11 @@
 {% extends "extension/base.html" %}
 
+{% block content_wrapper_class %}overflow-hidden{% endblock %}
+
 {% block content %}
 
-    <div class="flex-grow-1" style="max-height: 50vh;">
-        {% include "room/feed.html" %}
+    <div class="h-100">
+        {% include "room/window.html" %}
     </div>
 
 {% endblock content %}

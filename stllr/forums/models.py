@@ -76,7 +76,6 @@ class Post(models.Model):
         ordering = ['-brightness', '?']
 
     def get_absolute_url(self):
-        # Done by Claude, requires review
         return reverse('forums:post_detail', args=[self.pk])
 
     def __str__(self):

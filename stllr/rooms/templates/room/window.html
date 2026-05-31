@@ -1,0 +1,29 @@
+<div class="d-flex flex-column h-100 position-relative border border-grid rounded-card">
+
+    <button class="btn btn-sm btn-transparent rounded-pill position-absolute top-0 end-0 m-2 z-1"
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#roomUsersModal">
+        &nbsp;<i class="bi bi-broadcast text-danger spin"></i>
+    </button>
+
+    <div class="broadcast-feed rounded-card flex-grow-1 p-3 overflow-y-auto" data-page-id="{{ page.id }}"></div>
+
+    {% if user.is_authenticated %}
+
+        <form class="broadcast-form glow-on-focus rounded-card bg-white w-100 mt-2 flex-shrink-0">
+            <textarea class="broadcast-textarea form-control rounded-card border-0 shadow-none p-3"
+                    placeholder="Make contacts..."></textarea>
+        </form>
+
+    {% else %}
+
+        <p class="rounded-pill bg-light text-dark ps-3 py-2 mt-2 flex-shrink-0">
+            Please <a href="{% url "account_login" %}">sign in</a> to post to this forum.
+        </p>
+
+    {% endif %}
+
+</div>
+
+{% include "modals/room_users.html" %}
