@@ -72,10 +72,20 @@ async function fetchRoomCounts() {
     });
 }
 
+// Done by Claude, requires review
+function initPageCardLink(card) {
+    card.addEventListener('click', e => {
+        if (!e.target.closest('a, button, form')) {
+            window.location.href = card.dataset.forumUrl;
+        }
+    });
+}
+
 function initPages() {
     initPageStarButtons();
     initPinButtons();
     fetchRoomCounts();
+    document.querySelectorAll('.page[data-forum-url]').forEach(initPageCardLink);
 }
 
 

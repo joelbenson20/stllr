@@ -2,5 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.room, name='room'),
+    # Done by Claude, requires review
+    path('<int:page_id>/', views.room, name='room'),
 ]

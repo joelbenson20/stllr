@@ -12,11 +12,13 @@ function initPostForm(form) {
     initMarkdownToggle(form);
 }
 
+// Done by Claude, requires review
 function initMarkdownToggle(form) {
     const textarea = form.querySelector('textarea');
     const previewContainer = form.querySelector('.markdown-preview');
     const previewButton = form.querySelector('.markdown-preview-button');
     const editButton = form.querySelector('.markdown-edit-button');
+    const submitButton = form.querySelector('[type="submit"]');
 
     previewButton.addEventListener('click', () => {
         const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -35,6 +37,7 @@ function initMarkdownToggle(form) {
                 previewButton.style.display = 'none';
                 editButton.style.display = 'block';
                 textarea.style.display = 'none';
+                if (submitButton) submitButton.disabled = true;
             }
         });
     });
@@ -46,6 +49,7 @@ function initMarkdownToggle(form) {
         previewButton.style.display = 'block';
         editButton.style.display = 'none';
         textarea.style.display = 'block';
+        if (submitButton) submitButton.disabled = false;
         const end = textarea.value.length;
         textarea.focus();
         textarea.setSelectionRange(end, end);
@@ -132,10 +136,14 @@ function initPostStarButton(button) {
 }
 
 // Done by Claude, requires review
+// Done by Claude, requires review
 function initReplyAutoFocus(form) {
-    form.addEventListener('shown.bs.collapse', function () {
-        this.querySelector('textarea').focus();
-    })
+    const collapseEl = form.closest('.collapse');
+    if (collapseEl) {
+        collapseEl.addEventListener('shown.bs.collapse', () => {
+            form.querySelector('textarea').focus();
+        });
+    }
 }
 
 function initForums() {

@@ -1,5 +1,7 @@
 // Done by Claude, requires review
 function initRoom() {
+
+    const messageTextarea = document.querySelector('.message-textarea');
     const messageFeed = document.querySelector('.message-feed');
     if (!messageFeed) return;
 
@@ -8,7 +10,6 @@ function initRoom() {
     const url = wsProtocol + window.location.host + '/ws/room/' + pageId + '/';
     const roomSocket = new WebSocket(url);
 
-    const messageTextarea = document.querySelector('.message-textarea');
 
     roomSocket.onopen = function() {
         const heartbeat = setInterval(() => {

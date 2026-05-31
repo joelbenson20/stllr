@@ -7,7 +7,6 @@
 {% if notifications.all %}
     <div class="d-flex flex-column gap-2">
         {% for notif in notifications.all %}
-            <!-- Done by Claude, requires review -->
             <div class="p-3 rounded-3 border {% if not notif.read %}border-primary{% endif %}">
                 {% with actors=notif.notification_actors.all %}
                 <div class="d-flex align-items-start gap-3">
@@ -18,7 +17,6 @@
                             {% if notif.actor_count > 1 %}
                                 and {{ notif.actor_count|add:"-1" }} other{{ notif.actor_count|add:"-1"|pluralize }}
                             {% endif %}
-                            <!-- Done by Claude, requires review -->
                             {% if notif.event == 'post_starred' %}
                                 starred your post
                             {% elif notif.event == 'post_replied' %}
@@ -39,7 +37,6 @@
                             {% endif %}
                             <span class="text-secondary ms-1 small">{{ notif.updated|timesince }} ago</span>
                         </div>
-                        <!-- Done by Claude, requires review -->
                         {% if notif.event == 'post_starred' or notif.event == 'post_replied' or notif.event == 'post_shared' or notif.event == 'post_also_starred' %}
                             {% include "post/preview.html" with post=notif.object %}
                         {% elif notif.event == 'page_shared' or notif.event == 'page_also_starred' %}

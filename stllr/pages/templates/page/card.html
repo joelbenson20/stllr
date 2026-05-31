@@ -1,125 +1,146 @@
 {% load thumbnail %}
 {% load math_extras %}
 
-<!-- Page Card -->
 {% if page.is_active %}
-    <div id="page{{ page.id }}"
-        class="page mb-5">
+<div id="page{{ page.id }}"
+    class="page {% if standalone %}pb-3{% else %}py-3{% endif %}"
+    style="border-bottom: var(--border-grid); cursor: pointer;"
+    data-forum-url="{% url 'forums:forum' page.id %}">
 
-        <!-- Domain header -->
-        <div class="d-flex align-items-center">
-            
+    <div class="d-flex gap-3">
+
+        <!-- Avatar column -->
+        <!-- Done by Claude, requires review -->
+        <div class="flex-shrink-0 pt-1{% if threaded %} thread-line-down{% endif %}">
             {% include "domain/icon.html" with domain=page.domain dimensions="32x32" size=32 %}
+        </div>
 
-            <div class="overflow-hidden ms-2">
-                
-                <div class="small d-flex align-items-center gap-1">
-                    {{ page.domain }}
+        <!-- Content column -->
+        <div class="flex-grow-1" style="min-width: 0;">
+
+            <!-- Domain row -->
+            <div class="d-flex align-items-center justify-content-between gap-2">
+
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <span class="fw-semibold text-white" style="font-size: 0.9rem; white-space: nowrap;">{{ page.domain }}</span>
                     {% if page.domain.category %}
-                        <span class="badge small bg-dark">{{ page.domain.get_category_display }}</span>
+                        <span class="badge bg-secondary" style="font-size: 0.65rem;">{{ page.domain.get_category_display }}</span>
                     {% endif %}
-                </div>
-
-                <div class="d-flex align-items-center gap-1">
                     {% if "https" not in page.supported_protocols and "http" in page.supported_protocols %}
-                        <span class="badge bg-warning text-dark text-nowrap" style="font-size:0.6em"><i class="bi bi-shield-x"></i> Not Secure</span>
+                        <span class="badge bg-warning text-dark text-nowrap" style="font-size: 0.6rem;"><i class="bi bi-shield-x"></i></span>
                     {% endif %}
-                    <a class="small text-truncate text-white text-decoration-none" href="{{ page.link }}">
+                    <a class="text-secondary text-truncate text-decoration-none" href="{{ page.link }}" style="font-size: 0.85rem;">
                         {{ page.link }}
                     </a>
                 </div>
 
+                <!-- Dropdown -->
+                <button id="p{{ page.id }}Dropdown"
+                    class="dropdown-toggle no-caret btn btn-transparent text-secondary flex-shrink-0 p-0"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="p{{ page.id }}Dropdown">
+                    {% if request.user.is_authenticated %}
+                        <li>
+                            <button class="dropdown-item d-flex align-items-center gap-2 share-btn"
+                                data-object-type="page"
+                                data-object-id="{{ page.id }}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#shareModal">
+                                <i class="bi bi-share-fill"></i>Share page
+                            </button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item page-pin-button"
+                                data-page-id="{{ page.id }}"
+                                data-action="{% if page in user.pages_pinned.all %}unpin{% else %}pin{% endif %}"
+                                data-csrf-token="{{ csrf_token }}"
+                                data-endpoint="{% url 'api:toggle_pin' %}">
+                                <i class="bi bi-broadcast-pin"></i>
+                                <span>{% if page in user.pages_pinned.all %}Remove pin{% else %}Pin page{% endif %}</span>
+                            </button>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                                href="{% url "governance:report_page" page.id %}"
+                                target="_blank">
+                                <i class="bi bi-flag-fill"></i> Report page
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+
+            </div>
+
+            <!-- Title -->
+            <div class="mt-1">
+                <a class="text-decoration-none" href="{{ page.link }}" style="color: var(--white-hot); font-size: 0.95rem; font-weight: 400; line-height: 1.4;">
+                    {% if compact %}
+                        <span class="d-block text-truncate">{{ page.title|truncatechars:90 }}</span>
+                    {% else %}
+                        {{ page.title|truncatechars:90 }}
+                    {% endif %}
+                </a>
+            </div>
+
+            <!-- Description and image -->
+            {% if not compact %}
+
+                {% if page.description %}
+                    <p class="mt-1 mb-0" style="color: rgba(255,255,255,0.55); font-size: 0.875rem; line-height: 1.45;">
+                        {{ page.description|truncatechars:200 }}
+                    </p>
+                {% endif %}
+
+                {% if page.image %}
+                    {% thumbnail page.image 600x315 crop="center" as og_image %}{% if og_image %}
+                        <div class="mt-2">
+                            <a href="{{ page.link }}">
+                                <img class="rounded-3 w-100"
+                                    src="{{ og_image.url }}"
+                                    style="max-height: 315px; object-fit: cover; display: block;">
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+            {% endif %}
+
+            <!-- Action buttons -->
+            <div class="d-flex align-items-center mt-3" style="gap: 2rem;">
+
+                <button class="page-star-button star-button btn btn-link p-0 text-secondary d-flex align-items-center gap-1"
+                    data-id={{ page.id }}
+                    data-action="{% if page in user.pages_starred.all %}un{% endif %}star"
+                    data-csrf-token={{ csrf_token }}
+                    data-endpoint="{% url 'api:star_page' %}">
+                    <i class="bi {% if page in user.pages_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                    <span class="star-count" style="font-size: 0.8rem;">{{ page.total_stars }}</span>
+                </button>
+
+                <a class="btn btn-link p-0 text-secondary d-flex align-items-center gap-1"
+                    href="{% url "forums:forum" page.id %}">
+                    <i class="bi bi-diagram-3-fill"></i>
+                    <span class="post-count" style="font-size: 0.8rem;">{{ page.posts.count }}</span>
+                </a>
+
+                <a class="btn btn-link p-0 text-secondary d-flex align-items-center gap-1"
+                    href="{% url "room" page.id %}">
+                    <i class="bi bi-broadcast spin"></i>
+                    <span class="room-user-count" style="font-size: 0.8rem;"
+                        data-page-id="{{ page.id }}"
+                        data-endpoint="{% url 'api:get_room_count' %}">
+                    </span>
+                </a>
+
             </div>
 
         </div>
-
-        <!-- Title / link -->
-        <h1 class="{% if compact %}text-truncate{% endif %}">
-            <a href="{{ page.link }}">
-                {{ page.title|truncatechars:90 }}
-            </a>
-        </h1>
-
-        <!-- Image and description -->
-        {% if not compact %}
-            {% if page.image or page.description %}
-                <div class="clearfix">
-                    {% thumbnail page.image 0x63 as image %}{% if image %}
-                        <img class="float-start rounded me-2" src="{{ image.url }}">
-                    {% endif %}
-                    
-                    <p class="small m-0 p-0">{{ page.description|truncatechars:300 }}</p>
-                </div>
-            {% endif %}
-        {% endif %}
-
-        <!-- Buttons -->
-        <div class="d-flex align-items-center rounded-pill mt-3">
-
-            <button class="page-star-button star-button btn btn-outline-light rounded-pill me-2"
-                data-id={{ page.id }}
-                data-action="{% if page in user.pages_starred.all %}un{% endif %}star"
-                data-csrf-token={{ csrf_token }}
-                data-endpoint="{% url 'api:star_page' %}">
-                <i class="bi {% if page in user.pages_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                &nbsp;<span class="star-count">{{ page.total_stars }}</span>
-            </button>
-
-            <a class="btn btn-outline-light rounded-pill me-2"
-                href="{% url "forums:forum" page.id %}">
-                <i class="bi bi-diagram-3-fill"></i>
-                &nbsp;<span class="post-count">{{ page.posts.count }}</span>
-            </a>
-
-            <a class="btn btn-outline-light rounded-pill me-2"
-                href="{% url "room" %}?p={{ page.canonical|urlencode }}">
-                <i class="bi bi-broadcast spin"></i>&nbsp;
-                <span class="room-user-count"
-                    data-page-id="{{ page.id }}"
-                    data-endpoint="{% url 'api:get_room_count' %}">
-                </span>
-            </a>
-
-            <button id="p{{ page.id }}Dropdown"
-                class="dropdown-toggle no-caret btn btn-transparent btn-dark rounded-circle"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <i class="bi bi-three-dots"></i>
-            </button>
-
-            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="p{{ page.id }}Dropdown">
-                {% if request.user.is_authenticated %}
-                    <li>
-                        <button class="dropdown-item d-flex align-items-center gap-2 share-btn"
-                            data-object-type="page"
-                            data-object-id="{{ page.id }}"
-                            data-bs-toggle="modal"
-                            data-bs-target="#shareModal">
-                            <i class="bi bi-share-fill"></i>Share page
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dropdown-item page-pin-button"
-                            target="_blank"
-                            data-page-id="{{ page.id }}"
-                            data-action="{% if page in user.pages_pinned.all %}unpin{% else %}pin{% endif %}"
-                            data-csrf-token="{{ csrf_token }}"
-                            data-endpoint="{% url 'api:toggle_pin' %}">
-                            <i class="bi bi-broadcast-pin"></i>
-                            <span>{% if page in user.pages_pinned.all %}Remove pin{% else %}Pin page{% endif %}</span>
-                    </button>
-                    </li>
-                    <li>
-                        <a class="dropdown-item"
-                            href="{% url "governance:report_page" page.id %}"
-                            target="_blank">
-                            <i class="bi bi-flag-fill"></i> Report page
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-
-        </div>
     </div>
+
+</div>
 {% endif %}

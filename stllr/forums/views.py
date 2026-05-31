@@ -4,9 +4,15 @@ from django.core.exceptions import PermissionDenied
 from pages.models import Page
 from .models import Post
 
+# Done by Claude, requires review
 def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    return render(request, 'post/detail.html', {'post': post})
+    ancestors = []
+    node = post.parent
+    while node:
+        ancestors.insert(0, node)
+        node = node.parent
+    return render(request, 'post/detail.html', {'post': post, 'ancestors': ancestors})
 
 # Done by Claude, requires review
 def forum(request, page_id):

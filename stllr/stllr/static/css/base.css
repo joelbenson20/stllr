@@ -106,6 +106,16 @@ h1 a:hover {
     text-decoration: underline;
 }
 
+/* Done by Claude, requires review */
+.page a:hover,
+.post-content a:hover {
+    text-decoration: underline !important;
+}
+
+.post-content a {
+    text-decoration: none;
+}
+
 .bi-globe {
     font-size: 32px;
 }
@@ -137,6 +147,14 @@ h1 a:hover {
     border: none;
 }
 
+/* Done by Claude, requires review */
+.btn-link {
+    text-decoration: none;
+}
+.btn-link:hover {
+    text-decoration: none;
+}
+
 .glow-on-focus:has(:focus),
 .glow-on-focus:focus {
     outline: none;
@@ -154,11 +172,10 @@ h1 a:hover {
     --bs-popover-arrow-border: #495057;
 }
 
+/* Done by Claude, requires review */
 .star-button:has(.bi-star-fill) {
-    background-color: var(--white-hot);
-    color: var(--night-sky);
-    box-shadow: 0 0 5px 1px white;
-    text-shadow: 0 0 3px var(--night-sky);
+    color: var(--white-hot) !important;
+    text-shadow: 0 0 8px var(--white-hot), 0 0 16px rgba(237, 232, 255, 0.5);
 }
 
 .help-block, .form-text {
@@ -175,6 +192,29 @@ h1 a:hover {
     .profile-avatar { width: 96px; height: 96px; }
 }
 
+/* Done by Claude, requires review */
+/* Page cards */
+.page {
+    border-radius: 0;
+    margin: 0;
+}
+
+/* Thread connector line */
+.thread-line-down {
+    position: relative;
+}
+.thread-line-down::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 40px;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 1px;
+}
+
 /* Rooms */
 .message-feed {
     background-color: rgba(255, 255, 255, 0.05);
@@ -183,4 +223,7 @@ h1 a:hover {
 .message-textarea {
     height: 4rem;
     resize: none;
+    /* Done by Claude, requires review */
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
 }
