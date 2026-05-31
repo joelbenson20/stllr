@@ -10,15 +10,8 @@
     </div>
     
     <div class="flex-grow-1" style="max-height: 50vh">
-        {% include "messages/feed.html" %}
+        {% include "room/feed.html" %}
     </div>
-
-    {% include "messages/form.html" %}
 
 {% endblock content %}
 
-{% block scripts %}
-    {{ page.id|json_script:"pageId" }}
-    {{ request.user.username|json_script:"requestUser" }}
-    <script src="{% static 'js/rooms.js' %}"></script>
-{% endblock scripts %}

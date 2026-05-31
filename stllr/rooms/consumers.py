@@ -134,7 +134,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'room_message',
                 'html': await sync_to_async(render_to_string)(
-                    'rooms/broadcast.html',
+                    'broadcast/card.html', # Done by Claude, requires review
                     context={'broadcast': broadcast}
                 ),
             }

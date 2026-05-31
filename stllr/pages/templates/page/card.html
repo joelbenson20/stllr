@@ -1,10 +1,12 @@
 {% load thumbnail %}
 {% load math_extras %}
 
+<!-- Page Card -->
 {% if page.is_active %}
-    <!-- Done by Claude, requires review -->
-    <div class="page mb-5" id="p{{ page.id }}">
+    <div id="page{{ page.id }}"
+        class="page mb-5">
 
+        <!-- Domain header -->
         <div class="d-flex align-items-center">
             
             {% include "domain/icon.html" with domain=page.domain dimensions="32x32" size=32 %}
@@ -31,12 +33,14 @@
 
         </div>
 
+        <!-- Title / link -->
         <h1 class="{% if compact %}text-truncate{% endif %}">
             <a href="{{ page.link }}">
                 {{ page.title|truncatechars:90 }}
             </a>
         </h1>
 
+        <!-- Image and description -->
         {% if not compact %}
             {% if page.image or page.description %}
                 <div class="clearfix">
@@ -49,14 +53,14 @@
             {% endif %}
         {% endif %}
 
+        <!-- Buttons -->
         <div class="d-flex align-items-center rounded-pill mt-3">
 
             <button class="page-star-button star-button btn btn-outline-light rounded-pill me-2"
                 data-id={{ page.id }}
                 data-action="{% if page in user.pages_starred.all %}un{% endif %}star"
                 data-csrf-token={{ csrf_token }}
-                data-endpoint="{% url 'api:star_page' %}"
-                {% if not user.is_active %}disabled{% endif %}>
+                data-endpoint="{% url 'api:star_page' %}">
                 <i class="bi {% if page in user.pages_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
                 &nbsp;<span class="star-count">{{ page.total_stars }}</span>
             </button>
@@ -69,8 +73,11 @@
 
             <a class="btn btn-outline-light rounded-pill me-2"
                 href="{% url "room" %}?p={{ page.canonical|urlencode }}">
-                <i class="bi bi-broadcast spin"></i>
-                &nbsp;<span class="room-user-count" data-page-id="{{ page.id }}" data-endpoint="{% url 'api:get_room_count' %}">?</span>
+                <i class="bi bi-broadcast spin"></i>&nbsp;
+                <span class="room-user-count"
+                    data-page-id="{{ page.id }}"
+                    data-endpoint="{% url 'api:get_room_count' %}">
+                </span>
             </a>
 
             <button id="p{{ page.id }}Dropdown"
@@ -93,19 +100,20 @@
                         </button>
                     </li>
                     <li>
-                        <a class="dropdown-item page-pin-button"
-                            href="{% url 'pages:toggle_pin' page.id %}?action={% if page in user.pages_pinned.all %}unpin{% else %}pin{% endif %}"
+                        <button class="dropdown-item page-pin-button"
                             target="_blank"
                             data-page-id="{{ page.id }}"
                             data-action="{% if page in user.pages_pinned.all %}unpin{% else %}pin{% endif %}"
                             data-csrf-token="{{ csrf_token }}"
-                            data-endpoint="{% url 'api:pin_page' %}">
+                            data-endpoint="{% url 'api:toggle_pin' %}">
                             <i class="bi bi-broadcast-pin"></i>
                             <span>{% if page in user.pages_pinned.all %}Remove pin{% else %}Pin page{% endif %}</span>
-                        </a>
+                    </button>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{% url "governance:report_page" page.id %}" target="_blank">
+                        <a class="dropdown-item"
+                            href="{% url "governance:report_page" page.id %}"
+                            target="_blank">
                             <i class="bi bi-flag-fill"></i> Report page
                         </a>
                     </li>

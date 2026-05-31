@@ -12,10 +12,7 @@
     <link rel="stylesheet" href="{% static 'libs/bootstrap/dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'libs/bootstrap-icons/font/bootstrap-icons.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/users.css' %}">
-    <link rel="stylesheet" href="{% static 'css/pages.css' %}">
     <link rel="stylesheet" href="{% static 'css/forums.css' %}">
-    <link rel="stylesheet" href="{% static 'css/rooms.css' %}">
     {% block css %}
     {% endblock css %}
 
@@ -134,6 +131,7 @@
             </button>
         </div>
 
+        <!-- Mobile top bar -->
         {% if messages %}
             <div class="m-0 p-0">
                 {% for message in messages %}
@@ -145,6 +143,7 @@
             </div>
         {% endif %}
 
+        <!-- Content -->
         <div class="p-md-5 p-3">
             {% block content %}
             {% endblock content %}
@@ -161,6 +160,7 @@
     <script src="{% static 'js/modals.js' %}"></script>
     <script src="{% static 'js/pages.js' %}"></script>
     <script src="{% static 'js/forums.js' %}"></script>
+    <script src="{% static 'js/rooms.js' %}"></script>
     {% block scripts %}
     {% endblock scripts%}
 </body>

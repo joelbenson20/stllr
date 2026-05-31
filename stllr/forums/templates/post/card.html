@@ -2,12 +2,19 @@
 {% load humanize %}
 {% load utility_tags %}
 
-<div id="post{{ post.id }}" class="post rounded-card mt-2 p-2" data-author-id="{{ post.author.id }}" data-post-url="{% url 'post_detail' post.id %}" style="cursor:pointer">
+<div id="post{{ post.id }}"
+        class="post rounded-card mt-2 p-2"
+        data-author-id="{{ post.author.id }}"
+        data-post-url="{% url 'post_detail' post.id %}"
+        style="cursor:pointer">
 
+    <!-- Header -->
     {% include "user/header.html" with user=post.author timestamp=post.created|naturaltime %}
 
+    <!-- Body -->
     <div class="ms-4 my-2">
 
+        <!-- Content -->
         <div class="post-content {% if post.author.id in muted_user_ids %}d-none{% endif %}">
             {% if post.removed %}
                 <p class="text-secondary fst-italic small">This post was removed by {{ post.get_removed_by_display }}.</p>
@@ -19,31 +26,32 @@
             <p class="text-secondary fst-italic small">You have this user muted.</p>
         </div>
 
+        <!-- Buttons -->
         <div class="d-flex align-items-center">
 
-            <button id="post-star-button-{{ post.id }}" class="post-star-button star-button btn btn-sm btn-dark border-0 rounded-pill me-2"
+            <button id="post-star-button-{{ post.id }}"
+                class="post-star-button star-button btn btn-sm btn-dark border-0 rounded-pill me-2"
                 data-id={{ post.id }}
                 data-action="{% if post in user.posts_starred.all %}un{% endif %}star"
                 data-csrf-token={{ csrf_token }}
-                data-endpoint="{% url 'api:star_post' %}"
-                {% if not user.is_active %}disabled{% endif %}>
+                data-endpoint="{% url 'api:star_post' %}">
                 <i class="bi {% if post in user.posts_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
                 &nbsp;<span class="star-count">{{ post.total_stars }}</span>
             </button>
 
-            <a class="post-replies-button btn btn-sm btn-dark rounded-pill me-2"
+            <a class="btn btn-sm btn-dark rounded-pill me-2"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#children{{ post.id }}"
                 aria-expanded="false">
                 <i class="bi bi-diagram-3-fill"></i>
-                &nbsp;<span>{{ post.children.count }}</span>
+                &nbsp;<span class="children-count">{{ post.children.count }}</span>
             </a>
 
-            <button class="post-reply-button btn btn-sm btn-transparent btn-dark rounded-pill fw-bold me-1"
+            <button class="btn btn-sm btn-transparent btn-dark rounded-pill fw-bold me-1"
                 type="button"
                 data-bs-toggle="collapse"
-                data-bs-target="#reply-form-container-{{ post.id }}"
+                data-bs-target="#replyForm{{ post.id }}"
                 aria-expanded="{% if expanded %}true{% else %}false{% endif %}">
                 Reply
             </button>
@@ -56,7 +64,6 @@
                         <i class="bi bi-three-dots"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="post{{ post.id }}Dropdown">
-                <!-- Done by Claude, requires review -->
                 {% if request.user.is_authenticated %}
                 <li>
                     <button class="dropdown-item d-flex align-items-center gap-2 share-btn"
@@ -104,9 +111,7 @@
 
     </div>
 
-    <div id="reply-form-container-{{ post.id }}" class="reply-form-container collapse mt-3 ps-4">
-        {% include "post/form.html" with page=post.page parent=post %}
-    </div>
+    {% include "post/form.html" with page=post.page parent=post %}
 
     <div id="children{{ post.id }}" class="collapse {% if expanded %}show{% endif %} ps-4">
         {% if reply %}

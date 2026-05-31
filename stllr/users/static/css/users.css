@@ -1,4 +1,0 @@
-.profile-avatar { width: 192px; height: 192px; }
-@media (max-width: 576px) {
-    .profile-avatar { width: 96px; height: 96px; }
-}

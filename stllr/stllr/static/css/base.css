@@ -168,3 +168,19 @@ h1 a:hover {
 .form-control::placeholder {
     color: rgba(255, 255, 255, 0.4);
 }
+
+/* Users */
+.profile-avatar { width: 192px; height: 192px; }
+@media (max-width: 576px) {
+    .profile-avatar { width: 96px; height: 96px; }
+}
+
+/* Rooms */
+.message-feed {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.message-textarea {
+    height: 4rem;
+    resize: none;
+}

@@ -49,7 +49,7 @@ def star_page(request):
 
 @login_required
 @require_POST
-def pin_page(request):  # Done by Claude, requires review
+def toggle_pin(request):  # Done by Claude, requires review
     page_id = request.POST.get('id')
     action = request.POST.get('action')
     if page_id and action:

@@ -1,17 +1,14 @@
+// Done by Claude, requires review
 function initRoom() {
-    const pageId = JSON.parse(
-        document.getElementById('pageId').textContent
-    );
-    const requestUser = JSON.parse(
-        document.getElementById('requestUser').textContent
-    );
+    const messageFeed = document.querySelector('.message-feed');
+    if (!messageFeed) return;
+
+    const pageId = messageFeed.dataset.pageId;
     const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
     const url = wsProtocol + window.location.host + '/ws/room/' + pageId + '/';
     const roomSocket = new WebSocket(url);
-    // END EXTENSION-SPECIFIC CODE
 
     const messageTextarea = document.querySelector('.message-textarea');
-    const messageFeed = document.querySelector('.message-feed');
 
     roomSocket.onopen = function() {
         const heartbeat = setInterval(() => {
