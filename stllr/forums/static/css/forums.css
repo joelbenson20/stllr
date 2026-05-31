@@ -1,27 +1,21 @@
-.post {
-    background-color: rgba(255, 255, 255, 0.05)
-}
-
-/* Done by Claude, requires review */
-.post-form-textarea,
-.post-form-markdown-preview-container {
+.post-form textarea,
+.reply-form textarea,
+.markdown-preview {
     height: 4rem;
 }
 
-.post-form-textarea::placeholder {
+.post-form textarea::placeholder,
+.reply-form textarea::placeholder {
     color: rgba(0, 0, 0, 0.4);
 }
-.post-form-markdown-preview-container {
+
+.markdown-preview {
     color: black;
     display: none;
 }
 
-.post-form-markdown-edit-button {
+.markdown-edit-button {
     display: none;
-}
-
-.post-submit-button {
-    background-color: var(--star-light);
 }
 
 .post-reply-button {

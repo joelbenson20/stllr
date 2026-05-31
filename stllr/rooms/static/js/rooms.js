@@ -1,17 +1,34 @@
-function initRoom() {
-    const pageId = JSON.parse(
-        document.getElementById('pageId').textContent
-    );
-    const requestUser = JSON.parse(
-        document.getElementById('requestUser').textContent
-    );
-    const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-    const url = wsProtocol + window.location.host + '/ws/room/' + pageId + '/';
-    const roomSocket = new WebSocket(url);
-    // END EXTENSION-SPECIFIC CODE
+// Extension: replace the two lines below with:
+//   import { STLLR_URL, fetchWSTicket } from '../../client.js';
+//   const wsBase = STLLR_URL.replace(/^http/, 'ws');
+//   const fetchTicket = fetchWSTicket;
+const wsBase = window.location.origin.replace(/^http/, 'ws');
+const fetchTicket = null;
 
-    const messageTextarea = document.querySelector('.message-textarea');
-    const messageFeed = document.querySelector('.message-feed');
+let activeRoomSocket = null;
+
+export function closeRoomSocket() {
+    if (activeRoomSocket && activeRoomSocket.readyState !== WebSocket.CLOSED) {
+        activeRoomSocket.close();
+        activeRoomSocket = null;
+    }
+}
+
+export async function initRoom() {
+
+    const broadcastTextarea = document.querySelector('.broadcast-textarea');
+    const broadcastFeed = document.querySelector('.broadcast-feed');
+    if (!broadcastFeed || !broadcastTextarea) return;
+
+    if (activeRoomSocket && activeRoomSocket.readyState !== WebSocket.CLOSED) {
+        activeRoomSocket.close();
+    }
+
+    const pageId = broadcastFeed.dataset.pageId;
+    const ticket = fetchTicket ? await fetchTicket() : null;
+    const url = wsBase + '/ws/room/' + pageId + '/' + (ticket ? `?ticket=${ticket}` : '');
+    const roomSocket = new WebSocket(url);
+    activeRoomSocket = roomSocket;
 
     roomSocket.onopen = function() {
         const heartbeat = setInterval(() => {
@@ -28,31 +45,25 @@ function initRoom() {
     roomSocket.onmessage = function(event) {
         const data = JSON.parse(event.data);
         if (data.type === "room_message") {
-            const isAtBottom = messageFeed.scrollHeight - messageFeed.scrollTop <= messageFeed.clientHeight + 10;
-            messageFeed.innerHTML += data.html
-            if (isAtBottom) messageFeed.scrollTop = messageFeed.scrollHeight;
+            const isAtBottom = broadcastFeed.scrollHeight - broadcastFeed.scrollTop <= broadcastFeed.clientHeight + 10;
+            broadcastFeed.innerHTML += data.html
+            if (isAtBottom) broadcastFeed.scrollTop = broadcastFeed.scrollHeight;
         }
         else if (data.type === "presence_update") {
-            const popover = bootstrap.Popover.getInstance(roomUsersPopover);
-            const listHtml = data.users.map(u => `<li class="list-group-item">${u}</li>`).join('');
-            const contentHtml = `<ul class="list-group list-group-flush">${listHtml}</ul>`;
-                        popover.setContent({
-                '.popover-header': 'Users present',
-                '.popover-body': contentHtml,
-            });
-            updateRoomCounts()
+            const modal = document.getElementById('roomUsersModal');
+            if (modal) modal.dataset.users = JSON.stringify(data.users);
+            updateRoomCounts();
         }
     };
 
-    messageTextarea.addEventListener('keydown', function(event) {
+    broadcastTextarea.addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
-            const content = messageTextarea.value;
+            const content = broadcastTextarea.value;
             if (content) {
                 roomSocket.send(JSON.stringify({ content: content }));
-                messageTextarea.value = '';
-                messageTextarea.style.height = 'auto';
-                messageTextarea.focus();
+                broadcastTextarea.value = '';
+                broadcastTextarea.focus();
             }
         }
     })
@@ -61,12 +72,7 @@ function initRoom() {
         console.error('Room socket closed unexpectedly');
     };
 
-    messageTextarea.addEventListener('input', () => {
-        messageTextarea.style.height = 'auto';
-        messageTextarea.style.height = messageTextarea.scrollHeight + 'px';
-    })
-
-    messageTextarea.focus();
+    broadcastTextarea.focus();
 }
 
 async function updateRoomCounts() {
@@ -79,5 +85,3 @@ async function updateRoomCounts() {
         if (count !== undefined) s.textContent = count;
     });
 }
-
-initRoom();

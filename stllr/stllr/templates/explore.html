@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}explore - stllr{% endblock title %}
+
 {% block content %}
 
     <form class="d-flex w-100 mb-3" action="{% url 'explore' %}" role="search">
@@ -29,7 +31,6 @@
         {% endif %}
     </div>
 
-    <!-- Done by Claude, requires review -->
     <div class="mt-5" id="pageFeed">
         {% include 'page/list.html' with pages=pages user=user %}
     </div>

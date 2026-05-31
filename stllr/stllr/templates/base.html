@@ -12,10 +12,8 @@
     <link rel="stylesheet" href="{% static 'libs/bootstrap/dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'libs/bootstrap-icons/font/bootstrap-icons.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/users.css' %}">
-    <link rel="stylesheet" href="{% static 'css/pages.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
     <link rel="stylesheet" href="{% static 'css/forums.css' %}">
-    <link rel="stylesheet" href="{% static 'css/rooms.css' %}">
     {% block css %}
     {% endblock css %}
 
@@ -39,9 +37,11 @@
 
 <body>
 
-    <!-- Left sidebar: offcanvas on mobile, fixed on md+ via CSS -->
+<div id="layoutWrapper">
+
+    <!-- Left sidebar: offcanvas on mobile, sticky on md+ via CSS -->
     <div class="offcanvas offcanvas-start left-sidebar border-dark" id="leftNav" tabindex="-1">
-        <div class="offcanvas-header d-md-none justify-content-end pb-0">
+        <div class="offcanvas-header offcanvas-dismiss justify-content-end pb-0">
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="d-flex flex-column h-100 p-3">
@@ -67,8 +67,8 @@
                     <a href="{% url 'comms' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
                         <i class="bi bi-soundwave fs-3"></i>
                         <span class="fs-5 fw-semibold">Comms</span>
-                        {% if notifications.unread_count %}
-                            <span class="badge rounded-pill, bg-danger ms-auto">{{ notifications.unread_count }}</span>
+                        {% if notifications.unread %}
+                            <span class="badge rounded-pill, bg-danger ms-auto">{{ notifications.unread|length }}</span>
                         {% endif %}
                     </a>
                     <a href="{% url 'contacts' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
@@ -77,9 +77,6 @@
                     </a>
                     {% endif %}
             </nav>
-
-            {% block left %}
-            {% endblock left %}
 
             {% if user.is_authenticated %}
                 <a href="{% url 'profile' user.username %}" class="d-flex align-items-center gap-2 mt-3 p-2 rounded-3 sidebar-link text-decoration-none">
@@ -108,24 +105,23 @@
         </div>
     </div>
 
-    <!-- Right panel: offcanvas on mobile, fixed on md+ via CSS -->
+    <!-- Right panel: offcanvas on mobile and md, sticky on 1040px+ via CSS -->
     <div class="offcanvas offcanvas-end right-sidebar border-dark" id="rightPanel" tabindex="-1">
-        <div class="offcanvas-header d-md-none justify-content-start pb-0">
+        <div class="offcanvas-header offcanvas-dismiss justify-content-start pb-0">
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="d-flex flex-column h-100 p-3">
             {% block right %}
-            <!-- Done by Claude, requires review -->
             {% include "side_panels/contacts_statuses.html" %}
             {% endblock right %}
         </div>
     </div>
 
     <!-- Main content -->
-    <div id="mainContent">
+    <div id="mainContent" class="d-flex flex-column vh-100 overflow-y-auto">
 
-        <!-- Mobile top bar -->
-        <div class="d-flex d-md-none align-items-center gap-2 p-3 glass sticky-top navbar-dark">
+        <!-- Top bar: hidden at 832px+ (both sidebars always visible). Below 832px shows brand + both toggles. -->
+        <div class="d-flex top-bar-narrow align-items-center gap-2 p-3 glass sticky-top navbar-dark">
             <button class="navbar-toggler border-0 position-absolute start-0 ms-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftNav" aria-controls="leftNav">
                 <span class="navbar-toggler-icon text-secondary"></span>
             </button>
@@ -137,6 +133,7 @@
             </button>
         </div>
 
+        <!-- Mobile top bar -->
         {% if messages %}
             <div class="m-0 p-0">
                 {% for message in messages %}
@@ -148,23 +145,22 @@
             </div>
         {% endif %}
 
-        <div class="p-md-5 p-3">
+        <!-- Content -->
+        <div class="p-md-5 p-3 {% block content_wrapper_class %}{% endblock %}">
             {% block content %}
             {% endblock content %}
         </div>
 
     </div>
 
-    <!-- Done by Claude, requires review -->
-    {% include "modals/share.html" %}
+</div><!-- /#layoutWrapper -->
+
+<!-- Modals -->
+{% include "modals/share.html" %}
 
     <script src="{% static "libs/bootstrap/dist/js/bootstrap.bundle.min.js" %}"></script>
     <script src="{% static "libs/lodash/lodash.min.js" %}"></script>
-    <script src="{% static 'js/base.js' %}"></script>
-    <!-- Done by Claude, requires review -->
-    <script src="{% static 'js/modals.js' %}"></script>
-    <script src="{% static 'js/pages.js' %}"></script>
-    <script src="{% static 'js/forums.js' %}"></script>
+    <script type="module" src="{% static 'js/base.js' %}"></script>
     {% block scripts %}
     {% endblock scripts%}
 </body>

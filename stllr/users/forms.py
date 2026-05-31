@@ -62,7 +62,6 @@ class SocialSignupForm(SocialSignupFormBase):
 
 
 class UserRegistrationForm(forms.ModelForm):
-    # Done by Claude, requires review
     username = forms.CharField(help_text="Only letters, numbers, and underscores allowed.")
     password1=forms.CharField(
         label='Password',

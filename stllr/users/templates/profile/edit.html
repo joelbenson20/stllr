@@ -3,6 +3,10 @@
 
 {% block title %}edit your profile - stllr{% endblock title %}
 
+{% block right %}
+    {% include "profile/tabs.html" %}
+{% endblock right %}
+
 {% block content %}
 
     <h5>Edit your profile</h5>
@@ -16,5 +20,5 @@
             <button class="btn btn-primary" type="submit">Save</button>
         </div>
     </form>
-    
+
 {% endblock content %}

@@ -1,0 +1,4 @@
+<a href="{{ post.get_absolute_url }}" class="d-block text-decoration-none rounded p-2 mt-2" style="background:rgba(255,255,255,0.05)">
+    <div class="small text-secondary mb-1">@{{ post.author.username }} &middot; {{ post.page.title|truncatechars:50 }}</div>
+    <div class="small text-truncate" style="color:rgba(255,255,255,0.75)">{{ post.content|truncatechars:120 }}</div>
+</a>

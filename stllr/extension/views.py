@@ -9,16 +9,27 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import cache
 from django.middleware.csrf import get_token
 from pages.models import Page, Domain
-from pages.utils import get_canonical, get_meta, get_domain_name, verify_security, InsecureURLError
+from forums.models import Post
+from pages.utils import get_canonical, get_domain_name, verify_security, InsecureURLError
 
+SUPPORTED_EXTENSION_VERSIONS = ['2.0']
 
 @csrf_exempt
 @login_required
 @require_POST
 def extension(request):
+    extension_version = request.META.get('HTTP_X_EXTENSION_VERSION', '1.0') # Version 1.0 does not send the request header
+    if extension_version not in SUPPORTED_EXTENSION_VERSIONS:
+        return JsonResponse(
+            {
+                'status': 426,
+                'html': render_to_string('extension/errors/awaiting_review.html', request=request)
+            },
+            status=426
+        )
+
     data = json.loads(request.body).get('page').get('data')
     url = data.get('url')
-    # Done by Claude, requires review
     protocol = urlparse(url).scheme.lower()
     canonical = get_canonical(url)
     try:
@@ -29,29 +40,25 @@ def extension(request):
         if not page.is_active:
             return JsonResponse(
                 {
-                    'status': '403',
+                    'status': 403,
                     'html': render_to_string('extension/errors/inactive.html', request=request)
-                }
+                },
+                status=403
             )
     except Page.DoesNotExist:
-        scraped_data = get_meta(url, data.get('head'))
-        title = data.get('title') or scraped_data['title']
-        description = scraped_data['description']
-        content = "".join([ p for p in data.get('innerText').split('\n') if "." in p ])
-        image_url = scraped_data['image_url']
-        fav_icon_url = data.get('favIconUrl') or scraped_data['fav_icon_url']
-        site_name = scraped_data.get('site_name')
-
         try:
             verify_security(url)
-        except InsecureURLError as e:
+        except InsecureURLError:
             return JsonResponse(
                 {
-                    'status': '405',
+                    'status': 405,
                     'html': render_to_string('extension/errors/unsupported.html', request=request)
-                }
+                },
+                status=405
             )
 
+        fav_icon_url = data.get('favIconUrl')
+        site_name = data.get('siteName')
         domain_name = get_domain_name(url)
         domain, _ = Domain.objects.get_or_create(name=domain_name)
         if site_name and not domain.site_name:
@@ -63,12 +70,11 @@ def extension(request):
 
         page = Page.objects.create(
             canonical=canonical,
-            title=title,
-            description=description,
-            image_url=image_url,
+            title=data.get('title') or '',
+            description=data.get('description') or '',
+            image_url=data.get('imageUrl') or '',
             domain=domain,
-            content=content or scraped_data['content'] or '',
-            # Done by Claude, requires review
+            content=data.get('content') or '',
             supported_protocols=[protocol] if protocol else [],
         )
 
@@ -82,16 +88,17 @@ def extension(request):
 
     html = None
     if (tab == 'forum'):
+        posts_qs = Post.firmament.filter(page=page, thread_level=0)
+        context['posts'] = posts_qs.firmament() if posts_qs else posts_qs.none()
         html = render_to_string('extension/forum.html', context=context, request=request)
     elif (tab == 'room'):
         html = render_to_string('extension/room.html', context=context, request=request)
     elif (tab == 'similar'):
-        # Done by Claude, requires review
         context['similar_pages'] = page.get_similar_pages()
         html = render_to_string('extension/similar.html', context=context, request=request)
 
     return JsonResponse({
-        'status': '200',
+        'status': 200,
         'html': html
     })
 
@@ -105,7 +112,7 @@ def csrf_token(request):
         return JsonResponse({
             'status': 403,
             'html': render_to_string('extension/errors/unauthenticated.html', request=request)
-        })
+        }, status=403)
 
 @login_required
 def ws_ticket(request):
@@ -113,14 +120,8 @@ def ws_ticket(request):
     cache.set(f'ws_ticket:{token}', request.user.id, timeout=30)
     return JsonResponse({'ticket': token})
 
-def loading(request):
-    return JsonResponse({
-        'status': '200',
-        'html': render_to_string('extension/loading.html', request=request)
-    })
-
 def restricted(request):
     return JsonResponse({
-        'status': '200',
+        'status': 200,
         'html': render_to_string('extension/errors/restricted.html', request=request)
     })

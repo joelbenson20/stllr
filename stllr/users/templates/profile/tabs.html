@@ -1,0 +1,12 @@
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link my-2" href="{% url "edit" request.user.username %}">Edit Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link my-2" href="{% url "account_email" %}">Manage Email Addresses</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link my-2" href="{% url "account_reset_password" %}">Reset Password</a>
+    </li>
+</ul>
+<hr class="border-secondary">

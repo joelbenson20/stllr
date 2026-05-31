@@ -1,9 +1,12 @@
 <base href="{{ request.scheme }}://{{ request.get_host }}/">
 {% load static %}
 
-<div id="extensionBody">
+<div id="extensionBody" class="d-flex flex-column vh-100">
 
-    <div class="glass sticky-top">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/forums.css' %}">
+
+    <div class="sticky-top glass m-0 p-0">
 
         <div id="stllr-data" style="display:none"
             data-page-id="{{ page.id }}"
@@ -11,8 +14,8 @@
             data-csrf="{{ csrf_token }}">
         </div>
 
-        <div class="extension-header p-3">
-            {% include "page/card.html" with compact=True %}
+        <div class="p-3 pb-0">
+            {% include "page/card.html" with compact=True standalone=True %}
         </div>
 
         <nav id="extensionNavbar" class="navbar navbar-expand navbar-dark m-0 p-0">
@@ -28,13 +31,14 @@
                 </li>
             </ul>
         </nav>
-
     </div>
 
-    <div class="container-fluid p-3">
+    <div class="container-fluid p-3 flex-grow-1 {% block content_wrapper_class %}overflow-y-auto{% endblock %}">
         {% block content %}
         {% endblock content %}
     </div>
+
+    {% include "modals/share.html" %}
 
     {% block scripts %}
     {% endblock scripts %}

@@ -44,7 +44,6 @@ class Migration(migrations.Migration):
             model_name='comment',
             name='forums_comm_brightn_16819f_idx',
         ),
-        # Done by Claude, requires review
         migrations.AlterUniqueTogether(
             name='commentstar',
             unique_together=None,

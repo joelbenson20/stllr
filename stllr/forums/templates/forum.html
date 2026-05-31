@@ -6,20 +6,18 @@
 {% block content %}
     {% if page.is_active %}
 
-        <div class="mb-sm-5 mb-3">
-            {% include 'page/card.html' with compact=True %}
-        </div>
+        {% include 'page/card.html' with compact=True standalone=True %}
 
-        <div class="my-3">
+        <div class="ms-4 ms-sm-5">
+
             {% include "post/form.html" with parent=None %}
-        </div>
 
-        <div id="postFeed">
-            {% for post in page.posts.all %}
-                {% if post.thread_level == 0 %}
+            <div id="postFeed">
+                {% for post in posts %}
                     {% include "post/card.html" %}
-                {% endif %}
-            {% endfor %}
+                {% endfor %}
+            </div>
+
         </div>
 
     {% else %}

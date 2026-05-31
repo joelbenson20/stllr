@@ -3,6 +3,10 @@
 
 {% block title %}email addresses — stllr{% endblock %}
 
+{% block right %}
+    {% if user.is_authenticated %}{% include "profile/tabs.html" %}{% endif %}
+{% endblock right %}
+
 {% block content %}
 <div class="mt-4">
     <h2 class="mb-4">Email Addresses</h2>

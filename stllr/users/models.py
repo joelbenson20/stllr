@@ -11,12 +11,11 @@ class User(AbstractUser):
     def get_full_name(self):
         return super().get_full_name()
 
-    # Done by Claude, requires review
     def get_contacts(self):
         """Returns a queryset of accepted contact Users (both directions)."""
         return type(self).objects.filter(
-            Q(contacts_received__from_user=self, contacts_received__status=Contact.Status.ACCEPTED) |
-            Q(contacts_sent__to_user=self, contacts_sent__status=Contact.Status.ACCEPTED)
+            Q(contacts_received__from_user=self, contacts_received__status=ContactRelation.Status.ACCEPTED) |
+            Q(contacts_sent__to_user=self, contacts_sent__status=ContactRelation.Status.ACCEPTED)
         ).distinct()
 
 class Profile(models.Model):
@@ -35,7 +34,7 @@ class Profile(models.Model):
     def __str__(self):
         return f'Profile of {self.user.username}'
     
-class Contact(models.Model):
+class ContactRelation(models.Model):
     class Status(models.TextChoices):
         PENDING = 'pending', 'Pending'
         ACCEPTED = 'accepted', 'Accepted'
@@ -63,7 +62,6 @@ class Action(models.Model):
         REPLIED = 'replied', 'replied in the forum'
         ENTERED = 'entered', 'entered the room'
 
-    # Done by Claude, requires review
     actor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actions')
     verb = models.CharField(max_length=20, choices=Verb.choices)
     object_ct = models.ForeignKey(
@@ -77,8 +75,8 @@ class Action(models.Model):
     object = GenericForeignKey('object_ct', 'object_id')
 
     created = models.DateTimeField(auto_now_add=True)
-    removed = models.BooleanField(default=False)  # Done by Claude, requires review
-
+    removed = models.BooleanField(default=False)
+    
     class Meta:
         ordering = ['-created']
         indexes = [

@@ -61,7 +61,6 @@ INSTALLED_APPS = [
     'rooms.apps.RoomsConfig',
     'governance.apps.GovernanceConfig',
     'extension.apps.ExtensionConfig',
-    'api.apps.APIConfig',
     'corsheaders',
     'storages',
     'taggit',
@@ -99,7 +98,7 @@ TEMPLATES = [
                 'comms.context_processors.notifications',
                 'comms.context_processors.muted_users',
                 'comms.context_processors.contacts',
-                'comms.context_processors.contacts_statuses',  # Done by Claude, requires review
+                'comms.context_processors.contacts_statuses',
             ],
         },
     },
@@ -144,7 +143,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Done by Claude, requires review
 ACCOUNT_ADAPTER = 'users.adapters.AccountAdapter'
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
@@ -152,9 +150,8 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_SUBJECT_PREFIX = '[stllr] '
 ACCOUNT_SESSION_REMEMBER = True
-ACCOUNT_LOGIN_METHODS = {'username', 'email'}  # Done by Claude, requires review
+ACCOUNT_LOGIN_METHODS = {'username', 'email'}
 SOCIALACCOUNT_LOGIN_ON_GET = True
-# Done by Claude, requires review
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_FORMS = {'signup': 'users.forms.SocialSignupForm'}
 

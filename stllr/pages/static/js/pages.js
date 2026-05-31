@@ -6,7 +6,6 @@ function initPageStarButtons() {
         starButton.addEventListener('click', function(e) {
             e.preventDefault();
             var formData = new FormData();
-            formData.append('id', starButton.dataset.id)
             formData.append('action', starButton.dataset.action);
             var options = {
                 method: 'POST',
@@ -36,17 +35,6 @@ function initPageStarButtons() {
     })
 }
 
-async function fetchRoomCounts() {
-    const spans = document.querySelectorAll('.room-user-count[data-page-id]');
-    if (!spans.length) return;
-    const ids = [...spans].map(s => s.dataset.pageId).join(',');
-    const data = await fetch(new URL(spans[0].dataset.endpoint + `?ids=${ids}`, document.baseURI).href).then(r => r.json());
-    spans.forEach(s => {
-        const count = data[s.dataset.pageId];
-        if (count !== undefined) s.textContent = count;
-    });
-}
-
 function initPinButtons() {
     document.querySelectorAll('.page-pin-button').forEach(button => {
         button.addEventListener('click', function (e) {
@@ -72,11 +60,28 @@ function initPinButtons() {
     });
 }
 
-function initPages() {
+async function fetchRoomCounts() {
+    const spans = document.querySelectorAll('.room-user-count[data-page-id]');
+    if (!spans.length) return;
+    const ids = [...spans].map(s => s.dataset.pageId).join(',');
+    const data = await fetch(new URL(spans[0].dataset.endpoint + `?ids=${ids}`, document.baseURI).href).then(r => r.json());
+    spans.forEach(s => {
+        const count = data[s.dataset.pageId];
+        if (count !== undefined) s.textContent = count;
+    });
+}
+
+function initPageCardLink(card) {
+    card.addEventListener('click', e => {
+        if (!e.target.closest('a, button, form')) {
+            window.location.href = card.dataset.forumUrl;
+        }
+    });
+}
+
+export function initPages() {
     initPageStarButtons();
     initPinButtons();
     fetchRoomCounts();
+    document.querySelectorAll('.page[data-forum-url]').forEach(initPageCardLink);
 }
-
-
-initPages();

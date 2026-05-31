@@ -89,9 +89,20 @@ class Page(models.Model):
             return self.Protocol.HTTP + '://' + self.canonical
         return self.Protocol.HTTPS + '://' + self.canonical
 
-    # Done by Claude, requires review
     def get_similar_pages(self, limit=10):
         if not self.search_vector:
+            return Page.objects.none()
+        # Fetch only lexemes that are safe tsquery atoms — URL fragments and
+        # punctuation from scraped content would otherwise cause a syntax error.
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT lexeme FROM unnest((SELECT search_vector FROM pages_page WHERE id = %s)) "
+                "WHERE lexeme ~ '^[a-zA-Z][a-zA-Z0-9]*$'",
+                [self.pk]
+            )
+            lexemes = [row[0] for row in cursor.fetchall()]
+        if not lexemes:
             return Page.objects.none()
         return (
             Page.objects
@@ -99,10 +110,8 @@ class Page(models.Model):
             .exclude(pk=self.pk)
             .annotate(
                 score=RawSQL(
-                    "ts_rank(search_vector, to_tsquery('english', array_to_string("
-                    "ARRAY(SELECT lexeme FROM unnest((SELECT search_vector FROM pages_page WHERE id = %s))), ' | '"
-                    "))) * brightness",
-                    [self.pk]
+                    "ts_rank(search_vector, to_tsquery('english', %s)) * brightness",
+                    [' | '.join(lexemes)]
                 )
             )
             .filter(score__gt=0)

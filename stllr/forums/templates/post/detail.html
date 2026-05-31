@@ -1,27 +1,28 @@
 {% extends "base.html" %}
 {% load static %}
-{% load humanize %}
-{% load utility_tags %}
 
-<!-- Done by Claude, requires review -->
-{% block title %}stllr | post by {{ post.author.username }}{% endblock title %}
+{% block title %}stllr | post by @{{ post.author.username }}{% endblock title %}
 
 {% block content %}
 
-<div class="mb-3">
-    <!-- Done by Claude, requires review -->
-    <a href="{% url 'forums:forum' post.page.id %}" class="btn btn-sm btn-dark rounded-pill">
-        <i class="bi bi-arrow-left me-1"></i>Go to forum
-    </a>
-</div>
+{% include 'page/card.html' with page=post.page compact=True standalone=True threaded=True %}
 
-<!-- Done by Claude, requires review -->
-<div class="mb-sm-5 mb-3">
-    {% include "page/card.html" with page=post.page compact=True %}
-</div>
+{% for ancestor in ancestors %}
+    {% include "post/card.html" with post=ancestor threaded=True %}
+{% endfor %}
 
-<div>
-    {% include "post/card.html" with expanded=True %}
+{% include "post/card.html" with post=post standalone=True %}
+
+<div class="ms-4 ms-sm-5">
+
+    {% include "post/form.html" with parent=post page=post.page standalone=True %}
+
+    <div id="children{{ post.id }}">
+        {% for child in post.children.all %}
+            {% include "post/card.html" with post=child reply=None %}
+        {% endfor %}
+    </div>
+
 </div>
 
 {% endblock content %}
