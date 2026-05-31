@@ -107,7 +107,7 @@ h1 a:hover {
 }
 
 /* Done by Claude, requires review */
-.page a:hover,
+.page a:not(.btn-link):hover,
 .post-content a:hover {
     text-decoration: underline !important;
 }
@@ -149,10 +149,10 @@ h1 a:hover {
 
 /* Done by Claude, requires review */
 .btn-link {
-    text-decoration: none;
+    text-decoration: none !important;
 }
 .btn-link:hover {
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 .glow-on-focus:has(:focus),

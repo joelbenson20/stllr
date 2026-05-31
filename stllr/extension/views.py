@@ -9,9 +9,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import cache
 from django.middleware.csrf import get_token
 from pages.models import Page, Domain
+from forums.models import Post
 from pages.utils import get_canonical, get_domain_name, verify_security, InsecureURLError  # Done by Claude, requires review
 
-SUPPORTED_EXTENSION_VERSIONS = ['1.1']
+SUPPORTED_EXTENSION_VERSIONS = ['2.0']
 
 @csrf_exempt
 @login_required
@@ -91,6 +92,9 @@ def extension(request):
 
     html = None
     if (tab == 'forum'):
+        # Done by Claude, requires review
+        posts_qs = Post.firmament.filter(page=page, thread_level=0)
+        context['posts'] = posts_qs.firmament() if posts_qs else posts_qs.none()
         html = render_to_string('extension/forum.html', context=context, request=request)
     elif (tab == 'room'):
         html = render_to_string('extension/room.html', context=context, request=request)

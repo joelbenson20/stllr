@@ -68,7 +68,9 @@ class Post(models.Model):
     actions = GenericRelation('users.Action', content_type_field='object_ct', object_id_field='object_id')
 
     class Meta:
+        # Done by Claude, requires review
         default_manager_name = 'firmament'
+        base_manager_name = 'firmament'
         indexes = [
             models.Index(fields=['-brightness'])
         ]

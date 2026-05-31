@@ -17,7 +17,9 @@ def post_detail(request, post_id):
 # Done by Claude, requires review
 def forum(request, page_id):
     page = get_object_or_404(Page, pk=page_id)
-    return render(request, 'forum.html', context={'page': page})
+    posts_qs = Post.firmament.filter(page=page, thread_level=0)
+    posts = posts_qs.firmament() if posts_qs else posts_qs.none()
+    return render(request, 'forum.html', context={'page': page, 'posts': posts})
 
 # Done by Claude, requires review
 @login_required

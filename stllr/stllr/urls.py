@@ -16,7 +16,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('users/', include('users.urls')),
     path('policies/<str:policy>/', views.policy, name='policy'),
-    path('pages/', include('pages.urls', namespace='pages')),  # Done by Claude, requires review
     path('forum/', include('forums.urls', namespace='forums')),
     path('post/<int:post_id>/', post_detail, name='post_detail'),  # Done by Claude, requires review
     path('rooms/', include('rooms.urls')),

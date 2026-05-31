@@ -138,7 +138,8 @@
                     {% if reply %}
                         {% include "post/card.html" with post=reply expanded=False reply=None %}
                     {% else %}
-                        {% for child in post.children.all %}
+                        <!-- Done by Claude, requires review -->
+                        {% for child in post.children.all.firmament %}
                             {% include "post/card.html" with post=child reply=None %}
                         {% endfor %}
                     {% endif %}

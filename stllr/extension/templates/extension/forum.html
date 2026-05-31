@@ -8,11 +8,10 @@
     {% include "post/form.html" with parent=None %}
 
     <div id="postFeed">
-        {% for post in page.posts.all %}
-                {% if post.thread_level == 0 %}
-                    {% include "post/card.html" %}
-                {% endif %}
-            {% endfor %}
+        <!-- Done by Claude, requires review -->
+        {% for post in posts %}
+            {% include "post/card.html" %}
+        {% endfor %}
     </div>
 
     <div style="height:144px;"></div>
