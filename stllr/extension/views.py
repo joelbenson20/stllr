@@ -12,7 +12,7 @@ from pages.models import Page, Domain
 from forums.models import Post
 from pages.utils import get_canonical, get_domain_name, verify_security, InsecureURLError
 
-SUPPORTED_EXTENSION_VERSIONS = ['3.0']
+SUPPORTED_EXTENSION_VERSIONS = ['2.0']
 
 @csrf_exempt
 @login_required
