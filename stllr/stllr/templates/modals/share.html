@@ -1,6 +1,6 @@
 {% if user.is_authenticated %}
 <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true"
-    data-endpoint="{% url 'api:share_object' %}"
+    data-endpoint="{% url 'comms:share_object' %}"
     data-csrf-token="{{ csrf_token }}">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content glass text-white border-secondary">

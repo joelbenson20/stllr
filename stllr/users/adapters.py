@@ -1,7 +1,5 @@
-# Done by Claude, requires review
 from allauth.account.adapter import DefaultAccountAdapter
 from django.urls import reverse
-
 
 class AccountAdapter(DefaultAccountAdapter):
     def get_email_verification_redirect_url(self, email_address):

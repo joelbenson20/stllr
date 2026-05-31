@@ -7,12 +7,11 @@ from django.contrib.contenttypes.models import ContentType
 class Notification(models.Model):
     class Event(models.TextChoices):
         CONTACT_REQUEST = 'contact_request', 'Contact Request'
-        CONTACT_ACCEPTED = 'contact_accepted', 'Contact Accepted'  # Done by Claude, requires review
+        CONTACT_ACCEPTED = 'contact_accepted', 'Contact Accepted'
         POST_STARRED = 'post_starred', 'Post Starred'
         POST_REPLIED = 'post_replied', 'Post Replied'
         POST_SHARED = 'post_shared', 'Post Shared'
         PAGE_SHARED = 'page_shared', 'Page Shared'
-        # Done by Claude, requires review
         PAGE_ALSO_STARRED = 'page_also_starred', 'Page Also Starred'
         POST_ALSO_STARRED = 'post_also_starred', 'Post Also Starred'
 

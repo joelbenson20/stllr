@@ -106,7 +106,6 @@ h1 a:hover {
     text-decoration: underline;
 }
 
-/* Done by Claude, requires review */
 .page a:not(.btn-link):hover,
 .post-content a:hover {
     text-decoration: underline !important;
@@ -147,7 +146,6 @@ h1 a:hover {
     border: none;
 }
 
-/* Done by Claude, requires review */
 .btn-link {
     text-decoration: none !important;
 }
@@ -172,7 +170,6 @@ h1 a:hover {
     --bs-popover-arrow-border: #495057;
 }
 
-/* Done by Claude, requires review */
 .star-button:has(.bi-star-fill) {
     color: var(--white-hot) !important;
     text-shadow: 0 0 8px var(--white-hot), 0 0 16px rgba(237, 232, 255, 0.5);
@@ -192,7 +189,6 @@ h1 a:hover {
     .profile-avatar { width: 96px; height: 96px; }
 }
 
-/* Done by Claude, requires review */
 /* Page cards */
 .page {
     border-radius: 0;
@@ -223,7 +219,6 @@ h1 a:hover {
 .message-textarea {
     height: 4rem;
     resize: none;
-    /* Done by Claude, requires review */
     background-color: rgba(255, 255, 255, 0.05);
     color: white;
 }

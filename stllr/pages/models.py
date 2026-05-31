@@ -89,7 +89,6 @@ class Page(models.Model):
             return self.Protocol.HTTP + '://' + self.canonical
         return self.Protocol.HTTPS + '://' + self.canonical
 
-    # Done by Claude, requires review
     def get_similar_pages(self, limit=10):
         if not self.search_vector:
             return Page.objects.none()

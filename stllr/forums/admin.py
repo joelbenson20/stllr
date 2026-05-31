@@ -3,7 +3,6 @@ from .models import Post, PostStar
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    # Done by Claude, requires review
     list_display = ['author', 'content', 'created']
     search_fields = ['author__username', 'content']
     readonly_fields = ['created']

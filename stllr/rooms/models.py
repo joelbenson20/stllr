@@ -1,8 +1,6 @@
 from django.conf import settings
 from django.db import models
 
-
-# Done by Claude, requires review
 class Broadcast(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

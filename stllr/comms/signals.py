@@ -17,7 +17,6 @@ def notify_post_starred(sender, instance, created, **kwargs):
         actor=instance.user
     )
 
-# Done by Claude, requires review
 @receiver(post_save, sender=PageStar)
 def notify_page_also_starred(sender, instance, created, **kwargs):
     if not created:
@@ -32,7 +31,6 @@ def notify_page_also_starred(sender, instance, created, **kwargs):
             actor=instance.user
         )
 
-# Done by Claude, requires review
 @receiver(post_save, sender=PostStar)
 def notify_post_also_starred(sender, instance, created, **kwargs):
     if not created:
@@ -69,7 +67,6 @@ def notify_contact_request(sender, instance, created, **kwargs):
         actor=instance.from_user
     )
 
-# Done by Claude, requires review
 @receiver(pre_save, sender=ContactRelation)
 def track_contact_status(sender, instance, **kwargs):
     if instance.pk:

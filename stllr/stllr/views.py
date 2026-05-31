@@ -70,7 +70,6 @@ def contacts(request):
 
 @login_required
 def comms(request):
-    # Done by Claude, requires review
     from comms.models import Notification
     Notification.objects.filter(recipient=request.user, read=False).update(read=True)
     return render(request, 'comms.html')

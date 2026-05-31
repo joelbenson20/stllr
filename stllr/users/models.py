@@ -62,7 +62,6 @@ class Action(models.Model):
         REPLIED = 'replied', 'replied in the forum'
         ENTERED = 'entered', 'entered the room'
 
-    # Done by Claude, requires review
     actor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actions')
     verb = models.CharField(max_length=20, choices=Verb.choices)
     object_ct = models.ForeignKey(
@@ -76,8 +75,8 @@ class Action(models.Model):
     object = GenericForeignKey('object_ct', 'object_id')
 
     created = models.DateTimeField(auto_now_add=True)
-    removed = models.BooleanField(default=False)  # Done by Claude, requires review
-
+    removed = models.BooleanField(default=False)
+    
     class Meta:
         ordering = ['-created']
         indexes = [

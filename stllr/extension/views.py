@@ -10,7 +10,7 @@ from django.core.cache import cache
 from django.middleware.csrf import get_token
 from pages.models import Page, Domain
 from forums.models import Post
-from pages.utils import get_canonical, get_domain_name, verify_security, InsecureURLError  # Done by Claude, requires review
+from pages.utils import get_canonical, get_domain_name, verify_security, InsecureURLError
 
 SUPPORTED_EXTENSION_VERSIONS = ['2.0']
 
@@ -22,7 +22,6 @@ def extension(request):
     if extension_version not in SUPPORTED_EXTENSION_VERSIONS:
         return JsonResponse(
             {
-                # Done by Claude, requires review
                 'status': 400,
                 'html': render_to_string('extension/errors/update_required.html', request=request)
             },
@@ -41,20 +40,17 @@ def extension(request):
         if not page.is_active:
             return JsonResponse(
                 {
-                    # Done by Claude, requires review
                     'status': 403,
                     'html': render_to_string('extension/errors/inactive.html', request=request)
                 },
                 status=403
             )
     except Page.DoesNotExist:
-        # Done by Claude, requires review
         try:
             verify_security(url)
         except InsecureURLError:
             return JsonResponse(
                 {
-                    # Done by Claude, requires review
                     'status': 405,
                     'html': render_to_string('extension/errors/unsupported.html', request=request)
                 },
@@ -92,7 +88,6 @@ def extension(request):
 
     html = None
     if (tab == 'forum'):
-        # Done by Claude, requires review
         posts_qs = Post.firmament.filter(page=page, thread_level=0)
         context['posts'] = posts_qs.firmament() if posts_qs else posts_qs.none()
         html = render_to_string('extension/forum.html', context=context, request=request)
@@ -103,7 +98,6 @@ def extension(request):
         html = render_to_string('extension/similar.html', context=context, request=request)
 
     return JsonResponse({
-        # Done by Claude, requires review
         'status': 200,
         'html': html
     })
@@ -116,7 +110,6 @@ def csrf_token(request):
         })
     else:
         return JsonResponse({
-            # Done by Claude, requires review
             'status': 403,
             'html': render_to_string('extension/errors/unauthenticated.html', request=request)
         }, status=403)

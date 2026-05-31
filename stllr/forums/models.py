@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Case, When, IntegerField
 from django.contrib.contenttypes.fields import GenericRelation
+from django.urls import reverse
 from pages.models import Page
 
 
@@ -57,7 +58,6 @@ class Post(models.Model):
     )
     total_stars = models.PositiveIntegerField(default=0)
     brightness = models.FloatField(default=0)
-    # Done by Claude, requires review
     removed = models.BooleanField(default=False)
     removed_by = models.CharField(
         max_length=16,
@@ -68,13 +68,16 @@ class Post(models.Model):
     actions = GenericRelation('users.Action', content_type_field='object_ct', object_id_field='object_id')
 
     class Meta:
-        # Done by Claude, requires review
         default_manager_name = 'firmament'
         base_manager_name = 'firmament'
         indexes = [
             models.Index(fields=['-brightness'])
         ]
         ordering = ['-brightness', '?']
+
+    def get_absolute_url(self):
+        # Done by Claude, requires review
+        return reverse('forums:post_detail', args=[self.pk])
 
     def __str__(self):
         return f'{self.author}: {self.content}'

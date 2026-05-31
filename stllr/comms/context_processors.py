@@ -4,7 +4,6 @@ from comms.models import Notification
 def notifications(request):
 
     if request.user.is_authenticated:
-        # Done by Claude, requires review
         all_notifications = list(
             Notification.objects
             .filter(recipient=request.user)
@@ -33,7 +32,6 @@ def contacts(request):
         return {'contacts_list': contacts_list}
     return {'contacts_list': []}
 
-# Done by Claude, requires review
 def contacts_statuses(request):
     if request.user.is_authenticated:
         from users.models import Action
@@ -54,7 +52,6 @@ def contacts_statuses(request):
         return {'contacts_statuses': result}
     return {'contacts_statuses': []}
 
-# Done by Claude, requires review
 def muted_users(request):
     if request.user.is_authenticated:
         return {

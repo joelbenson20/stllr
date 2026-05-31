@@ -2,7 +2,6 @@ from django.db import migrations
 
 
 def delete_all_actions(apps, schema_editor):
-    # Done by Claude, requires review
     Action = apps.get_model('users', 'Action')
     Action.objects.all().delete()
 

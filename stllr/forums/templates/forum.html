@@ -8,13 +8,11 @@
 
         {% include 'page/card.html' with compact=True standalone=True %}
 
-        <!-- Done by Claude, requires review -->
         <div class="ms-4 ms-sm-5">
 
             {% include "post/form.html" with parent=None %}
 
             <div id="postFeed">
-                <!-- Done by Claude, requires review -->
                 {% for post in posts %}
                     {% include "post/card.html" %}
                 {% endfor %}

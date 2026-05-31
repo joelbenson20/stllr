@@ -1,5 +1,4 @@
 from django.contrib import admin
-# Done by Claude, requires review
 from rooms.models import Broadcast
 
 @admin.register(Broadcast)

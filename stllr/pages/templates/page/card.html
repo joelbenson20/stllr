@@ -10,7 +10,6 @@
     <div class="d-flex gap-3">
 
         <!-- Avatar column -->
-        <!-- Done by Claude, requires review -->
         <div class="flex-shrink-0 pt-1{% if threaded %} thread-line-down{% endif %}">
             {% include "domain/icon.html" with domain=page.domain dimensions="32x32" size=32 %}
         </div>
@@ -59,7 +58,7 @@
                                 data-page-id="{{ page.id }}"
                                 data-action="{% if page in user.pages_pinned.all %}unpin{% else %}pin{% endif %}"
                                 data-csrf-token="{{ csrf_token }}"
-                                data-endpoint="{% url 'api:toggle_pin' %}">
+                                data-endpoint="{% url 'pages:toggle_pin' page.id %}">
                                 <i class="bi bi-broadcast-pin"></i>
                                 <span>{% if page in user.pages_pinned.all %}Remove pin{% else %}Pin page{% endif %}</span>
                             </button>
@@ -114,10 +113,9 @@
             <div class="d-flex align-items-center mt-3" style="gap: 2rem;">
 
                 <button class="page-star-button star-button btn btn-link p-0 text-secondary d-flex align-items-center gap-1"
-                    data-id={{ page.id }}
                     data-action="{% if page in user.pages_starred.all %}un{% endif %}star"
                     data-csrf-token={{ csrf_token }}
-                    data-endpoint="{% url 'api:star_page' %}">
+                    data-endpoint="{% url 'pages:toggle_star' page.id %}">
                     <i class="bi {% if page in user.pages_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
                     <span class="star-count" style="font-size: 0.8rem;">{{ page.total_stars }}</span>
                 </button>
@@ -129,11 +127,11 @@
                 </a>
 
                 <a class="btn btn-link p-0 text-secondary d-flex align-items-center gap-1"
-                    href="{% url "room" page.id %}">
+                    href="{% url "rooms:room" page.id %}">
                     <i class="bi bi-broadcast spin"></i>
                     <span class="room-user-count" style="font-size: 0.8rem;"
                         data-page-id="{{ page.id }}"
-                        data-endpoint="{% url 'api:get_room_count' %}">
+                        data-endpoint="{% url 'rooms:room_count' %}">
                     </span>
                 </a>
 

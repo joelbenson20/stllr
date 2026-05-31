@@ -22,7 +22,6 @@ const loadMorePages = () => {
                 var newHTML = parser.parseFromString(html, 'text/html');
                 var newPages = newHTML.querySelectorAll('.page');
 
-                // Done by Claude, requires review
                 newPages.forEach(newPage => {
                     newPageId = newPage.id
                     if (!document.querySelector(`#${newPageId}`)){

@@ -1,4 +1,3 @@
-// Done by Claude, requires review
 function initRoom() {
 
     const messageTextarea = document.querySelector('.message-textarea');
@@ -30,7 +29,6 @@ function initRoom() {
             messageFeed.innerHTML += data.html
             if (isAtBottom) messageFeed.scrollTop = messageFeed.scrollHeight;
         }
-        // Done by Claude, requires review
         else if (data.type === "presence_update") {
             const modal = document.getElementById('roomUsersModal');
             if (modal) modal.dataset.users = JSON.stringify(data.users);

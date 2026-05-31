@@ -6,7 +6,6 @@ function initPageStarButtons() {
         starButton.addEventListener('click', function(e) {
             e.preventDefault();
             var formData = new FormData();
-            formData.append('id', starButton.dataset.id)
             formData.append('action', starButton.dataset.action);
             var options = {
                 method: 'POST',
@@ -72,7 +71,6 @@ async function fetchRoomCounts() {
     });
 }
 
-// Done by Claude, requires review
 function initPageCardLink(card) {
     card.addEventListener('click', e => {
         if (!e.target.closest('a, button, form')) {
