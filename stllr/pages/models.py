@@ -35,7 +35,7 @@ class Page(models.Model):
     firmament = FirmamentQuerySet.as_manager()
 
     canonical = models.CharField(max_length=250, unique=True)
-    supported_protocols = ArrayField(models.CharField(max_length=10), default=list, blank=True)
+    supported_protocols = ArrayField(models.CharField(max_length=10), default=list, blank=True) #TODO: make this only accept Protocols?
     title = models.CharField(max_length=500)
     description = models.TextField(max_length=500, blank=True)
     image_url = models.URLField(max_length=250, blank=True)

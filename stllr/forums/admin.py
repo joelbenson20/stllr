@@ -8,7 +8,7 @@ class PostAdmin(admin.ModelAdmin):
     readonly_fields = ['created']
     list_filter = ['created']
 
-@admin.register(PostStar)
+@admin.register(PostStar) # TODO: change the class name to PostStarAdmin??
 class PageStarAdmin(admin.ModelAdmin):
     list_display = ['user', 'post', 'created']
     readonly_fields = ['created',]

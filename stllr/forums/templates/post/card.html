@@ -52,7 +52,8 @@
                     </li>
                     {% endif %}
                     <li>
-                        <a class="dropdown-item" href="{% url "governance:report_post" post.id %}" target="_blank">
+                        <!-- Done by Claude, requires review -->
+                        <a class="dropdown-item" href="{% url "oversight:report_post" post.id %}" target="_blank">
                             <i class="bi bi-flag-fill me-2"></i>Report post
                         </a>
                     </li>

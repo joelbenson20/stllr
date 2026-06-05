@@ -19,7 +19,7 @@ urlpatterns = [
     path('rooms/', include('rooms.urls', namespace='rooms')),
     path('extension/', include('extension.urls', namespace='extension')),
     path('comms/', include('comms.urls', namespace='comms')),
-    path('governance/', include('governance.urls', namespace='governance')),
+    path('oversight/', include('oversight.urls', namespace='oversight')),  # Done by Claude, requires review
 ]
 
 if settings.DEBUG:

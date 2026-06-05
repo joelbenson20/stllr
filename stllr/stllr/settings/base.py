@@ -59,8 +59,9 @@ INSTALLED_APPS = [
     'comms.apps.CommsConfig',
     'forums.apps.ForumsConfig',
     'rooms.apps.RoomsConfig',
-    'governance.apps.GovernanceConfig',
+    'oversight.apps.OversightConfig',  # Done by Claude, requires review
     'extension.apps.ExtensionConfig',
+    'stella.apps.StellaConfig',
     'corsheaders',
     'storages',
     'taggit',

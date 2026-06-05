@@ -1,7 +1,8 @@
 from django.urls import path
 from . import views
 
-app_name = "governance"
+# Done by Claude, requires review
+app_name = "oversight"
 
 urlpatterns = [
     path("report/page/<int:page_id>/", views.report_page, name="report_page"),
