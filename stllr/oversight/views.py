@@ -13,7 +13,7 @@ def report_page(request, page_id):
     page = get_object_or_404(Page, id=page_id)
 
     if PageReport.objects.filter(reporter=request.user, page=page).exists():
-        return redirect(reverse("governance:report_page_already"))
+        return redirect(reverse("oversight:report_page_already"))
 
     if request.method == "POST":
         form = PageReportForm(request.POST)
@@ -22,7 +22,7 @@ def report_page(request, page_id):
             report.reporter = request.user
             report.page = page
             report.save()
-            return redirect(reverse("governance:report_page_success"))
+            return redirect(reverse("oversight:report_page_success"))
     else:
         form = PageReportForm()
 
@@ -33,7 +33,7 @@ def report_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
     if PostReport.objects.filter(reporter=request.user, post=post).exists():
-        return redirect(reverse("governance:report_post_already"))
+        return redirect(reverse("oversight:report_post_already"))
     
     if request.method == "POST":
         form = PostReportForm(request.POST)
@@ -42,7 +42,7 @@ def report_post(request, post_id):
             report.reporter = request.user
             report.post = post
             report.save()
-            return redirect(reverse("governance:report_post_success"))
+            return redirect(reverse("oversight:report_post_success"))
     else:
         form = PostReportForm()
 
