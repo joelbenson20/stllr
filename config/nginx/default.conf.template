@@ -1,6 +1,6 @@
 # upstream for uWSGI
 upstream uwsgi_app {
-    server unix:/tmp/uwsgi_app.sock;  # Done by Claude, requires review
+    server web:8000;  # Done by Claude, requires review
 }
 
 # Docker's internal DNS — re-resolve upstream hostnames every 30s so nginx
