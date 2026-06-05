@@ -23,7 +23,7 @@ def extension(request):
         return JsonResponse(
             {
                 'status': 426,
-                'html': render_to_string('extension/errors/awaiting_review.html', request=request)
+                'html': render_to_string('extension/errors/update_required.html', request=request)
             },
             status=426
         )

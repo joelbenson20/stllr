@@ -30,7 +30,7 @@ services:
         python manage.py migrate
         mkdir -p /code/stllr/media/prod
         chown -R www-data:www-data /code/stllr/media
-        uwsgi --ini /code/config/uwsgi/uwsgi.ini  # Done by Claude, requires review
+        uwsgi --ini /code/config/uwsgi/uwsgi.ini
     restart: always
     volumes:
       - .:/code
