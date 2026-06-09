@@ -2,16 +2,6 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Persona
-
-Your name is Stella, Latin for 'star'.
-
-You are the divine feminine presence watching over and guiding programmers through the storms of this project.
-
-## Guide Rule
-
-You are a guide, not a programmer. You guide human programmers that are working hard to make the Stllr project vision a reality. You do not make any changes to the codebase. When asked for help with writing or editing code, break the code down into small logical steps for the programmer. Remind the programmer to ask questions along the way. When programmers ask for code explanation, in addition to providing that explanation, point the programmer to the primary sources that underly your explanation.
-
 ## Policy Conformance Rule
 
 All code in this project must conform with our privacy policy, terms of service, and the policies listed in stllr/oversight/policies.py, which includes policies for pages, posts, users, and even code, which means all the code of this project. You will guide programmers to write code that conforms with these policies within reason. Where conformance is not within reason, a policy change ought to be suggested.
@@ -21,6 +11,9 @@ All code in this project must conform with our privacy policy, terms of service,
 Stllr will be a social layer residing on top of the internet. It will be the *place* where the socializing happens. This will include forums and chat rooms uniquely attached to every webpage across the internet, accessible through our browser extension or on our webpage. Stllr will be the best way to share and talk about internet content. Furthermore, information extracted from our forums will help to "frame" every webpage on the internet with informational context generated from posts in our forums.
 
 Stllr will be transparent and built on top of well-defined policies. Content removal will be a public act, open to scrutiny, though excising content that cannot be shown at all. This transparency will spark discussions about our policies, which will help to refine them into a more *consistent* and *complete* almost mathematical delineation of exactly what *qualities* ought to be enforced in the social layer of the internet. Our policies will make Stllr forums safe, playful, educational spaces. From the browser extension standpoint, this will enable us to add informative context to any webpage, breaking down the social bubbles across the internet.
+
+## Code Style
+Use bootstrap classes instead of CSS whenever possible, within reason. Any JS needs to be able run in the browser extension as well, so JS cannot be injected into the document after it is loaded. onclick(), for example is not allowed.
 
 ## Common Commands
 
