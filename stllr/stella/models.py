@@ -14,6 +14,7 @@ class Prompt(models.Model):
     prompt = models.TextField()
     output = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
+    tokens = models.PositiveIntegerField(null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
 
