@@ -5,6 +5,7 @@
         data-bs-toggle="modal"
         data-bs-target="#roomUsersModal">
         &nbsp;<i class="bi bi-broadcast text-danger spin"></i>
+        <span id="room-user-count" class="text-danger" style="font-size: 0.8rem;">{{ page.room_count }}</span>
     </button>
 
     <div class="broadcast-feed rounded-card flex-grow-1 p-3 overflow-y-auto" data-page-id="{{ page.id }}"></div>
@@ -19,7 +20,7 @@
     {% else %}
 
         <p class="rounded-pill bg-light text-dark ps-3 py-2 mt-2 flex-shrink-0">
-            Please <a href="{% url "account_login" %}">sign in</a> to post to this forum.
+            Please <a href="{% url "account_login" %}">sign in</a> to enter this room.
         </p>
 
     {% endif %}

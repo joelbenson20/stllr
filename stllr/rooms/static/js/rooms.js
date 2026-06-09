@@ -52,7 +52,8 @@ export async function initRoom() {
         else if (data.type === "presence_update") {
             const modal = document.getElementById('roomUsersModal');
             if (modal) modal.dataset.users = JSON.stringify(data.users);
-            updateRoomCounts();
+            const countSpan = document.getElementById('room-user-count');
+            if (countSpan) countSpan.textContent = data.count;
         }
     };
 
@@ -75,13 +76,3 @@ export async function initRoom() {
     broadcastTextarea.focus();
 }
 
-async function updateRoomCounts() {
-    const spans = document.querySelectorAll('.room-user-count[data-page-id]');
-    if (!spans.length) return;
-    const ids = [...spans].map(s => s.dataset.pageId).join(',');
-    const data = await fetch(new URL(spans[0].dataset.endpoint + `?ids=${ids}`, document.baseURI).href).then(r => r.json());
-    spans.forEach(s => {
-        const count = data[s.dataset.pageId];
-        if (count !== undefined) s.textContent = count;
-    });
-}

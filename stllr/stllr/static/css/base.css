@@ -5,6 +5,7 @@
     --border-grid: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* TODO: Move styles into their respective apps. Too crowded here. */
 [id] { scroll-margin-top: 150px; }
 
 html {
@@ -200,6 +201,21 @@ h1 a:hover {
     0%   { box-shadow: 0 0 4px 4px rgba(165, 148, 208, 0.2); }
     50%  { box-shadow: 0 0 16px 8px rgba(165, 148, 208, 0.5); }
     100% { box-shadow: 0 0 4px 4px rgba(165, 148, 208, 0.2); }
+}
+
+/* Accordion */
+.accordion-item {
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.08);
+    color: white;
+}
+.accordion-button {
+    background-color: transparent !important;
+    color: white !important;
+    box-shadow: none !important;
+}
+.accordion-button::after {
+    filter: invert(1);
 }
 
 /* Rooms */

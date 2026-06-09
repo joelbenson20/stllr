@@ -60,17 +60,6 @@ function initPinButtons() {
     });
 }
 
-async function fetchRoomCounts() {
-    const spans = document.querySelectorAll('.room-user-count[data-page-id]');
-    if (!spans.length) return;
-    const ids = [...spans].map(s => s.dataset.pageId).join(',');
-    const data = await fetch(new URL(spans[0].dataset.endpoint + `?ids=${ids}`, document.baseURI).href).then(r => r.json());
-    spans.forEach(s => {
-        const count = data[s.dataset.pageId];
-        if (count !== undefined) s.textContent = count;
-    });
-}
-
 function initPageCardLink(card) {
     card.addEventListener('click', e => {
         if (!e.target.closest('a, button, form')) {
@@ -82,6 +71,5 @@ function initPageCardLink(card) {
 export function initPages() {
     initPageStarButtons();
     initPinButtons();
-    fetchRoomCounts();
     document.querySelectorAll('.page[data-forum-url]').forEach(initPageCardLink);
 }

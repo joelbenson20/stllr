@@ -138,10 +138,7 @@
                 <a class="btn btn-link p-0 text-secondary d-flex align-items-center gap-1"
                     href="{% url "rooms:room" page.id %}">
                     <i class="bi bi-broadcast spin"></i>
-                    <span class="room-user-count" style="font-size: 0.8rem;"
-                        data-page-id="{{ page.id }}"
-                        data-endpoint="{% url 'rooms:room_count' %}">
-                    </span>
+                    <span class="room-user-count" style="font-size: 0.8rem;">{{ page.room_count }}</span>
                 </a>
 
             </div>

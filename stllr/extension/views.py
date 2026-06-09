@@ -10,6 +10,7 @@ from django.core.cache import cache
 from django.middleware.csrf import get_token
 from pages.models import Page, Domain
 from forums.models import Post
+from stella.models import Prompt
 from pages.utils import get_canonical, get_domain_name, verify_security, InsecureURLError
 
 SUPPORTED_EXTENSION_VERSIONS = ['2.0']
@@ -79,7 +80,7 @@ def extension(request):
         )
 
     # Default extension tab is 'forum'
-    tab = request.GET.get('tab', 'forum')
+    tab = request.GET.get('tab', 'frame')
     
     context = {
         'page': page,
@@ -87,6 +88,9 @@ def extension(request):
     }
 
     html = None
+    if (tab == 'frame'):
+        context['prompts'] = Prompt.objects.filter(page=page).order_by('created')
+        html = render_to_string('extension/frame.html', context=context, request=request)
     if (tab == 'forum'):
         posts_qs = Post.firmament.filter(page=page, thread_level=0)
         context['posts'] = posts_qs.firmament() if posts_qs else posts_qs.none()

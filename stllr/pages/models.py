@@ -10,29 +10,10 @@ from django.contrib.postgres.fields import ArrayField
 
 
 class Page(models.Model):
-    class FirmamentQuerySet(models.QuerySet):
-        def firmament(self):
-            if not self:
-                return self.none()
-            pages = self.values('id', 'brightness')
-            total_pages = pages.count()
-            ids = [page['id'] for page in pages]
-            brightnesses = np.maximum(np.array([page['brightness'] for page in pages]), 1e-10)
-            probabilities = brightnesses / brightnesses.sum()
-            chosen_ids = np.random.choice(ids, size=total_pages, p=probabilities, replace=False)
-            chosen_order = Case(
-                *[When(id=id, then=pos) for pos, id in enumerate(chosen_ids)],
-                output_field=IntegerField()
-            )
-            firmament = Page.objects.filter(id__in=chosen_ids).order_by(chosen_order)
-            return firmament
         
     class Protocol(models.TextChoices):
         HTTP = 'http', 'http://'
         HTTPS = 'https', 'https://'
-        
-    objects = models.Manager()
-    firmament = FirmamentQuerySet.as_manager()
 
     canonical = models.CharField(max_length=250, unique=True)
     supported_protocols = ArrayField(models.CharField(max_length=10), default=list, blank=True) #TODO: make this only accept Protocols?
@@ -88,6 +69,11 @@ class Page(models.Model):
         if self.Protocol.HTTP in self.supported_protocols:
             return self.Protocol.HTTP + '://' + self.canonical
         return self.Protocol.HTTPS + '://' + self.canonical
+
+    @property
+    def room_count(self):
+        from django.core.cache import cache
+        return len(cache.get(f'presence:room_{self.pk}') or {})
 
     def get_similar_pages(self, limit=10):
         if not self.search_vector:

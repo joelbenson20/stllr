@@ -5,5 +5,4 @@ app_name = 'rooms'
 
 urlpatterns = [
     path('<int:page_id>/', views.room, name='room'),
-    path('count/', views.room_count, name='room_count'),
 ]

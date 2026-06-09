@@ -18,8 +18,11 @@
             {% include "page/card.html" with compact=True standalone=True %}
         </div>
 
-        <nav id="extensionNavbar" class="navbar navbar-expand navbar-dark m-0 p-0">
-            <ul class="navbar-nav d-flex align-items-center w-100 justify-content-evenly">
+        <nav id="extensionNavbar" class="navbar navbar-expand navbar-dark m-0 p-3" style="overflow-x: auto; scrollbar-width: none;">
+            <ul class="navbar-nav d-flex align-items-center flex-nowrap">
+                <li class="nav-item">
+                    <a id="frameTab" class="nav-link text-light px-4 {% if tab == "frame" %}border-bottom{% endif %}" role="button">Frame</a>
+                </li>
                 <li class="nav-item">
                     <a id="forumTab" class="nav-link text-light px-4 {% if tab == "forum" %}border-bottom{% endif %}" role="button">Forum</a>
                 </li>

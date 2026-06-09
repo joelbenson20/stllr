@@ -12,6 +12,10 @@ const tooltipList = [...tooltipTriggerList].map(
   (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl),
 );
 
+document.querySelectorAll('[data-bs-toggle="popover"]').forEach(
+  (el) => new bootstrap.Popover(el),
+);
+
 initModals();
 initPages();
 initForums();
