@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     'comms.apps.CommsConfig',
     'forums.apps.ForumsConfig',
     'rooms.apps.RoomsConfig',
-    'oversight.apps.OversightConfig',  # Done by Claude, requires review
+    'oversight.apps.OversightConfig',
     'extension.apps.ExtensionConfig',
     'stella.apps.StellaConfig',
     'corsheaders',

@@ -69,7 +69,6 @@
                         </li>
                         <li>
                             <a class="dropdown-item"
-                                <!-- Done by Claude, requires review -->
                                 href="{% url "oversight:report_page" page.id %}"
                                 target="_blank">
                                 <i class="bi bi-flag-fill"></i> Report page
@@ -82,9 +81,14 @@
 
             <!-- Title -->
             <div class="mt-1">
-                <a class="text-decoration-none" href="{{ page.link }}" style="color: var(--white-hot); font-size: 1.25rem; font-weight: 600; line-height: 1.3;">
+                <a class="text-decoration-none d-block" href="{{ page.link }}" style="color: var(--white-hot); font-size: 1.25rem; font-weight: 600; line-height: 1.3;">
                     {% if compact %}
-                        <span class="d-block text-truncate">{{ page.title|truncatechars:90 }}</span>
+                        <div class="overflow-hidden w-100">
+                            <div class="ticker-track d-inline-flex flex-nowrap">
+                                <span class="text-nowrap">{{ page.title|truncatechars:90 }}</span>
+                                <span class="text-nowrap">{{ page.title|truncatechars:90 }}</span>
+                            </div>
+                        </div>
                     {% else %}
                         {{ page.title|truncatechars:90 }}
                     {% endif %}

@@ -154,6 +154,17 @@ h1 a:hover {
     margin: 0;
 }
 
+.ticker-track {
+    animation: ticker-scroll 12s linear infinite;
+}
+.ticker-track > span {  /* TODO: 2.1 Javascript so ticker only runs when title is too long */
+    padding-right: 6rem;
+}
+@keyframes ticker-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
 /* Thread connector line */
 .thread-line-down {
     position: relative;
