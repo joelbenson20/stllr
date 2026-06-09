@@ -181,6 +181,27 @@ h1 a:hover {
     border-radius: 1px;
 }
 
+/* Page feeder */
+#pageFeeder {
+    display: flex;
+    justify-content: center;
+    padding: 2.5rem 0;
+}
+
+.feeder-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--star-light);
+    animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+    0%   { box-shadow: 0 0 4px 4px rgba(165, 148, 208, 0.2); }
+    50%  { box-shadow: 0 0 16px 8px rgba(165, 148, 208, 0.5); }
+    100% { box-shadow: 0 0 4px 4px rgba(165, 148, 208, 0.2); }
+}
+
 /* Rooms */
 .broadcast-textarea {
     height: 6rem;

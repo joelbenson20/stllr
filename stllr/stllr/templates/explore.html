@@ -32,13 +32,10 @@
     </div>
 
     <div class="mt-5" id="pageFeed">
-        {% include 'page/list.html' with pages=pages user=user %}
+        <div id="pageFeeder" data-url="{% url 'pages:feed' %}"><div class="feeder-dot"></div></div>
     </div>
 
 
 {% endblock content %}
 
 
-{% block scripts %}
-    <script src="{% static 'js/index.js' %}"></script>
-{% endblock scripts %}
