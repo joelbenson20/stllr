@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-# Done by Claude, requires review
 from oversight.policies import PAGE_POLICIES, POST_POLICIES
 
 

@@ -8,6 +8,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import cache
 from django.middleware.csrf import get_token
+from pages.page_processors import youtube_processor
 from pages.models import Page, Domain
 from forums.models import Post
 from stella.models import Prompt
@@ -19,6 +20,8 @@ SUPPORTED_EXTENSION_VERSIONS = ['2.0']
 @login_required
 @require_POST
 def extension(request):
+
+    # Verify extension version supported
     extension_version = request.META.get('HTTP_X_EXTENSION_VERSION', '1.0') # Version 1.0 does not send the request header
     if extension_version not in SUPPORTED_EXTENSION_VERSIONS:
         return JsonResponse(
@@ -29,16 +32,43 @@ def extension(request):
             status=426
         )
 
+    # Load page data
     data = json.loads(request.body).get('page').get('data')
     url = data.get('url')
-    protocol = urlparse(url).scheme.lower()
+
+    # Check URL against security policy
+    try:
+        verify_security(url)
+    except InsecureURLError:
+        return JsonResponse(
+            {
+                'status': 405,
+                'html': render_to_string('extension/errors/unsupported.html', request=request)
+            },
+            status=405
+        )
+
+    # Get or create domain
+    domain_name = get_domain_name(url)
+    domain, created = Domain.objects.get_or_create(
+        name=domain_name
+    )
+    if created:
+        domain.fav_icon_url = data.get('favIconUrl') or ''
+        domain.site_name = data.get('siteName') or ''
+        domain.save()
+    
+    # Get or create page
     canonical = get_canonical(url)
+    protocol = urlparse(url).scheme.lower()
     try:
         page = Page.objects.get(canonical=canonical)
+
+        # If new protocol, add to page's supported protocol
         if protocol and protocol not in page.supported_protocols:
             page.supported_protocols.append(protocol)
             page.save(update_fields=['supported_protocols'])
-        if not page.is_active:
+        if not page.is_active: #TODO: Remove or improve the is_active field of pages
             return JsonResponse(
                 {
                     'status': 403,
@@ -46,36 +76,19 @@ def extension(request):
                 },
                 status=403
             )
-    except Page.DoesNotExist: #TODO Implement domain-specific page creation for difficult sites, like YouTube
-        try:
-            verify_security(url)
-        except InsecureURLError:
-            return JsonResponse(
-                {
-                    'status': 405,
-                    'html': render_to_string('extension/errors/unsupported.html', request=request)
-                },
-                status=405
-            )
+    except Page.DoesNotExist:
 
-        fav_icon_url = data.get('favIconUrl')
-        site_name = data.get('siteName')
-        domain_name = get_domain_name(url)
-        domain, _ = Domain.objects.get_or_create(name=domain_name)
-        if site_name and not domain.site_name:
-            domain.site_name = site_name
-            domain.save()
-        if fav_icon_url and not domain.fav_icon_url:
-            domain.fav_icon_url = fav_icon_url
-            domain.save()
+        # Process data for specific domains 
+        if domain.name in ('youtube.com', 'youtu.be'):
+            data = youtube_processor(url, data)
 
         page = Page.objects.create(
             canonical=canonical,
-            title=data.get('title') or '',
+            title=data.get('title') or '',  #TODO: Better handling of null/blank?
             description=data.get('description') or '',
             image_url=data.get('imageUrl') or '',
             domain=domain,
-            content=data.get('content') or '',
+            content=data.get('content') or '', #TODO: Add innerText vs content distinction (both sent over from extension)
             supported_protocols=[protocol] if protocol else [],
         )
 
