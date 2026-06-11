@@ -7,7 +7,7 @@
         {% include "user/profile-picture.html" with user=action.actor size="36" dimensions="36x36" %}
         <div class="min-w-0">
             <div class="text-break small">
-                <a href="{% url 'profile' action.actor.username %}" class="text-white fw-semibold text-decoration-none">@{{ action.actor.username }}</a>
+                <a href="{% url 'users:profile' action.actor.username %}" class="text-white fw-semibold text-decoration-none">@{{ action.actor.username }}</a>
                 <span class="text-secondary"> {{ action.get_verb_display }}</span>
                 {% if action.object %}
                     {% if action.object_ct.model == 'post' %}

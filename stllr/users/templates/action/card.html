@@ -32,7 +32,7 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="action{{ action.id }}Dropdown">
                         <li>
-                            <form method="post" action="{% url 'remove_action' action.id %}">
+                            <form method="post" action="{% url 'users:remove_action' action.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="dropdown-item">
                                     <span class="text-danger"><i class="bi bi-x-square-fill me-2"></i>Remove from feed</span>

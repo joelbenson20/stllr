@@ -79,7 +79,7 @@
                 </nav>
 
                 {% if user.is_authenticated %}
-                    <a href="{% url 'profile' user.username %}" class="d-flex align-items-center gap-2 mt-3 p-2 rounded-3 sidebar-link text-decoration-none">
+                    <a href="{% url 'users:profile' user.username %}" class="d-flex align-items-center gap-2 mt-3 p-2 rounded-3 sidebar-link text-decoration-none">
                         {% include "user/profile-picture.html" with user=user size="36" dimensions="36x36" %}
                         <span class="fw-semibold text-truncate">@{{ user.username }}</span>
                     </a>

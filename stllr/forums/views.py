@@ -37,7 +37,7 @@ def create_post(request):
             'postId': new_post.id,
             'post': render_to_string('post/tree.html', {'posts': [new_post]}, request=request),
         })
-    return JsonResponse({'status': '400'})
+    return JsonResponse({'status': '400'}) #TODO: Properly return status codes BREAKS EXTENSION, NEEDS UPDATE
 
 
 def post_detail(request, post_id):

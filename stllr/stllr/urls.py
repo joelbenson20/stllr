@@ -12,7 +12,7 @@ urlpatterns = [
     path('pins', views.pins, name='pins'),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('users/', include('users.urls')),
+    path('users/', include('users.urls', namespace='users')),
     path('policies/<str:policy>/', views.policy, name='policy'),
     path('forums/', include('forums.urls', namespace='forums')),
     path('pages/', include('pages.urls', namespace='pages')),

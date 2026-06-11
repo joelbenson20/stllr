@@ -17,7 +17,7 @@
             </button>
             <div class="collapse px-2 pb-2" id="contact-{{ contact.username }}">
                 <div class="d-flex gap-2 pt-1 ps-1">
-                    <a href="{% url 'profile' contact.username %}" class="btn btn-sm btn-outline-light">
+                    <a href="{% url 'users:profile' contact.username %}" class="btn btn-sm btn-outline-light">
                         <i class="bi bi-person"></i> Profile
                     </a>
                 </div>

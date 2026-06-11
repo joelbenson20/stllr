@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 
-# Done by Claude, requires review
 app_name = "oversight"
 
 urlpatterns = [

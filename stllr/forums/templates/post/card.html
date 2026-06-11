@@ -62,7 +62,7 @@
                             <button type="button" class="post-mute-button dropdown-item"
                                 data-action="{% if post.author.id in muted_user_ids %}unmute{% else %}mute{% endif %}"
                                 data-csrf-token="{{ csrf_token }}"
-                                data-endpoint="{% url 'mute_user' post.author.username %}">
+                                data-endpoint="{% url 'users:mute_user' post.author.username %}">
                                 <i class="bi bi-bell-slash me-2"></i>
                                 <span>{% if post.author.id in muted_user_ids %}Unmute{% else %}Mute{% endif %} {{ post.author.username }}</span>
                             </button>

@@ -16,7 +16,7 @@
         {% crispy user_form %}
         {% crispy profile_form %}
         <div class="d-flex justify-content-end gap-2">
-            <a href="{% url 'profile' request.user.username %}" class="btn btn-secondary">Cancel</a>
+            <a href="{% url 'users:profile' request.user.username %}" class="btn btn-secondary">Cancel</a>
             <button class="btn btn-primary" type="submit">Save</button>
         </div>
     </form>

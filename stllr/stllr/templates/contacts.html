@@ -30,7 +30,7 @@ searchInput.addEventListener('input', () => {
     const q = searchInput.value.trim();
     if (!q) { searchResults.innerHTML = ''; return; }
     searchTimeout = setTimeout(async () => {
-        const res = await fetch(`{% url 'search_users' %}?q=${encodeURIComponent(q)}`);
+        const res = await fetch(`{% url 'users:search_users' %}?q=${encodeURIComponent(q)}`);
         const data = await res.json();
         searchResults.innerHTML = data.html;
     }, 300);

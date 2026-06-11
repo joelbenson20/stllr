@@ -62,14 +62,14 @@
 
         {% if request.user != profile.user %}
             {% if not contact %}
-                <a href="{% url "send_request" profile.user.username %}" class="btn btn-sm btn-light">Add Contact</a>
+                <a href="{% url "users:send_request" profile.user.username %}" class="btn btn-sm btn-light">Add Contact</a>
             {% elif contact.status == 'pending' and contact.from_user == request.user %}
-                <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-sm btn-light">Cancel Request</a>
+                <a href="{% url "users:remove_contact" profile.user.username %}" class="btn btn-sm btn-light">Cancel Request</a>
             {% elif contact.status == 'pending' %}
-                <a href="{% url "accept_request" profile.user.username %}" class="btn btn-sm btn-light">Accept</a>
-                <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-warning">Decline</a>
+                <a href="{% url "users:accept_request" profile.user.username %}" class="btn btn-sm btn-light">Accept</a>
+                <a href="{% url "users:remove_contact" profile.user.username %}" class="btn btn-warning">Decline</a>
             {% else %}
-                <a href="{% url "remove_contact" profile.user.username %}" class="btn btn-sm btn-light">Remove Contact</a>
+                <a href="{% url "users:remove_contact" profile.user.username %}" class="btn btn-sm btn-light">Remove Contact</a>
             {% endif %}
         {% endif %}
     </div>

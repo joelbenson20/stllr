@@ -1,7 +1,7 @@
 {% if users %}
     {% for user in users %}
     <div>
-        <a href="{% url 'profile' user.username %}"
+        <a href="{% url 'users:profile' user.username %}"
            class="btn btn-dark w-100 text-start d-flex align-items-center gap-3 py-2 px-2 rounded-3 border-0 text-decoration-none">
             {% include "user/profile-picture.html" with user=user size="40" dimensions="40x40" %}
             <span class="fw-semibold">@{{ user.username }}</span>

@@ -30,7 +30,7 @@ def remove_action(request, action_id):
     action.removed = True
     action.save(update_fields=['removed'])
     messages.success(request, "Removed from your activity feed.")
-    return redirect('profile', username=request.user.username)
+    return redirect('users:profile', username=request.user.username)
 
 
 def profile(request, username):
@@ -55,7 +55,7 @@ def profile(request, username):
 @login_required
 def edit(request, username):
     if request.user.username != username:
-        return redirect('profile', username=username)
+        return redirect('users:profile', username=username)
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user, data=request.POST)
         profile_form = ProfileEditForm(
@@ -65,7 +65,7 @@ def edit(request, username):
             user_form.save()
             profile_form.save()
             messages.success(request, 'Account updated successfully')
-            return redirect('profile', request.user.username)
+            return redirect('users:profile', request.user.username)
         else:
             messages.error(request, 'Error updating your profile')
     else:
@@ -82,7 +82,7 @@ def send_request(request, username):
     to_user = get_object_or_404(get_user_model(), username=username)
     if to_user != request.user:
         ContactRelation.objects.create(from_user=request.user, to_user=to_user)
-    return redirect('profile', username=username)
+    return redirect('users:profile', username=username)
 
 
 @login_required
@@ -94,7 +94,7 @@ def accept_request(request, username):
     )
     contact.status = ContactRelation.Status.ACCEPTED
     contact.save()
-    return redirect('profile', username=username)
+    return redirect('users:profile', username=username)
 
 
 @login_required
@@ -102,7 +102,7 @@ def decline_request(request, username):
     other_user = get_object_or_404(get_user_model(), username=username)
     ContactRelation.objects.filter(from_user=request.user, to_user=other_user).delete()
     ContactRelation.objects.filter(from_user=other_user, to_user=request.user).delete()
-    return redirect('profile', username=request.user.username)
+    return redirect('users:profile', username=request.user.username)
 
 
 @login_required
@@ -110,7 +110,7 @@ def remove_contact(request, username):
     other_user = get_object_or_404(get_user_model(), username=username)
     ContactRelation.objects.filter(from_user=request.user, to_user=other_user).delete()
     ContactRelation.objects.filter(from_user=other_user, to_user=request.user).delete()
-    return redirect('profile', username=username)
+    return redirect('users:profile', username=username)
 
 
 @login_required

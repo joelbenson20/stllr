@@ -13,7 +13,7 @@
                     {% include "user/profile-picture.html" with user=actors.0.actor size="40" dimensions="40x40" %}
                     <div class="min-w-0 flex-grow-1">
                         <div>
-                            <a href="{% url 'profile' actors.0.actor.username %}" class="fw-semibold text-decoration-none">{{ actors.0.actor.username }}</a>
+                            <a href="{% url 'users:profile' actors.0.actor.username %}" class="fw-semibold text-decoration-none">{{ actors.0.actor.username }}</a>
                             {% if notif.actor_count > 1 %}
                                 and {{ notif.actor_count|add:"-1" }} other{{ notif.actor_count|add:"-1"|pluralize }}
                             {% endif %}

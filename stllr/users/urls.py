@@ -1,6 +1,8 @@
 from django.urls import path, include
 from . import views
 
+app_name = 'users'
+
 urlpatterns = [
     path('search/', views.search_users, name='search_users'),
     path('action/<int:action_id>/remove/', views.remove_action, name='remove_action'),
