@@ -46,7 +46,7 @@ def extension(request):
                 },
                 status=403
             )
-    except Page.DoesNotExist:
+    except Page.DoesNotExist: #TODO Implement domain-specific page creation for difficult sites, like YouTube
         try:
             verify_security(url)
         except InsecureURLError:
@@ -80,7 +80,7 @@ def extension(request):
         )
 
     # Default extension tab is 'forum'
-    tab = request.GET.get('tab', 'frame')
+    tab = request.GET.get('tab', 'forum')
     
     context = {
         'page': page,
