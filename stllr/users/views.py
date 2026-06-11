@@ -118,15 +118,15 @@ def remove_contact(request, username):
 def mute_user(request, username):
     target = get_object_or_404(get_user_model(), username=username)
     if target == request.user:
-        return JsonResponse({'status': '400'}, status=400)
+        return JsonResponse({'status': 400}, status=400)
     action = request.POST.get('action')
     if action == 'mute':
         Mute.objects.get_or_create(muter=request.user, muted=target)
     elif action == 'unmute':
         Mute.objects.filter(muter=request.user, muted=target).delete()
     else:
-        return JsonResponse({'status': '400'}, status=400)
-    return JsonResponse({'status': '200'})
+        return JsonResponse({'status': 400}, status=400)
+    return JsonResponse({'status': 200}, status=200)
 
 
 def register(request):

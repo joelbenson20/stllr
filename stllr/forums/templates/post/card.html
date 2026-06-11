@@ -128,6 +128,9 @@
                 <!-- Reply form -->
                 {% include "post/form.html" with page=post.page parent=post %}
 
+                <!-- Container to add replies -->
+                <div id="replies{{ post.id }}"></div>
+
                 <!-- Children -->
                 <div id="children{{ post.id }}" class="collapse {% if expanded %}show{% endif %}">
                     {% if reply %}

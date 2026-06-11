@@ -55,8 +55,8 @@ def toggle_star(request, page_id):
         if star:
             star.delete()
     else:
-        return JsonResponse({'status': '400'}, status=400)
-    return JsonResponse({'status': '200'})
+        return JsonResponse({'status': 400}, status=400)
+    return JsonResponse({'status': 200}, status=200)
 
 
 @login_required
@@ -71,5 +71,5 @@ def toggle_pin(request, page_id):
         if pin:
             pin.delete()
     else:
-        return JsonResponse({'status': '400'}, status=400)
-    return JsonResponse({'status': '200'})
+        return JsonResponse({'status': 400}, status=400)
+    return JsonResponse({'status': 200}, status=200)

@@ -33,7 +33,7 @@ class CreatePostTests(TestCase):
             'page': self.page.id,
             'content': 'Hello world',
         })
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         self.assertTrue(Post.objects.filter(page=self.page, content='Hello world').exists())
 
     def test_reply_has_correct_thread_level(self):
@@ -51,12 +51,13 @@ class CreatePostTests(TestCase):
         reply = Post.objects.get(content='Reply post')
         self.assertEqual(reply.thread_level, 1)
 
-    def test_invalid_post_is_not_created(self):            #TODO: Failing because Status Codes aren't yet properly implemented
+    def test_invalid_post_is_not_created(self):
         self.client.login(username='stella', password='pass')
         response = self.client.post(reverse('forums:create_post'), {
             'page': self.page.id,
             'content': ''
         })
+        self.assertEqual(response.status_code, 400)
         self.assertFalse(Post.objects.exists())
 
 class RemovePostTests(TestCase):

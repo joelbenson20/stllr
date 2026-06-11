@@ -14,22 +14,19 @@ function initPageStarButtons() {
                 body: formData
             }
             fetch(new URL(starButton.dataset.endpoint, document.baseURI).href, options)
-            .then(response => response.json())
-            .then(data => {
-                if (data['status'] === '200') {
+            .then(response => {
+                if (!response.ok) return;
+                var previousAction = starButton.dataset.action;
+                var newAction = previousAction === 'star' ? 'unstar' : 'star';
+                starButton.dataset.action = newAction;
 
-                    var previousAction = starButton.dataset.action;
-                    var newAction = previousAction === 'star' ? 'unstar' : 'star';
-                    starButton.dataset.action = newAction
+                var starCount = starButton.querySelector('.star-count');
+                var previousCount = parseInt(starCount.textContent);
+                starCount.textContent = previousAction === 'star' ? previousCount + 1 : previousCount - 1;
 
-                    var starCount = starButton.querySelector('.star-count');
-                    var previousCount = parseInt(starCount.textContent);
-                    starCount.textContent = previousAction === 'star' ? previousCount + 1 : previousCount - 1;
-
-                    var icon = starButton.querySelector('i');
-                    icon.classList.toggle('bi-star-fill')
-                    icon.classList.toggle('bi-star');
-                }
+                var icon = starButton.querySelector('i');
+                icon.classList.toggle('bi-star-fill');
+                icon.classList.toggle('bi-star');
             })
         })
     })
@@ -48,13 +45,11 @@ function initPinButtons() {
                 mode: 'same-origin',
                 body: formData,
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data['status'] === '200') {
-                    const isPinning = button.dataset.action === 'pin';
-                    button.dataset.action = isPinning ? 'unpin' : 'pin';
-                    button.querySelector('span').textContent = isPinning ? 'Remove Pin' : 'Pin page';
-                }
+            .then(response => {
+                if (!response.ok) return;
+                const isPinning = button.dataset.action === 'pin';
+                button.dataset.action = isPinning ? 'unpin' : 'pin';
+                button.querySelector('span').textContent = isPinning ? 'Remove Pin' : 'Pin page';
             });
         });
     });

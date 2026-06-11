@@ -33,11 +33,11 @@ def create_post(request):
         verb = Action.Verb.REPLIED if new_post.parent else Action.Verb.POSTED
         Action.objects.create(actor=request.user, verb=verb, object=new_post)
         return JsonResponse({
-            'status': '201',
+            'status': 201,
             'postId': new_post.id,
             'post': render_to_string('post/tree.html', {'posts': [new_post]}, request=request),
-        })
-    return JsonResponse({'status': '400'}) #TODO: Properly return status codes BREAKS EXTENSION, NEEDS UPDATE
+        }, status=201)
+    return JsonResponse({'status': 400, 'errors': form.errors}, status=400)
 
 
 def post_detail(request, post_id):
@@ -63,8 +63,8 @@ def toggle_star(request, post_id):
         if star:
             star.delete()
     else:
-        return JsonResponse({'status': '400'}, status=400)
-    return JsonResponse({'status': '200'})
+        return JsonResponse({'status': 400}, status=400)
+    return JsonResponse({'status': 200}, status=200)
 
 
 @login_required
@@ -88,4 +88,4 @@ def remove_post_success(request):
 @require_POST
 def markdownify(request):
     content = request.POST.get('content', '')
-    return JsonResponse({'status': '200', 'markdown': safe_markdown_filter(content)})
+    return JsonResponse({'status': 200, 'markdown': safe_markdown_filter(content)}, status=200)

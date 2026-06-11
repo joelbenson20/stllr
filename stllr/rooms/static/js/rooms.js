@@ -54,6 +54,9 @@ export async function initRoom() {
             if (modal) modal.dataset.users = JSON.stringify(data.users);
             const countSpan = document.getElementById('room-user-count');
             if (countSpan) countSpan.textContent = data.count;
+            document.querySelectorAll(`#page${pageId} .room-user-count`).forEach(el => {
+                el.textContent = data.count;
+            });
         }
     };
 
