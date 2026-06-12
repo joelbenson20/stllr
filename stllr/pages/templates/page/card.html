@@ -1,7 +1,6 @@
 {% load thumbnail %}
 {% load math_extras %}
 
-{% if page.is_active %}
 <div id="page{{ page.id }}"
     class="page {% if standalone %}pb-3{% else %}py-3{% endif %}"
     style="border-bottom: var(--border-grid); cursor: pointer;"
@@ -147,4 +146,3 @@
     </div>
 
 </div>
-{% endif %}

@@ -16,7 +16,11 @@ class Page(models.Model):
         HTTPS = 'https', 'https://'
 
     canonical = models.CharField(max_length=250, unique=True)
-    supported_protocols = ArrayField(models.CharField(max_length=10), default=list, blank=True) #TODO: make this only accept Protocols?
+    supported_protocols = ArrayField(
+        models.CharField(max_length=10, choices=Protocol.choices),
+        default=list,
+        blank=True,
+    )
     title = models.CharField(max_length=500)
     description = models.TextField(max_length=500, blank=True)
     image_url = models.URLField(max_length=250, blank=True)
@@ -24,6 +28,7 @@ class Page(models.Model):
     domain = models.ForeignKey('Domain', related_name='pages', on_delete=models.CASCADE)
     
     content = models.TextField(blank=True)
+    inner_text = models.TextField(blank=True)
     search_vector = SearchVectorField(null=True, editable=False)
 
     users_star = models.ManyToManyField(
@@ -42,8 +47,6 @@ class Page(models.Model):
     brightness = models.FloatField(default=0, editable=False)
     brightness_index = models.PositiveIntegerField(editable=False)
     rise = models.IntegerField(default=0, editable=False)
-
-    is_active = models.BooleanField(default=True)
 
     actions = GenericRelation('users.Action', content_type_field='object_ct', object_id_field='object_id')
 
@@ -92,7 +95,6 @@ class Page(models.Model):
             return Page.objects.none()
         return (
             Page.objects
-            .filter(is_active=True)
             .exclude(pk=self.pk)
             .annotate(
                 score=RawSQL(
@@ -142,8 +144,6 @@ class Domain(models.Model):
     fav_icon_url = models.URLField(max_length=250, blank=True)
     fav_icon = models.ImageField(max_length=255, upload_to='images/domains', blank=True)
     fav_icon_bg_light = models.BooleanField(default=False)
-
-    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.site_name or self.name

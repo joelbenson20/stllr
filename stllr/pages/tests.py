@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from pages.utils import get_canonical, get_domain_name, verify_security, InsecureURLError
+from pages.utils import get_canonical, get_domain_name, verify_supported, UnsupportedURLError
 from pages.models import Page, Domain, PageStar, PagePin
 from pages.tasks import delete_old_page_stars
 
@@ -29,18 +29,22 @@ class GetCanonicalTests(TestCase):
         result = get_canonical('https://example.com/page#section')
         self.assertEqual(result, 'example.com/page')
 
-class VerifySecurityTests(TestCase):
+class VerifySupportedTests(TestCase):
 
     def test_blocks_localhost(self):
-        with self.assertRaises(InsecureURLError):
-            verify_security('http://localhost/anything')
+        with self.assertRaises(UnsupportedURLError):
+            verify_supported('http://localhost/anything')
 
     def test_blocks_private_ip(self):
-        with self.assertRaises(InsecureURLError):
-            verify_security('http://192.168.1.1/internal')
+        with self.assertRaises(UnsupportedURLError):
+            verify_supported('http://192.168.1.1/internal')
+
+    def test_blocks_unsupported_protocol(self):
+        with self.assertRaises(UnsupportedURLError):
+            verify_supported('ftp://example.com/file')
 
     def test_passes_normal_url(self):
-        verify_security('https://example.com/page')
+        verify_supported('https://example.com/page')
 
 class PageStarDecayTests(TestCase):
 

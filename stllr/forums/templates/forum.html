@@ -4,23 +4,17 @@
 {% block title %} stllr | forum | {{ page.title }}{% endblock title %}
 
 {% block content %}
-    {% if page.is_active %}
+    {% include 'page/card.html' with compact=True standalone=True %}
 
-        {% include 'page/card.html' with compact=True standalone=True %}
+    <div class="ms-4 ms-sm-5">
 
-        <div class="ms-4 ms-sm-5">
+        {% include "post/form.html" with parent=None %}
 
-            {% include "post/form.html" with parent=None %}
-
-            <div id="postFeed">
-                {% for post in posts %}
-                    {% include "post/card.html" %}
-                {% endfor %}
-            </div>
-
+        <div id="postFeed">
+            {% for post in posts %}
+                {% include "post/card.html" %}
+            {% endfor %}
         </div>
 
-    {% else %}
-        <p>The forum at this page is suspended.</p>
-    {% endif %}
+    </div>
 {% endblock content %}

@@ -12,7 +12,7 @@ from pages.page_processors import youtube_processor
 from pages.models import Page, Domain
 from forums.models import Post
 from stella.models import Prompt
-from pages.utils import get_canonical, get_domain_name, verify_security, InsecureURLError
+from pages.utils import get_canonical, get_domain_name, verify_supported, UnsupportedURLError
 
 SUPPORTED_EXTENSION_VERSIONS = ['2.0']
 
@@ -38,8 +38,8 @@ def extension(request):
 
     # Check URL against security policy
     try:
-        verify_security(url)
-    except InsecureURLError:
+        verify_supported(url)
+    except UnsupportedURLError:
         return JsonResponse(
             {
                 'status': 405,
@@ -68,14 +68,6 @@ def extension(request):
         if protocol and protocol not in page.supported_protocols:
             page.supported_protocols.append(protocol)
             page.save(update_fields=['supported_protocols'])
-        if not page.is_active: #TODO: Remove or improve the is_active field of pages
-            return JsonResponse(
-                {
-                    'status': 403,
-                    'html': render_to_string('extension/errors/inactive.html', request=request)
-                },
-                status=403
-            )
     except Page.DoesNotExist:
 
         # Process data for specific domains 
@@ -88,7 +80,8 @@ def extension(request):
             description=data.get('description') or '',
             image_url=data.get('imageUrl') or '',
             domain=domain,
-            content=data.get('content') or '', #TODO: Add innerText vs content distinction (both sent over from extension)
+            content=data.get('content') or '',
+            inner_text=data.get('innerText') or '',
             supported_protocols=[protocol] if protocol else [],
         )
 
