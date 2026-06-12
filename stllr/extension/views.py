@@ -16,8 +16,7 @@ from pages.utils import get_canonical, get_domain_name, verify_supported, Unsupp
 
 SUPPORTED_EXTENSION_VERSIONS = ['2.0']
 
-@csrf_exempt
-@login_required
+@login_required #TODO: Unauthenticated users should get forbidden messages rather than redirect for all extension views
 @require_POST
 def extension(request):
 

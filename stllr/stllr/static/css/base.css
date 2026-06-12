@@ -6,6 +6,7 @@
 }
 
 /* TODO: Move styles into their respective apps. Too crowded here. */
+/* TODO: Title ticker scroll should only scroll if content overflows */
 [id] { scroll-margin-top: 150px; }
 
 html {

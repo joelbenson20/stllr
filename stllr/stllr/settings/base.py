@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.google', #TODO: Sign in with Apple ID
     'stllr',
     'pages.apps.PagesConfig',
     'comms.apps.CommsConfig',
@@ -237,13 +237,17 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(),
     },
     "delete-old-post-stars": {
-        "task": "forum.delete_old_post_stars",
+        "task": "forums.delete_old_post_stars",
         "schedule": crontab(),
     },
     "update-post-brightnesses": {
-        "task": "forum.update_post_brightnesses",
+        "task": "forums.update_post_brightnesses",
         "schedule": crontab(),
     },
+    "delete_old_broadcasts": {
+        "task": "rooms.delete_old_broadcasts",
+        "schedule": crontab(),
+    }
 }
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'

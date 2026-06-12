@@ -118,12 +118,12 @@ class RoomConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
 
-        if (data.get('type') == 'ping'):
+        if (data.get('type') == 'ping'):    #TODO: This should refresh TTL on a per-user basis. Needs structural change for user-specific records
             users = await sync_to_async(_get_users)(self.room_name)
             await sync_to_async(_set_users)(self.room_name, users)
             return
         
-        content = data['content']
+        content = data['content']   #TODO: Add type to broadcast messages
         broadcast = await Broadcast.objects.acreate(
             user=self.user, page_id=self.page_id, content=content
         )
