@@ -56,9 +56,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google', #TODO: Sign in with Apple ID
     'stllr',
     'pages.apps.PagesConfig',
-    'comms.apps.CommsConfig',
+    'stars.apps.StarsConfig',
     'forums.apps.ForumsConfig',
     'rooms.apps.RoomsConfig',
+    'comms.apps.CommsConfig',
     'oversight.apps.OversightConfig',
     'extension.apps.ExtensionConfig',
     'stella.apps.StellaConfig',
@@ -223,24 +224,16 @@ CELERY_TIMEZONE = TIME_ZONE  # reuse Django's TIME_ZONE
 CELERY_TASK_TIME_LIMIT = 5 * 60  # hard kill after 5 min
 
 CELERY_BEAT_SCHEDULE = {
-    "delete-old-page-stars": {
-        "task": "pages.delete_old_page_stars",
+    "delete-old-stars": {
+        "task": "stars.delete_old_stars",
         "schedule": crontab(),
     },
-    "update-page-brightnesses": {
-        "task": "pages.update_page_brightnesses",
+    "update-brightnesses": {
+        "task": "stars.update_brightnesses",
         "schedule": crontab(),
     },
     "update-brightness-index": {
         "task": "pages.update_brightness_index",
-        "schedule": crontab(),
-    },
-    "delete-old-post-stars": {
-        "task": "forums.delete_old_post_stars",
-        "schedule": crontab(),
-    },
-    "update-post-brightnesses": {
-        "task": "forums.update_post_brightnesses",
         "schedule": crontab(),
     },
     "delete_old_broadcasts": {

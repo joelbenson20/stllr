@@ -6,6 +6,7 @@ from django.db.models.expressions import RawSQL
 from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.fields import ArrayField
+from django.contrib.contenttypes.fields import GenericRelation
 
 
 class Page(models.Model):
@@ -30,18 +31,13 @@ class Page(models.Model):
     inner_text = models.TextField(blank=True)
     search_vector = SearchVectorField(null=True, editable=False)
 
-    users_star = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        through='PageStar',
-        related_name='pages_starred',
-        blank=True
-    )
     users_pin = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         through='PagePin',
         related_name='pages_pinned',
         blank=True
     )
+    stars = GenericRelation('stars.Star', content_type_field='object_ct', object_id_field='object_id')
     total_stars = models.PositiveIntegerField(default=0, editable=False)
     brightness = models.FloatField(default=0, editable=False)
     brightness_index = models.PositiveIntegerField(editable=False)
@@ -105,14 +101,6 @@ class Page(models.Model):
         )
     
     
-class PageStar(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_stars', on_delete=models.CASCADE)
-    page = models.ForeignKey(Page, related_name='stars', on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'page')
-
 class PagePin(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='page_pins', on_delete=models.CASCADE)
     page = models.ForeignKey(Page, related_name='pins', on_delete=models.CASCADE)

@@ -17,6 +17,7 @@ urlpatterns = [
     path('forums/', include('forums.urls', namespace='forums')),
     path('pages/', include('pages.urls', namespace='pages')),
     path('rooms/', include('rooms.urls', namespace='rooms')),
+    path('stars/', include('stars.urls', namespace='stars')),
     path('extension/', include('extension.urls', namespace='extension')),
     path('comms/', include('comms.urls', namespace='comms')),
     path('oversight/', include('oversight.urls', namespace='oversight')),

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, PostStar
+from .models import Post
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -7,9 +7,3 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['author__username', 'content']
     readonly_fields = ['created']
     list_filter = ['created']
-
-@admin.register(PostStar)
-class PostStarAdmin(admin.ModelAdmin):
-    list_display = ['user', 'post', 'created']
-    readonly_fields = ['created',]
-    ordering = ['-created']

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Page, PageStar, Domain
+from .models import Page, Domain
 
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
@@ -8,12 +8,6 @@ class PageAdmin(admin.ModelAdmin):
     search_fields = ['canonical', 'title']
     ordering = ['canonical']
     show_facets = admin.ShowFacets.ALWAYS
-
-@admin.register(PageStar)
-class PageStarAdmin(admin.ModelAdmin):
-    list_display = ('user', 'page', 'created')
-    readonly_fields = ('created',)
-    ordering = ['-created']
 
 @admin.register(Domain)
 class DomainAdmin(admin.ModelAdmin):

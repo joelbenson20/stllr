@@ -6,23 +6,10 @@
     <div class="mb-2">
         <div class="text-muted small fw-bold px-1 pb-1 border-bottom border-secondary mb-1">{{ group.grouper }}</div>
         {% for contact in group.list %}
-        <div>
-            <button class="btn btn-dark w-100 text-start d-flex align-items-center gap-3 py-2 px-2 rounded-3 border-0"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#contact-{{ contact.username }}"
-                    aria-expanded="false">
-                {% include "user/profile-picture.html" with user=contact size="40" dimensions="40x40" %}
-                <span class="fw-semibold">@{{ contact.username }}</span>
-                <i class="bi bi-chevron-down ms-auto text-muted small"></i>
-            </button>
-            <div class="collapse px-2 pb-2" id="contact-{{ contact.username }}">
-                <div class="d-flex gap-2 pt-1 ps-1">
-                    <a href="{% url 'users:profile' contact.username %}" class="btn btn-sm btn-outline-light">
-                        <i class="bi bi-person"></i> Profile
-                    </a>
-                </div>
-            </div>
-        </div>
+        <a href="{% url 'users:profile' contact.username %}" class="btn btn-dark w-100 text-start d-flex align-items-center gap-3 py-2 px-2 rounded-3 border-0 text-decoration-none">
+            {% include "user/profile-picture.html" with user=contact size="40" dimensions="40x40" %}
+            <span class="fw-semibold">@{{ contact.username }}</span>
+        </a>
         {% endfor %}
     </div>
     {% endfor %}

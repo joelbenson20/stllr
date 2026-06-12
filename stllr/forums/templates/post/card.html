@@ -94,14 +94,7 @@
             <!-- Action buttons -->
             <div class="d-flex align-items-center mt-2" style="gap: 2rem;">
 
-                <button id="post-star-button-{{ post.id }}"
-                    class="post-star-button star-button btn btn-link p-0 text-secondary d-flex align-items-center gap-1"
-                    data-action="{% if post in user.posts_starred.all %}un{% endif %}star"
-                    data-csrf-token={{ csrf_token }}
-                    data-endpoint="{% url 'forums:toggle_star' post.id %}">
-                    <i class="bi {% if post in user.posts_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                    <span class="star-count" style="font-size: 0.8rem;">{{ post.total_stars }}</span>
-                </button>
+                {% include "star/button.html" with obj=post %}
 
                 <button class="btn btn-link p-0 text-secondary d-flex align-items-center gap-1"
                     type="button"

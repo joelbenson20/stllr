@@ -1,49 +1,48 @@
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
-from forums.models import Post, PostStar
-from pages.models import PageStar
+from forums.models import Post
+from pages.models import Page
+from stars.models import Star
 from users.models import ContactRelation
 from .models import Notification
 from .notifications import notify
 
-@receiver(post_save, sender=PostStar)
-def notify_post_starred(sender, instance, created, **kwargs):
-    if not created:
-        return
-    notify(
-        recipient=instance.post.author,
-        event=Notification.Event.POST_STARRED,
-        object=instance.post,
-        actor=instance.user
-    )
 
-@receiver(post_save, sender=PageStar)
-def notify_page_also_starred(sender, instance, created, **kwargs):
+@receiver(post_save, sender=Star)
+def notify_starred(sender, instance, created, **kwargs):
     if not created:
         return
-    contacts = instance.user.get_contacts()
-    prior_starrers = contacts.filter(pages_starred=instance.page).exclude(pk=instance.user.pk)
-    for contact in prior_starrers:
+    obj = instance.object
+    if isinstance(obj, Post):
         notify(
-            recipient=contact,
-            event=Notification.Event.PAGE_ALSO_STARRED,
-            object=instance.page,
+            recipient=obj.author,
+            event=Notification.Event.POST_STARRED,
+            object=obj,
             actor=instance.user
         )
 
-@receiver(post_save, sender=PostStar)
-def notify_post_also_starred(sender, instance, created, **kwargs):
+
+@receiver(post_save, sender=Star)
+def notify_also_starred(sender, instance, created, **kwargs):
     if not created:
         return
+    obj = instance.object
     contacts = instance.user.get_contacts()
-    prior_starrers = contacts.filter(posts_starred=instance.post).exclude(pk=instance.user.pk)
+    prior_starrers = contacts.filter(
+        stars__object_ct=instance.object_ct,
+        stars__object_id=instance.object_id,
+    ).exclude(pk=instance.user.pk)
+
+    if isinstance(obj, Page):
+        event = Notification.Event.PAGE_ALSO_STARRED
+    elif isinstance(obj, Post):
+        event = Notification.Event.POST_ALSO_STARRED
+    else:
+        return
+
     for contact in prior_starrers:
-        notify(
-            recipient=contact,
-            event=Notification.Event.POST_ALSO_STARRED,
-            object=instance.post,
-            actor=instance.user
-        )
+        notify(recipient=contact, event=event, object=obj, actor=instance.user)
+
 
 @receiver(post_save, sender=Post)
 def notify_post_replied(sender, instance, created, **kwargs):

@@ -2,6 +2,7 @@ import { initPages } from './pages.js';
 import { initForums } from './forums.js';
 import { initRoom } from './rooms.js';
 import { initModals } from './modals.js';
+import { initStarButtons } from './stars.js';
 
 const STLLR_URL = '/';
 
@@ -17,6 +18,8 @@ document.querySelectorAll('[data-bs-toggle="popover"]').forEach(
 );
 
 initModals();
+initStarButtons();
 initPages();
 initForums();
 initRoom();
+

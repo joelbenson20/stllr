@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django_ratelimit.decorators import ratelimit
 from pages.models import Page
-from .models import Post, PostStar
+from .models import Post
 from .forms import PostForm
 from .templatetags.utility_tags import safe_markdown_filter
 
@@ -45,22 +45,6 @@ def post_detail(request, post_id):
         node = node.parent
     return render(request, 'post/detail.html', {'post': post, 'ancestors': ancestors})
 
-
-@login_required
-@require_POST
-@ratelimit(key='user', rate='3/s', method='POST', block=True)
-def toggle_star(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    action = request.POST.get('action')
-    if action == 'star':
-        PostStar.objects.get_or_create(post=post, user=request.user)
-    elif action == 'unstar':
-        star = PostStar.objects.filter(post=post, user=request.user).first()
-        if star:
-            star.delete()
-    else:
-        return JsonResponse({'status': 400}, status=400)
-    return JsonResponse({'status': 200}, status=200)
 
 
 @login_required

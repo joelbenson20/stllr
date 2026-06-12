@@ -3,7 +3,7 @@ from django.dispatch import receiver
 import requests
 from requests.exceptions import MissingSchema
 from django.core.files.base import ContentFile
-from .models import Page, PageStar
+from .models import Page
 from django.contrib.postgres.search import SearchVector
 
 @receiver(post_save, sender=Page)
@@ -61,9 +61,3 @@ def update_search_vector(sender, instance, created, update_fields, **kwargs):
             )
         )
 
-@receiver(post_save, sender=PageStar)
-@receiver(post_delete, sender=PageStar)
-def update_page_total_stars(sender, instance, **kwargs):
-    page = instance.page
-    page.total_stars = page.stars.count()
-    page.save(update_fields=['total_stars'])

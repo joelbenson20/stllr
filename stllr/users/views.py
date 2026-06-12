@@ -24,23 +24,30 @@ def search_users(request):
     return JsonResponse({'html': html})
 
 
-def profile(request, username):
+def _profile_base_context(request, username):
     user = get_object_or_404(get_user_model(), username=username)
     contact = None
     if request.user.is_authenticated and request.user != user:
-        contact = ContactRelation.objects.filter(
+        contact = ContactRelation.objects.filter( #TODO: Make helper function to 'get ContactRelation' status of any two users
             from_user=request.user, to_user=user
         ).first() or ContactRelation.objects.filter(
             from_user=user, to_user=request.user
         ).first()
-    return render(
-        request,
-        'profile/detail.html',
-        {
-            'profile': user.profile,
-            'contact': contact,
-        }
-    )
+    return user, {'profile': user.profile, 'contact': contact}
+
+
+def profile_posts(request, username): #TODO: Posts need to display the page they're under to make contextual sense
+    user, context = _profile_base_context(request, username)
+    context['posts'] = user.posts.filter(removed=False).select_related('page', 'page__domain').order_by('-created')
+    context['active_tab'] = 'posts'
+    return render(request, 'profile/detail.html', context)
+
+
+def profile_stars(request, username):
+    user, context = _profile_base_context(request, username)
+    context['starred_pages'] = user.pages_starred.select_related('domain').order_by('-stars__created')
+    context['active_tab'] = 'stars'
+    return render(request, 'profile/detail.html', context)
 
 @login_required
 def edit(request, username):

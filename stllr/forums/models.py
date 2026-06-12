@@ -1,9 +1,9 @@
 import numpy as np
 from django.db import models
 from django.conf import settings
-from django.db import models
 from django.db.models import Case, When, IntegerField
 from django.urls import reverse
+from django.contrib.contenttypes.fields import GenericRelation
 from pages.models import Page
 
 
@@ -49,12 +49,7 @@ class Post(models.Model):
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 
-    users_star = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        through='PostStar',
-        related_name='posts_starred',
-        blank=True
-    )
+    stars = GenericRelation('stars.Star', content_type_field='object_ct', object_id_field='object_id')
     total_stars = models.PositiveIntegerField(default=0)
     brightness = models.FloatField(default=0)
     removed = models.BooleanField(default=False)
@@ -80,10 +75,3 @@ class Post(models.Model):
         return f'{self.author}: {self.content}'
     
     
-class PostStar(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='post_stars', on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, related_name='stars', on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'post')
