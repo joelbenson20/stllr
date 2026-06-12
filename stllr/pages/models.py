@@ -3,7 +3,6 @@ from django.db import models
 from django.conf import settings
 from django.db.models import Case, When, IntegerField
 from django.db.models.expressions import RawSQL
-from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.fields import ArrayField
@@ -48,7 +47,6 @@ class Page(models.Model):
     brightness_index = models.PositiveIntegerField(editable=False)
     rise = models.IntegerField(default=0, editable=False)
 
-    actions = GenericRelation('users.Action', content_type_field='object_ct', object_id_field='object_id')
 
     def save(self, *args, **kwargs):
         if not self.pk:

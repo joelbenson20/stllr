@@ -3,7 +3,6 @@ from django.db import models
 from django.conf import settings
 from django.db import models
 from django.db.models import Case, When, IntegerField
-from django.contrib.contenttypes.fields import GenericRelation
 from django.urls import reverse
 from pages.models import Page
 
@@ -65,7 +64,6 @@ class Post(models.Model):
         null=True,
         blank=True
     )
-    actions = GenericRelation('users.Action', content_type_field='object_ct', object_id_field='object_id')
 
     class Meta:
         default_manager_name = 'firmament'

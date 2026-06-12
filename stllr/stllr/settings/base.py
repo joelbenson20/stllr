@@ -99,7 +99,6 @@ TEMPLATES = [
                 'comms.context_processors.notifications',
                 'comms.context_processors.muted_users',
                 'comms.context_processors.contacts',
-                'comms.context_processors.contacts_statuses',
             ],
         },
     },

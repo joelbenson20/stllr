@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
-from .models import ContactRelation, Action, Mute
+from .models import ContactRelation, Mute
 
 
 @login_required
@@ -24,15 +24,6 @@ def search_users(request):
     return JsonResponse({'html': html})
 
 
-@login_required
-def remove_action(request, action_id):
-    action = get_object_or_404(Action, id=action_id, actor=request.user)
-    action.removed = True
-    action.save(update_fields=['removed'])
-    messages.success(request, "Removed from your activity feed.")
-    return redirect('users:profile', username=request.user.username)
-
-
 def profile(request, username):
     user = get_object_or_404(get_user_model(), username=username)
     contact = None
@@ -48,7 +39,6 @@ def profile(request, username):
         {
             'profile': user.profile,
             'contact': contact,
-            'actions': user.actions.filter(removed=False),
         }
     )
 

@@ -9,8 +9,6 @@ from django.contrib.postgres.search import SearchQuery
 from django.db import connection
 from django.db.models.expressions import RawSQL
 from .models import Page, PageStar, PagePin
-from users.models import Action
-
 
 def feed(request):
     sort = request.GET.get('sort', 'firmament')

@@ -6,7 +6,6 @@ from django.template.loader import render_to_string
 from django.core.cache import cache
 from asgiref.sync import sync_to_async
 from .models import Broadcast
-from users.models import Action
 from pages.models import Page
 
 PRESENCE_TTL = 20 # expires 2 heartbeats after last activity
@@ -65,9 +64,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
         # Accept connection
         await self.accept()
-
-        # Create user action
-        await Action.objects.acreate(actor=self.user, verb=Action.Verb.ENTERED, object=page)
 
         # Send "entered the room" message
         await self.channel_layer.group_send(

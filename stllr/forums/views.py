@@ -9,8 +9,6 @@ from pages.models import Page
 from .models import Post, PostStar
 from .forms import PostForm
 from .templatetags.utility_tags import safe_markdown_filter
-from users.models import Action
-
 
 def forum(request, page_id):
     page = get_object_or_404(Page, pk=page_id)
@@ -30,8 +28,6 @@ def create_post(request):
         if new_post.parent:
             new_post.thread_level = new_post.parent.thread_level + 1
         new_post.save()
-        verb = Action.Verb.REPLIED if new_post.parent else Action.Verb.POSTED
-        Action.objects.create(actor=request.user, verb=verb, object=new_post)
         return JsonResponse({
             'status': 201,
             'postId': new_post.id,
