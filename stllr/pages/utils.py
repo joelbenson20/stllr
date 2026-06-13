@@ -93,3 +93,5 @@ def verify_supported(url):
     # Block localhost variants
     if hostname in ('localhost', '127.0.0.1', '::1', '0.0.0.0'):
         raise UnsupportedURLError(f"URL points to a localhost: {url}")
+    
+# TODO: Verify no private information (email address, phone number)
