@@ -1,33 +1,11 @@
-import numpy as np
 from django.db import models
 from django.conf import settings
-from django.db.models import Case, When, IntegerField
 from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericRelation
 from pages.models import Page
 
 
 class Post(models.Model):
-
-    class FirmamentQuerySet(models.QuerySet):
-        def firmament(self):
-            if not self:
-                return self.none()
-            posts = self.values('id', 'brightness')
-            total_posts = posts.count()
-            ids = [post['id'] for post in posts]
-            brightnesses = np.maximum(np.array([post['brightness'] for post in posts]), 1e-10)
-            probabilities = brightnesses / brightnesses.sum()
-            chosen_ids = np.random.choice(ids, size=total_posts, p=probabilities, replace=False)
-            chosen_order = Case(
-                *[When(id=id, then=pos) for pos, id in enumerate(chosen_ids)],
-                output_field=IntegerField()
-            )
-            firmament = Post.objects.filter(id__in=chosen_ids).order_by(chosen_order)
-            return firmament
-    
-    objects = models.Manager()
-    firmament = FirmamentQuerySet.as_manager()
 
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -61,8 +39,6 @@ class Post(models.Model):
     )
 
     class Meta:
-        default_manager_name = 'firmament'
-        base_manager_name = 'firmament'
         indexes = [
             models.Index(fields=['-brightness'])
         ]

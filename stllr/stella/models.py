@@ -19,4 +19,6 @@ class Prompt(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = [("page", "prompt")]
+        constraints = [
+            models.UniqueConstraint(fields=['page', 'prompt'], name='unique_prompt_per_page'),
+        ]

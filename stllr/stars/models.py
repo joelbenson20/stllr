@@ -12,7 +12,9 @@ class Star(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'object_ct', 'object_id')
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'object_ct', 'object_id'], name='unique_star_per_user_object'),
+        ]
         indexes = [
             models.Index(fields=['object_ct', 'object_id']),
         ]

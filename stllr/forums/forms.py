@@ -11,6 +11,12 @@ class PostForm(forms.ModelForm):
         required=False,
     )
 
+    def clean_content(self):
+        content = self.cleaned_data.get('content', '')
+        if not content.strip():
+            raise forms.ValidationError('Post content cannot be empty.')
+        return content
+
     class Meta:
         model = Post
         fields = ['content', 'page', 'parent']

@@ -35,17 +35,24 @@ export function initPages() {
             if (feeder.dataset.query) params.set('query', feeder.dataset.query);
             if (feeder.dataset.starredBy) params.set('starred_by', feeder.dataset.starredBy);
             if (feeder.dataset.nearTo) params.set('near_to', feeder.dataset.nearTo);
-            params.set('p', feeder.dataset.page);
+            params.set('p', feeder.dataset.p);
             fetch(feeder.dataset.endpoint + '?' + params.toString())
                 .then(r => r.text())
                 .then(html => {
                     if (html === '') {
                         feeder.remove();
                     } else {
-                        feeder.insertAdjacentHTML('beforebegin', html);
-                        feeder.dataset.page = parseInt(feeder.dataset.page) + 1;
-                        loading = false;
-                        if (intersecting) loadMore();
+                        const tmp = document.createElement('div');
+                        tmp.innerHTML = html;
+                        const items = [...tmp.querySelectorAll('.page')];
+                        items.forEach((item, i) => {
+                            setTimeout(() => feeder.insertAdjacentElement('beforebegin', item), i * 80);
+                        });
+                        setTimeout(() => {
+                            feeder.dataset.p = parseInt(feeder.dataset.p) + 1;
+                            loading = false;
+                            if (intersecting) loadMore();
+                        }, items.length * 80);
                     }
                 })
                 .catch(() => {

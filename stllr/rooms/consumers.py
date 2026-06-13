@@ -92,9 +92,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
         users.pop(self.channel_name, None)
         await sync_to_async(_set_users)(self.room_name, users)
 
-        # Leave the room
-        await self.channel_layer.group_discard(self.room_name, self.channel_name)
-
         # Send "left the room" message
         await self.channel_layer.group_send(
             self.room_name,
@@ -109,6 +106,9 @@ class RoomConsumer(AsyncWebsocketConsumer):
             self.room_name,
             {'type': 'presence_update', 'users': list(users.values())}
         )
+
+        # Leave the room after broadcasting so all members receive both messages
+        await self.channel_layer.group_discard(self.room_name, self.channel_name)
 
 
     async def receive(self, text_data):

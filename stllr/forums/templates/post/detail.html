@@ -15,7 +15,7 @@
 
 <div class="ms-4 ms-sm-5">
 
-    {% include "post/form.html" with parent=post page=post.page standalone=True %}
+    {% include "post/form.html" with parent=post page=post.page %}
 
     <div id="children{{ post.id }}">
         {% for child in post.children.all %}

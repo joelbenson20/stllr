@@ -25,7 +25,9 @@ class PageReport(Report):
     policy = models.CharField(max_length=20, choices=PAGE_POLICIES)
 
     class Meta:
-        unique_together = ("reporter", "page")
+        constraints = [
+            models.UniqueConstraint(fields=['reporter', 'page'], name='unique_page_report_per_reporter'),
+        ]
 
 
 class PostReport(Report):
@@ -34,4 +36,6 @@ class PostReport(Report):
     policy = models.CharField(max_length=20, choices=POST_POLICIES)
 
     class Meta:
-        unique_together = ("reporter", "post")
+        constraints = [
+            models.UniqueConstraint(fields=['reporter', 'post'], name='unique_post_report_per_reporter'),
+        ]

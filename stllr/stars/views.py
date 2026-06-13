@@ -15,13 +15,19 @@ def toggle_star(request):
     object_id = request.POST.get('object_id')
     action = request.POST.get('action')
 
+    if model_name not in ('page', 'post'):
+        return JsonResponse({'status': 400}, status=400)
+
     object_ct = get_object_or_404(ContentType, model=model_name)
     get_object_or_404(object_ct.model_class(), pk=object_id)
 
     if action == 'star':
-        Star.objects.get_or_create(user=request.user, object_ct=object_ct, object_id=object_id)
+        _, created = Star.objects.get_or_create(user=request.user, object_ct=object_ct, object_id=object_id)
+        if not created:
+            return JsonResponse({'status': 409}, status=409)
     elif action == 'unstar':
-        Star.objects.filter(user=request.user, object_ct=object_ct, object_id=object_id).delete()
+        star = get_object_or_404(Star, user=request.user, object_ct=object_ct, object_id=object_id)
+        star.delete()
     else:
         return JsonResponse({'status': 400}, status=400)
 

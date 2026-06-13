@@ -5,6 +5,7 @@ app_name = 'forums'
 
 urlpatterns = [
     path('<int:page_id>/', views.forum, name='forum'),
+    path('feed/', views.feed, name='feed'),
     path('post/create/', views.create_post, name='create_post'),
     path('post/<int:post_id>/', views.post_detail, name='post_detail'),
     path('post/<int:post_id>/remove/', views.remove_post, name='remove_post'),

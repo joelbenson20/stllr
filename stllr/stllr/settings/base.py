@@ -232,8 +232,8 @@ CELERY_BEAT_SCHEDULE = {
         "task": "stars.update_brightnesses",
         "schedule": crontab(),
     },
-    "update-brightness-index": {
-        "task": "stars.update_brightness_index",
+    "update-brightness-indexes-and-rises": {
+        "task": "stars.update_brightness_indexes_and_rises",
         "schedule": crontab(),
     },
     "delete_old_broadcasts": {

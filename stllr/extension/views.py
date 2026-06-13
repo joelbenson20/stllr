@@ -10,7 +10,6 @@ from django.core.cache import cache
 from django.middleware.csrf import get_token
 from pages.page_processors import youtube_processor
 from pages.models import Page, Domain
-from forums.models import Post
 from stella.models import Prompt
 from pages.utils import get_canonical, get_domain_name, verify_supported, UnsupportedURLError
 
@@ -97,8 +96,6 @@ def extension(request):
         context['prompts'] = Prompt.objects.filter(page=page).order_by('created')
         html = render_to_string('extension/frame.html', context=context, request=request)
     if (tab == 'forum'):
-        posts_qs = Post.firmament.filter(page=page, thread_level=0)
-        context['posts'] = posts_qs.firmament() if posts_qs else posts_qs.none()
         html = render_to_string('extension/forum.html', context=context, request=request)
     elif (tab == 'room'):
         html = render_to_string('extension/room.html', context=context, request=request)

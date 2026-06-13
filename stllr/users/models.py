@@ -43,7 +43,9 @@ class ContactRelation(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('from_user', 'to_user')
+        constraints = [
+            models.UniqueConstraint(fields=['from_user', 'to_user'], name='unique_contact_relation'),
+        ]
 
 class Mute(models.Model):
     muter = models.ForeignKey(User, related_name='muting', on_delete=models.CASCADE)
@@ -51,6 +53,8 @@ class Mute(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('muter', 'muted')
+        constraints = [
+            models.UniqueConstraint(fields=['muter', 'muted'], name='unique_mute'),
+        ]
 
 #TODO: Fix error: 'User' object has no attribute 'pages_starred'

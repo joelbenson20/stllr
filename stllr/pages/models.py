@@ -39,7 +39,7 @@ class Page(models.Model):
         HTTP = 'http', 'http://'
         HTTPS = 'https', 'https://'
 
-    canonical = models.CharField(max_length=250, unique=True)
+    canonical = models.CharField(max_length=250, unique=True)   # TODO: Canonical -> Path, does not need to be unique, but must be unique in conjunction with domain
     supported_protocols = ArrayField(
         models.CharField(max_length=10, choices=Protocol.choices),
         default=list,
@@ -129,4 +129,6 @@ class PagePin(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'page')
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'page'], name='unique_page_pin_per_user'),
+        ]

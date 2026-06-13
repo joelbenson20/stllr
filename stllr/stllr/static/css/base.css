@@ -67,6 +67,9 @@ h1 a:hover {
     text-decoration: underline;
 }
 
+.post-even { background-color: color-mix(in srgb, var(--star-light) 7%, var(--night-sky)); }
+.post-odd  { background-color: var(--night-sky); }
+
 .page a:not(.btn-link):hover,
 .post-content a:hover {
     text-decoration: underline !important;
@@ -183,8 +186,19 @@ h1 a:hover {
     border-radius: 1px;
 }
 
-/* Page feed */
-.page-feeder {
+/* Star fade-in for feed cards */
+@keyframes star-appear {
+    0%   { filter: brightness(4) blur(3px); }
+    100% { filter: brightness(1) blur(0); }
+}
+
+.post {
+    animation: star-appear 0.6s ease-out both;
+}
+
+/* Page and post feeds */
+.page-feeder,
+.post-feeder {
     display: flex;
     justify-content: center;
     padding: 2.5rem 0;

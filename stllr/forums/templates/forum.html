@@ -10,11 +10,7 @@
 
         {% include "post/form.html" with parent=None %}
 
-        <div id="postFeed">
-            {% for post in posts %}
-                {% include "post/card.html" %}
-            {% endfor %}
-        </div>
+        {% include "post/feed.html" %}
 
     </div>
 {% endblock content %}

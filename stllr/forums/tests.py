@@ -48,11 +48,64 @@ class CreatePostTests(PostTestBase):
         self.client.login(username='stella', password='pass')
         self.client.post(reverse('forums:create_post'), {
             'page': self.page.id,
-            'content': 'Reply post',
+            'content': '@stella Reply post',
             'parent': self.post.id,
         })
-        reply = Post.objects.get(content='Reply post')
+        reply = Post.objects.get(content='@stella Reply post')
         self.assertEqual(reply.thread_level, 1)
+
+    def test_reply_with_parent_author_mention_is_created(self):
+        self.client.login(username='stella', password='pass')
+        response = self.client.post(reverse('forums:create_post'), {
+            'page': self.page.id,
+            'content': '@stella great post!',
+            'parent': self.post.id,
+        })
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(Post.objects.filter(content='@stella great post!').exists())
+
+    def test_reply_must_start_with_parent_author_mention(self):
+        self.client.login(username='stella', password='pass')
+        response = self.client.post(reverse('forums:create_post'), {
+            'page': self.page.id,
+            'content': 'Reply without mention',
+            'parent': self.post.id,
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(Post.objects.filter(content='Reply without mention').exists())
+
+    def test_reply_mention_must_be_at_start(self):
+        self.client.login(username='stella', password='pass')
+        response = self.client.post(reverse('forums:create_post'), {
+            'page': self.page.id,
+            'content': 'Reply to @stella',
+            'parent': self.post.id,
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(Post.objects.filter(content='Reply to @stella').exists())
+
+    def test_reply_requires_content_beyond_mention(self):
+        self.client.login(username='stella', password='pass')
+        for content in ('@stella ', '@stella   ', '@stella\t'):
+            with self.subTest(content=content):
+                response = self.client.post(reverse('forums:create_post'), {
+                    'page': self.page.id,
+                    'content': content,
+                    'parent': self.post.id,
+                })
+                self.assertEqual(response.status_code, 400)
+                self.assertFalse(Post.objects.filter(content=content).exists())
+
+    def test_reply_mention_must_be_parent_author(self):
+        other = User.objects.create_user(username='cosmo', password='pass')
+        self.client.login(username='stella', password='pass')
+        response = self.client.post(reverse('forums:create_post'), {
+            'page': self.page.id,
+            'content': f'@{other.username} wrong mention',
+            'parent': self.post.id,
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(Post.objects.filter(content=f'@{other.username} wrong mention').exists())
 
     def test_invalid_post_is_not_created(self):
         self.client.login(username='stella', password='pass')
@@ -62,6 +115,15 @@ class CreatePostTests(PostTestBase):
         })
         self.assertEqual(response.status_code, 400)
         self.assertFalse(Post.objects.filter(content='').exists())
+
+    def test_post_content_cannot_be_only_whitespace(self):
+        self.client.login(username='stella', password='pass')
+        response = self.client.post(reverse('forums:create_post'), {
+            'page': self.page.id,
+            'content': '   ',
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(Post.objects.filter(content='   ').exists())
 
 
 class RemovePostTests(PostTestBase):
@@ -88,6 +150,9 @@ class RemovePostTests(PostTestBase):
         self.post.refresh_from_db()
         self.assertFalse(self.post.removed)
 
+    # TODO: Test posts correctly marked as removed by the author
+
+    # TODO: Test removed posts do not display any author information
 
 class MarkdownifyTests(PostTestBase):
 

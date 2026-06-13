@@ -1,13 +1,13 @@
 {% load static %}
 {% load humanize %}
-{% load utility_tags %}
+{% load forum_tags %}
 
 <div id="post{{ post.id }}"
-    class="post py-3"
+    class="post rounded-card mt-3 p-3 {% if post.thread_level|divisibleby:2 %}post-even{% else %}post-odd{% endif %}"
     data-author-id="{{ post.author.id }}"
     style="border-bottom: var(--border-grid);">
 
-    <div class="d-flex gap-3">
+    <div class="d-flex gap-2">
 
         <!-- Avatar column -->
         <a class="flex-shrink-0 pt-1{% if threaded %} thread-line-down{% endif %}" href="{{ post.author.profile.get_absolute_url }}">
@@ -83,7 +83,7 @@
                 {% if post.removed %}
                     <p class="text-secondary fst-italic small">This post was removed by {{ post.get_removed_by_display }}.</p>
                 {% else %}
-                    {{ post.content|safe_markdown }}
+                    {{ post.content|render_post }}
                 {% endif %}
             </div>
             <div class="post-content-muted {% if post.author.id not in muted_user_ids %}d-none{% endif %}">
@@ -104,34 +104,31 @@
                     <span class="descendant-count" style="font-size: 0.8rem;">{{ post.descendant_count }}</span>
                 </button>
 
+                {% if not standalone %}
                 <button class="btn btn-link p-0 text-secondary"
                     style="font-size: 0.8rem;"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#replyForm{{ post.id }}"
-                    aria-expanded="{% if expanded %}true{% else %}false{% endif %}">
+                    aria-expanded="false">
                     Reply
                 </button>
+                {% endif %}
 
             </div>
 
             {% if not standalone %}
-                <!-- Reply form -->
-                {% include "post/form.html" with page=post.page parent=post %}
 
-                <!-- Container to add replies -->
-                <div id="replies{{ post.id }}"></div>
+                <!-- Reply form -->
+                <div id="replyForm{{ post.id }}" class="collapse" data-reply-username="{{ post.author.username }}">
+                    {% include "post/form.html" with page=post.page parent=post %}
+                </div>
 
                 <!-- Children -->
                 <div id="children{{ post.id }}" class="collapse {% if expanded %}show{% endif %}">
-                    {% if reply %}
-                        {% include "post/card.html" with post=reply expanded=False reply=None %}
-                    {% else %}
-                        {% for child in post.children.all.firmament %}
-                            {% include "post/card.html" with post=child reply=None %}
-                        {% endfor %}
-                    {% endif %}
+                    {% include "post/feed.html" with parent_id=post.id page=post.page %}
                 </div>
+
             {% endif %}
 
         </div>

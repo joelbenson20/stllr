@@ -32,21 +32,7 @@ class StarTestBase(TestCase):
         self.post_ct = ContentType.objects.get_for_model(Post)
 
 
-class StarDecayTests(StarTestBase):
-
-    def test_stars_older_than_7_days_are_deleted(self):
-        star = Star.objects.create(user=self.user, object_ct=self.page_ct, object_id=self.page.id)
-        Star.objects.filter(pk=star.pk).update(created=timezone.now() - timedelta(days=8))
-        delete_old_stars()
-        self.assertFalse(Star.objects.filter(pk=star.pk).exists())
-
-    def test_stars_newer_than_7_days_are_kept(self):
-        star = Star.objects.create(user=self.user, object_ct=self.page_ct, object_id=self.page.id)
-        delete_old_stars()
-        self.assertTrue(Star.objects.filter(pk=star.pk).exists())
-
-
-class TogglePageStarTests(StarTestBase):
+class ToggleStarTests(StarTestBase):
 
     def test_unauthenticated_user_is_redirected(self):
         response = self.client.post(
@@ -63,6 +49,14 @@ class TogglePageStarTests(StarTestBase):
         )
         self.assertTrue(self.page.stars.filter(user=self.user).exists())
 
+    def test_authenticated_user_can_only_star_once(self):
+        self.client.login(username='stella', password='pass')
+        payload = {'action': 'star', 'object_ct': 'page', 'object_id': self.page.id}
+        self.client.post(reverse('stars:toggle_star'), payload)
+        response = self.client.post(reverse('stars:toggle_star'), payload)
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(self.page.stars.filter(user=self.user).count(), 1)
+
     def test_authenticated_user_can_unstar_a_page(self):
         Star.objects.create(user=self.user, object_ct=self.page_ct, object_id=self.page.id)
         self.client.login(username='stella', password='pass')
@@ -72,6 +66,22 @@ class TogglePageStarTests(StarTestBase):
         )
         self.assertFalse(self.page.stars.filter(user=self.user).exists())
 
+    def test_unstar_returns_404_if_star_does_not_exist(self):
+        self.client.login(username='stella', password='pass')
+        response = self.client.post(
+            reverse('stars:toggle_star'),
+            {'action': 'unstar', 'object_ct': 'page', 'object_id': self.page.id}
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_invalid_object_ct_returns_400(self):
+        self.client.login(username='stella', password='pass')
+        response = self.client.post(
+            reverse('stars:toggle_star'),
+            {'action': 'star', 'object_ct': 'user', 'object_id': self.user.id}
+        )
+        self.assertEqual(response.status_code, 400)
+
     def test_invalid_action_returns_400(self):
         self.client.login(username='stella', password='pass')
         response = self.client.post(
@@ -80,17 +90,7 @@ class TogglePageStarTests(StarTestBase):
         )
         self.assertEqual(response.status_code, 400)
 
-
-class TogglePostStarTests(StarTestBase):
-
-    def test_unauthenticated_user_is_redirected(self):
-        response = self.client.post(
-            reverse('stars:toggle_star'),
-            {'action': 'star', 'object_ct': 'post', 'object_id': self.post.id}
-        )
-        self.assertEqual(response.status_code, 302)
-
-    def test_authenticated_user_can_star_a_post(self):
+    def test_view_works_with_post_content_type(self):
         self.client.login(username='stella', password='pass')
         self.client.post(
             reverse('stars:toggle_star'),
@@ -98,25 +98,22 @@ class TogglePostStarTests(StarTestBase):
         )
         self.assertTrue(self.post.stars.filter(user=self.user).exists())
 
-    def test_authenticated_user_can_unstar_a_post(self):
-        Star.objects.create(user=self.user, object_ct=self.post_ct, object_id=self.post.id)
-        self.client.login(username='stella', password='pass')
-        self.client.post(
-            reverse('stars:toggle_star'),
-            {'action': 'unstar', 'object_ct': 'post', 'object_id': self.post.id}
-        )
-        self.assertFalse(self.post.stars.filter(user=self.user).exists())
 
-    def test_invalid_action_returns_400(self):
-        self.client.login(username='stella', password='pass')
-        response = self.client.post(
-            reverse('stars:toggle_star'),
-            {'action': 'invalid', 'object_ct': 'post', 'object_id': self.post.id}
-        )
-        self.assertEqual(response.status_code, 400)
+class StarDecayTests(StarTestBase):
+
+    def test_stars_older_than_7_days_are_deleted(self):
+        star = Star.objects.create(user=self.user, object_ct=self.page_ct, object_id=self.page.id)
+        Star.objects.filter(pk=star.pk).update(created=timezone.now() - timedelta(days=8))
+        delete_old_stars()
+        self.assertFalse(Star.objects.filter(pk=star.pk).exists())
+
+    def test_stars_newer_than_7_days_are_kept(self):
+        star = Star.objects.create(user=self.user, object_ct=self.page_ct, object_id=self.page.id)
+        delete_old_stars()
+        self.assertTrue(Star.objects.filter(pk=star.pk).exists())
 
 
-class TotalStarsSignalTests(StarTestBase):
+class StarSignalsTests(StarTestBase):
 
     def test_page_total_stars_increments_on_star(self):
         Star.objects.create(user=self.user, object_ct=self.page_ct, object_id=self.page.id)
@@ -129,13 +126,39 @@ class TotalStarsSignalTests(StarTestBase):
         self.page.refresh_from_db()
         self.assertEqual(self.page.total_stars, 0)
 
-    def test_post_total_stars_increments_on_star(self):
+    def test_page_brightness_updated_on_star(self):
+        Star.objects.create(user=self.user, object_ct=self.page_ct, object_id=self.page.id)
+        self.page.refresh_from_db()
+        self.assertGreater(self.page.brightness, 0)
+
+    def test_update_page_brightness_index_and_rise(self):
+        from stars.tasks import update_brightness_indexes_and_rises
+        from stars.utils import calculate_brightness
+
+        user_count = User.objects.count()
+        page_b = Page.objects.create(canonical='example.com/page-b', title='Page B', domain=self.domain)
+
+        # Invert the ranks: self.page has 1 star (higher brightness) but rank 2, page_b has 0 stars but rank 1
+        self.page.total_stars = 1
+        self.page.brightness = calculate_brightness(1, user_count)
+        self.page.brightness_index = 2
+        self.page.save(update_fields=['total_stars', 'brightness', 'brightness_index'])
+        page_b.total_stars = 0
+        page_b.brightness = calculate_brightness(0, user_count)
+        page_b.brightness_index = 1
+        page_b.save(update_fields=['total_stars', 'brightness', 'brightness_index'])
+
+        update_brightness_indexes_and_rises()
+
+        self.page.refresh_from_db()
+        page_b.refresh_from_db()
+        self.assertEqual(self.page.brightness_index, 1)
+        self.assertEqual(page_b.brightness_index, 2)
+        self.assertGreater(self.page.rise, 0)
+        self.assertLess(page_b.rise, 0)
+
+    def test_signal_works_with_post(self):
         Star.objects.create(user=self.user, object_ct=self.post_ct, object_id=self.post.id)
         self.post.refresh_from_db()
         self.assertEqual(self.post.total_stars, 1)
-
-    def test_post_total_stars_decrements_on_unstar(self):
-        star = Star.objects.create(user=self.user, object_ct=self.post_ct, object_id=self.post.id)
-        star.delete()
-        self.post.refresh_from_db()
-        self.assertEqual(self.post.total_stars, 0)
+        self.assertGreater(self.post.brightness, 0)

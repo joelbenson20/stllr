@@ -40,7 +40,9 @@ class Notification(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ('recipient', 'event', 'object_ct', 'object_id')
+        constraints = [
+            models.UniqueConstraint(fields=['recipient', 'event', 'object_ct', 'object_id'], name='unique_notification_per_recipient_event_object'),
+        ]
         ordering = ['-updated']
 
     def __str__(self):
@@ -60,5 +62,7 @@ class NotificationActor(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('notification', 'actor')
+        constraints = [
+            models.UniqueConstraint(fields=['notification', 'actor'], name='unique_actor_per_notification'),
+        ]
         ordering = ['-created']
