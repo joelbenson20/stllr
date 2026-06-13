@@ -8,6 +8,8 @@ from asgiref.sync import sync_to_async
 from .models import Broadcast
 from pages.models import Page
 
+# TODO: If user is already in a room, then they shouldn't be able to join it again. Question: Should they be able to join two different rooms at the same time?
+
 PRESENCE_TTL = 20 # expires 2 heartbeats after last activity
 
 def _presence_key(room_name):

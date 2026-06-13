@@ -126,7 +126,9 @@
 
                 <!-- Children -->
                 <div id="children{{ post.id }}" class="collapse {% if expanded %}show{% endif %}">
-                    {% include "post/feed.html" with parent_id=post.id page=post.page %}
+                    {% if post.descendant_count %}
+                        {% include "post/feed.html" with parent_id=post.id page=post.page %}
+                    {% endif %}
                 </div>
 
             {% endif %}

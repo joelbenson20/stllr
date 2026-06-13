@@ -30,7 +30,7 @@ class Post(models.Model):
     stars = GenericRelation('stars.Star', content_type_field='object_ct', object_id_field='object_id')
     total_stars = models.PositiveIntegerField(default=0)
     brightness = models.FloatField(default=0)
-    removed = models.BooleanField(default=False)
+    removed = models.BooleanField(default=False) #TODO: How do reply mentions work with removing posts and hiding the author? Also, forced mention changes the dynamic of a reply a bit. Worth thinking about.
     removed_by = models.CharField(
         max_length=16,
         choices=[('author', 'the author'), ('moderator', 'a moderator')],
