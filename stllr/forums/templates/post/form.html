@@ -1,59 +1,55 @@
 {% load markdown_deux_tags %}
 
-<div class="mt-2 ps-3">
-    <div class="d-flex gap-3">
+<div class="mt-2">
 
-        <div class="flex-shrink-0 pt-1">
-            {% include "user/profile-picture.html" with user=request.user size="32" dimensions="32x32" %}
-        </div>
 
-        <div class="flex-grow-1" style="min-width: 0;">
+    {% if user.is_authenticated %}
 
-            {% if user.is_authenticated %}
-            <form class="{% if parent %}reply-form{% else %}post-form{% endif %} glow-on-focus rounded-card bg-white"
-                method="post"
-                data-endpoint="{% url 'forums:create_post' %}">
-                {% csrf_token %}
+        <form class="{% if parent %}reply-form{% else %}post-form{% endif %} glow-on-focus rounded-card bg-white"
+            method="post"
+            data-endpoint="{% url 'forums:create_post' %}">
+            {% csrf_token %}
 
-                <input type="hidden" name="page" value="{{ page.id }}">
-                <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
+            <input type="hidden" name="page" value="{{ page.id }}">
+            <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
 
-                <textarea class="form-control rounded-card border-0 shadow-none p-3"
-                    name="content"
-                    placeholder="What's written in the stars?"
-                    required></textarea>
+            <textarea class="form-control rounded-card border-0 shadow-none p-3"
+                name="content"
+                placeholder="What's written in the stars?"
+                required></textarea>
 
-                <div class="markdown-preview rounded p-3"></div>
+            <div class="markdown-preview rounded p-3"></div>
 
-                <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center">
 
-                    <button class="btn btn-transparent btn-light rounded-circle m-1" type="button">
-                        <i class="bi bi-question-circle"></i>
-                    </button>
+                <button class="btn btn-transparent btn-light rounded-circle m-1" type="button">
+                    <i class="bi bi-question-circle"></i>
+                </button>
 
-                    <button class="markdown-preview-button btn btn-transparent btn-light rounded-card m-1"
-                        type="button"
-                        data-endpoint="{% url 'forums:markdownify' %}">
-                        <i class="bi bi-eye-fill"></i> Preview
-                    </button>
+                <button class="markdown-preview-button btn btn-transparent btn-light rounded-card m-1"
+                    type="button"
+                    data-endpoint="{% url 'forums:markdownify' %}">
+                    <i class="bi bi-eye-fill"></i> Preview
+                </button>
 
-                    <button class="markdown-edit-button btn btn-transparent btn-light rounded-card m-1" type="button">
-                        <i class="bi bi-eye-slash"></i> Edit
-                    </button>
+                <button class="markdown-edit-button btn btn-transparent btn-light rounded-card m-1" type="button">
+                    <i class="bi bi-eye-slash"></i> Edit
+                </button>
 
-                    <button class="btn btn-light rounded-card ms-auto m-1" type="submit">
-                        {% if parent %}Reply{% else %}Post{% endif %}
-                    </button>
+                <button class="btn btn-light rounded-card ms-auto m-1" type="submit">
+                    {% if parent %}Reply{% else %}Post{% endif %}
+                </button>
 
-                </div>
-
-            </form>
-            {% else %}
-            <div class="rounded-card bg-white p-3 text-secondary">
-                <a href="{% url 'account_login' %}?next={{ request.path }}">Sign in</a> to post in the forum.
             </div>
-            {% endif %}
+
+        </form>
+
+    {% else %}
+
+        <div class="rounded-card bg-white p-3 text-secondary">
+            <a href="{% url 'account_login' %}?next={{ request.path }}">Sign in</a> to post in the forum.
         </div>
 
-    </div>
+    {% endif %}
+
 </div>

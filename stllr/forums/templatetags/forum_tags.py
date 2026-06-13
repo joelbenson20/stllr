@@ -5,6 +5,7 @@ import markdown_deux
 from django import template
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.template.loader import render_to_string
 
 register = template.Library()
 
@@ -44,6 +45,22 @@ def safe_markdown(content):
     html = markdown_deux.markdown(content)
     clean = bleach.clean(html, tags=ALLOWED_TAGS, attributes=_allow_safe_urls, strip=True)
     return mark_safe(clean)
+
+
+@register.simple_tag(takes_context=True)
+def ancestry_chain(context, ancestors, post):
+    """Render a nested ancestry chain: each ancestor embeds the next via display_children."""
+    request = context.get('request')
+    flat = context.flatten()
+
+    def render_node(p, inner=''):
+        ctx = {**flat, 'post': p, 'display_children': mark_safe(inner)}
+        return render_to_string('post/card.html', ctx, request=request)
+
+    html = render_node(post)
+    for ancestor in reversed(ancestors):
+        html = render_node(ancestor, inner=html)
+    return mark_safe(html)
 
 
 @register.filter(name='render_post')

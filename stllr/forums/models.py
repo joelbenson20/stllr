@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, connection
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericRelation
@@ -47,17 +47,18 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('forums:post_detail', args=[self.pk])
 
-    def get_descendants(self):
-        ids = []
-        frontier = list(self.children.values_list('id', flat=True))
-        while frontier:
-            ids.extend(frontier)
-            frontier = list(Post.objects.filter(parent_id__in=frontier).values_list('id', flat=True))
-        return Post.objects.filter(id__in=ids)
-
     @property
     def descendant_count(self):
-        return self.get_descendants().count()
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                WITH RECURSIVE tree AS (
+                    SELECT id FROM forums_post WHERE parent_id = %s
+                    UNION ALL
+                    SELECT p.id FROM forums_post p INNER JOIN tree t ON p.parent_id = t.id
+                )
+                SELECT COUNT(*) FROM tree
+            """, [self.pk])
+            return cursor.fetchone()[0]
 
     def __str__(self):
         return f'{self.author}: {self.content}'

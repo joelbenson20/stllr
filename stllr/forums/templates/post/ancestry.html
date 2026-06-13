@@ -1,0 +1,16 @@
+{% load forum_tags %}
+
+{# Chain from root page down through ancestor posts to the focal post. #}
+{# Context: post, ancestors (list oldest→newest) #}
+
+<div class="post-ancestry">
+
+    {# Root: the page this thread lives under #}
+    {% include 'page/card.html' with page=post.page compact=True %}
+
+    {# Nested post chain: each ancestor embeds the next via display_children #}
+    <div class="display-children">
+        {% ancestry_chain ancestors post %}
+    </div>
+
+</div>

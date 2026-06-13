@@ -1,7 +1,7 @@
 .post-form textarea,
 .reply-form textarea,
 .markdown-preview {
-    height: 4rem;
+    height: 5.5rem;
 }
 
 .post-form textarea::placeholder,

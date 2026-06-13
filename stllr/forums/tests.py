@@ -134,7 +134,11 @@ class RemovePostTests(PostTestBase):
         self.post.refresh_from_db()
         self.assertTrue(self.post.removed)
 
-    def test_stranger_cannot_remove_someone_elses_post(self):
+    # TODO: Test posts correctly marked as removed by the author
+
+    # TODO: Test removed posts do not display any author information
+
+    def test_only_author_can_remove_their_own_post(self):
         stranger = User.objects.create_user(username='stranger')
         stranger.set_password('pass')
         stranger.save()
@@ -150,9 +154,6 @@ class RemovePostTests(PostTestBase):
         self.post.refresh_from_db()
         self.assertFalse(self.post.removed)
 
-    # TODO: Test posts correctly marked as removed by the author
-
-    # TODO: Test removed posts do not display any author information
 
 class MarkdownifyTests(PostTestBase):
 

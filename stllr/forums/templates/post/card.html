@@ -79,7 +79,7 @@
             </div>
 
             <!-- Content -->
-            <div class="post-content mt-1 {% if post.author.id in muted_user_ids %}d-none{% endif %}">
+            <div class="post-content my-3 {% if post.author.id in muted_user_ids %}d-none{% endif %}">
                 {% if post.removed %}
                     <p class="text-secondary fst-italic small">This post was removed by {{ post.get_removed_by_display }}.</p>
                 {% else %}
@@ -91,20 +91,19 @@
             </div>
 
             <!-- Action buttons -->
-            <div class="d-flex align-items-center mt-2" style="gap: 2rem;">
+            <div class="d-flex align-items-center" style="gap: 2rem;">
 
                 {% include "star/button.html" with obj=post %}
 
                 <button class="btn btn-link p-0 text-secondary d-flex align-items-center gap-1"
                     type="button"
                     data-bs-toggle="collapse"
-                    data-bs-target="#children{{ post.id }}"
+                    data-bs-target="#collapseChildren{{ post.id }}"
                     aria-expanded="false">
                     <i class="bi bi-diagram-3-fill"></i>
                     <span class="descendant-count" style="font-size: 0.8rem;">{{ post.descendant_count }}</span>
                 </button>
 
-                {% if not standalone %}
                 <button class="btn btn-link p-0 text-secondary"
                     style="font-size: 0.8rem;"
                     type="button"
@@ -113,25 +112,23 @@
                     aria-expanded="false">
                     Reply
                 </button>
-                {% endif %}
 
             </div>
 
-            {% if not standalone %}
+            <!-- Reply form -->
+            <div id="replyForm{{ post.id }}" class="collapse" data-reply-username="{{ post.author.username }}">
+                {% include "post/form.html" with page=post.page parent=post %}
+            </div>
 
-                <!-- Reply form -->
-                <div id="replyForm{{ post.id }}" class="collapse" data-reply-username="{{ post.author.username }}">
-                    {% include "post/form.html" with page=post.page parent=post %}
-                </div>
+            <!-- Displayed children -->
+            <div class="display-children">{{ display_children }}</div>
 
-                <!-- Children -->
-                <div id="children{{ post.id }}" class="collapse {% if expanded %}show{% endif %}">
-                    {% if post.descendant_count %}
-                        {% include "post/feed.html" with parent_id=post.id page=post.page %}
-                    {% endif %}
-                </div>
-
-            {% endif %}
+            <!-- Collapsed children -->
+            <div id="collapseChildren{{ post.id }}" class="collapse {% if expanded %}show{% endif %}">
+                {% if post.descendant_count %}
+                    {% include "post/feed.html" with parent_id=post.id page=post.page %}
+                {% endif %}
+            </div>
 
         </div>
     </div>

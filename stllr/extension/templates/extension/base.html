@@ -5,6 +5,7 @@
 
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/forums.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rooms.css' %}">
 
     <div class="sticky-top glass m-0 p-0">
 
@@ -15,7 +16,7 @@
         </div>
 
         <div class="p-3 pb-0">
-            {% include "page/card.html" with compact=True standalone=True %}
+            {% include "page/card.html" with compact=True %}
         </div>
 
         <nav id="extensionNavbar" class="navbar navbar-expand navbar-dark m-0 p-3" style="overflow-x: auto; scrollbar-width: none;">
