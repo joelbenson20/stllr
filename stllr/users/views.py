@@ -45,7 +45,6 @@ def profile_posts(request, username): #TODO: Posts need to display the page they
 
 def profile_stars(request, username):
     user, context = _profile_base_context(request, username)
-    context['starred_pages'] = user.pages_starred.select_related('domain').order_by('-stars__created')
     context['active_tab'] = 'stars'
     return render(request, 'profile/detail.html', context)
 

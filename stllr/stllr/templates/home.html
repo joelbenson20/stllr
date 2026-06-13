@@ -4,9 +4,7 @@
 
 {% block content %}
 
-        <div id="pageFeed">
-            <div id="pageFeeder" data-url="{% url 'pages:feed' %}"><div class="feeder-dot"></div></div>
-        </div>
+    {% include "page/feed.html" %}
 
 {% endblock content %}
 

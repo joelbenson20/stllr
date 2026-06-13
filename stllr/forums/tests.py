@@ -82,8 +82,6 @@ class RemovePostTests(PostTestBase):
         self.post.refresh_from_db()
         self.assertFalse(self.post.removed)
 
-    #TODO: Consider implementing 'moderator' permission that allows user to remove posts
-
     def test_unauthenticated_user_is_redirected(self):
         response = self.client.post(reverse('forums:remove_post', args=[self.post.id]))
         self.assertEqual(response.status_code, 302)

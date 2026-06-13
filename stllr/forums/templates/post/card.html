@@ -5,8 +5,7 @@
 <div id="post{{ post.id }}"
     class="post py-3"
     data-author-id="{{ post.author.id }}"
-    data-post-url="{{ post.get_absolute_url }}"
-    style="border-bottom: var(--border-grid); cursor: pointer;">
+    style="border-bottom: var(--border-grid);">
 
     <div class="d-flex gap-3">
 
@@ -102,7 +101,7 @@
                     data-bs-target="#children{{ post.id }}"
                     aria-expanded="false">
                     <i class="bi bi-diagram-3-fill"></i>
-                    <span class="children-count" style="font-size: 0.8rem;">{{ post.children.count }}</span>
+                    <span class="descendant-count" style="font-size: 0.8rem;">{{ post.descendant_count }}</span>
                 </button>
 
                 <button class="btn btn-link p-0 text-secondary"

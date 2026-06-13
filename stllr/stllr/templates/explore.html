@@ -17,7 +17,8 @@
 
     <div class="d-flex align-items-center gap-2">
         <div class="dropdown">
-            <button class="btn btn-sm btn-outline-light dropdown-toggle" id="sortMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i>sort:</i>
+            <button class="btn btn-sm btn-dark dropdown-toggle ms-2" id="sortMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ sort|capfirst }}
             </button>
             <div class="dropdown-menu" aria-labelledby="sortMenuButton">
@@ -26,15 +27,9 @@
                 <a class="dropdown-item" href="{% url 'explore' %}?{% if query %}query={{ query }}&{% endif %}sort=rising">Rising</a>
             </div>
         </div>
-        {% if query %}
-            <span class="text-secondary"><i class="bi bi-search"></i> {{ query }}</span>
-        {% endif %}
     </div>
 
-    <div class="mt-5" id="pageFeed">
-        <div id="pageFeeder" data-url="{% url 'pages:feed' %}"><div class="feeder-dot"></div></div>
-    </div>
-
+    {% include "page/feed.html" with query=query sort=sort %}
 
 {% endblock content %}
 

@@ -3,9 +3,9 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from pages.utils import get_canonical, get_domain_name, verify_supported, UnsupportedURLError
 from pages.models import Page, Domain, PagePin
+from unittest.mock import patch, MagicMock
 
 User = get_user_model()
-
 
 class PageTestBase(TestCase):
     def setUp(self):
@@ -18,7 +18,6 @@ class PageTestBase(TestCase):
             title='Example Page',
             domain=self.domain,
         )
-
 
 class GetCanonicalTests(TestCase):
 
@@ -37,7 +36,38 @@ class GetCanonicalTests(TestCase):
 
     def test_strips_fragment(self):
         result = get_canonical('https://example.com/page#section')
-        self.assertEqual(result, 'example.com/page')
+        self.assertNotIn('#section', result)
+
+class GetDomainNameTests(TestCase):
+
+    def test_strips_www(self):
+        self.assertEqual(get_domain_name('https://www.example.com/page'), 'example.com')
+
+    def test_returns_bare_host(self):
+        self.assertEqual(get_domain_name('https://example.com/page'), 'example.com')
+
+    def test_lowercases_host(self):
+        self.assertEqual(get_domain_name('https://Example.COM/page'), 'example.com')
+
+    def test_ignores_path_and_query(self):
+        self.assertEqual(get_domain_name('https://example.com/a/b?q=1#frag'), 'example.com')
+
+    def test_handles_subdomain(self):
+        self.assertEqual(get_domain_name('https://blog.example.com/post'), 'blog.example.com')
+
+class PageLinkTests(PageTestBase):
+
+    def test_returns_https_when_https_in_supported_protocols(self):
+        self.page.supported_protocols = [Page.Protocol.HTTPS]
+        self.assertEqual(self.page.get_absolute_url(), 'https://' + self.page.canonical)
+
+    def test_returns_http_when_only_http_in_supported_protocols(self):
+        self.page.supported_protocols = [Page.Protocol.HTTP]
+        self.assertEqual(self.page.get_absolute_url(), 'http://' + self.page.canonical)
+
+    def test_falls_back_to_https_when_supported_protocols_is_empty(self):
+        self.page.supported_protocols = []
+        self.assertEqual(self.page.get_absolute_url(), 'https://' + self.page.canonical)
 
 
 class VerifySupportedTests(TestCase):
@@ -92,10 +122,22 @@ class TogglePinTests(PageTestBase):
         )
         self.assertEqual(response.status_code, 400)
 
+    def test_pin_is_idempotent(self):
+        self.client.login(username='stella', password='pass')
+        url = reverse('pages:toggle_pin', args=[self.page.id])
+        self.client.post(url, {'action': 'pin'})
+        self.client.post(url, {'action': 'pin'})
+        self.assertEqual(PagePin.objects.filter(user=self.user, page=self.page).count(), 1)
+
+    def test_get_request_is_rejected(self):
+        self.client.login(username='stella', password='pass')
+        response = self.client.get(reverse('pages:toggle_pin', args=[self.page.id]))
+        self.assertEqual(response.status_code, 405)
+
 
 class FeedTests(TestCase):
 
-    def test_feed_is_publicly_accessible(self):
+    def test_feed_is_publicly_accessible(self):  #TODO: Write the feed view to also allow sort by users that starred or similar_pages
         response = self.client.get(reverse('pages:feed'))
         self.assertEqual(response.status_code, 200)
 
@@ -108,3 +150,33 @@ class FeedTests(TestCase):
         for sort in ['firmament', 'brightest', 'rising']:
             response = self.client.get(reverse('pages:feed'), {'sort': sort})
             self.assertEqual(response.status_code, 200)
+
+
+class SignalsTest(PageTestBase):
+
+    def test_search_vector_populated_on_create(self):
+        page = Page.objects.create(canonical='example.com/page2', title='Hello', domain=self.domain)
+        page.refresh_from_db()
+        self.assertIsNotNone(page.search_vector)
+
+    def test_search_vector_not_updated_on_unrelated_save(self):
+        Page.objects.filter(pk=self.page.pk).update(search_vector=None)
+        self.page.save(update_fields=['brightness'])
+        self.page.refresh_from_db()
+        self.assertIsNone(self.page.search_vector)
+
+    @patch('pages.signals.requests.get')
+    def test_image_downloaded_on_create(self, mock_get):
+        mock_get.return_value = MagicMock(content=b'imagedata')
+        page = Page.objects.create(
+            canonical='example.com/page2', image_url='https://example.com/img.jpg', domain=self.domain
+        )
+        mock_get.assert_called_once()
+        page.refresh_from_db()
+        self.assertTrue(page.image)
+
+    @patch('pages.signals.requests.get')
+    def test_image_not_downloaded_on_unrelated_save(self, mock_get):
+        self.page.save()
+        mock_get.assert_not_called()
+

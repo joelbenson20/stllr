@@ -53,3 +53,4 @@ class Mute(models.Model):
     class Meta:
         unique_together = ('muter', 'muted')
 
+#TODO: Fix error: 'User' object has no attribute 'pages_starred'

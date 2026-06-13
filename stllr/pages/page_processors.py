@@ -1,10 +1,10 @@
 import requests
 from urllib.parse import urlparse, parse_qs
 
-YOUTUBE_OEMBED_URL = 'https://www.youtube.com/oembed'
-
 
 def youtube_processor(url, data):
+
+    YOUTUBE_OEMBED_URL = 'https://www.youtube.com/oembed'
 
     parsed = urlparse(url)
 

@@ -102,9 +102,8 @@ def extension(request):
         html = render_to_string('extension/forum.html', context=context, request=request)
     elif (tab == 'room'):
         html = render_to_string('extension/room.html', context=context, request=request)
-    elif (tab == 'similar'):
-        context['similar_pages'] = page.get_similar_pages()
-        html = render_to_string('extension/similar.html', context=context, request=request)
+    elif (tab == 'nearby'):
+        html = render_to_string('extension/nearby.html', context=context, request=request)
 
     return JsonResponse({
         'status': 200,

@@ -183,8 +183,8 @@ h1 a:hover {
     border-radius: 1px;
 }
 
-/* Page feeder */
-#pageFeeder {
+/* Page feed */
+.page-feeder {
     display: flex;
     justify-content: center;
     padding: 2.5rem 0;

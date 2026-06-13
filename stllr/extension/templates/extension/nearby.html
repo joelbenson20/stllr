@@ -1,5 +1,5 @@
 {% extends "extension/base.html" %}
 
 {% block content %}
-    {% include "page/list.html" with pages=similar_pages %}
+    {% include "page/feed.html" with near_to=page.id %}
 {% endblock content %}

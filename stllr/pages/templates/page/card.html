@@ -1,10 +1,10 @@
 {% load thumbnail %}
-{% load math_extras %}
+
+{# TODO: Make page cards look distinct from post cards, back to article-based style #}
 
 <div id="page{{ page.id }}"
     class="page {% if standalone %}pb-3{% else %}py-3{% endif %}"
-    style="border-bottom: var(--border-grid); cursor: pointer;"
-    data-forum-url="{% url 'forums:forum' page.id %}">
+    style="border-bottom: var(--border-grid);">
 
     <div class="d-flex gap-3">
 
@@ -30,8 +30,8 @@
                         {% if "https" not in page.supported_protocols and "http" in page.supported_protocols %}
                             <span class="text-warning text-nowrap flex-shrink-0" style="font-size: 0.8rem;">[ Not Secure ]</span>
                         {% endif %}
-                        <a class="text-secondary text-truncate text-decoration-none" href="{{ page.link }}" style="font-size: 0.8rem;">
-                            {{ page.link }}
+                        <a class="text-secondary text-truncate text-decoration-none" href="{{ page.get_absolute_url }}" style="font-size: 0.8rem;">
+                            {{ page.get_absolute_url }}
                         </a>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
 
             <!-- Title -->
             <div class="mt-1">
-                <a class="text-decoration-none d-block" href="{{ page.link }}" style="color: var(--white-hot); font-size: 1.25rem; font-weight: 600; line-height: 1.3;">
+                <a class="text-decoration-none d-block" href="{{ page.get_absolute_url }}" style="color: var(--white-hot); font-size: 1.25rem; font-weight: 600; line-height: 1.3;">
                     {% if compact %}
                         <div class="overflow-hidden w-100">
                             <div class="ticker-track d-inline-flex flex-nowrap">
@@ -106,7 +106,7 @@
                 {% if page.image %}
                     {% thumbnail page.image 600x315 crop="center" as og_image %}{% if og_image %}
                         <div class="mt-2">
-                            <a href="{{ page.link }}">
+                            <a href="{{ page.get_absolute_url }}">
                                 <img class="rounded-3 w-100"
                                     src="{{ og_image.url }}"
                                     style="max-height: 315px; object-fit: cover; display: block;">

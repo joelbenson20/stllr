@@ -2,12 +2,36 @@ import numpy as np
 from django.db import models
 from django.conf import settings
 from django.db.models import Case, When, IntegerField
+from django.core.cache import cache
 from django.db.models.expressions import RawSQL
 from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.contenttypes.fields import GenericRelation
 
+class Domain(models.Model):
+
+    CATEGORIES = [
+        ('article', 'Article'),
+        ('news', 'News'),
+        ('video', 'Video'),
+        ('television', 'TV'),
+        ('music', 'Music'),
+        ('social', 'Social'),
+        ('shopping', 'Shopping'),
+        ('reference', 'Reference'),
+        ('app', 'App'),
+    ]
+
+    name = models.CharField(unique=True, max_length=100)
+    site_name = models.CharField(max_length=100, blank=True)
+    category = models.CharField(max_length=20, choices=CATEGORIES, blank=True)
+    fav_icon_url = models.URLField(max_length=250, blank=True)
+    fav_icon = models.ImageField(max_length=255, upload_to='images/domains', blank=True)
+    fav_icon_bg_light = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.site_name or self.name
 
 class Page(models.Model):
         
@@ -59,8 +83,7 @@ class Page(models.Model):
     def __str__(self):
         return self.canonical
     
-    @property
-    def link(self):
+    def get_absolute_url(self):
         if self.Protocol.HTTPS in self.supported_protocols:
             return self.Protocol.HTTPS + '://' + self.canonical
         if self.Protocol.HTTP in self.supported_protocols:
@@ -69,10 +92,9 @@ class Page(models.Model):
 
     @property
     def room_count(self):
-        from django.core.cache import cache
         return len(cache.get(f'presence:room_{self.pk}') or {})
 
-    def get_similar_pages(self, limit=10):
+    def get_nearby_pages(self):
         if not self.search_vector:
             return Page.objects.none()
         # Fetch only lexemes that are safe tsquery atoms — URL fragments and
@@ -97,7 +119,7 @@ class Page(models.Model):
                 )
             )
             .filter(score__gt=0)
-            .order_by('-score')[:limit]
+            .order_by('-score', 'pk')
         )
     
     
@@ -108,28 +130,3 @@ class PagePin(models.Model):
 
     class Meta:
         unique_together = ('user', 'page')
-
-
-class Domain(models.Model):
-
-    CATEGORIES = [
-        ('article', 'Article'),
-        ('news', 'News'),
-        ('video', 'Video'),
-        ('television', 'TV'),
-        ('music', 'Music'),
-        ('social', 'Social'),
-        ('shopping', 'Shopping'),
-        ('reference', 'Reference'),
-        ('app', 'App'),
-    ]
-
-    name = models.CharField(unique=True, max_length=100)
-    site_name = models.CharField(max_length=100, blank=True)
-    category = models.CharField(max_length=20, choices=CATEGORIES, blank=True)
-    fav_icon_url = models.URLField(max_length=250, blank=True)
-    fav_icon = models.ImageField(max_length=255, upload_to='images/domains', blank=True)
-    fav_icon_bg_light = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.site_name or self.name

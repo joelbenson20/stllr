@@ -1,6 +1,8 @@
 import logging
 from datetime import timedelta
 from celery import shared_task
+from django.db.models.expressions import Window
+from django.db.models.functions import RowNumber
 from django.utils import timezone
 
 logger = logging.getLogger(__name__)
@@ -22,8 +24,7 @@ def delete_old_stars():
     from .models import Star
 
     cutoff = timezone.now() - STAR_LIFE
-    for star in Star.objects.filter(created__lt=cutoff):
-        star.delete()
+    Star.objects.filter(created__lt=cutoff).delete()
 
 
 @shared_task(name="stars.update_brightnesses")
@@ -46,3 +47,21 @@ def update_brightnesses():
     Post.objects.bulk_update(posts, ['brightness'])
 
     return {'pages': len(pages), 'posts': len(posts)}
+
+
+@shared_task(name="stars.update_brightness_index")
+def update_brightness_index():
+    from pages.models import Page
+    from django.db.models import OrderBy
+    from django.db.models.expressions import RawSQL
+
+    pages = Page.objects.annotate(
+        new_brightness_index=Window(expression=RowNumber(), order_by=['-brightness', OrderBy(RawSQL('RANDOM()', []))])
+    )
+    pages = list(pages)
+
+    for page in pages:
+        page.rise = page.brightness_index - page.new_brightness_index
+        page.brightness_index = page.new_brightness_index
+
+    Page.objects.bulk_update(pages, ['rise', 'brightness_index'])

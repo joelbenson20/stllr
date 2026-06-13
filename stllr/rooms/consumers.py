@@ -23,7 +23,7 @@ def _set_users(room_name, users):
 @database_sync_to_async
 def get_user_from_ticket(ticket):
     from django.contrib.auth import get_user_model
-    from django.contrib.auth.models import AnonymousUser
+    from django.contrib.auth.models import AnonymousUser #TODO: Confirm expired tickets are actively rejected, not just ignored
     from django.core.cache import cache
     user_id = cache.get(f'ws_ticket:{ticket}')
     if not user_id:

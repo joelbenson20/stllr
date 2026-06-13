@@ -114,13 +114,7 @@
         {% endif %}
 
     {% elif active_tab == 'stars' %}
-        {% if starred_pages %}
-            {% for page in starred_pages %}
-                {% include "page/card.html" %}
-            {% endfor %}
-        {% else %}
-            <p class="text-secondary">No starred pages yet.</p>
-        {% endif %}
+        {% include "page/feed.html" with starred_by=profile.user.username %}
     {% endif %}
 
 {% endblock content %}

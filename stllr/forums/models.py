@@ -71,6 +71,18 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('forums:post_detail', args=[self.pk])
 
+    def get_descendants(self):
+        ids = []
+        frontier = list(self.children.values_list('id', flat=True))
+        while frontier:
+            ids.extend(frontier)
+            frontier = list(Post.objects.filter(parent_id__in=frontier).values_list('id', flat=True))
+        return Post.objects.filter(id__in=ids)
+
+    @property
+    def descendant_count(self):
+        return self.get_descendants().count()
+
     def __str__(self):
         return f'{self.author}: {self.content}'
     
