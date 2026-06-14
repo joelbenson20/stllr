@@ -23,9 +23,9 @@
 
         <nav id="extensionNavbar" class="navbar navbar-expand navbar-dark m-0 p-3" style="overflow-x: auto; scrollbar-width: none;">
             <ul class="navbar-nav d-flex align-items-center flex-nowrap">
-                <li class="nav-item">
+                {% comment %} <li class="nav-item">
                     <a id="frameTab" class="nav-link text-light px-4 {% if tab == "frame" %}border-bottom{% endif %}" role="button">Frame</a>
-                </li>
+                </li> {% endcomment %}
                 <li class="nav-item">
                     <a id="forumTab" class="nav-link text-light px-4 {% if tab == "forum" %}border-bottom{% endif %}" role="button">Forum</a>
                 </li>
@@ -37,6 +37,15 @@
                 </li>
             </ul>
         </nav>
+    </div>
+
+    <div id="alertContainer" class="m-0 p-0">
+        {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show m-3 p-4" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
     </div>
 
     <div class="container-fluid p-3 flex-grow-1 {% block content_wrapper_class %}overflow-y-auto{% endblock %}">

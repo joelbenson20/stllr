@@ -11,6 +11,10 @@ class PostForm(forms.ModelForm):
         required=False,
     )
 
+    content = forms.CharField(
+        error_messages={'required': 'Post content cannot be empty.'}
+    )
+
     def clean_content(self):
         content = self.cleaned_data.get('content', '')
         if not content.strip():

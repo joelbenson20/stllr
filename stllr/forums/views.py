@@ -57,12 +57,16 @@ def create_post(request):
         if new_post.parent:
             new_post.thread_level = new_post.parent.thread_level + 1
             required_mention = f'@{new_post.parent.author.username}'
-            after = new_post.content[len(required_mention):]
-            if (not new_post.content.startswith(required_mention)
-                    or not after or not after[0].isspace()
-                    or not after.strip()):
+            raw_content = request.POST.get('content', '')
+            after = raw_content[len(required_mention):]
+            if not raw_content.startswith(required_mention) or not after or not after[0].isspace():
                 return JsonResponse(
-                    {'status': 400, 'errors': {'content': [f'Reply must start with {required_mention}.']}},
+                    {'status': 400, 'errors': {'content': [f'Reply must start with {required_mention} mention.']}},
+                    status=400
+                )
+            if not after.strip():
+                return JsonResponse(
+                    {'status': 400, 'errors': {'content': [f'Reply content cannot be empty.']}},
                     status=400
                 )
         new_post.save()
