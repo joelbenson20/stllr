@@ -1,0 +1,23 @@
+.page a:not(.btn-link):hover {
+    text-decoration: underline !important;
+}
+
+.bi-globe {
+    font-size: 32px;
+}
+
+.page {
+    border-radius: 0;
+    margin: 0;
+}
+
+.ticker-track {
+    animation: ticker-scroll 12s linear infinite;
+}
+.ticker-track > span {  /* TODO: 2.1 Javascript so ticker only runs when title is too long */
+    padding-right: 6rem;
+}
+@keyframes ticker-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}

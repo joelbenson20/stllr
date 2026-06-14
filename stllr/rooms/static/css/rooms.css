@@ -1,3 +1,19 @@
 .broadcast-textarea {
     height: 5.5rem;
+    resize: none;
+}
+
+.spin {
+    animation: spin 2s infinite linear;
+    display: inline-block;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(359deg); }
+}
+
+
+.broadcast-form textarea::placeholder {
+    color: rgba(0, 0, 0, 0.4);
 }

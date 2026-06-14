@@ -2,11 +2,9 @@
     --night-sky: #060d1a;
     --star-light: #a594d0;
     --white-hot: #ede8ff;
-    --border-grid: 1px solid rgba(255, 255, 255, 0.08);
+    --cosmic-grid: rgba(165, 148, 208, 0.20);
 }
 
-/* TODO: Move styles into their respective apps. Too crowded here. */
-/* TODO: Title ticker scroll should only scroll if content overflows */
 [id] { scroll-margin-top: 150px; }
 
 html {
@@ -25,13 +23,10 @@ body {
     -webkit-backdrop-filter: blur(10px);
 }
 
-.search-form {
-    max-width: 576px;
-}
-
 .border-grid {
-    --bs-border-color: rgba(255, 255, 255, 0.08);
+    --bs-border-color: var(--cosmic-grid);
     --bs-border-width: 1px;
+    --bs-offcanvas-border-color: var(--cosmic-grid);
 }
 
 ::-webkit-scrollbar {
@@ -43,7 +38,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(165, 148, 208, 0.33);
+    background: var(--cosmic-grid);
     border: 4px solid transparent;
     background-clip: padding-box;
     border-radius: 9999px;
@@ -52,45 +47,6 @@ body {
 a, a:hover,
 .nav-link, .nav-link:hover {
     color: var(--star-light);
-}
-
-h1:has(a) {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 30px;
-}
-h1 a {
-    color: var(--star-light);
-    font-weight: 300;
-    text-decoration: none;
-}
-h1 a:hover {
-    text-decoration: underline;
-}
-
-.post-even { background-color: color-mix(in srgb, var(--star-light) 7%, var(--night-sky)); }
-.post-odd  { background-color: var(--night-sky); }
-
-.page a:not(.btn-link):hover,
-.post-content a:hover {
-    text-decoration: underline !important;
-}
-
-.post-content a {
-    text-decoration: none;
-}
-
-.bi-globe {
-    font-size: 32px;
-}
-
-.spin {
-    animation: spin 2s infinite linear;
-    display: inline-block;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(359deg); }
 }
 
 .collapse, .collapsing {
@@ -113,6 +69,7 @@ h1 a:hover {
 .btn-link {
     text-decoration: none !important;
 }
+
 .btn-link:hover {
     text-decoration: none !important;
 }
@@ -134,11 +91,6 @@ h1 a:hover {
     --bs-popover-arrow-border: #495057;
 }
 
-.star-button:has(.bi-star-fill) {
-    color: var(--white-hot) !important;
-    text-shadow: 0 0 8px var(--white-hot), 0 0 16px rgba(237, 232, 255, 0.5);
-}
-
 .help-block, .form-text {
     color: rgba(255, 255, 255, 0.5) !important;
 }
@@ -147,58 +99,11 @@ h1 a:hover {
     color: rgba(255, 255, 255, 0.4);
 }
 
-/* Users */
-.profile-avatar { width: 192px; height: 192px; }
-@media (max-width: 576px) {
-    .profile-avatar { width: 96px; height: 96px; }
+.search-form {
+    max-width: 576px;
 }
 
-/* Page cards */
-.page {
-    border-radius: 0;
-    margin: 0;
-}
-
-.ticker-track {
-    animation: ticker-scroll 12s linear infinite;
-}
-.ticker-track > span {  /* TODO: 2.1 Javascript so ticker only runs when title is too long */
-    padding-right: 6rem;
-}
-@keyframes ticker-scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
-
-/* Thread connector line */
-.thread-line-down {
-    position: relative;
-}
-.thread-line-down::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 40px;
-    bottom: 0;
-    width: 2px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 1px;
-}
-
-/* Star fade-in for feed cards */
-@keyframes star-appear {
-    0%   { filter: brightness(4) blur(3px); }
-    100% { filter: brightness(1) blur(0); }
-}
-
-.post {
-    animation: star-appear 0.6s ease-out both;
-}
-
-/* Page and post feeds */
-.page-feeder,
-.post-feeder {
+.feeder {
     display: flex;
     justify-content: center;
     padding: 2.5rem 0;
@@ -216,29 +121,4 @@ h1 a:hover {
     0%   { box-shadow: 0 0 4px 4px rgba(165, 148, 208, 0.2); }
     50%  { box-shadow: 0 0 16px 8px rgba(165, 148, 208, 0.5); }
     100% { box-shadow: 0 0 4px 4px rgba(165, 148, 208, 0.2); }
-}
-
-/* Accordion */
-.accordion-item {
-    background-color: transparent !important;
-    border-color: rgba(255, 255, 255, 0.08);
-    color: white;
-}
-.accordion-button {
-    background-color: transparent !important;
-    color: white !important;
-    box-shadow: none !important;
-}
-.accordion-button::after {
-    filter: invert(1);
-}
-
-/* Rooms */
-.broadcast-textarea {
-    height: 6rem;
-    resize: none;
-}
-
-.broadcast-form textarea::placeholder {
-    color: rgba(0, 0, 0, 0.4);
 }

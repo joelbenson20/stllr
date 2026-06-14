@@ -1,7 +1,7 @@
 {% load page_tags %}
 <div class="page-feed">
 
-    <div class="page-feeder"
+    <div class="feeder page-feeder"
         data-endpoint="{% url 'pages:feed' %}"
         data-sort="{{ sort|default:"firmament" }}"
         data-p="{{ p|default:1 }}"

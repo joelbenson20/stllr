@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="{% static 'libs/bootstrap-icons/font/bootstrap-icons.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/users.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stars.css' %}">
     <link rel="stylesheet" href="{% static 'css/forums.css' %}">
     <link rel="stylesheet" href="{% static 'css/rooms.css' %}">
     {% block css %}
@@ -41,7 +44,7 @@
     <div id="layoutWrapper">
 
         <!-- Left sidebar: offcanvas on mobile, sticky on md+ via CSS -->
-        <div class="offcanvas offcanvas-start left-sidebar border-dark" id="leftNav" tabindex="-1">
+        <div class="offcanvas offcanvas-start left-sidebar border-grid" id="leftNav" tabindex="-1">
             <div class="offcanvas-header offcanvas-dismiss justify-content-end pb-0">
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
@@ -107,7 +110,7 @@
         </div>
 
         <!-- Right panel: offcanvas on mobile and md, sticky on 1040px+ via CSS -->
-        <div class="offcanvas offcanvas-end right-sidebar border-dark" id="rightPanel" tabindex="-1">
+        <div class="offcanvas offcanvas-end right-sidebar border-grid" id="rightPanel" tabindex="-1">
             <div class="offcanvas-header offcanvas-dismiss justify-content-start pb-0">
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>

@@ -1,7 +1,7 @@
 {% load forum_tags %}
 <div class="post-feed">
 
-    <div class="post-feeder"
+    <div class="feeder post-feeder"
         data-endpoint="{% url 'forums:feed' %}"
         data-page-id="{{ page.id }}"
         data-parent-id="{{ parent_id|default:'' }}"

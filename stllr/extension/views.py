@@ -84,7 +84,7 @@ def extension(request):
         )
 
     # Default extension tab is 'forum'
-    tab = request.GET.get('tab', 'forum')
+    tab = request.GET.get('tab', 'frame')
     
     context = {
         'page': page,

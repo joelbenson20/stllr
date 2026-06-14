@@ -16,14 +16,16 @@
         </div>
 
         <div class="p-3 pb-0">
+
             {% include "page/card.html" with compact=True %}
+
         </div>
 
         <nav id="extensionNavbar" class="navbar navbar-expand navbar-dark m-0 p-3" style="overflow-x: auto; scrollbar-width: none;">
             <ul class="navbar-nav d-flex align-items-center flex-nowrap">
-                {% comment %} <li class="nav-item">
+                <li class="nav-item">
                     <a id="frameTab" class="nav-link text-light px-4 {% if tab == "frame" %}border-bottom{% endif %}" role="button">Frame</a>
-                </li> {% endcomment %}
+                </li>
                 <li class="nav-item">
                     <a id="forumTab" class="nav-link text-light px-4 {% if tab == "forum" %}border-bottom{% endif %}" role="button">Forum</a>
                 </li>
