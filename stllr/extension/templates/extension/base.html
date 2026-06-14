@@ -4,10 +4,14 @@
 <div id="extensionBody" class="d-flex flex-column vh-100">
 
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/users.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stars.css' %}">
     <link rel="stylesheet" href="{% static 'css/forums.css' %}">
     <link rel="stylesheet" href="{% static 'css/rooms.css' %}">
 
-    <div class="sticky-top glass m-0 p-0">
+    <div class="sticky-top glass">
 
         <div id="stllr-data" style="display:none"
             data-page-id="{{ page.id }}"
@@ -15,7 +19,7 @@
             data-csrf="{{ csrf_token }}">
         </div>
 
-        <div class="p-3 pb-0">
+        <div class="px-3">
 
             {% include "page/card.html" with compact=True %}
 
@@ -54,7 +58,5 @@
     </div>
 
     {% include "modals/share.html" %}
-
-    {% block scripts %}
-    {% endblock scripts %}
+    {% include "modals/markdown_help.html" %}
 </div>

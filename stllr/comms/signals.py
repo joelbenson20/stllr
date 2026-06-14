@@ -46,7 +46,7 @@ def notify_also_starred(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Post)
 def notify_post_replied(sender, instance, created, **kwargs):
-    if not created or instance.parent is None:
+    if not created or instance.parent is None or instance.author == instance.parent.author:
         return
     notify(
         recipient=instance.parent.author,

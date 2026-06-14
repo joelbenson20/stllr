@@ -122,6 +122,18 @@ class NotificatoinSignalTests(CommsTestBase):
             event=Notification.Event.POST_REPLIED,
         ).exists())
 
+    def test_self_reply_does_not_notify(self):
+        Post.objects.create(
+            author=self.stella,
+            page=self.page,
+            content='A self-reply',
+            parent=self.post,
+        )
+        self.assertFalse(Notification.objects.filter(
+            recipient=self.stella,
+            event=Notification.Event.POST_REPLIED,
+        ).exists())
+
     def test_contact_request_notifies_recipient(self):
         ContactRelation.objects.create(
             from_user=self.stranger,

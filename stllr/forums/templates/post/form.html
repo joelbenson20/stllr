@@ -1,7 +1,4 @@
-{% load markdown_deux_tags %}
-
 <div class="mt-2">
-
 
     {% if user.is_authenticated %}
 
@@ -22,7 +19,9 @@
 
             <div class="d-flex align-items-center">
 
-                <button class="btn btn-transparent btn-light rounded-circle m-1" type="button">
+                <button class="btn btn-transparent btn-light rounded-circle m-1" type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#markdownHelpModal">
                     <i class="bi bi-question-circle"></i>
                 </button>
 
