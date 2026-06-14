@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}crews - stllr{% endblock title %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Crews</h5>
+        <a href="{% url 'crews:create_crew' %}" class="btn btn-primary btn-sm">Start a crew</a>
+    </div>
+
+    {% for crew in crews_list %}
+        {% include "crew/card.html" %}
+    {% empty %}
+        <p class="text-secondary">No crews yet.</p>
+    {% endfor %}
+{% endblock content %}

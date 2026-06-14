@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'stars.apps.StarsConfig',
     'forums.apps.ForumsConfig',
     'rooms.apps.RoomsConfig',
+    'crews.apps.CrewsConfig',
     'comms.apps.CommsConfig',
     'oversight.apps.OversightConfig',
     'extension.apps.ExtensionConfig',

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}@{{ crew.handle }} - stllr{% endblock title %}
+
+{% block css %}
+    <style>
+        .banner-bleed {
+            margin-top: -1rem;
+            margin-left: -1rem;
+            margin-right: -1rem;
+        }
+        @media (min-width: 768px) {
+            .banner-bleed {
+                margin-top: -3rem;
+                margin-left: -3rem;
+                margin-right: -3rem;
+            }
+        }
+    </style>
+    {% if crew.background %}
+    <style>
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url("{{ crew.background.url }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            opacity: 0.05;
+            z-index: -1;
+        }
+    </style>
+    {% endif %}
+{% endblock css %}
+
+{% block content %}
+
+    <div class="position-relative overflow-hidden banner-bleed border-bottom border-grid" style="aspect-ratio: 16/9;">
+        {% if crew.background %}
+            {% thumbnail crew.background "1200x675" crop="center" as banner %}
+            <img class="object-fit-cover w-100 h-100" src="{{ banner.url }}">
+        {% endif %}
+    </div>
+
+    <div class="d-flex align-items-center justify-content-center my-3 gap-3">
+        <div class="text-center">
+            <h1 class="mb-0">{{ crew.name }}</h1>
+            <p class="text-secondary mb-0">@{{ crew.handle }}</p>
+            {% if crew.bio %}<p class="mt-2 mb-0">{{ crew.bio }}</p>{% endif %}
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 mb-4 text-secondary small">
+        <span>{{ members.count }} member{{ members.count|pluralize }}</span>
+        <span>{{ crew.created|date:"N j, Y" }}</span>
+    </div>
+
+    {% if request.user.is_authenticated %}
+        <div class="d-flex justify-content-center mb-4">
+            {% if membership %}
+                {% if membership.status == 'accepted' %}
+                    <span class="badge bg-secondary">Member</span>
+                {% elif membership.status == 'invited' %}
+                    <span class="badge bg-primary">Invited</span>
+                {% elif membership.status == 'requested' %}
+                    <span class="badge bg-secondary">Request pending</span>
+                {% endif %}
+            {% else %}
+                {% if crew.is_open %}
+                    <button class="btn btn-primary btn-sm">Join</button>
+                {% else %}
+                    <button class="btn btn-outline-secondary btn-sm">Request to join</button>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <h6 class="text-secondary text-uppercase small mb-3">Members</h6>
+    {% for m in members %}
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <a href="{{ m.user.profile.get_absolute_url }}" class="text-decoration-none">@{{ m.user.username }}</a>
+            {% if m.role == 'owner' %}
+                <span class="badge bg-secondary">Owner</span>
+            {% elif m.role == 'admin' %}
+                <span class="badge bg-secondary">Admin</span>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p class="text-secondary">No members yet.</p>
+    {% endfor %}
+
+{% endblock content %}
+
+{% block right %}
+    {% if request.user.pk in crew.admin_pks %}
+        {% include "crew/tabs.html" %}
+    {% else %}
+        {% include "contact/list.html" %}
+    {% endif %}
+{% endblock right %}

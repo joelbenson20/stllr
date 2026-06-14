@@ -1,4 +1,5 @@
 {% load thumbnail %}
+{% if page.image %}{% thumbnail page.image "600x315" crop="center" as thumbnail_image %}{% endif %}
 
 {# TODO: Page cards squished on the extension have title + description overflowing above the top of the thumbnail #}
 
@@ -43,12 +44,11 @@
                         </div>
                     </a>
                 </div>
-            {% elif page.image %}
-                {% thumbnail page.image 600x315 crop="center" as og_image %}{% if og_image %}
+            {% elif thumbnail_image %}
                     <div class="mt-2 position-relative">
                         <a href="{{ page.get_absolute_url }}">
                             <img class="rounded-3 w-100"
-                                src="{{ og_image.url }}"
+                                src="{{ thumbnail_image.url }}"
                                 style="max-height: 315px; object-fit: cover; display: block;">
                         </a>
                         <div class="position-absolute bottom-0 start-0 end-0 p-3 rounded-bottom-3" style="background: linear-gradient(rgba(6, 13, 26, 0.6) 0%, rgba(6, 13, 26, 0.8) 40%, rgba(6, 13, 26, 0.95) 75%, rgba(6, 13, 26, 1) 100%);">
@@ -62,7 +62,6 @@
                             {% endif %}
                         </div>
                     </div>
-                {% endif %}
             {% else %}
                 <div class="mt-1">
                     <a class="text-decoration-none d-block" href="{{ page.get_absolute_url }}" style="color: var(--white-hot); font-size: 1.25rem; font-weight: 600; line-height: 1.3;">

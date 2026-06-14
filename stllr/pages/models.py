@@ -39,7 +39,7 @@ class Page(models.Model):
         HTTP = 'http', 'http://'
         HTTPS = 'https', 'https://'
 
-    canonical = models.CharField(max_length=250, unique=True)   # TODO: Canonical -> Path, does not need to be unique, but must be unique in conjunction with domain
+    canonical = models.CharField(max_length=500, unique=True)   # TODO: Canonical -> Path, does not need to be unique, but must be unique in conjunction with domain
     supported_protocols = ArrayField(
         models.CharField(max_length=10, choices=Protocol.choices),
         default=list,
@@ -47,7 +47,7 @@ class Page(models.Model):
     )
     title = models.CharField(max_length=500)
     description = models.TextField(max_length=500, blank=True)
-    image_url = models.URLField(max_length=250, blank=True)
+    image_url = models.URLField(max_length=2000, blank=True)
     image = models.ImageField(max_length=255, upload_to='images/pages', blank=True)
     domain = models.ForeignKey('Domain', related_name='pages', on_delete=models.CASCADE)
     

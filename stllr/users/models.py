@@ -6,6 +6,13 @@ from django.db.models import Q
 
 class User(AbstractUser):
 
+    @property
+    def handle(self):
+        return self.username
+
+    def __str__(self):
+        return f'@{self.username}'
+
     def get_full_name(self):
         return super().get_full_name()
 
@@ -21,6 +28,7 @@ class Profile(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
+    bio = models.CharField(max_length=300, blank=True)
     background = models.ImageField(
         upload_to='users/%Y/%m/%d/',
         blank=True
@@ -30,7 +38,7 @@ class Profile(models.Model):
         return reverse("users:profile", kwargs={"username": self.user.username})
     
     def __str__(self):
-        return f'Profile of {self.user.username}'
+        return f'@{self.user.username}: {self.bio}'
     
 class ContactRelation(models.Model):
     class Status(models.TextChoices):

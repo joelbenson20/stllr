@@ -62,10 +62,21 @@ def extension(request):
     try:
         page = Page.objects.get(canonical=canonical)
 
-        # If new protocol, add to page's supported protocol
+        update_fields = []
         if protocol and protocol not in page.supported_protocols:
             page.supported_protocols.append(protocol)
-            page.save(update_fields=['supported_protocols'])
+            update_fields.append('supported_protocols')
+        if not page.title and data.get('title'):
+            page.title = data.get('title')
+            update_fields.append('title')
+        if not page.description and data.get('description'):
+            page.description = data.get('description')
+            update_fields.append('description')
+        if not page.image_url and data.get('imageUrl'):
+            page.image_url = data.get('imageUrl')
+            update_fields.append('image_url')
+        if update_fields:
+            page.save(update_fields=update_fields)
     except Page.DoesNotExist:
 
         # Process data for specific domains 
