@@ -10,7 +10,7 @@
 
         <!-- Avatar column -->
         <a class="flex-shrink-0 pt-1{% if threaded %} thread-line-down{% endif %}" href="{{ post.author.profile.get_absolute_url }}">
-            {% include "user/profile-picture.html" with user=post.author size="32" dimensions="32x32" %}
+            {% include "user/avatar.html" with user=post.author size="32" dimensions="32x32" %}
         </a>
 
         <!-- Content column -->

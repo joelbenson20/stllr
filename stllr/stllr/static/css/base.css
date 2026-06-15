@@ -3,6 +3,7 @@
     --star-light: #a594d0;
     --white-hot: #ede8ff;
     --cosmic-grid: rgba(165, 148, 208, 0.20);
+    --glass-dark: rgba(6, 13, 26, 0.70);
 }
 
 [id] { scroll-margin-top: 150px; }
@@ -18,9 +19,19 @@ body {
 }
 
 .glass {
-    background: none !important;
+    background: var(--glass-dark);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+}
+
+.btn-glass {
+    background: rgba(165, 148, 208, 0.20);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.btn-glass:hover {
+    background: rgba(165, 148, 208, 0.35);
 }
 
 .border-grid {

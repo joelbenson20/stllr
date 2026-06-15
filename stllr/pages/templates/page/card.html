@@ -31,7 +31,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <!-- Title, description, image -->
             {% if compact %}
                 <div class="mt-1">
@@ -47,7 +47,7 @@
             {% elif thumbnail_image %}
                 <div class="thumbnail rounded-card position-relative mt-2">
                     <img class="w-100" src="{{ thumbnail_image.url }}">
-                    <div class="thumbnail-info border border-grid position-absolute bottom-0 start-0 end-0 p-3 rounded-card">
+                    <div class="thumbnail-info glass border border-grid position-absolute bottom-0 start-0 end-0 p-3 rounded-card">
                         <span class="page-title d-block">{{ page.title|truncatechars:90 }}</span>
                         {% if page.description %}
                             <p class="page-description mt-1 mb-0">

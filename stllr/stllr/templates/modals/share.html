@@ -15,7 +15,7 @@
                             <button class="share-contact-btn btn btn-outline-secondary text-start d-flex align-items-center gap-2 w-100"
                                 data-contact-id="{{ contact.id }}"
                                 data-username="{{ contact.username }}">
-                                {% include "user/profile-picture.html" with user=contact size="32" dimensions="32x32" %}
+                                {% include "user/avatar.html" with user=contact size="32" dimensions="32x32" %}
                                 <span>@{{ contact.username }}</span>
                                 <span class="share-btn-status ms-auto"></span>
                             </button>

@@ -10,11 +10,11 @@
     width: 100%;
 }
 
-.thumbnail-info {
+/* .thumbnail-info {
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     background: rgba(6, 13, 26, 0.55);
-}
+} */
 
 .page-title {
     color: var(--white-hot);
