@@ -3,6 +3,7 @@ import { initForums } from './forums.js';
 import { initRoom } from './rooms.js';
 import { initModals } from './modals.js';
 import { initStars } from './stars.js';
+import './contacts.js';
 
 const STLLR_URL = '/';
 

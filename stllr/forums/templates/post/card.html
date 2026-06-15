@@ -1,5 +1,4 @@
 {% load static %}
-{% load humanize %}
 {% load forum_tags %}
 
 <div id="post{{ post.id }}"
@@ -23,8 +22,7 @@
                     @{{ post.author.username }}
                 </a>
                 <span>·</span>
-                {% comment %} TODO: Get better time humanizer that only says: num seconds, minutes, hours, days, months, or years  {% endcomment %}
-                <span class="text-light text-truncate" style="font-size: 0.85rem;">{{ post.created|naturaltime }}</span>
+                <span class="text-light text-truncate" style="font-size: 0.85rem;">{{ post.created|time_since }}</span>
             </div>
 
             <!-- Content -->
@@ -44,7 +42,7 @@
 
                 {% include "star/button.html" with obj=post %}
 
-                <button class="d-flex align-items-center btn btn-glass border border-grid rounded-pill gap-1"
+                <button class="d-flex align-items-center btn btn-glass rounded-pill gap-1"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#collapseChildren{{ post.id }}"
@@ -57,7 +55,7 @@
                 {% if not post.removed %}
                 <div class="dropend">
                     <button id="post{{ post.id }}Dropdown"
-                        class="dropdown-toggle no-caret btn btn-glass rounded-circle border border-grid text-white flex-shrink-0"
+                        class="dropdown-toggle no-caret btn btn-glass rounded-circle flex-shrink-0"
                         type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false">

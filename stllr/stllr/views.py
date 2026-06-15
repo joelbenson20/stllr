@@ -1,7 +1,9 @@
 import random
-from django.shortcuts import render
-from django.http import Http404
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.http import Http404
+from django.shortcuts import render
 from pages.models import Page
 
 def home(request):
@@ -14,10 +16,6 @@ def explore(request):
         'query': request.GET.get('query', ''),
         'sort': request.GET.get('sort', 'firmament'),
     })
-
-@login_required
-def contacts(request):
-    return render(request, 'contacts.html')
 
 @login_required
 def comms(request):

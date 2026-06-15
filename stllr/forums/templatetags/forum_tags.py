@@ -6,6 +6,7 @@ from django import template
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 register = template.Library()
 
@@ -34,6 +35,28 @@ def _link_mentions(html):
         url = reverse('users:profile', args=[username])
         return f'<a href="{url}">@{username}</a>'
     return _MENTION_RE.sub(replace, html)
+
+@register.filter(name='time_since')
+def time_since(value):
+    now = timezone.now()
+    seconds = int((now - value).total_seconds())
+    if seconds < 60:
+        return f"{seconds} second{'s' if seconds != 1 else ''} ago"
+    minutes = seconds // 60
+    if minutes < 60:
+        return f"{minutes} minute{'s' if minutes != 1 else ''} ago"
+    hours = minutes // 60
+    if hours < 24:
+        return f"{hours} hour{'s' if hours != 1 else ''} ago"
+    days = hours // 24
+    if days < 30:
+        return f"{days} day{'s' if days != 1 else ''} ago"
+    months = days // 30
+    if months < 12:
+        return f"{months} month{'s' if months != 1 else ''} ago"
+    years = days // 365
+    return f"{years} year{'s' if years != 1 else ''} ago"
+
 
 @register.simple_tag
 def random_seed():

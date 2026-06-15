@@ -44,22 +44,18 @@
         <img class="position-absolute bottom-0 start-50 translate-middle-x profile-avatar" src="{% static 'brand/icon.png' %}">
     </div>
 
-    <div class="d-flex align-items-center justify-content-center my-3 gap-3">
-        <h1 class="mb-0">@{{ profile.user.username }}</h1>
-
-        {% if request.user != profile.user %}
-            {% if not contact %}
-                <a href="{% url "users:send_request" profile.user.username %}" class="btn btn-sm btn-light">Add Contact</a>
-            {% elif contact.status == 'pending' and contact.from_user == request.user %}
-                <a href="{% url "users:remove_contact" profile.user.username %}" class="btn btn-sm btn-light">Cancel Request</a>
-            {% elif contact.status == 'pending' %}
-                <a href="{% url "users:accept_request" profile.user.username %}" class="btn btn-sm btn-light">Accept</a>
-                <a href="{% url "users:remove_contact" profile.user.username %}" class="btn btn-warning btn-sm">Decline</a>
-            {% else %}
-                <a href="{% url "users:remove_contact" profile.user.username %}" class="btn btn-sm btn-light">Remove Contact</a>
-            {% endif %}
-        {% endif %}
+    <div class="d-flex justify-content-center my-3">
+        <div class="text-center">
+            <p class="text-secondary mb-0">@{{ profile.user.username }}</p>
+            {% if profile.bio %}<p class="mt-1 mb-0">{{ profile.bio }}</p>{% endif %}
+        </div>
     </div>
+
+    {% if request.user != profile.user %}
+        <div class="d-flex justify-content-center mb-4">
+            {% include "contact/status_button.html" with other=profile.user %}
+        </div>
+    {% endif %}
 
     <nav class="profile-tabs border-bottom border-grid mb-4">
         <ul class="nav">

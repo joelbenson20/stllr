@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}find crews - stllr{% endblock title %}
+
+{% block content %}
+
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <a href="{% url 'crews:crews' %}" class="btn btn-glass rounded-circle d-flex align-items-center justify-content-center" style="width:31px;height:31px;">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <h4 class="fw-bold mb-0">Find Crews</h4>
+    </div>
+
+    <form class="d-flex w-100 mb-4" action="{% url 'crews:find_crews' %}" role="search">
+        <input class="search-bar glow-on-focus form-control form-control-lg rounded-pill border-0"
+            name="q"
+            type="search"
+            placeholder="Search by name or handle"
+            value="{{ q }}"
+            autocomplete="off"
+            autofocus>
+    </form>
+
+    {% if q %}
+        {% if results %}
+            <div class="d-flex flex-column gap-2">
+            {% for crew in results %}
+                {% include "crew/card.html" %}
+            {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-secondary small">No crews found matching "{{ q }}".</p>
+        {% endif %}
+    {% endif %}
+
+{% endblock content %}

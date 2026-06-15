@@ -7,7 +7,7 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('explore/', views.explore, name='explore'),
-    path('contacts/', views.contacts, name='contacts'),  # TODO: Create contacts app?
+    path('contacts/', include('contacts.urls', namespace='contacts')),
     path('comms/', views.comms, name='comms'),  # TODO: Move all these tabs into their respective apps
     path('pins', views.pins, name='pins'),
     path('admin/', admin.site.urls),

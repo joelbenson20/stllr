@@ -27,12 +27,18 @@ def notifications(request):
 
 def contacts(request):
     if request.user.is_authenticated:
+        from contacts.models import ContactRelation
         contacts_list = sorted(
             request.user.get_contacts().select_related('profile'),
             key=lambda u: u.username.lower()
         )
-        return {'contacts_list': contacts_list}
-    return {'contacts_list': []}
+        contact_requests = list(
+            ContactRelation.objects
+            .filter(to_user=request.user, status=ContactRelation.Status.PENDING)
+            .select_related('from_user', 'from_user__profile')
+        )
+        return {'contacts_list': contacts_list, 'contact_requests': contact_requests}
+    return {'contacts_list': [], 'contact_requests': []}
 
 def crews(request):
     if request.user.is_authenticated:

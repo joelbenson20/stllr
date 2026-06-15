@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from forums.models import Post
 from pages.models import Page
 from stars.models import Star
-from users.models import ContactRelation
+from contacts.models import ContactRelation
 from .models import Notification
 from .notifications import notify
 

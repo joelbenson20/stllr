@@ -4,7 +4,7 @@
     data-csrf-token="{{ csrf_token }}">
 
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass border border-grid">
+        <div class="modal-content glass">
             <div class="modal-header border-0">
                 <h5 class="modal-title" id="shareModalLabel">Share page</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -13,7 +13,7 @@
                 {% if contacts_list %}
                     <div class="d-flex flex-column gap-2">
                         {% for contact in contacts_list %}
-                            <button class="share-contact-btn btn btn-glass border border-grid text-start d-flex align-items-center gap-2 w-100"
+                            <button class="share-contact-btn btn btn-glass text-start d-flex align-items-center gap-2 w-100"
                                 data-contact-id="{{ contact.id }}"
                                 data-username="{{ contact.username }}">
                                 {% include "user/avatar.html" with user=contact size="32" dimensions="32x32" %}

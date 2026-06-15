@@ -1,6 +1,6 @@
 
-<a class="btn btn-glass text-start text-light d-flex align-items-center rounded-card
-    border border-grid text-decoration-none w-100 gap-3 py-2 px-2"
+<a class="btn btn-glass rounded-card text-start d-flex align-items-center
+    text-decoration-none w-100 gap-3 py-2 px-2"
     href="{% url 'users:profile' user.username %}" >
     {% include "user/avatar.html" with user=user size="40" dimensions="40x40" %}
     <span class="fw-semibold">@{{ user.username }}</span>

@@ -1,0 +1,71 @@
+{% load static %}
+
+<!-- Left sidebar: offcanvas on mobile, sticky on md+ via CSS -->
+<div class="offcanvas offcanvas-start left-sidebar border-grid" id="leftNav" tabindex="-1">
+    <div class="offcanvas-header offcanvas-dismiss justify-content-end pb-0">
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="d-flex flex-column h-100 p-3">
+
+        <a class="navbar-brand mb-4 d-none d-md-block" href="{% url 'home' %}">
+            <img src="{% static 'brand/stllr.png' %}" width=96>
+        </a>
+
+        <nav class="sidebar-nav flex-grow-1">
+            <a href="{% url 'home' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
+                <i class="bi bi-globe-europe-africa fs-3"></i>
+                <span class="fs-5 fw-semibold">Home</span>
+            </a>
+            <a href="{% url 'explore' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
+                <i class="bi bi-rocket fs-3"></i>
+                <span class="fs-5 fw-semibold">Explore</span>
+            </a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'pins' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
+                    <i class="bi bi-broadcast-pin fs-3"></i>
+                    <span class="fs-5 fw-semibold">Pinned</span>
+                </a>
+                <a href="{% url 'contacts:contacts' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
+                    <i class="bi bi-person fs-3"></i>
+                    <span class="fs-5 fw-semibold">Contacts</span>
+                </a>
+                <a href="{% url 'crews:crews' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
+                    <i class="bi bi-people fs-3"></i>
+                    <span class="fs-5 fw-semibold">Crews</span>
+                </a>
+                <a href="{% url 'comms' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
+                    <i class="bi bi-soundwave fs-3"></i>
+                    <span class="fs-5 fw-semibold">Comms</span>
+                    {% if notifications.unread %}
+                        <span class="badge rounded-pill, bg-danger ms-auto">{{ notifications.unread|length }}</span>
+                    {% endif %}
+                </a>
+            {% endif %}
+        </nav>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'users:profile' user.username %}" class="d-flex align-items-center gap-2 mt-3 p-2 rounded-3 sidebar-link text-decoration-none">
+                {% include "user/avatar.html" with user=user size="36" dimensions="36x36" %}
+                <span class="fw-semibold text-truncate">@{{ user.username }}</span>
+            </a>
+            <form method="post" action="{% url 'account_logout' %}" class="mt-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-light w-100">Sign Out</button>
+            </form>
+        {% else %}
+            <div class="d-flex flex-column gap-2 mt-3">
+                <a class="btn btn-outline-light" href="{% url "account_login" %}?next={{ request.path }}">Sign In</a>
+                <a class="btn btn-light text-dark" href="{% url "account_signup" %}?next={{ request.path }}">Sign Up</a>
+            </div>
+        {% endif %}
+
+        <footer class="mt-3 small text-secondary">
+            <div class="mb-1">
+                <a href="{% url 'policy' 'privacy-policy' %}" class="text-secondary me-3">Privacy Policy</a>
+                <a href="{% url 'policy' 'user-agreement' %}" class="text-secondary">User Agreement</a>
+            </div>
+            <p class="mb-0">stllr &copy; All Rights Reserved.</p>
+        </footer>
+
+    </div>
+</div>

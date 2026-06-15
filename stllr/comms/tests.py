@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from pages.models import Page, Domain
 from forums.models import Post
 from stars.models import Star
-from users.models import ContactRelation
+from contacts.models import ContactRelation
 from comms.models import Notification
 
 User = get_user_model()

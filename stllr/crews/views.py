@@ -10,6 +10,16 @@ def crews(request):
     return render(request, 'crews.html')
 
 
+def find_crews(request):
+    q = request.GET.get('q', '').strip()
+    results = []
+    if q:
+        results = Crew.objects.filter(
+            Q(name__icontains=q) | Q(handle__icontains=q)
+        )[:20]
+    return render(request, 'find_crews.html', {'q': q, 'results': results})
+
+
 @login_required
 def create_crew(request):
     if request.method == 'POST':

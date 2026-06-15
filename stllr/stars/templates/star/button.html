@@ -1,5 +1,7 @@
 {% load star_tags %}
-<button class="star-button d-flex align-items-center gap-1 btn btn-glass border border-grid rounded-pill"
+
+
+<button class="star-button d-flex align-items-center gap-1 btn btn-glass rounded-pill"
     data-action="{% if obj|starred_by:user %}un{% endif %}star"
     data-csrf-token={{ csrf_token }}
     data-endpoint="{% url 'stars:toggle_star' %}"

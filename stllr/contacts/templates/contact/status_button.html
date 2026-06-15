@@ -1,0 +1,35 @@
+
+<div id="contact-btn-{{ other.username }}" class="d-flex gap-2">
+    {% if not contact %}
+        <button type="button" class="btn btn-sm btn-glass contact-action-btn"
+                data-endpoint="{% url 'contacts:send_request' other.username %}"
+                data-csrf-token="{{ csrf_token }}">
+            Add Contact
+        </button>
+    {% elif contact.status == 'pending' and contact.from_user == request.user %}
+        <button type="button" class="btn btn-sm btn-glass contact-action-btn"
+                data-endpoint="{% url 'contacts:remove_contact' other.username %}"
+                data-csrf-token="{{ csrf_token }}">
+            Cancel Request
+        </button>
+    {% elif contact.status == 'pending' %}
+        <button type="button" class="btn btn-sm btn-glass btn-glass-success contact-action-btn"
+                data-endpoint="{% url 'contacts:accept_request' other.username %}"
+                data-csrf-token="{{ csrf_token }}">
+            Accept
+        </button>
+        <button type="button" class="btn btn-sm btn-glass btn-glass-danger contact-action-btn"
+                data-endpoint="{% url 'contacts:remove_contact' other.username %}"
+                data-csrf-token="{{ csrf_token }}">
+            Decline
+        </button>
+    {% else %}
+        <button type="button" class="btn btn-sm btn-glass contact-action-btn"
+                data-endpoint="{% url 'contacts:remove_contact' other.username %}"
+                data-csrf-token="{{ csrf_token }}">
+            Remove Contact
+        </button>
+    {% endif %}
+</div>
+
+{% comment %} TODO: A user can spam another with infinite contact request notifications {% endcomment %}

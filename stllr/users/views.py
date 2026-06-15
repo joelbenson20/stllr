@@ -3,10 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
-from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
-from .models import ContactRelation, Mute
+from .forms import UserEditForm, ProfileEditForm
+from .models import Mute
+from contacts.models import ContactRelation
 
 
 def _profile_base_context(request, username):
@@ -32,6 +32,7 @@ def profile_stars(request, username):
     user, context = _profile_base_context(request, username)
     context['active_tab'] = 'stars'
     return render(request, 'profile/detail.html', context)
+
 
 @login_required
 def edit(request, username):
@@ -59,42 +60,6 @@ def edit(request, username):
 
 
 @login_required
-def send_request(request, username):
-    to_user = get_object_or_404(get_user_model(), username=username)
-    if to_user != request.user:
-        ContactRelation.objects.create(from_user=request.user, to_user=to_user)
-    return redirect('users:profile', username=username)
-
-
-@login_required
-def accept_request(request, username):
-    from_user = get_object_or_404(get_user_model(), username=username)
-    contact = get_object_or_404(
-        ContactRelation, from_user=from_user, to_user=request.user,
-        status=ContactRelation.Status.PENDING
-    )
-    contact.status = ContactRelation.Status.ACCEPTED
-    contact.save()
-    return redirect('users:profile', username=username)
-
-
-@login_required
-def decline_request(request, username):
-    other_user = get_object_or_404(get_user_model(), username=username)
-    ContactRelation.objects.filter(from_user=request.user, to_user=other_user).delete()
-    ContactRelation.objects.filter(from_user=other_user, to_user=request.user).delete()
-    return redirect('users:profile', username=request.user.username)
-
-
-@login_required
-def remove_contact(request, username):
-    other_user = get_object_or_404(get_user_model(), username=username)
-    ContactRelation.objects.filter(from_user=request.user, to_user=other_user).delete()
-    ContactRelation.objects.filter(from_user=other_user, to_user=request.user).delete()
-    return redirect('users:profile', username=username)
-
-
-@login_required
 @require_POST
 def mute_user(request, username):
     target = get_object_or_404(get_user_model(), username=username)
@@ -108,16 +73,3 @@ def mute_user(request, username):
     else:
         return JsonResponse({'status': 400}, status=400)
     return JsonResponse({'status': 200}, status=200)
-
-
-def register(request):
-    if request.method == 'POST':
-        user_form = UserRegistrationForm(request.POST)
-        if user_form.is_valid():
-            new_user = user_form.save(commit=False)
-            new_user.set_password(user_form.cleaned_data['password1'])
-            new_user.save()
-            return render(request, 'account/register_done.html', {'new_user': new_user})
-    else:
-        user_form = UserRegistrationForm()
-    return render(request, 'account/register.html', {'user_form': user_form})

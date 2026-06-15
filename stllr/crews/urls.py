@@ -5,6 +5,7 @@ app_name = 'crews'
 
 urlpatterns = [
     path('', views.crews, name='crews'),
+    path('find/', views.find_crews, name='find_crews'),
     path('create/', views.create_crew, name='create_crew'),
     path('<str:handle>/', views.crew_detail, name='crew_detail'),
     path('<str:handle>/edit/', views.edit_crew, name='edit_crew'),

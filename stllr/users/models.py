@@ -24,6 +24,7 @@ class User(AbstractUser):
         ).order_by('name')
 
     def get_contacts(self):
+        from contacts.models import ContactRelation
         return type(self).objects.filter(
             Q(contacts_received__from_user=self, contacts_received__status=ContactRelation.Status.ACCEPTED) |
             Q(contacts_sent__to_user=self, contacts_sent__status=ContactRelation.Status.ACCEPTED)
@@ -46,21 +47,6 @@ class Profile(models.Model):
     def __str__(self):
         return f'@{self.user.username}: {self.bio}'
     
-class ContactRelation(models.Model):
-    class Status(models.TextChoices):
-        PENDING = 'pending', 'Pending'
-        ACCEPTED = 'accepted', 'Accepted'
-
-    from_user = models.ForeignKey(User, related_name='contacts_sent', on_delete=models.CASCADE)
-    to_user = models.ForeignKey(User, related_name='contacts_received', on_delete=models.CASCADE)
-    status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['from_user', 'to_user'], name='unique_contact_relation'),
-        ]
-
 class Mute(models.Model):
     muter = models.ForeignKey(User, related_name='muting', on_delete=models.CASCADE)
     muted = models.ForeignKey(User, related_name='muted_by', on_delete=models.CASCADE)
@@ -71,5 +57,4 @@ class Mute(models.Model):
             models.UniqueConstraint(fields=['muter', 'muted'], name='unique_mute'),
         ]
 
-#TODO: Fix error: 'User' object has no attribute 'pages_starred'
 #TODO: Move Mute model to forums, + Create separate Mute model in rooms

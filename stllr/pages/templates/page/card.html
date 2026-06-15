@@ -75,13 +75,13 @@
 
                 {% include "star/button.html" with obj=page %}
 
-                <a class="btn btn-glass border border-grid rounded-pill d-flex align-items-center gap-1"
+                <a class="btn btn-glass rounded-pill d-flex align-items-center gap-1"
                     href="{% url "forums:forum" page.id %}">
                     <i class="bi bi-diagram-3-fill"></i>
                     <span class="post-count" style="font-size: 0.8rem;">{{ page.posts.count }}</span>
                 </a>
 
-                <a class="btn btn-glass border border-grid rounded-pill d-flex align-items-center gap-1"
+                <a class="btn btn-glass rounded-pill d-flex align-items-center gap-1"
                     href="{% url "rooms:room" page.id %}">
                     <i class="bi bi-broadcast spin"></i>
                     <span class="room-user-count" style="font-size: 0.8rem;">{{ page.room_count }}</span>
@@ -91,7 +91,7 @@
                 <div class="dropend">
 
                     <button id="p{{ page.id }}Dropdown"
-                        class="dropdown-toggle no-caret btn btn-glass rounded-circle border border-grid text-white flex-shrink-0"
+                        class="dropdown-toggle no-caret btn btn-glass rounded-circle flex-shrink-0"
                         type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false">

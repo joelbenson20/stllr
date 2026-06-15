@@ -1,9 +1,0 @@
-{% load static %}
-
-{% if contacts_list %}
-    {% for contact in contacts_list %}
-        {% include "user/card.html" with user=contact %}
-    {% endfor %}
-{% else %}
-    <p class="text-secondary small">No contacts yet.</p>
-{% endif %}
