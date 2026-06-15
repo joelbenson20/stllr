@@ -1,0 +1,7 @@
+{% if crews_list %}
+    {% for crew in crews_list %}
+        {% include "crew/card.html" %}
+    {% endfor %}
+{% else %}
+    <p class="text-secondary small">No crews yet.</p>
+{% endif %}

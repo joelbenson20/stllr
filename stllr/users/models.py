@@ -16,11 +16,18 @@ class User(AbstractUser):
     def get_full_name(self):
         return super().get_full_name()
 
+    def get_crews(self):   #TODO: Is this the most efficient way?
+        from crews.models import Crew, Membership
+        return Crew.objects.filter(
+            memberships__user=self,
+            memberships__status=Membership.Status.ACCEPTED,
+        ).order_by('name')
+
     def get_contacts(self):
         return type(self).objects.filter(
             Q(contacts_received__from_user=self, contacts_received__status=ContactRelation.Status.ACCEPTED) |
             Q(contacts_sent__to_user=self, contacts_sent__status=ContactRelation.Status.ACCEPTED)
-        ).distinct()
+        ).distinct().order_by('username')
 
 class Profile(models.Model):
     user = models.OneToOneField(

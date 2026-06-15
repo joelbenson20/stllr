@@ -7,12 +7,7 @@ from .models import Crew, Membership
 
 
 def crews(request):
-    crews_list = (
-        Crew.objects
-        .annotate(member_count=Count('memberships', filter=Q(memberships__status=Membership.Status.ACCEPTED)))
-        .order_by('-created')
-    )
-    return render(request, 'crews.html', {'crews_list': crews_list})
+    return render(request, 'crews.html')
 
 
 @login_required

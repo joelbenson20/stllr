@@ -9,21 +9,6 @@ from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 from .models import ContactRelation, Mute
 
 
-@login_required
-def search_users(request):
-    User = get_user_model()
-    q = request.GET.get('q', '').strip()
-    users = []
-    if q:
-        users = list(
-            User.objects.filter(username__icontains=q)
-            .exclude(id=request.user.id)
-            .select_related('profile')[:10]
-        )
-    html = render_to_string('user/search_results.html', {'users': users}, request=request)
-    return JsonResponse({'html': html})
-
-
 def _profile_base_context(request, username):
     user = get_object_or_404(get_user_model(), username=username)
     contact = None

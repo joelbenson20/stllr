@@ -2,40 +2,40 @@
 {% load static %}
 {% load thumbnail %}
 
+
 {% block title %}@{{ crew.handle }} - stllr{% endblock title %}
 
+
 {% block css %}
-    <style>
-        .banner-bleed {
-            margin-top: -1rem;
-            margin-left: -1rem;
-            margin-right: -1rem;
-        }
-        @media (min-width: 768px) {
-            .banner-bleed {
-                margin-top: -3rem;
-                margin-left: -3rem;
-                margin-right: -3rem;
-            }
-        }
-    </style>
     {% if crew.background %}
-    <style>
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-image: url("{{ crew.background.url }}");
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            opacity: 0.05;
-            z-index: -1;
-        }
-    </style>
+        <style>
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                background-image: url("{{ crew.background.url }}");
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+                opacity: 0.05;
+                z-index: -1;
+            }
+        </style>
     {% endif %}
 {% endblock css %}
+
+
+{% block right %}
+
+    {% if request.user.pk in crew.admin_pks %}
+        {% include "crew/tabs.html" %}
+    {% else %}
+        {{ blocker.super }}
+    {% endif %}
+
+{% endblock right %}
+
 
 {% block content %}
 
@@ -94,11 +94,3 @@
     {% endfor %}
 
 {% endblock content %}
-
-{% block right %}
-    {% if request.user.pk in crew.admin_pks %}
-        {% include "crew/tabs.html" %}
-    {% else %}
-        {% include "contact/list.html" %}
-    {% endif %}
-{% endblock right %}

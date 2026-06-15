@@ -1,6 +1,8 @@
 from users.models import Mute
 from comms.models import Notification
 
+# TODO: Move each context processor to its own app.
+
 def notifications(request):
 
     if request.user.is_authenticated:
@@ -31,6 +33,11 @@ def contacts(request):
         )
         return {'contacts_list': contacts_list}
     return {'contacts_list': []}
+
+def crews(request):
+    if request.user.is_authenticated:
+        return {'crews_list': request.user.get_crews()}
+    return {'crews_list': []}
 
 def muted_users(request):
     if request.user.is_authenticated:

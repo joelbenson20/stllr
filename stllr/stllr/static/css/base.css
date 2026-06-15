@@ -2,8 +2,8 @@
     --night-sky: #060d1a;
     --star-light: #a594d0;
     --white-hot: #ede8ff;
-    --cosmic-grid: rgba(165, 148, 208, 0.20);
-    --glass-dark: rgba(6, 13, 26, 0.70);
+    --cosmic-grid: rgba(165, 148, 208, 0.2);
+    --glass-dark: rgba(6, 13, 26, 0.55);
 }
 
 [id] { scroll-margin-top: 150px; }
@@ -19,19 +19,51 @@ body {
 }
 
 .glass {
+    color: white;
+    background: var(--cosmic-grid);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.glass-dark {
+    color: white;
     background: var(--glass-dark);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
 
+.modal-glass {
+    background: rgba(6, 13, 26, 0.6);
+}
+
 .btn-glass {
+    color: white;
     background: rgba(165, 148, 208, 0.20);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
 }
 
 .btn-glass:hover {
+    color: white;
     background: rgba(165, 148, 208, 0.35);
+}
+
+.dropdown-menu-glass {
+    color: white;
+    background: var(--cosmic-grid);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-color: var(--cosmic-grid);
+}
+
+.dropdown-menu-glass .dropdown-item {
+    color: white;
+}
+
+.dropdown-menu-glass .dropdown-item:hover,
+.dropdown-menu-glass .dropdown-item:focus {
+    background: rgba(165, 148, 208, 0.20);
+    color: white;
 }
 
 .border-grid {
@@ -73,16 +105,9 @@ a, a:hover,
 }
 
 .btn-transparent {
+    color: white;
     background-color: transparent;
     border: none;
-}
-
-.btn-link {
-    text-decoration: none !important;
-}
-
-.btn-link:hover {
-    text-decoration: none !important;
 }
 
 .glow-on-focus:has(:focus),

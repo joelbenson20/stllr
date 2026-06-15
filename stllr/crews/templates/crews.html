@@ -4,14 +4,15 @@
 {% block title %}crews - stllr{% endblock title %}
 
 {% block content %}
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">Crews</h5>
-        <a href="{% url 'crews:create_crew' %}" class="btn btn-primary btn-sm">Start a crew</a>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-2">
+            <h4 class="fw-bold mb-0">Crews</h4>
+            <button class="btn btn-glass border border-grid rounded-circle d-flex align-items-center justify-content-center" style="width:31px;height:31px;">
+                <i class="bi bi-plus"></i>
+            </button>
+        </div>
+        <a href="{% url 'crews:create_crew' %}" class="btn btn-glass border border-grid btn-sm">Start a crew</a>
     </div>
 
-    {% for crew in crews_list %}
-        {% include "crew/card.html" %}
-    {% empty %}
-        <p class="text-secondary">No crews yet.</p>
-    {% endfor %}
+    {% include "crew/list.html" %}
 {% endblock content %}

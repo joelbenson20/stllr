@@ -47,8 +47,8 @@
             {% elif thumbnail_image %}
                 <div class="thumbnail rounded-card position-relative mt-2">
                     <img class="w-100" src="{{ thumbnail_image.url }}">
-                    <div class="thumbnail-info glass border border-grid position-absolute bottom-0 start-0 end-0 p-3 rounded-card">
-                        <span class="page-title d-block">{{ page.title|truncatechars:90 }}</span>
+                    <div class="thumbnail-info glass-dark border border-grid position-absolute bottom-0 start-0 end-0 p-3 rounded-card">
+                        <span class="page-title">{{ page.title|truncatechars:90 }}</span>
                         {% if page.description %}
                             <p class="page-description mt-1 mb-0">
                                 {{ page.description|truncatechars:200 }}
@@ -75,13 +75,13 @@
 
                 {% include "star/button.html" with obj=page %}
 
-                <a class="btn btn-link border border-grid rounded-pill text-secondary d-flex align-items-center gap-1"
+                <a class="btn btn-glass border border-grid rounded-pill d-flex align-items-center gap-1"
                     href="{% url "forums:forum" page.id %}">
                     <i class="bi bi-diagram-3-fill"></i>
                     <span class="post-count" style="font-size: 0.8rem;">{{ page.posts.count }}</span>
                 </a>
 
-                <a class="btn btn-link border border-grid rounded-pill text-secondary d-flex align-items-center gap-1"
+                <a class="btn btn-glass border border-grid rounded-pill d-flex align-items-center gap-1"
                     href="{% url "rooms:room" page.id %}">
                     <i class="bi bi-broadcast spin"></i>
                     <span class="room-user-count" style="font-size: 0.8rem;">{{ page.room_count }}</span>
@@ -91,39 +91,39 @@
                 <div class="dropend">
 
                     <button id="p{{ page.id }}Dropdown"
-                        class="dropdown-toggle no-caret btn btn-transparent text-secondary flex-shrink-0"
+                        class="dropdown-toggle no-caret btn btn-glass rounded-circle border border-grid text-white flex-shrink-0"
                         type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <i class="bi bi-three-dots"></i>
                     </button>
 
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="p{{ page.id }}Dropdown">
+                    <ul class="dropdown-menu dropdown-menu-glass rounded-card" aria-labelledby="p{{ page.id }}Dropdown">
                         {% if request.user.is_authenticated %}
                             <li>
-                                <button class="dropdown-item d-flex align-items-center gap-2 share-btn"
+                                <button class="share-btn dropdown-item d-flex align-items-center gap-2"
                                     data-object-type="page"
                                     data-object-id="{{ page.id }}"
                                     data-bs-toggle="modal"
                                     data-bs-target="#shareModal">
-                                    <i class="bi bi-share-fill"></i>Share page
+                                    <i class="bi bi-share-fill"></i>Share
                                 </button>
                             </li>
                             <li>
-                                <button class="dropdown-item page-pin-button"
+                                <button class="page-pin-button dropdown-item d-flex align-items-center gap-2"
                                     data-page-id="{{ page.id }}"
                                     data-action="{% if page in user.pages_pinned.all %}unpin{% else %}pin{% endif %}"
                                     data-csrf-token="{{ csrf_token }}"
                                     data-endpoint="{% url 'pages:toggle_pin' page.id %}">
                                     <i class="bi bi-broadcast-pin"></i>
-                                    <span>{% if page in user.pages_pinned.all %}Remove pin{% else %}Pin page{% endif %}</span>
+                                    <span>{% if page in user.pages_pinned.all %}Remove pin{% else %}Pin{% endif %}</span>
                                 </button>
                             </li>
                             <li>
-                                <a class="dropdown-item"
+                                <a class="dropdown-item d-flex align-items-center gap-2"
                                     href="{% url "oversight:report_page" page.id %}"
                                     target="_blank">
-                                    <i class="bi bi-flag-fill"></i> Report page
+                                    <i class="bi bi-flag-fill"></i> Report
                                 </a>
                             </li>
                         {% endif %}

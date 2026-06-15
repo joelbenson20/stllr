@@ -1,14 +1,8 @@
 {% load static %}
 
 {% if contacts_list %}
-    {% regroup contacts_list by username.0|upper as alpha_groups %}
-    {% for group in alpha_groups %}
-    <div class="mb-2">
-        <div class="text-muted small fw-bold px-1 pb-1 border-bottom border-secondary mb-1">{{ group.grouper }}</div>
-        {% for contact in group.list %}
-            {% include "user/card.html" with user=contact %}
-        {% endfor %}
-    </div>
+    {% for contact in contacts_list %}
+        {% include "user/card.html" with user=contact %}
     {% endfor %}
 {% else %}
     <p class="text-secondary small">No contacts yet.</p>

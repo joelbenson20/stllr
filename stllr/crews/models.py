@@ -31,6 +31,10 @@ class Crew(models.Model):
             )
 
     @property
+    def member_count(self):
+        return self.memberships.filter(status=Membership.Status.ACCEPTED).count()
+
+    @property
     def admin_pks(self):
         return self.memberships.filter(
             role__in=[Membership.Role.OWNER, Membership.Role.ADMIN],

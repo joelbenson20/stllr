@@ -3,7 +3,7 @@
 {% load forum_tags %}
 
 <div id="post{{ post.id }}"
-    class="post rounded-card border border-grid mt-3 p-3 {% if post.thread_level|divisibleby:2 %}post-even{% else %}post-odd{% endif %}"
+    class="post rounded-card border border-grid mt-3 p-3"
     data-author-id="{{ post.author.id }}">
 
     <div class="d-flex gap-2">
@@ -17,64 +17,14 @@
         <div class="flex-grow-1" style="min-width: 0;">
 
             <!-- Author row -->
-            <div class="d-flex align-items-center justify-content-between gap-2">
-
-                <div class="d-flex align-items-center gap-1 overflow-hidden">
-                    <a class="fw-semibold text-white text-decoration-none text-truncate" style="font-size: 0.9rem;"
-                        href="{{ post.author.profile.get_absolute_url }}">
-                        @{{ post.author.username }}
-                    </a>
-                    <span class="text-secondary">·</span>
-                    <span class="text-secondary text-nowrap" style="font-size: 0.85rem;">{{ post.created|naturaltime }}</span>
-                </div>
-
-                <!-- Actions Dropdown -->
-                {% if not post.removed %}
-                <button id="post{{ post.id }}Dropdown"
-                    class="dropdown-toggle no-caret btn btn-transparent text-secondary flex-shrink-0 p-0"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    <i class="bi bi-three-dots"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="post{{ post.id }}Dropdown">
-                    {% if request.user.is_authenticated %}
-                    <li>
-                        <button class="dropdown-item d-flex align-items-center gap-2 share-btn"
-                            data-object-type="post"
-                            data-object-id="{{ post.id }}"
-                            data-bs-toggle="modal"
-                            data-bs-target="#shareModal">
-                            <i class="bi bi-share-fill"></i>Share post
-                        </button>
-                    </li>
-                    {% endif %}
-                    <li>
-                        <a class="dropdown-item" href="{% url "oversight:report_post" post.id %}" target="_blank">
-                            <i class="bi bi-flag-fill me-2"></i>Report post
-                        </a>
-                    </li>
-                    {% if request.user.is_authenticated and post.author != request.user %}
-                        <li>
-                            <button type="button" class="post-mute-button dropdown-item"
-                                data-action="{% if post.author.id in muted_user_ids %}unmute{% else %}mute{% endif %}"
-                                data-csrf-token="{{ csrf_token }}"
-                                data-endpoint="{% url 'users:mute_user' post.author.username %}">
-                                <i class="bi bi-bell-slash me-2"></i>
-                                <span>{% if post.author.id in muted_user_ids %}Unmute{% else %}Mute{% endif %} {{ post.author.username }}</span>
-                            </button>
-                        </li>
-                    {% endif %}
-                    {% if post.author == request.user %}
-                        <li>
-                            <a class="dropdown-item" href="{% url "forums:remove_post" post.id %}" target="_blank">
-                                <span class="text-danger"><i class="bi bi-x-square-fill me-2"></i>Remove post</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-                {% endif %}
-
+            <div class="d-flex align-items-center gap-1">
+                <a class="fw-semibold text-white text-decoration-none text-nowrap" style="font-size: 0.9rem;"
+                    href="{{ post.author.profile.get_absolute_url }}">
+                    @{{ post.author.username }}
+                </a>
+                <span>·</span>
+                {% comment %} TODO: Get better time humanizer that only says: num seconds, minutes, hours, days, months, or years  {% endcomment %}
+                <span class="text-light text-truncate" style="font-size: 0.85rem;">{{ post.created|naturaltime }}</span>
             </div>
 
             <!-- Content -->
@@ -94,7 +44,7 @@
 
                 {% include "star/button.html" with obj=post %}
 
-                <button class="d-flex align-items-center btn btn-link border border-grid rounded-pill text-secondary gap-1"
+                <button class="d-flex align-items-center btn btn-glass border border-grid rounded-pill gap-1"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#collapseChildren{{ post.id }}"
@@ -103,7 +53,56 @@
                     <span class="descendant-count" style="font-size: 0.8rem;">{{ post.descendant_count }}</span>
                 </button>
 
-                <button class="btn btn-link text-secondary"
+                <!-- Actions Dropdown -->
+                {% if not post.removed %}
+                <div class="dropend">
+                    <button id="post{{ post.id }}Dropdown"
+                        class="dropdown-toggle no-caret btn btn-glass rounded-circle border border-grid text-white flex-shrink-0"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-three-dots"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-glass rounded-card" aria-labelledby="post{{ post.id }}Dropdown">
+                        {% if request.user.is_authenticated %}
+                        <li>
+                            <button class="dropdown-item d-flex align-items-center gap-2 share-btn"
+                                data-object-type="post"
+                                data-object-id="{{ post.id }}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#shareModal">
+                                <i class="bi bi-share-fill"></i>Share
+                            </button>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a class="dropdown-item" href="{% url "oversight:report_post" post.id %}" target="_blank">
+                                <i class="bi bi-flag-fill me-2"></i>Report
+                            </a>
+                        </li>
+                        {% if request.user.is_authenticated and post.author != request.user %}
+                            <li>
+                                <button type="button" class="post-mute-button dropdown-item"
+                                    data-action="{% if post.author.id in muted_user_ids %}unmute{% else %}mute{% endif %}"
+                                    data-csrf-token="{{ csrf_token }}"
+                                    data-endpoint="{% url 'users:mute_user' post.author.username %}">
+                                    <i class="bi bi-bell-slash me-2"></i>
+                                    <span>{% if post.author.id in muted_user_ids %}Unmute{% else %}Mute{% endif %} {{ post.author.username }}</span>
+                                </button>
+                            </li>
+                        {% endif %}
+                        {% if post.author == request.user %}
+                            <li>
+                                <a class="dropdown-item" href="{% url "forums:remove_post" post.id %}" target="_blank">
+                                    <span class="text-danger"><i class="bi bi-x-square-fill me-2"></i>Remove</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <button class="btn btn-transparent"
                     style="font-size: 0.8rem;"
                     type="button"
                     data-bs-toggle="collapse"
