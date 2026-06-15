@@ -2,21 +2,21 @@
 {% load forum_tags %}
 
 <div id="post{{ post.id }}"
-    class="post rounded-card border border-grid mt-3 p-3"
+    class="post rounded-card border border-grid mt-3 pb-3 pe-3"
     data-author-id="{{ post.author.id }}">
 
     <div class="d-flex gap-2">
 
         <!-- Avatar column -->
-        <a class="flex-shrink-0 pt-1{% if threaded %} thread-line-down{% endif %}" href="{{ post.author.profile.get_absolute_url }}">
-            {% include "user/avatar.html" with user=post.author size="32" dimensions="32x32" %}
+        <a class="flex-shrink-0 mt-2 ms-2" href="{{ post.author.profile.get_absolute_url }}">
+            {% include "user/avatar.html" with user=post.author size="42" dimensions="42x42" %}
         </a>
 
         <!-- Content column -->
         <div class="flex-grow-1" style="min-width: 0;">
 
             <!-- Author row -->
-            <div class="d-flex align-items-center gap-1">
+            <div class="d-flex align-items-center gap-1 mt-3">
                 <a class="fw-semibold text-white text-decoration-none text-nowrap" style="font-size: 0.9rem;"
                     href="{{ post.author.profile.get_absolute_url }}">
                     @{{ post.author.username }}

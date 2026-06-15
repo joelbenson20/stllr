@@ -21,26 +21,10 @@
 
         <div class="px-3">
 
-            {% include "page/card.html" with compact=True %}
+            {% include "page/card.html" with compact=True extension_header_card=True %}
 
         </div>
-
-        <nav id="extensionNavbar" class="navbar navbar-expand navbar-dark m-0 p-3" style="overflow-x: auto; scrollbar-width: none;">
-            <ul class="navbar-nav d-flex align-items-center flex-nowrap">
-                {% comment %} <li class="nav-item">
-                    <a id="frameTab" class="nav-link text-light px-4 {% if tab == "frame" %}border-bottom{% endif %}" role="button">Frame</a>
-                </li> {% endcomment %}
-                <li class="nav-item">
-                    <a id="forumTab" class="nav-link text-light px-4 {% if tab == "forum" %}border-bottom{% endif %}" role="button">Forum</a>
-                </li>
-                <li class="nav-item">
-                    <a id="roomTab" class="nav-link text-light px-4 {% if tab == "room" %}border-bottom{% endif %}" role="button">Room</a>
-                </li>
-                <li class="nav-item">
-                    <a id="nearbyTab" class="nav-link text-light px-4 {% if tab == "nearby" %}border-bottom{% endif %}" role="button">Nearby</a>
-                </li>
-            </ul>
-        </nav>
+        
     </div>
 
     <div id="alertContainer" class="m-0 p-0">

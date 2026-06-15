@@ -1,7 +1,7 @@
 {% load static %}
 {% load thumbnail %}
 
-<div class="d-block position-relative rounded-circle overflow-hidden flex-shrink-0"
+<div class="d-block position-relative rounded-circle border border-grid overflow-hidden flex-shrink-0"
     style="width:{{size}}px;height:{{size}}px;">
     {% if user.profile.background %}
         {% thumbnail user.profile.background dimensions crop="smart" as im %}
