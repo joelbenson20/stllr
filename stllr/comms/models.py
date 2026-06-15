@@ -14,6 +14,7 @@ class Notification(models.Model):
         PAGE_SHARED = 'page_shared', 'Page Shared'
         PAGE_ALSO_STARRED = 'page_also_starred', 'Page Also Starred'
         POST_ALSO_STARRED = 'post_also_starred', 'Post Also Starred'
+        CREW_INVITE = 'crew_invite', 'Crew Invite'
 
     recipient = models.ForeignKey(
         settings.AUTH_USER_MODEL,

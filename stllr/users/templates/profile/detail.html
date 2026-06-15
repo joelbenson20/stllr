@@ -6,33 +6,24 @@
 
 {% block css %}
     {% if profile.background %}
-    <style>
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("{{ profile.background.url }}");
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            opacity: 0.05;
-            z-index: -1;
-        }
-    </style>
+        <style>
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: url("{{ profile.background.url }}");
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+                opacity: 0.05;
+                z-index: -1;
+            }
+        </style>
     {% endif %}
 {% endblock css %}
-
-{% block right %}
-    {% if profile.user == request.user %}
-        {% include "profile/tabs.html" %}
-    {% else %}
-        {{ block.super }}
-    {% endif %}
-{% endblock right %}
-
 
 
 {% block content %}
@@ -51,9 +42,57 @@
         </div>
     </div>
 
-    {% if request.user != profile.user %}
+    {% if request.user == profile.user %}
         <div class="d-flex justify-content-center mb-4">
+            <div class="dropend">
+                <button class="dropdown-toggle no-caret btn btn-sm btn-glass rounded-circle flex-shrink-0"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="bi bi-gear"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-glass rounded-card">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'users:edit' profile.user.username %}">
+                            <i class="bi bi-pencil me-2"></i>Edit profile
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'account_email' %}">
+                            <i class="bi bi-envelope me-2"></i>Manage email addresses
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'account_change_password' %}">
+                            <i class="bi bi-key me-2"></i>Reset password
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
             {% include "contact/status_button.html" with other=profile.user %}
+            <div class="dropend">
+                <button class="dropdown-toggle no-caret btn btn-sm btn-glass rounded-circle flex-shrink-0"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-glass rounded-card">
+                    {% for crew in admin_crews %}
+                    <li>
+                        <button type="button"
+                            class="dropdown-item crew-invite-btn"
+                            data-endpoint="{% url 'crews:send_invite' crew.handle profile.user.username %}"
+                            data-csrf-token="{{ csrf_token }}">
+                            <i class="bi bi-people me-2"></i>Invite to {{ crew.name }}
+                        </button>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     {% endif %}
 

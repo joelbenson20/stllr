@@ -42,8 +42,26 @@ def contacts(request):
 
 def crews(request):
     if request.user.is_authenticated:
-        return {'crews_list': request.user.get_crews()}
-    return {'crews_list': []}
+        from crews.models import Membership
+        all_crews = list(request.user.get_crews())
+        memberships = Membership.objects.filter(
+            user=request.user,
+            status__in=[Membership.Status.ACCEPTED, Membership.Status.INVITED],
+        ).select_related('crew')
+        admin_crew_ids = set()
+        crew_invitations = []
+        for m in memberships:
+            if m.status == Membership.Status.INVITED:
+                crew_invitations.append(m)
+            elif m.role in (Membership.Role.OWNER, Membership.Role.ADMIN):
+                admin_crew_ids.add(m.crew_id)
+        admin_crews = [c for c in all_crews if c.pk in admin_crew_ids]
+        return {
+            'crews_list': all_crews,
+            'admin_crews': admin_crews,
+            'crew_invitations': crew_invitations,
+        }
+    return {'crews_list': [], 'admin_crews': [], 'crew_invitations': []}
 
 def muted_users(request):
     if request.user.is_authenticated:

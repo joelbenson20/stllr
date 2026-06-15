@@ -5,7 +5,7 @@
 
 {% block content %}
 
-    <div class="d-flex align-items-center gap-2 mb-4">
+    <div class="d-flex align-items-center gap-3 mb-4">
         <a href="{% url 'crews:crews' %}" class="btn btn-glass rounded-circle d-flex align-items-center justify-content-center" style="width:31px;height:31px;">
             <i class="bi bi-arrow-left"></i>
         </a>
@@ -25,8 +25,19 @@
     {% if q %}
         {% if results %}
             <div class="d-flex flex-column gap-2">
-            {% for crew in results %}
-                {% include "crew/card.html" %}
+            {% for result in results %}
+                <div class="glass rounded-card d-flex align-items-center w-100 gap-3 px-2">
+                    <a href="{{ result.crew.get_absolute_url }}" class="btn d-flex align-items-center gap-3 text-light text-decoration-none flex-grow-1">
+                        {% include "crew/avatar.html" with crew=result.crew size="40" dimensions="40x40" %}
+                        <div class="d-flex flex-column text-start">
+                            <span class="text-secondary" style="font-size:0.75rem;">@{{ result.crew.handle }}</span>
+                            <span class="fw-semibold">{{ result.crew.name }}</span>
+                        </div>
+                    </a>
+                    <div class="ms-auto">
+                        {% include "crew/status_button.html" with crew=result.crew membership=result.membership %}
+                    </div>
+                </div>
             {% endfor %}
             </div>
         {% else %}

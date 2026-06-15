@@ -3,6 +3,15 @@
 
 {% block title %}explore - stllr{% endblock title %}
 
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var input = document.querySelector('input[name="query"]');
+        if (input) { var v = input.value; input.value = ''; input.value = v; }
+    });
+</script>
+{% endblock scripts %}
+
 {% block content %}
 
     <form class="d-flex w-100 mb-3" action="{% url 'explore' %}" role="search">

@@ -5,11 +5,12 @@
 
 {% block content %}
 
-    <div class="d-flex align-items-center gap-2 mb-4">
+    <div class="d-flex align-items-center gap-3 mb-4">
         <a href="{% url 'contacts:contacts' %}" class="btn btn-glass rounded-circle d-flex align-items-center justify-content-center" style="width:31px;height:31px;">
             <i class="bi bi-arrow-left"></i>
         </a>
         <h4 class="fw-bold mb-0">Find Contacts</h4>
+        <div class="ms-auto">{% include "contact/invite_dropdown.html" %}</div>
     </div>
 
     <form class="d-flex w-100 mb-4" action="{% url 'contacts:find_contacts' %}" role="search">

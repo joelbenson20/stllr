@@ -1,0 +1,41 @@
+
+<div id="crew-btn-{{ crew.handle }}" class="d-flex gap-2">
+    {% if not membership or membership.status == 'declined' %}
+        {% if crew.is_open %}
+            <button type="button" class="btn btn-sm btn-glass crew-action-btn"
+                    data-endpoint="{% url 'crews:join_crew' crew.handle %}"
+                    data-csrf-token="{{ csrf_token }}">
+                Join
+            </button>
+        {% else %}
+            <button type="button" class="btn btn-sm btn-glass crew-action-btn"
+                    data-endpoint="{% url 'crews:join_crew' crew.handle %}"
+                    data-csrf-token="{{ csrf_token }}">
+                Request to Join
+            </button>
+        {% endif %}
+    {% elif membership.status == 'requested' %}
+        <button type="button" class="btn btn-sm btn-glass crew-action-btn"
+                data-endpoint="{% url 'crews:leave_crew' crew.handle %}"
+                data-csrf-token="{{ csrf_token }}">
+            Cancel Request
+        </button>
+    {% elif membership.status == 'invited' %}
+        <button type="button" class="btn btn-sm btn-glass btn-glass-success crew-action-btn"
+                data-endpoint="{% url 'crews:accept_invite' crew.handle %}"
+                data-csrf-token="{{ csrf_token }}">
+            Accept
+        </button>
+        <button type="button" class="btn btn-sm btn-glass btn-glass-danger crew-action-btn"
+                data-endpoint="{% url 'crews:decline_invite' crew.handle %}"
+                data-csrf-token="{{ csrf_token }}">
+            Decline
+        </button>
+    {% elif membership.status == 'accepted' and membership.role != 'owner' %}
+        <button type="button" class="btn btn-sm btn-glass crew-action-btn"
+                data-endpoint="{% url 'crews:leave_crew' crew.handle %}"
+                data-csrf-token="{{ csrf_token }}">
+            Leave
+        </button>
+    {% endif %}
+</div>

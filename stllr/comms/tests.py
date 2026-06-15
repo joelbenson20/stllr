@@ -6,6 +6,7 @@ from pages.models import Page, Domain
 from forums.models import Post
 from stars.models import Star
 from contacts.models import ContactRelation
+from crews.models import Crew
 from comms.models import Notification
 
 User = get_user_model()
@@ -170,6 +171,25 @@ class NotificatoinSignalTests(CommsTestBase):
             recipient=self.stella,
             event=Notification.Event.PAGE_ALSO_STARRED,
         ).exists())
+
+    def test_crew_invite_notifies_recipient(self):
+        crew = Crew.objects.create(handle='testcrew', name='Test Crew', creator=self.stella)
+        self.client.login(username='stella', password='pass')
+        self.client.post(reverse('crews:send_invite', args=[crew.handle, self.stranger.username]))
+        self.assertTrue(Notification.objects.filter(
+            recipient=self.stranger,
+            event=Notification.Event.CREW_INVITE,
+        ).exists())
+
+    def test_duplicate_crew_invite_does_not_create_duplicate_notification(self):
+        crew = Crew.objects.create(handle='testcrew', name='Test Crew', creator=self.stella)
+        self.client.login(username='stella', password='pass')
+        self.client.post(reverse('crews:send_invite', args=[crew.handle, self.stranger.username]))
+        self.client.post(reverse('crews:send_invite', args=[crew.handle, self.stranger.username]))
+        self.assertEqual(Notification.objects.filter(
+            recipient=self.stranger,
+            event=Notification.Event.CREW_INVITE,
+        ).count(), 1)
 
     def test_post_also_starred_notifies_contact(self):
         ContactRelation.objects.create(

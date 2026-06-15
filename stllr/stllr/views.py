@@ -20,8 +20,9 @@ def explore(request):
 @login_required
 def comms(request):
     from comms.models import Notification
+    response = render(request, 'comms.html')
     Notification.objects.filter(recipient=request.user, read=False).update(read=True)
-    return render(request, 'comms.html')
+    return response
 
 @login_required
 def pins(request):

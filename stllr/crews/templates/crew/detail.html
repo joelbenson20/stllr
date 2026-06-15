@@ -2,9 +2,7 @@
 {% load static %}
 {% load thumbnail %}
 
-
 {% block title %}@{{ crew.handle }} - stllr{% endblock title %}
-
 
 {% block css %}
     {% if crew.background %}
@@ -24,17 +22,6 @@
         </style>
     {% endif %}
 {% endblock css %}
-
-
-{% block right %}
-
-    {% if request.user.pk in crew.admin_pks %}
-        {% include "crew/tabs.html" %}
-    {% else %}
-        {{ blocker.super }}
-    {% endif %}
-
-{% endblock right %}
 
 
 {% block content %}
@@ -60,22 +47,31 @@
     </div>
 
     {% if request.user.is_authenticated %}
-        <div class="d-flex justify-content-center mb-4">
-            {% if membership %}
-                {% if membership.status == 'accepted' %}
-                    <span class="badge bg-secondary">Member</span>
-                {% elif membership.status == 'invited' %}
-                    <span class="badge bg-primary">Invited</span>
-                {% elif membership.status == 'requested' %}
-                    <span class="badge bg-secondary">Request pending</span>
-                {% endif %}
-            {% else %}
-                {% if crew.is_open %}
-                    <button class="btn btn-primary btn-sm">Join</button>
-                {% else %}
-                    <button class="btn btn-outline-secondary btn-sm">Request to join</button>
-                {% endif %}
+        <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
+            {% if request.user.pk not in crew.admin_pks %}
+                {% include "crew/status_button.html" with crew=crew membership=membership %}
             {% endif %}
+            <div class="dropend">
+                <button class="dropdown-toggle no-caret btn btn-sm btn-glass rounded-circle flex-shrink-0"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    {% if request.user.pk in crew.admin_pks %}
+                        <i class="bi bi-gear"></i>
+                    {% else %}
+                        <i class="bi bi-three-dots"></i>
+                    {% endif %}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-glass rounded-card">
+                    {% if request.user.pk in crew.admin_pks %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'crews:edit_crew' crew.handle %}">
+                            <i class="bi bi-pencil me-2"></i>Edit crew
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     {% endif %}
 
