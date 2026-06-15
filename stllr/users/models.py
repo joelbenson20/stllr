@@ -17,7 +17,6 @@ class User(AbstractUser):
         return super().get_full_name()
 
     def get_contacts(self):
-        """Returns a queryset of accepted contact Users (both directions)."""
         return type(self).objects.filter(
             Q(contacts_received__from_user=self, contacts_received__status=ContactRelation.Status.ACCEPTED) |
             Q(contacts_sent__to_user=self, contacts_sent__status=ContactRelation.Status.ACCEPTED)
@@ -66,3 +65,4 @@ class Mute(models.Model):
         ]
 
 #TODO: Fix error: 'User' object has no attribute 'pages_starred'
+#TODO: Move Mute model to forums, + Create separate Mute model in rooms

@@ -45,31 +45,26 @@
                     </a>
                 </div>
             {% elif thumbnail_image %}
-                    <div class="mt-2 position-relative">
-                        <a href="{{ page.get_absolute_url }}">
-                            <img class="rounded-3 w-100"
-                                src="{{ thumbnail_image.url }}"
-                                style="max-height: 315px; object-fit: cover; display: block;">
-                        </a>
-                        <div class="position-absolute bottom-0 start-0 end-0 p-3 rounded-bottom-3" style="background: linear-gradient(rgba(6, 13, 26, 0.6) 0%, rgba(6, 13, 26, 0.8) 40%, rgba(6, 13, 26, 0.95) 75%, rgba(6, 13, 26, 1) 100%);">
-                            <a class="text-decoration-none d-block" href="{{ page.get_absolute_url }}" style="color: var(--white-hot); font-size: 1.25rem; font-weight: 600; line-height: 1.3;">
-                                {{ page.title|truncatechars:90 }}
-                            </a>
-                            {% if page.description %}
-                                <p class="mt-1 mb-0" style="color: rgba(255,255,255,0.55); font-size: 0.875rem; line-height: 1.45;">
-                                    {{ page.description|truncatechars:200 }}
-                                </p>
-                            {% endif %}
-                        </div>
+                <div class="thumbnail rounded-card position-relative mt-2">
+                    <img class="w-100" src="{{ thumbnail_image.url }}">
+                    <div class="thumbnail-info border border-grid position-absolute bottom-0 start-0 end-0 p-3 rounded-card">
+                        <span class="page-title d-block">{{ page.title|truncatechars:90 }}</span>
+                        {% if page.description %}
+                            <p class="page-description mt-1 mb-0">
+                                {{ page.description|truncatechars:200 }}
+                            </p>
+                        {% endif %}
                     </div>
+                    <a href="{{ page.get_absolute_url }}" class="stretched-link"></a>
+                </div>
             {% else %}
                 <div class="mt-1">
-                    <a class="text-decoration-none d-block" href="{{ page.get_absolute_url }}" style="color: var(--white-hot); font-size: 1.25rem; font-weight: 600; line-height: 1.3;">
+                    <a class="page-title text-decoration-none d-block" href="{{ page.get_absolute_url }}">
                         {{ page.title|truncatechars:90 }}
                     </a>
                 </div>
                 {% if page.description %}
-                    <p class="mt-1 mb-0" style="color: rgba(255,255,255,0.55); font-size: 0.875rem; line-height: 1.45;">
+                    <p class="page-description mt-1 mb-0">
                         {{ page.description|truncatechars:200 }}
                     </p>
                 {% endif %}
