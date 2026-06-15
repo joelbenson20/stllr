@@ -135,6 +135,10 @@ a, a:hover,
     color: rgba(255, 255, 255, 0.4);
 }
 
+.search-bar::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
 .search-form {
     max-width: 576px;
 }

@@ -24,6 +24,10 @@
     }
 }
 
+.thumbnail:hover .page-title {
+    color: var(--star-light);
+}
+
 .page-title {
     color: var(--white-hot);
     font-size: 1.25rem;
