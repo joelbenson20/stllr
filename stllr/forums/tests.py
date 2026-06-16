@@ -2,7 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from pages.models import Page, Domain
-from forums.models import Post
+from crews.models import Crew
+from forums.models import Post, Mention
 
 User = get_user_model()
 
@@ -165,3 +166,95 @@ class MarkdownifyTests(PostTestBase):
         self.client.login(username='stella', password='pass')
         response = self.client.post(reverse('forums:markdownify'), {'content': '**bold**'})
         self.assertIn(b'<strong>bold</strong>', response.content)
+
+
+class MentionSignalTests(PostTestBase):
+
+    def test_mention_created_for_existing_user(self):
+        other = User.objects.create_user(username='cosmo', password='pass')
+        post = Post.objects.create(author=self.user, page=self.page, content='Hello @cosmo!')
+        self.assertTrue(Mention.objects.filter(post=post, user=other).exists())
+
+    def test_mention_created_for_existing_crew(self):
+        crew = Crew.objects.create(handle='nebula', name='Nebula Crew', creator=self.user)
+        post = Post.objects.create(author=self.user, page=self.page, content='Hello @nebula!')
+        self.assertTrue(Mention.objects.filter(post=post, crew=crew).exists())
+
+    def test_unknown_handle_is_ignored(self):
+        post = Post.objects.create(author=self.user, page=self.page, content='Hello @nobody!')
+        self.assertFalse(Mention.objects.filter(post=post).exists())
+
+    def test_multiple_mentions_in_one_post(self):
+        other = User.objects.create_user(username='cosmo', password='pass')
+        crew = Crew.objects.create(handle='nebula', name='Nebula Crew', creator=self.user)
+        post = Post.objects.create(author=self.user, page=self.page, content='Hi @cosmo and @nebula!')
+        self.assertTrue(Mention.objects.filter(post=post, user=other).exists())
+        self.assertTrue(Mention.objects.filter(post=post, crew=crew).exists())
+
+    def test_mentions_synced_on_edit(self):
+        other = User.objects.create_user(username='cosmo', password='pass')
+        new_user = User.objects.create_user(username='nova', password='pass')
+        post = Post.objects.create(author=self.user, page=self.page, content='Hi @cosmo!')
+        self.assertTrue(Mention.objects.filter(post=post, user=other).exists())
+        post.content = 'Hi @nova!'
+        post.save()
+        self.assertFalse(Mention.objects.filter(post=post, user=other).exists())
+        self.assertTrue(Mention.objects.filter(post=post, user=new_user).exists())
+
+    def test_duplicate_handle_in_content_creates_one_mention(self):
+        other = User.objects.create_user(username='cosmo', password='pass')
+        post = Post.objects.create(author=self.user, page=self.page, content='@cosmo @cosmo again!')
+        self.assertEqual(Mention.objects.filter(post=post, user=other).count(), 1)
+
+    def test_no_mentions_in_plain_post(self):
+        post = Post.objects.create(author=self.user, page=self.page, content='No mentions here.')
+        self.assertEqual(Mention.objects.filter(post=post).count(), 0)
+
+
+class MentionCompletionsTests(PostTestBase):
+
+    def test_unauthenticated_user_is_redirected(self):
+        response = self.client.get(reverse('forums:mention_completions'), {'q': 'ste'})
+        self.assertEqual(response.status_code, 302)
+
+    def test_empty_query_returns_empty_list(self):
+        self.client.login(username='stella', password='pass')
+        response = self.client.get(reverse('forums:mention_completions'), {'q': ''})
+        self.assertEqual(response.json(), [])
+
+    def test_returns_matching_user(self):
+        self.client.login(username='stella', password='pass')
+        response = self.client.get(reverse('forums:mention_completions'), {'q': 'ste'})
+        data = response.json()
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]['type'], 'user')
+        self.assertEqual(data[0]['handle'], 'stella')
+
+    def test_returns_matching_crew(self):
+        Crew.objects.create(handle='stardust', name='Stardust Crew', creator=self.user)
+        self.client.login(username='stella', password='pass')
+        response = self.client.get(reverse('forums:mention_completions'), {'q': 'star'})
+        data = response.json()
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]['type'], 'crew')
+        self.assertEqual(data[0]['handle'], 'stardust')
+        self.assertEqual(data[0]['name'], 'Stardust Crew')
+
+    def test_matching_is_case_insensitive(self):
+        self.client.login(username='stella', password='pass')
+        response = self.client.get(reverse('forums:mention_completions'), {'q': 'STE'})
+        data = response.json()
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]['handle'], 'stella')
+
+    def test_non_matching_query_returns_empty_list(self):
+        self.client.login(username='stella', password='pass')
+        response = self.client.get(reverse('forums:mention_completions'), {'q': 'zzz'})
+        self.assertEqual(response.json(), [])
+
+    def test_results_capped_at_five_per_type(self):
+        for i in range(7):
+            User.objects.create_user(username=f'alpha{i}', password='pass')
+        self.client.login(username='stella', password='pass')
+        response = self.client.get(reverse('forums:mention_completions'), {'q': 'alpha'})
+        self.assertLessEqual(len(response.json()), 5)

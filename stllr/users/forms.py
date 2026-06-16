@@ -27,24 +27,18 @@ RESERVED_USERNAMES = {
 }
 
 
-def validate_handle(value, requesting_user=None, requesting_crew=None):
+def validate_handle(value, requesting_user=None):
     if not re.fullmatch(r'[A-Za-z0-9_]+', value):
         raise forms.ValidationError("Handle may only contain letters, numbers, and underscores.")
 
     if value.lower() in RESERVED_USERNAMES and not (requesting_user and requesting_user.is_staff):
         raise forms.ValidationError("This handle is reserved for staff.")
 
-    user_qs = User.objects.filter(username__iexact=value)
-    if requesting_user and requesting_user.pk:
-        user_qs = user_qs.exclude(pk=requesting_user.pk)
-    if user_qs.exists():
+    if User.objects.filter(username__iexact=value).exists():
         raise forms.ValidationError("This handle is already taken by a user.")
 
     from crews.models import Crew
-    crew_qs = Crew.objects.filter(handle__iexact=value)
-    if requesting_crew and requesting_crew.pk:
-        crew_qs = crew_qs.exclude(pk=requesting_crew.pk)
-    if crew_qs.exists():
+    if Crew.objects.filter(handle__iexact=value).exists():
         raise forms.ValidationError("This handle is already taken by a crew.")
 
 class SocialSignupForm(SocialSignupFormBase):
@@ -116,7 +110,8 @@ class UserEditForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data['username']
-        validate_handle(username, requesting_user=self.instance)
+        if username.lower() != self.instance.username.lower():
+            validate_handle(username, requesting_user=self.instance)
         return username
 
 class ProfileEditForm(forms.ModelForm):

@@ -3,6 +3,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericRelation
 from pages.models import Page
+from crews.models import Crew
 
 
 class Post(models.Model):
@@ -62,5 +63,49 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.author}: {self.content}'
-    
-    
+
+
+class Mention(models.Model):
+
+    post = models.ForeignKey(
+        Post,
+        related_name='mentions',
+        on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='mentions',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    crew = models.ForeignKey(
+        Crew,
+        related_name='mentions',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=(
+                    models.Q(user__isnull=False, crew__isnull=True) |
+                    models.Q(user__isnull=True, crew__isnull=False)
+                ),
+                name='mention_exactly_one_target'
+            ),
+            models.UniqueConstraint(fields=['post', 'user'], name='unique_mention_user', condition=models.Q(user__isnull=False)),
+            models.UniqueConstraint(fields=['post', 'crew'], name='unique_mention_crew', condition=models.Q(crew__isnull=False)),
+        ]
+        indexes = [
+            models.Index(fields=['user']),
+            models.Index(fields=['crew']),
+        ]
+
+    def __str__(self):
+        target = f'@{self.user.username}' if self.user_id else f'@{self.crew.handle}'
+        return f'{target} in post {self.post_id}'
+
+

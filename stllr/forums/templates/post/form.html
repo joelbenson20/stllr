@@ -4,7 +4,8 @@
 
         <form class="{% if parent %}reply-form{% else %}post-form{% endif %} glow-on-focus rounded-card bg-white"
             method="post"
-            data-endpoint="{% url 'forums:create_post' %}">
+            data-endpoint="{% url 'forums:create_post' %}"
+            data-mention-endpoint="{% url 'forums:mention_completions' %}">
             {% csrf_token %}
 
             <input type="hidden" name="page" value="{{ page.id }}">

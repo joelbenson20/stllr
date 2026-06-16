@@ -17,5 +17,6 @@ class CrewForm(forms.ModelForm):
 
     def clean_handle(self):
         handle = self.cleaned_data['handle']
-        validate_handle(handle, requesting_user=self.requesting_user, requesting_crew=self.instance)
+        if not self.instance.pk or handle.lower() != self.instance.handle.lower():
+            validate_handle(handle, requesting_user=self.requesting_user)
         return handle

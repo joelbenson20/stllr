@@ -11,4 +11,5 @@ urlpatterns = [
     path('post/<int:post_id>/remove/', views.remove_post, name='remove_post'),
     path('post/removed/', views.remove_post_success, name='remove_post_success'),
     path('markdownify/', views.markdownify, name='markdownify'),
+    path('mention-completions/', views.mention_completions, name='mention_completions'),
 ]

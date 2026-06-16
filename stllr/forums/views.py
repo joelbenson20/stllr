@@ -10,6 +10,7 @@ from django.db import connection
 from django.db.models.expressions import RawSQL
 from django_ratelimit.decorators import ratelimit
 from pages.models import Page
+from crews.models import Crew
 from .models import Post
 from .forms import PostForm
 from .templatetags.forum_tags import render_post
@@ -120,3 +121,22 @@ def remove_post_success(request):
 def markdownify(request):
     content = request.POST.get('content', '')
     return JsonResponse({'status': 200, 'markdown': render_post(content)}, status=200)
+
+
+@login_required
+def mention_completions(request):
+    q = request.GET.get('q', '').strip()
+    if not q:
+        return JsonResponse([], safe=False)
+
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+
+    users = User.objects.filter(username__istartswith=q).values('username')[:5]
+    crews = Crew.objects.filter(handle__istartswith=q).values('handle', 'name')[:5]
+
+    results = (
+        [{'type': 'user', 'handle': u['username']} for u in users] +
+        [{'type': 'crew', 'handle': c['handle'], 'name': c['name']} for c in crews]
+    )
+    return JsonResponse(results, safe=False)
