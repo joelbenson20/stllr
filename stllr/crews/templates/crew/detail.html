@@ -73,6 +73,14 @@
                             <i class="bi bi-person-plus me-2"></i>Invite members
                         </a>
                     </li>
+                    {% if membership.role == 'owner' %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="{% url 'crews:delete_crew' crew.handle %}">
+                            <i class="bi bi-trash me-2"></i>Delete crew
+                        </a>
+                    </li>
+                    {% endif %}
                     {% endif %}
                 </ul>
             </div>

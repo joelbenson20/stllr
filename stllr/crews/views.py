@@ -119,7 +119,7 @@ def find_crews(request):
     results = []
     if q:
         crews = Crew.objects.filter(
-            Q(name__icontains=q) | Q(handle__icontains=q)
+            Q(name__icontains=q) | Q(handle__icontains=q) | Q(bio__icontains=q)
         )[:20]
         memberships = {}
         if request.user.is_authenticated:
@@ -229,6 +229,20 @@ def remove_member(request, handle, username):
         return HttpResponseForbidden()
     target.delete()
     return HttpResponse('')
+
+
+@login_required
+def delete_crew(request, handle):
+    crew = get_object_or_404(Crew, handle__iexact=handle)
+    get_object_or_404(
+        Membership, crew=crew, user=request.user,
+        role=Membership.Role.OWNER, status=Membership.Status.ACCEPTED
+    )
+    if request.method == 'POST':
+        crew.delete()
+        messages.success(request, f'Crew @{handle} has been deleted.')
+        return redirect('crews:crews')
+    return render(request, 'crew/delete_confirm.html', {'crew': crew})
 
 
 @login_required

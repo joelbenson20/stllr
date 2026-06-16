@@ -10,13 +10,14 @@
             <i class="bi bi-arrow-left"></i>
         </a>
         <h4 class="fw-bold mb-0">Find Crews</h4>
+        <a href="{% url 'crews:create_crew' %}" class="btn btn-glass btn-sm ms-auto">Start a crew</a>
     </div>
 
     <form class="d-flex w-100 mb-4" action="{% url 'crews:find_crews' %}" role="search">
         <input class="search-bar glow-on-focus form-control form-control-lg rounded-pill border-0"
             name="q"
             type="search"
-            placeholder="Search by name or handle"
+            placeholder="Search by name, handle, or bio"
             value="{{ q }}"
             autocomplete="off"
             autofocus>

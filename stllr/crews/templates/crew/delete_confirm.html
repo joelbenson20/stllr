@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Delete @{{ crew.handle }} - stllr{% endblock title %}
+
+{% block content %}
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-danger">
+                <div class="card-body text-center p-4">
+                    <i class="bi bi-exclamation-triangle-fill text-danger fs-1 mb-3 d-block"></i>
+                    <h5 class="mb-1">Delete <strong>{{ crew.name }}</strong>?</h5>
+                    <p class="text-secondary small mb-4">
+                        @{{ crew.handle }} and all its memberships and data will be permanently deleted.
+                        This cannot be undone.
+                    </p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger w-100 mb-2">Yes, delete this crew</button>
+                        <a href="{{ crew.get_absolute_url }}" class="btn btn-outline-secondary w-100">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
