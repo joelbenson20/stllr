@@ -100,10 +100,10 @@
     </nav>
 
     {% if active_tab == 'posts' %}
-        {% include "post/feed.html" with author=profile.user.username %}
+        {% include "post/feed.html" with author_id=profile.user.id %}
 
     {% elif active_tab == 'stars' %}
-        {% include "page/feed.html" with starred_by_user=profile.user.username %}
+        {% include "page/feed.html" with starred_by_user_id=profile.user.id %}
     {% endif %}
 
 {% endblock content %}

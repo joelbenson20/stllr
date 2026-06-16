@@ -17,20 +17,20 @@ def feed(request):
     query = request.GET.get('query', '')
     sort = request.GET.get('sort', 'firmament')
     seed = float(request.GET.get('seed', random.random()))
-    starred_by_user = request.GET.get('starred_by_user')
-    starred_by_crew = request.GET.get('starred_by_crew')
-    near_to = request.GET.get('near_to')
+    starred_by_user_id = request.GET.get('starred_by_user_id')
+    starred_by_crew_id = request.GET.get('starred_by_crew_id')
+    near_page_id = request.GET.get('near_page_id')
 
     pages = None
 
-    if near_to:
-        source_page = get_object_or_404(Page, id=near_to)
+    if near_page_id:
+        source_page = get_object_or_404(Page, id=near_page_id)
         pages = source_page.get_nearby_pages()
-    elif starred_by_user:
-        profile_user = get_object_or_404(get_user_model(), username=starred_by_user)
+    elif starred_by_user_id:
+        profile_user = get_object_or_404(get_user_model(), id=starred_by_user_id)
         pages = Page.objects.filter(stars__user=profile_user).order_by('-stars__created')
-    elif starred_by_crew:
-        crew = get_object_or_404(Crew, handle__iexact=starred_by_crew)
+    elif starred_by_crew_id:
+        crew = get_object_or_404(Crew, id=starred_by_crew_id)
         member_user_ids = crew.memberships.filter(status=Membership.Status.ACCEPTED).values('user')
         with connection.cursor() as cursor:
             cursor.execute('SELECT setseed(%s)', [seed])

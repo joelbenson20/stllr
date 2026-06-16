@@ -93,7 +93,7 @@
     </nav>
 
     {% if active_tab == 'stars' %}
-        {% include "page/feed.html" with starred_by_crew=crew.handle %}
+        {% include "page/feed.html" with starred_by_crew_id=crew.id %}
 
     {% elif active_tab == 'members' %}
         {% for m in members %}

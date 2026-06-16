@@ -159,9 +159,9 @@ function initPostFeed(feed) {
         if (loading) return;
         loading = true;
         const params = new URLSearchParams();
-        if (feeder.dataset.page) params.set('page_id', feeder.dataset.page);
-        if (feeder.dataset.parent) params.set('parent_id', feeder.dataset.parent);
-        if (feeder.dataset.author) params.set('author', feeder.dataset.author);
+        if (feeder.dataset.pageId) params.set('page_id', feeder.dataset.pageId);
+        if (feeder.dataset.parentId) params.set('parent_id', feeder.dataset.parentId);
+        if (feeder.dataset.authorId) params.set('author_id', feeder.dataset.authorId);
         params.set('seed', feeder.dataset.seed);
         params.set('p', feeder.dataset.p);
         fetch(feeder.dataset.endpoint + '?' + params.toString())

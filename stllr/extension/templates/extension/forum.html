@@ -5,6 +5,6 @@
 
     {% include "post/form.html" with parent=None %}
 
-    {% include "post/feed.html" %}
+    {% include "post/feed.html" with page_id=page.id %}
 
 {% endblock content %}

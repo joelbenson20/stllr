@@ -22,16 +22,16 @@ def forum(request, page_id):
 
 def feed(request):
     seed = float(request.GET.get('seed', random.random()))
-    author = request.GET.get('author')
+    author_id = request.GET.get('author_id')
     page_id = request.GET.get('page_id')
     parent_id = request.GET.get('parent_id')
 
     with connection.cursor() as cursor:
         cursor.execute('SELECT setseed(%s)', [seed])
 
-    if author:
+    if author_id:
         from django.contrib.auth import get_user_model
-        author_user = get_object_or_404(get_user_model(), username=author)
+        author_user = get_object_or_404(get_user_model(), id=author_id)
         posts = Post.objects.filter(author=author_user, removed=False)
     elif page_id:
         page = get_object_or_404(Page, pk=page_id)
