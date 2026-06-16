@@ -1,0 +1,66 @@
+<div id="crew-member-{{ m.user.username }}" class="crew-member-row d-flex align-items-center btn-glass rounded-card gap-3 py-2 px-2 mb-2">
+    <a href="{{ m.user.profile.get_absolute_url }}" class="d-flex align-items-center gap-3 text-decoration-none flex-grow-1">
+        {% include "user/avatar.html" with user=m.user size="40" dimensions="40x40" %}
+        <span class="fw-semibold">@{{ m.user.username }}</span>
+    </a>
+
+    {% if m.role == 'owner' %}
+        <span class="badge bg-secondary">Owner</span>
+    {% elif m.role == 'admin' %}
+        <span class="badge bg-secondary">Admin</span>
+    {% endif %}
+
+    {% if request.user.is_authenticated and m.user != request.user and membership %}
+        {% if membership.role == 'owner' and m.role != 'owner' %}
+        <div class="dropdown">
+            <button class="dropdown-toggle no-caret btn btn-sm btn-glass rounded-circle flex-shrink-0"
+                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-glass rounded-card">
+                {% if m.role == 'admin' %}
+                <li>
+                    <button type="button" class="dropdown-item crew-member-action-btn"
+                        data-endpoint="{% url 'crews:unset_admin' crew.handle m.user.username %}"
+                        data-csrf-token="{{ csrf_token }}">
+                        <i class="bi bi-shield-minus me-2"></i>Remove Admin
+                    </button>
+                </li>
+                {% else %}
+                <li>
+                    <button type="button" class="dropdown-item crew-member-action-btn"
+                        data-endpoint="{% url 'crews:set_admin' crew.handle m.user.username %}"
+                        data-csrf-token="{{ csrf_token }}">
+                        <i class="bi bi-shield-plus me-2"></i>Make Admin
+                    </button>
+                </li>
+                {% endif %}
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <button type="button" class="dropdown-item text-danger crew-member-action-btn"
+                        data-endpoint="{% url 'crews:remove_member' crew.handle m.user.username %}"
+                        data-csrf-token="{{ csrf_token }}">
+                        <i class="bi bi-person-dash me-2"></i>Remove
+                    </button>
+                </li>
+            </ul>
+        </div>
+        {% elif membership.role == 'admin' and m.role == 'member' %}
+        <div class="dropdown">
+            <button class="dropdown-toggle no-caret btn btn-sm btn-glass rounded-circle flex-shrink-0"
+                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-glass rounded-card">
+                <li>
+                    <button type="button" class="dropdown-item text-danger crew-member-action-btn"
+                        data-endpoint="{% url 'crews:remove_member' crew.handle m.user.username %}"
+                        data-csrf-token="{{ csrf_token }}">
+                        <i class="bi bi-person-dash me-2"></i>Remove
+                    </button>
+                </li>
+            </ul>
+        </div>
+        {% endif %}
+    {% endif %}
+</div>

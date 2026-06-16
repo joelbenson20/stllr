@@ -42,8 +42,7 @@
     </div>
 
     <div class="d-flex justify-content-center gap-3 mb-4 text-secondary small">
-        <span>{{ members.count }} member{{ members.count|pluralize }}</span>
-        <span>{{ crew.created|date:"N j, Y" }}</span>
+        <i>Created: {{ crew.created|date:"N j, Y" }}</i>
     </div>
 
     {% if request.user.is_authenticated %}
@@ -69,24 +68,39 @@
                             <i class="bi bi-pencil me-2"></i>Edit crew
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'crews:invite_members' crew.handle %}">
+                            <i class="bi bi-person-plus me-2"></i>Invite members
+                        </a>
+                    </li>
                     {% endif %}
                 </ul>
             </div>
         </div>
     {% endif %}
 
-    <h6 class="text-secondary text-uppercase small mb-3">Members</h6>
-    {% for m in members %}
-        <div class="d-flex align-items-center gap-2 mb-2">
-            <a href="{{ m.user.profile.get_absolute_url }}" class="text-decoration-none">@{{ m.user.username }}</a>
-            {% if m.role == 'owner' %}
-                <span class="badge bg-secondary">Owner</span>
-            {% elif m.role == 'admin' %}
-                <span class="badge bg-secondary">Admin</span>
-            {% endif %}
-        </div>
-    {% empty %}
-        <p class="text-secondary">No members yet.</p>
-    {% endfor %}
+    <nav class="profile-tabs border-bottom border-grid mb-4">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link {% if active_tab == 'stars' %}active{% endif %}"
+                   href="{% url 'crews:crew_stars' crew.handle %}">Stars</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if active_tab == 'members' %}active{% endif %}"
+                   href="{% url 'crews:crew_detail' crew.handle %}">Members ({{ crew.member_count }})</a>
+            </li>
+        </ul>
+    </nav>
+
+    {% if active_tab == 'stars' %}
+        {% include "page/feed.html" with starred_by_crew=crew.handle %}
+
+    {% elif active_tab == 'members' %}
+        {% for m in members %}
+            {% include "member/card.html" %}
+        {% empty %}
+            <p class="text-secondary">No members yet.</p>
+        {% endfor %}
+    {% endif %}
 
 {% endblock content %}

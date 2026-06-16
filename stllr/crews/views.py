@@ -8,6 +8,8 @@ from django.template.loader import render_to_string
 from .forms import CrewForm
 from .models import Crew, Membership
 
+User = get_user_model()
+
 
 def crews(request):
     return render(request, 'crews.html')
@@ -28,6 +30,26 @@ def crew_detail(request, handle):
         'crew': crew,
         'membership': membership,
         'members': members,
+        'active_tab': 'members',
+    })
+
+
+def crew_stars(request, handle):
+    crew = get_object_or_404(Crew, handle__iexact=handle)
+    membership = None
+    if request.user.is_authenticated:
+        membership = Membership.objects.filter(crew=crew, user=request.user).first()
+    members = (
+        Membership.objects
+        .filter(crew=crew, status=Membership.Status.ACCEPTED)
+        .select_related('user')
+        .order_by('joined')
+    )
+    return render(request, 'crew/detail.html', {
+        'crew': crew,
+        'membership': membership,
+        'members': members,
+        'active_tab': 'stars',
     })
 
 
@@ -67,6 +89,31 @@ def edit_crew(request, handle):
     return render(request, 'crew/form.html', {'form': form, 'crew': crew})
 
 
+@login_required
+def invite_members(request, handle):
+    crew = get_object_or_404(Crew, handle__iexact=handle)
+    requester = Membership.objects.filter(
+        crew=crew, user=request.user, status=Membership.Status.ACCEPTED
+    ).first()
+    if not requester or requester.role == Membership.Role.MEMBER:
+        return redirect(crew.get_absolute_url())
+    q = request.GET.get('q', '').strip()
+    results = []
+    if q:
+        users = (
+            User.objects
+            .filter(username__icontains=q)
+            .exclude(pk=request.user.pk)
+            [:20]
+        )
+        memberships = {
+            m.user_id: m
+            for m in Membership.objects.filter(crew=crew, user__in=users)
+        }
+        results = [{'user': u, 'membership': memberships.get(u.pk)} for u in users]
+    return render(request, 'invite_members.html', {'crew': crew, 'q': q, 'results': results})
+
+
 def find_crews(request):
     q = request.GET.get('q', '').strip()
     results = []
@@ -90,7 +137,7 @@ def send_invite(request, handle, username):
     crew = get_object_or_404(Crew, handle__iexact=handle)
     if request.user.pk not in crew.admin_pks:
         return HttpResponseForbidden()
-    user = get_object_or_404(get_user_model(), username=username)
+    user = get_object_or_404(User, username=username)
     membership, created = Membership.objects.get_or_create(
         crew=crew, user=user,
         defaults={'status': Membership.Status.INVITED, 'role': Membership.Role.MEMBER},
@@ -162,3 +209,57 @@ def decline_invite(request, handle):
             request=request,
         ))
     return redirect(crew.get_absolute_url())
+
+
+@login_required
+def remove_member(request, handle, username):
+    crew = get_object_or_404(Crew, handle__iexact=handle)
+    requester = Membership.objects.filter(
+        crew=crew, user=request.user, status=Membership.Status.ACCEPTED
+    ).first()
+    if not requester or requester.role == Membership.Role.MEMBER:
+        return HttpResponseForbidden()
+    target_user = get_object_or_404(User, username=username)
+    if target_user == request.user:
+        return HttpResponseForbidden()
+    target = get_object_or_404(Membership, crew=crew, user=target_user, status=Membership.Status.ACCEPTED)
+    if target.role == Membership.Role.OWNER:
+        return HttpResponseForbidden()
+    if requester.role == Membership.Role.ADMIN and target.role == Membership.Role.ADMIN:
+        return HttpResponseForbidden()
+    target.delete()
+    return HttpResponse('')
+
+
+@login_required
+def set_admin(request, handle, username):
+    crew = get_object_or_404(Crew, handle__iexact=handle)
+    requester = get_object_or_404(Membership, crew=crew, user=request.user, status=Membership.Status.ACCEPTED)
+    if requester.role != Membership.Role.OWNER:
+        return HttpResponseForbidden('Only the crew owner can assign admin roles.')
+    target_user = get_object_or_404(User, username=username)
+    target = get_object_or_404(Membership, crew=crew, user=target_user, status=Membership.Status.ACCEPTED)
+    target.role = Membership.Role.ADMIN
+    target.save()
+    return HttpResponse(render_to_string(
+        'member/card.html',
+        {'m': target, 'crew': crew, 'membership': requester},
+        request=request,
+    ))
+
+
+@login_required
+def unset_admin(request, handle, username):
+    crew = get_object_or_404(Crew, handle__iexact=handle)
+    requester = get_object_or_404(Membership, crew=crew, user=request.user, status=Membership.Status.ACCEPTED)
+    if requester.role != Membership.Role.OWNER:
+        return HttpResponseForbidden('Only the crew owner can remove admin roles.')
+    target_user = get_object_or_404(User, username=username)
+    target = get_object_or_404(Membership, crew=crew, user=target_user, status=Membership.Status.ACCEPTED)
+    target.role = Membership.Role.MEMBER
+    target.save()
+    return HttpResponse(render_to_string(
+        'member/card.html',
+        {'m': target, 'crew': crew, 'membership': requester},
+        request=request,
+    ))

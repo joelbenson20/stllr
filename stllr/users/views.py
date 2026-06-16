@@ -21,9 +21,8 @@ def _profile_base_context(request, username):
     return user, {'profile': user.profile, 'contact': contact}
 
 
-def profile_posts(request, username): #TODO: Posts need to display the page they're under to make contextual sense
+def profile_posts(request, username):
     user, context = _profile_base_context(request, username)
-    context['posts'] = user.posts.filter(removed=False).select_related('page', 'page__domain').order_by('-created')
     context['active_tab'] = 'posts'
     return render(request, 'profile/detail.html', context)
 

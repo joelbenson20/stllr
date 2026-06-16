@@ -32,7 +32,8 @@ export function initPages() {
             if (feeder.dataset.sort) params.set('sort', feeder.dataset.sort);
             if (feeder.dataset.seed) params.set('seed', feeder.dataset.seed);
             if (feeder.dataset.query) params.set('query', feeder.dataset.query);
-            if (feeder.dataset.starredBy) params.set('starred_by', feeder.dataset.starredBy);
+            if (feeder.dataset.starredByUser) params.set('starred_by_user', feeder.dataset.starredByUser);
+            if (feeder.dataset.starredByCrew) params.set('starred_by_crew', feeder.dataset.starredByCrew);
             if (feeder.dataset.nearTo) params.set('near_to', feeder.dataset.nearTo);
             params.set('p', feeder.dataset.p);
             fetch(new URL(feeder.dataset.endpoint, document.baseURI).href + '?' + params.toString())

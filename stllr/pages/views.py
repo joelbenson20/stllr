@@ -7,14 +7,18 @@ from django.shortcuts import get_object_or_404, render
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib.postgres.search import SearchQuery
 from django.db import connection
+from django.db.models import Count, ExpressionWrapper, FloatField
 from django.db.models.expressions import RawSQL
+from django.db.models.functions import Random
 from .models import Page, PagePin
+from crews.models import Crew, Membership
 
 def feed(request):
     query = request.GET.get('query', '')
     sort = request.GET.get('sort', 'firmament')
     seed = float(request.GET.get('seed', random.random()))
-    starred_by = request.GET.get('starred_by')
+    starred_by_user = request.GET.get('starred_by_user')
+    starred_by_crew = request.GET.get('starred_by_crew')
     near_to = request.GET.get('near_to')
 
     pages = None
@@ -22,9 +26,20 @@ def feed(request):
     if near_to:
         source_page = get_object_or_404(Page, id=near_to)
         pages = source_page.get_nearby_pages()
-    elif starred_by:
-        profile_user = get_object_or_404(get_user_model(), username=starred_by)
+    elif starred_by_user:
+        profile_user = get_object_or_404(get_user_model(), username=starred_by_user)
         pages = Page.objects.filter(stars__user=profile_user).order_by('-stars__created')
+    elif starred_by_crew:
+        crew = get_object_or_404(Crew, handle__iexact=starred_by_crew)
+        member_user_ids = crew.memberships.filter(status=Membership.Status.ACCEPTED).values('user')
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT setseed(%s)', [seed])
+        pages = (
+            Page.objects
+            .filter(stars__user__in=member_user_ids)
+            .annotate(firmament_score=ExpressionWrapper(Count('stars') * Random(), output_field=FloatField()))
+            .order_by('-firmament_score')
+        )
     else:
         if sort == 'firmament':
             with connection.cursor() as cursor:

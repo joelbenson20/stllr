@@ -3,8 +3,9 @@
 
     <div class="feeder post-feeder"
         data-endpoint="{% url 'forums:feed' %}"
-        data-page-id="{{ page.id }}"
-        data-parent-id="{{ parent_id|default:'' }}"
+        data-page="{{ page.id|default:'' }}"
+        data-parent="{{ parent_id|default:'' }}"
+        data-author="{{ author|default:'' }}"
         data-seed="{% random_seed %}"
         data-p="1">
 

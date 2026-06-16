@@ -81,16 +81,6 @@
                     <i class="bi bi-three-dots"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-glass rounded-card">
-                    {% for crew in admin_crews %}
-                    <li>
-                        <button type="button"
-                            class="dropdown-item crew-invite-btn"
-                            data-endpoint="{% url 'crews:send_invite' crew.handle profile.user.username %}"
-                            data-csrf-token="{{ csrf_token }}">
-                            <i class="bi bi-people me-2"></i>Invite to {{ crew.name }}
-                        </button>
-                    </li>
-                    {% endfor %}
                 </ul>
             </div>
         </div>
@@ -110,16 +100,10 @@
     </nav>
 
     {% if active_tab == 'posts' %}
-        {% if posts %}
-            {% for post in posts %}
-                {% include "post/card.html" %}
-            {% endfor %}
-        {% else %}
-            <p class="text-secondary">No posts yet.</p>
-        {% endif %}
+        {% include "post/feed.html" with author=profile.user.username %}
 
     {% elif active_tab == 'stars' %}
-        {% include "page/feed.html" with starred_by=profile.user.username %}
+        {% include "page/feed.html" with starred_by_user=profile.user.username %}
     {% endif %}
 
 {% endblock content %}

@@ -21,17 +21,26 @@ def forum(request, page_id):
 
 
 def feed(request):
-    page = get_object_or_404(Page, pk=request.GET.get('page_id'))
     seed = float(request.GET.get('seed', random.random()))
+    author = request.GET.get('author')
+    page_id = request.GET.get('page_id')
     parent_id = request.GET.get('parent_id')
 
     with connection.cursor() as cursor:
         cursor.execute('SELECT setseed(%s)', [seed])
 
-    if parent_id:
-        posts = Post.objects.filter(parent_id=parent_id)
+    if author:
+        from django.contrib.auth import get_user_model
+        author_user = get_object_or_404(get_user_model(), username=author)
+        posts = Post.objects.filter(author=author_user, removed=False)
+    elif page_id:
+        page = get_object_or_404(Page, pk=page_id)
+        if parent_id:
+            posts = Post.objects.filter(parent_id=parent_id)
+        else:
+            posts = Post.objects.filter(page=page, thread_level=0)
     else:
-        posts = Post.objects.filter(page=page, thread_level=0)
+        return HttpResponse('')
 
     posts = posts.order_by(RawSQL('brightness * RANDOM()', []).desc())
 
