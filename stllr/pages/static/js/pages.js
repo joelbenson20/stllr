@@ -8,7 +8,7 @@ export function initPages() {
             const icon = btn.querySelector('i');
             icon.className = 'bi bi-check-lg';
             setTimeout(() => { icon.className = 'bi bi-link-45deg'; }, 1500);
-        });
+        }).catch(err => console.error('Copy failed:', err));
     });
 
     // Pin Buttons

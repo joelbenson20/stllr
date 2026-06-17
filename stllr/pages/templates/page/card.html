@@ -101,7 +101,7 @@
                     <ul class="dropdown-menu dropdown-menu-glass rounded-card" aria-labelledby="p{{ page.id }}ShareDropdown">
                         <li>
                             <button class="copy-url-btn dropdown-item d-flex align-items-center gap-2"
-                                data-url="{{ page.url }}">
+                                data-url="{{ page.get_absolute_url }}">
                                 <i class="bi bi-link-45deg"></i>Copy URL
                             </button>
                         </li>
