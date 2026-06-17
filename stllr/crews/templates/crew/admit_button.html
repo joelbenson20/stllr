@@ -1,0 +1,18 @@
+<div class="crew-member-row d-flex align-items-center btn-glass rounded-card gap-3 py-2 px-2 mb-2">
+    <a href="{{ m.user.profile.get_absolute_url }}" class="d-flex align-items-center gap-3 text-decoration-none flex-grow-1">
+        {% include "user/avatar.html" with user=m.user size="40" dimensions="40x40" %}
+        <span class="fw-semibold">@{{ m.user.username }}</span>
+    </a>
+    <form method="post" action="{% url 'crews:admit_member' crew.handle m.user.username %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-sm btn-glass">
+            <i class="bi bi-check-lg me-1"></i>Admit
+        </button>
+    </form>
+    <form method="post" action="{% url 'crews:reject_member' crew.handle m.user.username %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-sm btn-glass text-danger">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </form>
+</div>

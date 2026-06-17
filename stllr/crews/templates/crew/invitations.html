@@ -6,7 +6,7 @@
                 {% include "crew/avatar.html" with crew=membership.crew size="28" dimensions="28x28" %}
                 <span class="small text-truncate">@{{ membership.crew.handle }}</span>
             </a>
-            {% include "crew/status_button.html" with crew=membership.crew membership=membership %}
+            {% include "crew/join_button.html" with crew=membership.crew membership=membership %}
         </div>
     {% endfor %}
 {% endif %}

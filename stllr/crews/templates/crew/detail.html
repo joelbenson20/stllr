@@ -48,7 +48,7 @@
     {% if request.user.is_authenticated %}
         <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
             {% if request.user.pk not in crew.admin_pks %}
-                {% include "crew/status_button.html" with crew=crew membership=membership %}
+                {% include "crew/join_button.html" with crew=crew membership=membership %}
             {% endif %}
             <div class="dropend">
                 <button class="dropdown-toggle no-caret btn btn-sm btn-glass rounded-circle flex-shrink-0"
@@ -115,6 +115,13 @@
         {% include "page/feed.html" with starred_by_crew_id=crew.id %}
 
     {% elif active_tab == 'members' %}
+        {% if membership_requests %}
+            <p class="text-secondary small mb-2">Requests</p>
+            {% for m in membership_requests %}
+                {% include "crew/admit_button.html" %}
+            {% endfor %}
+            <hr class="border-grid my-3">
+        {% endif %}
         {% for m in members %}
             {% include "member/card.html" %}
         {% empty %}

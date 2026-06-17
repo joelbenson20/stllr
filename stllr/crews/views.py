@@ -39,6 +39,13 @@ def crew_members(request, handle):
         .select_related('user')
         .order_by('joined')
     )
+    if request.user.is_authenticated and request.user.pk in crew.admin_pks:
+        context['membership_requests'] = (
+            Membership.objects
+            .filter(crew=crew, status=Membership.Status.REQUESTED)
+            .select_related('user')
+            .order_by('created')
+        )
     return render(request, 'crew/detail.html', context)
 
 
@@ -131,6 +138,7 @@ def find_crews(request):
     return render(request, 'find_crews.html', {'q': q, 'results': results})
 
 
+@require_POST
 @login_required
 def send_invite(request, handle, username):
     from comms.models import Notification
@@ -148,6 +156,7 @@ def send_invite(request, handle, username):
     return HttpResponse(status=200)
 
 
+@require_POST
 @login_required
 def join_crew(request, handle):
     crew = get_object_or_404(Crew, handle__iexact=handle)
@@ -158,13 +167,14 @@ def join_crew(request, handle):
     )
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return HttpResponse(render_to_string(
-            'crew/status_button.html',
+            'crew/join_button.html',
             {'crew': crew, 'membership': membership},
             request=request,
         ))
     return redirect(crew.get_absolute_url())
 
 
+@require_POST
 @login_required
 def leave_crew(request, handle):
     crew = get_object_or_404(Crew, handle__iexact=handle)
@@ -173,13 +183,14 @@ def leave_crew(request, handle):
     ).delete()
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return HttpResponse(render_to_string(
-            'crew/status_button.html',
+            'crew/join_button.html',
             {'crew': crew, 'membership': None},
             request=request,
         ))
     return redirect(crew.get_absolute_url())
 
 
+@require_POST
 @login_required
 def accept_invite(request, handle):
     crew = get_object_or_404(Crew, handle__iexact=handle)
@@ -190,13 +201,14 @@ def accept_invite(request, handle):
     membership.save()
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return HttpResponse(render_to_string(
-            'crew/status_button.html',
+            'crew/join_button.html',
             {'crew': crew, 'membership': membership},
             request=request,
         ))
     return redirect(crew.get_absolute_url())
 
 
+@require_POST
 @login_required
 def decline_invite(request, handle):
     crew = get_object_or_404(Crew, handle__iexact=handle)
@@ -205,13 +217,14 @@ def decline_invite(request, handle):
     ).delete()
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return HttpResponse(render_to_string(
-            'crew/status_button.html',
+            'crew/join_button.html',
             {'crew': crew, 'membership': None},
             request=request,
         ))
     return redirect(crew.get_absolute_url())
 
 
+@require_POST
 @login_required
 def remove_member(request, handle, username):
     crew = get_object_or_404(Crew, handle__iexact=handle)
@@ -232,6 +245,36 @@ def remove_member(request, handle, username):
     return HttpResponse('')
 
 
+@require_POST
+@login_required
+def admit_member(request, handle, username):
+    crew = get_object_or_404(Crew, handle__iexact=handle)
+    requester = Membership.objects.filter(
+        crew=crew, user=request.user, status=Membership.Status.ACCEPTED
+    ).first()
+    if not requester or requester.role == Membership.Role.MEMBER:
+        return HttpResponseForbidden()
+    target_user = get_object_or_404(User, username=username)
+    target = get_object_or_404(Membership, crew=crew, user=target_user, status=Membership.Status.REQUESTED)
+    target.status = Membership.Status.ACCEPTED
+    target.save()
+    return redirect('crews:crew_members', handle=handle)
+
+
+@require_POST
+@login_required
+def reject_member(request, handle, username):
+    crew = get_object_or_404(Crew, handle__iexact=handle)
+    requester = Membership.objects.filter(
+        crew=crew, user=request.user, status=Membership.Status.ACCEPTED
+    ).first()
+    if not requester or requester.role == Membership.Role.MEMBER:
+        return HttpResponseForbidden()
+    target_user = get_object_or_404(User, username=username)
+    Membership.objects.filter(crew=crew, user=target_user, status=Membership.Status.REQUESTED).delete()
+    return redirect('crews:crew_members', handle=handle)
+
+
 @login_required
 def delete_crew(request, handle):
     crew = get_object_or_404(Crew, handle__iexact=handle)
@@ -246,6 +289,7 @@ def delete_crew(request, handle):
     return render(request, 'crew/delete_confirm.html', {'crew': crew})
 
 
+@require_POST
 @login_required
 def set_admin(request, handle, username):
     crew = get_object_or_404(Crew, handle__iexact=handle)
@@ -263,6 +307,7 @@ def set_admin(request, handle, username):
     ))
 
 
+@require_POST
 @login_required
 def unset_admin(request, handle, username):
     crew = get_object_or_404(Crew, handle__iexact=handle)
