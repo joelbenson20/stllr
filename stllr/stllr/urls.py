@@ -18,6 +18,7 @@ urlpatterns = [
     path('forums/', include('forums.urls', namespace='forums')),
     path('rooms/', include('rooms.urls', namespace='rooms')),
     path('crews/', include('crews.urls', namespace='crews')),
+    path('beacons/', include('beacons.urls', namespace='beacons')),
     path('comms/', include('comms.urls', namespace='comms')),
     path('oversight/', include('oversight.urls', namespace='oversight')),
     path('policies/<str:policy>/', views.policy, name='policy'), # TODO: Move policies urls and views into oversight

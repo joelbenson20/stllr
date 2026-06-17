@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}beacons - stllr{% endblock title %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0">Beacons</h4>
+    </div>
+
+    {% include "beacon/feed.html" with beaconed_to_user_id=request.user.id %}
+{% endblock content %}

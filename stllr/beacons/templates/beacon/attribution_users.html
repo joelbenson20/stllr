@@ -1,0 +1,14 @@
+<div class="d-inline-flex align-items-center glass-dark rounded-pill gap-2 flex-shrink-0 mb-1 px-1">
+    <div class="d-flex">
+        {% for b in beacon.page.attribution_beacons %}
+            <a href="{% url 'users:profile' b.user.username %}"
+               class="position-relative" style="z-index:{{ forloop.revcounter }};{% if not forloop.first %}margin-left:-8px;{% endif %}"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="@{{ b.user.username }}">
+                {% include "user/avatar.html" with user=b.user size="24" dimensions="24x24" %}
+            </a>
+        {% endfor %}
+    </div>
+    <span class="text-secondary">→</span>
+</div>

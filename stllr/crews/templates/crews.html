@@ -14,5 +14,6 @@
         <a href="{% url 'crews:create_crew' %}" class="btn btn-glass btn-sm">Start a crew</a>
     </div>
 
+    {% include "crew/invitations.html" %}
     {% include "crew/list.html" %}
 {% endblock content %}

@@ -1,10 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.db.models import Count, Q
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
+from django.views.decorators.http import require_POST
 from .forms import CrewForm
 from .models import Crew, Membership
 
@@ -15,42 +16,42 @@ def crews(request):
     return render(request, 'crews.html')
 
 
-def crew_detail(request, handle):
+def _crew_base_context(request, handle):
     crew = get_object_or_404(Crew, handle__iexact=handle)
     membership = None
     if request.user.is_authenticated:
         membership = Membership.objects.filter(crew=crew, user=request.user).first()
-    members = (
+    return crew, {'crew': crew, 'membership': membership}
+
+
+def crew_beacons(request, handle):
+    _, context = _crew_base_context(request, handle)
+    context['active_tab'] = 'beacons'
+    return render(request, 'crew/detail.html', context)
+
+
+def crew_members(request, handle):
+    crew, context = _crew_base_context(request, handle)
+    context['active_tab'] = 'members'
+    context['members'] = (
         Membership.objects
         .filter(crew=crew, status=Membership.Status.ACCEPTED)
         .select_related('user')
         .order_by('joined')
     )
-    return render(request, 'crew/detail.html', {
-        'crew': crew,
-        'membership': membership,
-        'members': members,
-        'active_tab': 'members',
-    })
+    return render(request, 'crew/detail.html', context)
+
+
+def crew_mentions(request, handle):
+    _, context = _crew_base_context(request, handle)
+    context['active_tab'] = 'mentions'
+    return render(request, 'crew/detail.html', context)
 
 
 def crew_stars(request, handle):
-    crew = get_object_or_404(Crew, handle__iexact=handle)
-    membership = None
-    if request.user.is_authenticated:
-        membership = Membership.objects.filter(crew=crew, user=request.user).first()
-    members = (
-        Membership.objects
-        .filter(crew=crew, status=Membership.Status.ACCEPTED)
-        .select_related('user')
-        .order_by('joined')
-    )
-    return render(request, 'crew/detail.html', {
-        'crew': crew,
-        'membership': membership,
-        'members': members,
-        'active_tab': 'stars',
-    })
+    _, context = _crew_base_context(request, handle)
+    context['active_tab'] = 'stars'
+    return render(request, 'crew/detail.html', context)
 
 
 
@@ -277,3 +278,4 @@ def unset_admin(request, handle, username):
         {'m': target, 'crew': crew, 'membership': requester},
         request=request,
     ))
+

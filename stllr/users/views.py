@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 from .forms import UserEditForm, ProfileEditForm
 from .models import Mute
 from contacts.models import ContactRelation
+from crews.models import Membership
 
 
 def _profile_base_context(request, username):
@@ -30,6 +31,30 @@ def profile_posts(request, username):
 def profile_stars(request, username):
     user, context = _profile_base_context(request, username)
     context['active_tab'] = 'stars'
+    return render(request, 'profile/detail.html', context)
+
+
+def profile_replies(request, username):
+    user, context = _profile_base_context(request, username)
+    context['active_tab'] = 'replies'
+    return render(request, 'profile/detail.html', context)
+
+
+def profile_mentions(request, username):
+    user, context = _profile_base_context(request, username)
+    context['active_tab'] = 'mentions'
+    return render(request, 'profile/detail.html', context)
+
+
+def profile_crews(request, username):
+    user, context = _profile_base_context(request, username)
+    context['active_tab'] = 'crews'
+    context['crews_list'] = [
+        m.crew for m in user.crew_memberships
+            .filter(status=Membership.Status.ACCEPTED)
+            .select_related('crew')
+            .order_by('crew__name')
+    ]
     return render(request, 'profile/detail.html', context)
 
 

@@ -1,20 +1,7 @@
-{% if crew_invitations %}
-    <h6 class="text-uppercase small fw-bold text-secondary mb-2">Invitations</h6>
-    {% for membership in crew_invitations %}
-        <div class="d-flex align-items-center gap-2 mb-2">
-            <a href="{{ membership.crew.get_absolute_url }}" class="d-flex align-items-center gap-2 text-light text-decoration-none flex-grow-1 text-truncate">
-                {% include "crew/avatar.html" with crew=membership.crew size="28" dimensions="28x28" %}
-                <span class="small text-truncate">@{{ membership.crew.handle }}</span>
-            </a>
-            {% include "crew/status_button.html" with crew=membership.crew membership=membership %}
-        </div>
-    {% endfor %}
-{% endif %}
-
 {% if crews_list %}
     {% for crew in crews_list %}
         {% include "crew/card.html" %}
     {% endfor %}
-{% elif not crew_invitations %}
+{% else %}
     <a href="{% url 'crews:find_crews' %}" class="text-secondary small">Find crews</a>
 {% endif %}

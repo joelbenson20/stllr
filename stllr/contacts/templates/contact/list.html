@@ -1,22 +1,7 @@
-{% load static %}
-
-{% if contact_requests %}
-    <h6 class="text-uppercase small fw-bold text-secondary mb-2">Requests</h6>
-    {% for rel in contact_requests %}
-        <div class="d-flex align-items-center gap-2 mb-2">
-            <a href="{% url 'users:profile' rel.from_user.username %}" class="d-flex align-items-center gap-2 text-light text-decoration-none flex-grow-1 text-truncate">
-                {% include "user/avatar.html" with user=rel.from_user size="28" dimensions="28x28" %}
-                <span class="small text-truncate">@{{ rel.from_user.username }}</span>
-            </a>
-            {% include "contact/status_button.html" with other=rel.from_user contact=rel %}
-        </div>
-    {% endfor %}
-{% endif %}
-
 {% if contacts_list %}
     {% for contact in contacts_list %}
         {% include "user/card.html" with user=contact %}
     {% endfor %}
-{% elif not contact_requests %}
+{% else %}
     <a href="{% url 'contacts:find_contacts' %}" class="text-secondary small">Find contacts</a>
 {% endif %}

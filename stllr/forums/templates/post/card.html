@@ -30,7 +30,7 @@
                 {% if post.removed %}
                     <p class="text-secondary fst-italic small">This post was removed by {{ post.get_removed_by_display }}.</p>
                 {% else %}
-                    {{ post.content|render_post }}
+                    {{ post|render_post }}
                 {% endif %}
             </div>
             <div class="post-content-muted {% if post.author.id not in muted_user_ids %}d-none{% endif %}">

@@ -1,10 +1,10 @@
-{% load thumbnail %}
+{% load thumbnail page_tags %}
 {% if page.image %}{% thumbnail page.image "600x315" crop="center" as thumbnail_image %}{% endif %}
 
 {# TODO: Page cards squished on the extension have title + description overflowing above the top of the thumbnail #}
 
 <div id="page{{ page.id }}"
-    class="page py-3">
+    class="page mb-5">
 
     <div>
 
@@ -89,11 +89,49 @@
                     <span class="room-user-count" style="font-size: 0.8rem;">{{ page.room_count }}</span>
                 </a>
 
-                <!-- Dropdown buttons -->
+                <!-- Share button -->
+                <div class="dropdown">
+                    <button id="p{{ page.id }}ShareDropdown"
+                        class="dropdown-toggle no-caret btn btn-glass rounded-circle flex-shrink-0"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-share-fill"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-glass rounded-card" aria-labelledby="p{{ page.id }}ShareDropdown">
+                        <li>
+                            <button class="copy-url-btn dropdown-item d-flex align-items-center gap-2"
+                                data-url="{{ page.url }}">
+                                <i class="bi bi-link-45deg"></i>Copy URL
+                            </button>
+                        </li>
+                        {% if request.user.is_authenticated %}
+                            <li>
+                                <button class="share-btn dropdown-item d-flex align-items-center gap-2"
+                                    data-object-type="page"
+                                    data-object-id="{{ page.id }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#shareModal">
+                                    <i class="bi bi-person-fill"></i>Share
+                                </button>
+                            </li>
+                            <li>
+                                <button class="beacon-btn dropdown-item d-flex align-items-center gap-2"
+                                    data-page-id="{{ page.id }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#beaconModal">
+                                    <i class="bi bi-broadcast-pin"></i>Beacon
+                                </button>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <!-- More options -->
                 <div class="dropend">
 
                     <button id="p{{ page.id }}Dropdown"
-                        class="dropdown-toggle no-caret btn btn-glass rounded-circle flex-shrink-0"
+                        class="dropdown-toggle no-caret btn btn-transparent rounded-circle flex-shrink-0"
                         type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -103,22 +141,13 @@
                     <ul class="dropdown-menu dropdown-menu-glass rounded-card" aria-labelledby="p{{ page.id }}Dropdown">
                         {% if request.user.is_authenticated %}
                             <li>
-                                <button class="share-btn dropdown-item d-flex align-items-center gap-2"
-                                    data-object-type="page"
-                                    data-object-id="{{ page.id }}"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#shareModal">
-                                    <i class="bi bi-share-fill"></i>Share
-                                </button>
-                            </li>
-                            <li>
                                 <button class="page-pin-button dropdown-item d-flex align-items-center gap-2"
                                     data-page-id="{{ page.id }}"
-                                    data-action="{% if page in user.pages_pinned.all %}unpin{% else %}pin{% endif %}"
+                                    data-action="{% if page|pinned_by:request.user %}unpin{% else %}pin{% endif %}"
                                     data-csrf-token="{{ csrf_token }}"
                                     data-endpoint="{% url 'pages:toggle_pin' page.id %}">
-                                    <i class="bi bi-broadcast-pin"></i>
-                                    <span>{% if page in user.pages_pinned.all %}Remove pin{% else %}Pin{% endif %}</span>
+                                    <i class="bi bi-geo-fill"></i>
+                                    <span>{% if page|pinned_by:request.user %}Remove pin{% else %}Pin{% endif %}</span>
                                 </button>
                             </li>
                             <li>

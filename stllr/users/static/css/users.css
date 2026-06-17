@@ -15,21 +15,3 @@
         margin-right: -3rem;
     }
 }
-
-.profile-tabs .nav-link {
-    color: rgba(255,255,255,0.55);
-    font-weight: 600;
-    padding: 1rem 1.5rem;
-    border: none;
-    border-bottom: 2px solid transparent;
-    border-radius: 0;
-}
-.profile-tabs .nav-link:hover {
-    color: #fff;
-    border-bottom-color: rgba(255,255,255,0.3);
-}
-.profile-tabs .nav-link.active {
-    color: #fff;
-    background: none;
-    border-bottom: 2px solid #fff;
-}

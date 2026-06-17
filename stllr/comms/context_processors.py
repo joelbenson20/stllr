@@ -32,13 +32,13 @@ def contacts(request):
             request.user.get_contacts().select_related('profile'),
             key=lambda u: u.username.lower()
         )
-        contact_requests = list(
+        requests_list = list(
             ContactRelation.objects
             .filter(to_user=request.user, status=ContactRelation.Status.PENDING)
             .select_related('from_user', 'from_user__profile')
         )
-        return {'contacts_list': contacts_list, 'contact_requests': contact_requests}
-    return {'contacts_list': [], 'contact_requests': []}
+        return {'contacts_list': contacts_list, 'requests_list': requests_list}
+    return {'contacts_list': [], 'requests_list': []}
 
 def crews(request):
     if request.user.is_authenticated:
@@ -49,20 +49,22 @@ def crews(request):
             status__in=[Membership.Status.ACCEPTED, Membership.Status.INVITED],
         ).select_related('crew')
         admin_crew_ids = set()
-        crew_invitations = []
+        invitations_list = []
         for m in memberships:
             if m.status == Membership.Status.INVITED:
-                crew_invitations.append(m)
+                invitations_list.append(m)
             elif m.role in (Membership.Role.OWNER, Membership.Role.ADMIN):
                 admin_crew_ids.add(m.crew_id)
         admin_crews = [c for c in all_crews if c.pk in admin_crew_ids]
         return {
             'crews_list': all_crews,
             'admin_crews': admin_crews,
-            'crew_invitations': crew_invitations,
+            'invitations_list': invitations_list,
         }
-    return {'crews_list': [], 'admin_crews': [], 'crew_invitations': []}
+    return {'crews_list': [], 'admin_crews': [], 'invitations_list': []}
 
+
+# TODO: Remove muted_users functionality for now.
 def muted_users(request):
     if request.user.is_authenticated:
         return {

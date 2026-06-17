@@ -90,17 +90,28 @@
     <nav class="profile-tabs border-bottom border-grid mb-4">
         <ul class="nav">
             <li class="nav-item">
+                <a class="nav-link {% if active_tab == 'beacons' %}active{% endif %}"
+                   href="{% url 'crews:crew_detail' crew.handle %}">Beacons</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {% if active_tab == 'stars' %}active{% endif %}"
                    href="{% url 'crews:crew_stars' crew.handle %}">Stars</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {% if active_tab == 'mentions' %}active{% endif %}"
+                   href="{% url 'crews:crew_mentions' crew.handle %}">Mentions</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {% if active_tab == 'members' %}active{% endif %}"
-                   href="{% url 'crews:crew_detail' crew.handle %}">Members ({{ crew.member_count }})</a>
+                   href="{% url 'crews:crew_members' crew.handle %}">Members</a>
             </li>
         </ul>
     </nav>
 
-    {% if active_tab == 'stars' %}
+    {% if active_tab == 'beacons' %}
+        {% include "beacon/feed.html" with beaconed_to_crew_id=crew.id %}
+
+    {% elif active_tab == 'stars' %}
         {% include "page/feed.html" with starred_by_crew_id=crew.id %}
 
     {% elif active_tab == 'members' %}
@@ -109,6 +120,9 @@
         {% empty %}
             <p class="text-secondary">No members yet.</p>
         {% endfor %}
+
+    {% elif active_tab == 'mentions' %}
+        {% include "post/feed.html" with mentioned_crew_id=crew.id %}
     {% endif %}
 
 {% endblock content %}

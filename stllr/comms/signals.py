@@ -84,3 +84,6 @@ def notify_contact_accepted(sender, instance, created, **kwargs):
             object=instance,
             actor=instance.to_user
         )
+
+
+# TODO: Add notify_mentioned

@@ -230,6 +230,9 @@ function initPostFeed(feed) {
         if (feeder.dataset.pageId) params.set('page_id', feeder.dataset.pageId);
         if (feeder.dataset.parentId) params.set('parent_id', feeder.dataset.parentId);
         if (feeder.dataset.authorId) params.set('author_id', feeder.dataset.authorId);
+        if (feeder.dataset.mentionedUserId) params.set('mentioned_user_id', feeder.dataset.mentionedUserId);
+        if (feeder.dataset.mentionedCrewId) params.set('mentioned_crew_id', feeder.dataset.mentionedCrewId);
+        if (feeder.dataset.repliesOnly) params.set('replies_only', feeder.dataset.repliesOnly);
         params.set('seed', feeder.dataset.seed);
         params.set('p', feeder.dataset.p);
         fetch(feeder.dataset.endpoint + '?' + params.toString())

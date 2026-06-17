@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, render
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib.postgres.search import SearchQuery
 from django.db import connection
-from django.db.models import Count, ExpressionWrapper, FloatField
+from django.db.models import Count, ExpressionWrapper, FloatField, Max
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Random
 from .models import Page, PagePin
@@ -19,6 +19,8 @@ def feed(request):
     seed = float(request.GET.get('seed', random.random()))
     starred_by_user_id = request.GET.get('starred_by_user_id')
     starred_by_crew_id = request.GET.get('starred_by_crew_id')
+    beaconed_by_crew_id = request.GET.get('beaconed_by_crew_id')
+    beaconed_to_user_id = request.GET.get('beaconed_to_user_id')
     near_page_id = request.GET.get('near_page_id')
 
     pages = None
@@ -39,6 +41,25 @@ def feed(request):
             .filter(stars__user__in=member_user_ids)
             .annotate(firmament_score=ExpressionWrapper(Count('stars') * Random(), output_field=FloatField()))
             .order_by('-firmament_score')
+        )
+    elif beaconed_by_crew_id:
+        crew = get_object_or_404(Crew, id=beaconed_by_crew_id)
+        pages = (
+            Page.objects
+            .filter(beacons__crew=crew)
+            .annotate(last_beaconed=Max('beacons__created'))
+            .order_by('-last_beaconed')
+        )
+    elif beaconed_to_user_id:
+        target_user = get_object_or_404(get_user_model(), id=beaconed_to_user_id)
+        crew_ids = Membership.objects.filter(
+            user=target_user, status=Membership.Status.ACCEPTED
+        ).values('crew_id')
+        pages = (
+            Page.objects
+            .filter(beacons__crew_id__in=crew_ids)
+            .annotate(last_beaconed=Max('beacons__created'))
+            .order_by('-last_beaconed')
         )
     else:
         if sort == 'firmament':

@@ -13,7 +13,7 @@ from pages.models import Page
 from crews.models import Crew
 from .models import Post
 from .forms import PostForm
-from .templatetags.forum_tags import render_post
+from .templatetags.forum_tags import render_content
 
 
 def forum(request, page_id):
@@ -26,14 +26,25 @@ def feed(request):
     author_id = request.GET.get('author_id')
     page_id = request.GET.get('page_id')
     parent_id = request.GET.get('parent_id')
+    mentioned_user_id = request.GET.get('mentioned_user_id')
+    mentioned_crew_id = request.GET.get('mentioned_crew_id')
 
     with connection.cursor() as cursor:
         cursor.execute('SELECT setseed(%s)', [seed])
 
+    replies_only = request.GET.get('replies_only')
+
     if author_id:
         from django.contrib.auth import get_user_model
         author_user = get_object_or_404(get_user_model(), id=author_id)
-        posts = Post.objects.filter(author=author_user, removed=False)
+        if replies_only:
+            posts = Post.objects.filter(author=author_user, removed=False, thread_level__gt=0)
+        else:
+            posts = Post.objects.filter(author=author_user, removed=False, thread_level=0)
+    elif mentioned_user_id:
+        posts = Post.objects.filter(mentions__user_id=mentioned_user_id, removed=False).distinct()
+    elif mentioned_crew_id:
+        posts = Post.objects.filter(mentions__crew_id=mentioned_crew_id, removed=False).distinct()
     elif page_id:
         page = get_object_or_404(Page, pk=page_id)
         if parent_id:
@@ -43,7 +54,7 @@ def feed(request):
     else:
         return HttpResponse('')
 
-    posts = posts.order_by(RawSQL('brightness * RANDOM()', []).desc())
+    posts = posts.prefetch_related('mentions__user', 'mentions__crew').order_by(RawSQL('brightness * RANDOM()', []).desc())
 
     paginator = Paginator(posts, 10)
     try:
@@ -120,7 +131,7 @@ def remove_post_success(request):
 @require_POST
 def markdownify(request):
     content = request.POST.get('content', '')
-    return JsonResponse({'status': 200, 'markdown': render_post(content)}, status=200)
+    return JsonResponse({'status': 200, 'markdown': render_content(content)}, status=200)
 
 
 @login_required

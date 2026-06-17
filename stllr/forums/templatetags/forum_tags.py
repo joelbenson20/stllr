@@ -10,6 +10,9 @@ from django.utils import timezone
 
 register = template.Library()
 
+# TODO: Decide on allowed tags
+# TODO: Remove 'humanize' library
+
 ALLOWED_TAGS = [
     'p', 'br', 'strong', 'em', 'code', 'pre', 'blockquote',
     'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'a',
@@ -29,12 +32,52 @@ def _allow_safe_urls(tag, name, value):
 
 _MENTION_RE = re.compile(r'@(\w+)')
 
-def _link_mentions(html):
+def _link_mentions(html, mention_map):
     def replace(match):
-        username = match.group(1)
-        url = reverse('users:profile', args=[username])
-        return f'<a href="{url}">@{username}</a>'
+        handle = match.group(1)
+        url = mention_map.get(handle)
+        if url:
+            return f'<a href="{url}">@{handle}</a>'
+        return match.group(0)
     return _MENTION_RE.sub(replace, html)
+
+
+def _mention_map_from_content(content):
+    from django.contrib.auth import get_user_model
+    from crews.models import Crew
+    handles = set(_MENTION_RE.findall(content))
+    if not handles:
+        return {}
+    User = get_user_model()
+    mention_map = {}
+    for u in User.objects.filter(username__in=handles):
+        mention_map[u.username] = reverse('users:profile', args=[u.username])
+    for c in Crew.objects.filter(handle__in=handles):
+        mention_map[c.handle] = reverse('crews:crew_detail', args=[c.handle])
+    return mention_map
+
+
+def _mention_map_from_post(post):
+    mention_map = {}
+    for m in post.mentions.all():
+        if m.user_id:
+            mention_map[m.user.username] = reverse('users:profile', args=[m.user.username])
+        else:
+            mention_map[m.crew.handle] = reverse('crews:crew_detail', args=[m.crew.handle])
+    return mention_map
+
+
+def render_content(content):
+    html = markdown_deux.markdown(content)
+    clean = bleach.clean(html, tags=ALLOWED_TAGS, attributes=_allow_safe_urls, strip=True)
+    return mark_safe(_link_mentions(clean, _mention_map_from_content(content)))
+
+
+@register.filter(name='render_post')
+def render_post(post):
+    html = markdown_deux.markdown(post.content)
+    clean = bleach.clean(html, tags=ALLOWED_TAGS, attributes=_allow_safe_urls, strip=True)
+    return mark_safe(_link_mentions(clean, _mention_map_from_post(post)))
 
 @register.filter(name='time_since')
 def time_since(value):
@@ -84,10 +127,3 @@ def ancestry_chain(context, ancestors, post):
     for ancestor in reversed(ancestors):
         html = render_node(ancestor, inner=html)
     return mark_safe(html)
-
-
-@register.filter(name='render_post')
-def render_post(content):
-    html = markdown_deux.markdown(content)
-    clean = bleach.clean(html, tags=ALLOWED_TAGS, attributes=_allow_safe_urls, strip=True)
-    return mark_safe(_link_mentions(clean))

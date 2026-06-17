@@ -22,8 +22,12 @@
             </a>
             {% if user.is_authenticated %}
                 <a href="{% url 'pins' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
+                    <i class="bi bi-geo-fill fs-3"></i>
+                    <span class="fs-5 fw-semibold">Pins</span>
+                </a>
+                <a href="{% url 'beacons:beacons' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
                     <i class="bi bi-broadcast-pin fs-3"></i>
-                    <span class="fs-5 fw-semibold">Pinned</span>
+                    <span class="fs-5 fw-semibold">Beacons</span>
                 </a>
                 <a href="{% url 'contacts:contacts' %}" class="sidebar-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 text-decoration-none">
                     <i class="bi bi-person fs-3"></i>
