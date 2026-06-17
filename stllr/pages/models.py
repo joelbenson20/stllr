@@ -66,7 +66,7 @@ class Page(models.Model):
     brightness = models.FloatField(default=0, editable=False)
     brightness_index = models.PositiveIntegerField(editable=False)
     rise = models.IntegerField(default=0, editable=False)
-
+    # TODO: Add 'Forging' and 'Poppin' scores -> Respectively most posts in the past week, most users currently in the room 
 
     def save(self, *args, **kwargs):
         if not self.pk:
