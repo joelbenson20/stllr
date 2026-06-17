@@ -38,7 +38,7 @@ export function initModals() {
         })
         .then(response => {
             if (response.ok) {
-                statusEl.innerHTML = '<i class="bi bi-check-lg"></i>';
+                statusEl.innerHTML = '<i class="bi bi-check-lg modal-check"></i>';
             } else {
                 btn.disabled = false;
                 btn.classList.add('btn-danger');
@@ -77,7 +77,7 @@ export function initModals() {
                     btn.disabled = false;
                     if (beaconedSet.has(btn.dataset.crewId)) {
                         btn.dataset.beaconed = '1';
-                        btn.querySelector('.beacon-btn-status').innerHTML = '<i class="bi bi-check-lg"></i>';
+                        btn.querySelector('.beacon-btn-status').innerHTML = '<i class="bi bi-check-lg modal-check"></i>';
                     }
                 });
             })
@@ -114,14 +114,14 @@ export function initModals() {
                     statusEl.innerHTML = '';
                 } else {
                     btn.dataset.beaconed = '1';
-                    statusEl.innerHTML = '<i class="bi bi-check-lg"></i>';
+                    statusEl.innerHTML = '<i class="bi bi-check-lg modal-check"></i>';
                 }
             } else {
                 btn.classList.add('btn-danger');
                 statusEl.innerHTML = '<i class="bi bi-x-lg"></i>';
                 setTimeout(() => {
                     btn.classList.remove('btn-danger');
-                    statusEl.innerHTML = isBeaconed ? '<i class="bi bi-check-lg"></i>' : '';
+                    statusEl.innerHTML = isBeaconed ? '<i class="bi bi-check-lg modal-check"></i>' : '';
                     if (isBeaconed) btn.dataset.beaconed = '1';
                 }, 2000);
             }

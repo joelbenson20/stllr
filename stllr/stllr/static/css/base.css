@@ -37,6 +37,27 @@ body {
     background: rgba(6, 13, 26, 0.6);
 }
 
+.share-contact-btn:focus,
+.share-contact-btn:focus-visible,
+.share-contact-btn:active,
+.share-contact-btn:disabled,
+.beacon-crew-btn:focus,
+.beacon-crew-btn:focus-visible,
+.beacon-crew-btn:active,
+.beacon-crew-btn:disabled {
+    opacity: 1;
+    box-shadow: none;
+    border-color: var(--cosmic-grid) !important;
+    background: rgba(165, 148, 208, 0.20) !important;
+    outline: none;
+}
+
+.modal-check {
+    color: var(--star-light);
+    font-size: 1.1rem;
+    filter: drop-shadow(0 0 4px rgba(165, 148, 208, 0.7));
+}
+
 .btn-glass {
     color: white;
     background: rgba(165, 148, 208, 0.20);
