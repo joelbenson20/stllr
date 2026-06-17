@@ -1,0 +1,13 @@
+{% if membership.status == 'accepted' %}
+    <span class="btn btn-sm btn-glass disabled">Member</span>
+{% elif membership.status == 'invited' %}
+    <span class="btn btn-sm btn-glass disabled">Invited</span>
+{% elif membership.status == 'requested' %}
+    <span class="btn btn-sm btn-glass disabled">Requested</span>
+{% else %}
+    <button type="button" class="btn btn-sm btn-glass crew-invite-btn"
+        data-endpoint="{% url 'crews:send_invite' crew.handle user.username %}"
+        data-csrf-token="{{ csrf_token }}">
+        Invite
+    </button>
+{% endif %}

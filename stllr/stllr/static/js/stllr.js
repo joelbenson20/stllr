@@ -5,6 +5,7 @@ import { initModals } from './modals.js';
 import { initStars } from './stars.js';
 import './contacts.js';
 import './crews.js';
+import './beacons.js';
 
 const STLLR_URL = '/';
 

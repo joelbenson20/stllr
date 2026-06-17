@@ -48,7 +48,7 @@
     {% if request.user.is_authenticated %}
         <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
             {% if request.user.pk not in crew.admin_pks %}
-                {% include "crew/join_button.html" with crew=crew membership=membership %}
+                {% include "crew/buttons/join.html" with crew=crew membership=membership %}
             {% endif %}
             <div class="dropend">
                 <button class="dropdown-toggle no-caret btn btn-sm btn-glass rounded-circle flex-shrink-0"
@@ -69,7 +69,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{% url 'crews:invite_members' crew.handle %}">
+                        <a class="dropdown-item" href="{% url 'crews:find_members' crew.handle %}">
                             <i class="bi bi-person-plus me-2"></i>Invite members
                         </a>
                     </li>
@@ -118,7 +118,7 @@
         {% if membership_requests %}
             <p class="text-secondary small mb-2">Requests</p>
             {% for m in membership_requests %}
-                {% include "crew/admit_button.html" %}
+                {% include "crew/buttons/admit.html" %}
             {% endfor %}
             <hr class="border-grid my-3">
         {% endif %}

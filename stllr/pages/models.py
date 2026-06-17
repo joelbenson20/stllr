@@ -51,7 +51,7 @@ class Page(models.Model):
     image = models.ImageField(max_length=255, upload_to='images/pages', blank=True)
     domain = models.ForeignKey('Domain', related_name='pages', on_delete=models.CASCADE)
     
-    content = models.TextField(blank=True)
+    content = models.TextField(blank=True) # TODO: Get rid of content and inner_text storage. Just generate a word and/or token vector and use that for all NLP processing
     inner_text = models.TextField(blank=True)
     search_vector = SearchVectorField(null=True, editable=False)
 

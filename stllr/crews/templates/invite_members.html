@@ -12,7 +12,7 @@
         <h4 class="fw-bold mb-0">Invite members to {{ crew.name }}</h4>
     </div>
 
-    <form class="d-flex w-100 mb-4" action="{% url 'crews:invite_members' crew.handle %}" role="search">
+    <form class="d-flex w-100 mb-4" action="{% url 'crews:find_members' crew.handle %}" role="search">
         <input class="search-bar glow-on-focus form-control form-control-lg rounded-pill border-0"
             name="q"
             type="search"
@@ -31,19 +31,7 @@
                         {% include "user/avatar.html" with user=result.user size="40" dimensions="40x40" %}
                         <span class="fw-semibold">@{{ result.user.username }}</span>
                     </a>
-                    {% if result.membership and result.membership.status == 'accepted' %}
-                        <span class="btn btn-sm btn-glass disabled">Member</span>
-                    {% elif result.membership and result.membership.status == 'invited' %}
-                        <span class="btn btn-sm btn-glass disabled">Invited</span>
-                    {% elif result.membership and result.membership.status == 'requested' %}
-                        <span class="btn btn-sm btn-glass disabled">Requested</span>
-                    {% else %}
-                        <button type="button" class="btn btn-sm btn-glass crew-invite-btn"
-                            data-endpoint="{% url 'crews:send_invite' crew.handle result.user.username %}"
-                            data-csrf-token="{{ csrf_token }}">
-                            Invite
-                        </button>
-                    {% endif %}
+                    {% include "crew/buttons/invite.html" with membership=result.membership user=result.user %}
                 </div>
             {% endfor %}
             </div>
