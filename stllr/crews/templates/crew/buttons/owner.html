@@ -1,0 +1,32 @@
+        <div class="dropdown">
+            <button class="dropdown-toggle no-caret btn btn-sm btn-glass rounded-circle flex-shrink-0"
+                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-glass rounded-card">
+                {% if membership.role == 'admin' %}
+                <li>
+                    <button type="button" class="dropdown-item crew-admittance-btn"
+                        data-endpoint="{% url 'crews:unset_admin' crew.handle membership.user.username %}"
+                        data-csrf-token="{{ csrf_token }}">
+                        <i class="bi bi-shield-minus me-2"></i>Remove Admin
+                    </button>
+                </li>
+                {% else %}
+                <li>
+                    <button type="button" class="dropdown-item crew-admittance-btn"
+                        data-endpoint="{% url 'crews:set_admin' crew.handle membership.user.username %}"
+                        data-csrf-token="{{ csrf_token }}">
+                        <i class="bi bi-shield-plus me-2"></i>Make Admin
+                    </button>
+                </li>
+                {% endif %}
+                <li>
+                    <button type="button" class="dropdown-item crew-admittance-btn"
+                        data-endpoint="{% url 'crews:set_owner' crew.handle membership.user.username %}"
+                        data-csrf-token="{{ csrf_token }}">
+                        <i class="bi bi-person-fill-up me-2"></i>Make Owner
+                    </button>
+                </li>
+            </ul>
+        </div>

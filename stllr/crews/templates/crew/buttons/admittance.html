@@ -1,0 +1,32 @@
+<div class="crew-admittance-btns">
+    {% if membership.status == 'accepted' %}
+        <button type="button" class="btn btn-sm btn-glass text-danger crew-admittance-btn"
+            data-endpoint="{% url 'crews:remove_member' crew.handle membership.user.username %}"
+            data-csrf-token="{{ csrf_token }}">
+            Remove
+        </button>
+    {% elif membership.status == 'invited' %}
+        <button type="button" class="btn btn-sm btn-glass crew-admittance-btn"
+            data-endpoint="{% url 'crews:cancel_invite' crew.handle membership.user.username %}"
+            data-csrf-token="{{ csrf_token }}">
+            Cancel Invite
+        </button>
+    {% elif membership.status == 'requested' %}
+        <button type="button" class="btn btn-sm btn-glass crew-admittance-btn"
+            data-endpoint="{% url 'crews:admit_member' crew.handle membership.user.username %}"
+            data-csrf-token="{{ csrf_token }}">
+            <i class="bi bi-check-lg me-1"></i>Admit
+        </button>
+        <button type="button" class="btn btn-sm btn-glass text-danger crew-admittance-btn"
+            data-endpoint="{% url 'crews:deny_member' crew.handle membership.user.username %}"
+            data-csrf-token="{{ csrf_token }}">
+            <i class="bi bi-x-lg me-1"></i>Deny
+        </button>
+    {% else %}
+        <button type="button" class="btn btn-sm btn-glass crew-admittance-btn"
+            data-endpoint="{% url 'crews:send_invite' crew.handle user.username %}"
+            data-csrf-token="{{ csrf_token }}">
+            Invite
+        </button>
+    {% endif %}
+</div>

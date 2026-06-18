@@ -47,8 +47,8 @@
 
     {% if request.user.is_authenticated %}
         <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
-            {% if request.user.pk not in crew.admin_pks %}
-                {% include "crew/buttons/join.html" with crew=crew membership=membership %}
+            {% if not request_user_membership or request_user_membership.role != 'owner' %}
+                {% include "crew/buttons/entry.html" with crew=crew request_user_membership=request_user_membership %}
             {% endif %}
             <div class="dropend">
                 <button class="dropdown-toggle no-caret btn btn-sm btn-glass rounded-circle flex-shrink-0"
@@ -73,7 +73,7 @@
                             <i class="bi bi-person-plus me-2"></i>Invite members
                         </a>
                     </li>
-                    {% if membership.role == 'owner' %}
+                    {% if request_user_membership.role == 'owner' %}
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <a class="dropdown-item text-danger" href="{% url 'crews:delete_crew' crew.handle %}">
@@ -115,14 +115,20 @@
         {% include "page/feed.html" with starred_by_crew_id=crew.id %}
 
     {% elif active_tab == 'members' %}
-        {% if membership_requests %}
+        {% if requested_memberships %}
             <p class="text-secondary small mb-2">Requests</p>
-            {% for m in membership_requests %}
-                {% include "crew/buttons/admit.html" %}
+            {% for membership in requested_memberships %}
+                <div class="crew-member-row d-flex align-items-center btn-glass rounded-card gap-3 py-2 px-2 mb-2">
+                    <a href="{{ membership.user.profile.get_absolute_url }}" class="d-flex align-items-center gap-3 text-decoration-none flex-grow-1">
+                        {% include "user/avatar.html" with user=membership.user size="40" dimensions="40x40" %}
+                        <span class="fw-semibold">@{{ membership.user.username }}</span>
+                    </a>
+                    {% include "crew/buttons/admittance.html" %}
+                </div>
             {% endfor %}
             <hr class="border-grid my-3">
         {% endif %}
-        {% for m in members %}
+        {% for membership in members %}
             {% include "member/card.html" %}
         {% empty %}
             <p class="text-secondary">No members yet.</p>

@@ -105,6 +105,12 @@ body {
     color: white;
 }
 
+.glass-no-blur {
+    color: white;
+    background: rgba(165, 148, 208, 0.10);
+    border: 1px solid var(--cosmic-grid);
+}
+
 .border-grid {
     --bs-border-color: var(--cosmic-grid);
     --bs-border-width: 1px;

@@ -6,10 +6,6 @@
     text-decoration: underline !important;
 }
 
-.post {
-    background-color: rgba(165, 148, 208, 0.07);
-}
-
 .post-form textarea,
 .reply-form textarea,
 .markdown-preview {

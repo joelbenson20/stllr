@@ -31,7 +31,7 @@
                         {% include "user/avatar.html" with user=result.user size="40" dimensions="40x40" %}
                         <span class="fw-semibold">@{{ result.user.username }}</span>
                     </a>
-                    {% include "crew/buttons/invite.html" with membership=result.membership user=result.user %}
+                    {% include "crew/buttons/admittance.html" with membership=result.membership user=result.user %}
                 </div>
             {% endfor %}
             </div>
