@@ -1,0 +1,15 @@
+<div class="crew-invitation-btns">
+    {% if membership and membership.status == 'invited' %}
+        <button type="button" class="btn btn-sm btn-glass crew-invitation-btn"
+            data-endpoint="{% url 'crews:cancel_invite' crew.handle membership.user.username %}"
+            data-csrf-token="{{ csrf_token }}">
+            Cancel Invite
+        </button>
+    {% else %}
+        <button type="button" class="btn btn-sm btn-glass crew-invitation-btn"
+            data-endpoint="{% url 'crews:send_invite' crew.handle user.username %}"
+            data-csrf-token="{{ csrf_token }}">
+            Invite
+        </button>
+    {% endif %}
+</div>

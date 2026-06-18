@@ -15,5 +15,7 @@
     </div>
 
     {% include "crew/invitations.html" %}
+    {% include "crew/requests.html" %}
+    {% if memberships_invited or memberships_requested %}<hr class="border-grid my-3">{% endif %}
     {% include "crew/list.html" %}
 {% endblock content %}

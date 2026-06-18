@@ -5,7 +5,7 @@ from django.db import models
 class ContactRelation(models.Model):
     class Status(models.TextChoices):
         PENDING = 'pending', 'Pending'
-        ACCEPTED = 'accepted', 'Accepted'
+        ACTIVE = 'active', 'Active'
 
     from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='contacts_sent', on_delete=models.CASCADE)
     to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='contacts_received', on_delete=models.CASCADE)

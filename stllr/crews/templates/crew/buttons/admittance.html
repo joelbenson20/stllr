@@ -1,32 +1,26 @@
-<div class="crew-admittance-btns">
-    {% if membership.status == 'accepted' %}
-        <button type="button" class="btn btn-sm btn-glass text-danger crew-admittance-btn"
-            data-endpoint="{% url 'crews:remove_member' crew.handle membership.user.username %}"
-            data-csrf-token="{{ csrf_token }}">
-            Remove
-        </button>
-    {% elif membership.status == 'invited' %}
-        <button type="button" class="btn btn-sm btn-glass crew-admittance-btn"
-            data-endpoint="{% url 'crews:cancel_invite' crew.handle membership.user.username %}"
-            data-csrf-token="{{ csrf_token }}">
-            Cancel Invite
-        </button>
+<div class="crew-admittance-btns d-flex gap-2">
+    {% if membership.status == 'active' %}
+        <form method="post" action="{% url 'crews:remove_member' crew.handle membership.user.username %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass text-danger">
+                Remove
+            </button>
+        </form>
     {% elif membership.status == 'requested' %}
-        <button type="button" class="btn btn-sm btn-glass crew-admittance-btn"
-            data-endpoint="{% url 'crews:admit_member' crew.handle membership.user.username %}"
-            data-csrf-token="{{ csrf_token }}">
-            <i class="bi bi-check-lg me-1"></i>Admit
-        </button>
-        <button type="button" class="btn btn-sm btn-glass text-danger crew-admittance-btn"
-            data-endpoint="{% url 'crews:deny_member' crew.handle membership.user.username %}"
-            data-csrf-token="{{ csrf_token }}">
-            <i class="bi bi-x-lg me-1"></i>Deny
-        </button>
-    {% else %}
-        <button type="button" class="btn btn-sm btn-glass crew-admittance-btn"
-            data-endpoint="{% url 'crews:send_invite' crew.handle user.username %}"
-            data-csrf-token="{{ csrf_token }}">
-            Invite
-        </button>
+        <form method="post" action="{% url 'crews:admit_member' crew.handle membership.user.username %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass">
+                <i class="bi bi-check-lg me-1"></i>Admit
+            </button>
+        </form>
+        <form method="post" action="{% url 'crews:deny_member' crew.handle membership.user.username %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass text-danger">
+                <i class="bi bi-x-lg me-1"></i>Deny
+            </button>
+        </form>
     {% endif %}
 </div>

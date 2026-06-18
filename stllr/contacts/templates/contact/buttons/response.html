@@ -1,0 +1,12 @@
+<div class="d-flex gap-2">
+    <form method="post" action="{% url 'contacts:accept_request' other.username %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit" class="btn btn-sm btn-glass btn-glass-success">Accept</button>
+    </form>
+    <form method="post" action="{% url 'contacts:decline_request' other.username %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit" class="btn btn-sm btn-glass btn-glass-danger">Decline</button>
+    </form>
+</div>

@@ -20,14 +20,14 @@ class User(AbstractUser):
         from crews.models import Crew, Membership
         return Crew.objects.filter(
             memberships__user=self,
-            memberships__status=Membership.Status.ACCEPTED,
+            memberships__status=Membership.Status.ACTIVE,
         ).order_by('name')
 
     def get_contacts(self):
         from contacts.models import ContactRelation
         return type(self).objects.filter(
-            Q(contacts_received__from_user=self, contacts_received__status=ContactRelation.Status.ACCEPTED) |
-            Q(contacts_sent__to_user=self, contacts_sent__status=ContactRelation.Status.ACCEPTED)
+            Q(contacts_received__from_user=self, contacts_received__status=ContactRelation.Status.ACTIVE) |
+            Q(contacts_sent__to_user=self, contacts_sent__status=ContactRelation.Status.ACTIVE)
         ).distinct().order_by('username')
 
 class Profile(models.Model):

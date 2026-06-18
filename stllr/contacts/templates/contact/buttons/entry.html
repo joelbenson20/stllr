@@ -1,0 +1,23 @@
+<div id="contact-btn-{{ other.username }}" class="d-flex gap-2">
+    {% if not contact %}
+        <form method="post" action="{% url 'contacts:send_request' other.username %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass">Add Contact</button>
+        </form>
+    {% elif contact.status == 'pending' and contact.from_user == request.user %}
+        <form method="post" action="{% url 'contacts:remove_contact' other.username %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass">Cancel Request</button>
+        </form>
+    {% elif contact.status == 'pending' %}
+        {% include "contact/buttons/response.html" with other=other next=request.path %}
+    {% elif contact.status == 'active' %}
+        <form method="post" action="{% url 'contacts:remove_contact' other.username %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass">Remove Contact</button>
+        </form>
+    {% endif %}
+</div>

@@ -33,7 +33,7 @@ def feed(request):
         pages = Page.objects.filter(stars__user=profile_user).order_by('-stars__created')
     elif starred_by_crew_id:
         crew = get_object_or_404(Crew, id=starred_by_crew_id)
-        member_user_ids = crew.memberships.filter(status=Membership.Status.ACCEPTED).values('user')
+        member_user_ids = crew.memberships.filter(status=Membership.Status.ACTIVE).values('user')
         with connection.cursor() as cursor:
             cursor.execute('SELECT setseed(%s)', [seed])
         pages = (
@@ -53,7 +53,7 @@ def feed(request):
     elif beaconed_to_user_id:
         target_user = get_object_or_404(get_user_model(), id=beaconed_to_user_id)
         crew_ids = Membership.objects.filter(
-            user=target_user, status=Membership.Status.ACCEPTED
+            user=target_user, status=Membership.Status.ACTIVE
         ).values('crew_id')
         pages = (
             Page.objects

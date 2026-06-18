@@ -27,18 +27,18 @@ class Crew(models.Model):
                 crew=self,
                 user=self.creator,
                 role=Membership.Role.OWNER,
-                status=Membership.Status.ACCEPTED,
+                status=Membership.Status.ACTIVE,
             )
 
     @property
     def member_count(self):
-        return self.memberships.filter(status=Membership.Status.ACCEPTED).count()
+        return self.memberships.filter(status=Membership.Status.ACTIVE).count()
 
     @property
     def admin_pks(self):
         return self.memberships.filter(
             role__in=[Membership.Role.OWNER, Membership.Role.ADMIN],
-            status=Membership.Status.ACCEPTED,
+            status=Membership.Status.ACTIVE,
         ).values_list('user', flat=True)
 
     def get_absolute_url(self):
@@ -52,9 +52,7 @@ class Membership(models.Model):
     class Status(models.TextChoices):
         REQUESTED = 'requested', 'Requested'
         INVITED = 'invited', 'Invited'
-        ACCEPTED = 'accepted', 'Accepted'
-        DECLINED = 'declined', 'Declined'
-        BANNED = 'banned', 'Banned'
+        ACTIVE = 'active', 'Active'
 
     class Role(models.TextChoices):
         OWNER = 'owner', 'Owner'
@@ -79,7 +77,7 @@ class Membership(models.Model):
         ]
 
     def save(self, *args, **kwargs):
-        if self.status == self.Status.ACCEPTED and self.joined is None:
+        if self.status == self.Status.ACTIVE and self.joined is None:
             self.joined = timezone.now()
         super().save(*args, **kwargs)
 

@@ -1,41 +1,34 @@
-
 <div class="crew-entry-btns d-flex gap-2">
-    {% if not request_user_membership or request_user_membership.status == 'declined' %}
-        {% if crew.is_open %}
-            <button type="button" class="btn btn-sm btn-glass crew-action-btn"
-                    data-endpoint="{% url 'crews:join_crew' crew.handle %}"
-                    data-csrf-token="{{ csrf_token }}">
-                Join
+    {% if not request_user_membership %}
+        <form method="post" action="{% url 'crews:join_crew' crew.handle %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass">
+                {% if crew.is_open %}Join{% else %}Request to Join{% endif %}
             </button>
-        {% else %}
-            <button type="button" class="btn btn-sm btn-glass crew-action-btn"
-                    data-endpoint="{% url 'crews:join_crew' crew.handle %}"
-                    data-csrf-token="{{ csrf_token }}">
-                Request to Join
-            </button>
-        {% endif %}
+        </form>
     {% elif request_user_membership.status == 'requested' %}
-        <button type="button" class="btn btn-sm btn-glass crew-action-btn"
-                data-endpoint="{% url 'crews:leave_crew' crew.handle %}"
-                data-csrf-token="{{ csrf_token }}">
-            Cancel Request
-        </button>
+        <form method="post" action="{% url 'crews:leave_crew' crew.handle %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass">Cancel Request</button>
+        </form>
     {% elif request_user_membership.status == 'invited' %}
-        <button type="button" class="btn btn-sm btn-glass btn-glass-success crew-action-btn"
-                data-endpoint="{% url 'crews:accept_invite' crew.handle %}"
-                data-csrf-token="{{ csrf_token }}">
-            Accept
-        </button>
-        <button type="button" class="btn btn-sm btn-glass btn-glass-danger crew-action-btn"
-                data-endpoint="{% url 'crews:decline_invite' crew.handle %}"
-                data-csrf-token="{{ csrf_token }}">
-            Decline
-        </button>
-    {% elif request_user_membership.status == 'accepted' and request_user_membership.role != 'owner' %}
-        <button type="button" class="btn btn-sm btn-glass crew-action-btn"
-                data-endpoint="{% url 'crews:leave_crew' crew.handle %}"
-                data-csrf-token="{{ csrf_token }}">
-            Leave
-        </button>
+        <form method="post" action="{% url 'crews:accept_invite' crew.handle %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass btn-glass-success">Accept</button>
+        </form>
+        <form method="post" action="{% url 'crews:decline_invite' crew.handle %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass btn-glass-danger">Decline</button>
+        </form>
+    {% elif request_user_membership.status == 'active' and request_user_membership.role != 'owner' %}
+        <form method="post" action="{% url 'crews:leave_crew' crew.handle %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass">Leave</button>
+        </form>
     {% endif %}
 </div>

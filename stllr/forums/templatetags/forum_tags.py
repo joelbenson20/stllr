@@ -41,7 +41,7 @@ def _link_mentions(html, mention_map):
         return match.group(0)
     return _MENTION_RE.sub(replace, html)
 
-
+# TODO: Mention links should depend on the mention still being valid (If the user/crew is deleted then the mention is deleted by cascade. This is desireable behavior, because then the link will break, as it should.)
 def _mention_map_from_content(content):
     from django.contrib.auth import get_user_model
     from crews.models import Crew

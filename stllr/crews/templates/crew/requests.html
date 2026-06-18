@@ -1,12 +1,16 @@
-{% if memberships_invited %}
-    <h6 class="text-uppercase small fw-bold text-secondary mb-2">Invitations</h6>
-    {% for membership in memberships_invited %}
+{% if memberships_requested %}
+    <h6 class="text-uppercase small fw-bold text-secondary mb-2">Requests</h6>
+    {% for membership in memberships_requested %}
         <div class="d-flex align-items-center glass-no-blur rounded-card gap-3 py-2 px-2 mb-2">
             <a href="{{ membership.crew.get_absolute_url }}" class="d-flex align-items-center gap-3 text-decoration-none flex-grow-1">
                 {% include "crew/avatar.html" with crew=membership.crew size="40" dimensions="40x40" %}
                 <span class="fw-semibold">@{{ membership.crew.handle }}</span>
             </a>
-            {% include "crew/buttons/entry.html" with crew=membership.crew request_user_membership=membership %}
+            <form method="post" action="{% url 'crews:leave_crew' membership.crew.handle %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button type="submit" class="btn btn-sm btn-glass">Cancel Request</button>
+            </form>
         </div>
     {% endfor %}
 {% endif %}

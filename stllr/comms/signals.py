@@ -77,7 +77,7 @@ def track_contact_status(sender, instance, **kwargs):
 def notify_contact_accepted(sender, instance, created, **kwargs):
     if created:
         return
-    if getattr(instance, '_previous_status', None) == ContactRelation.Status.PENDING and instance.status == ContactRelation.Status.ACCEPTED:
+    if getattr(instance, '_previous_status', None) == ContactRelation.Status.PENDING and instance.status == ContactRelation.Status.ACTIVE:
         notify(
             recipient=instance.from_user,
             event=Notification.Event.CONTACT_ACCEPTED,

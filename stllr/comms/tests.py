@@ -42,7 +42,7 @@ class ShareObjectTests(CommsTestBase):
         ContactRelation.objects.create(
             from_user=self.stella,
             to_user=self.stranger,
-            status=ContactRelation.Status.ACCEPTED,
+            status=ContactRelation.Status.ACTIVE,
         )
 
     def test_unauthenticated_user_is_redirected(self):
@@ -152,7 +152,7 @@ class NotificatoinSignalTests(CommsTestBase):
             to_user=self.stella,
             status=ContactRelation.Status.PENDING,
         )
-        relation.status = ContactRelation.Status.ACCEPTED
+        relation.status = ContactRelation.Status.ACTIVE
         relation.save()
         self.assertTrue(Notification.objects.filter(
             recipient=self.stranger,
@@ -163,7 +163,7 @@ class NotificatoinSignalTests(CommsTestBase):
         ContactRelation.objects.create(
             from_user=self.stella,
             to_user=self.stranger,
-            status=ContactRelation.Status.ACCEPTED,
+            status=ContactRelation.Status.ACTIVE,
         )
         Star.objects.create(user=self.stella, object_ct=self.page_ct, object_id=self.page.id)
         Star.objects.create(user=self.stranger, object_ct=self.page_ct, object_id=self.page.id)
@@ -195,7 +195,7 @@ class NotificatoinSignalTests(CommsTestBase):
         ContactRelation.objects.create(
             from_user=self.stella,
             to_user=self.stranger,
-            status=ContactRelation.Status.ACCEPTED,
+            status=ContactRelation.Status.ACTIVE,
         )
         Star.objects.create(user=self.stella, object_ct=self.post_ct, object_id=self.post.id)
         Star.objects.create(user=self.stranger, object_ct=self.post_ct, object_id=self.post.id)

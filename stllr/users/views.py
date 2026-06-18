@@ -51,7 +51,7 @@ def profile_crews(request, username):
     context['active_tab'] = 'crews'
     context['crews_list'] = [
         m.crew for m in user.crew_memberships
-            .filter(status=Membership.Status.ACCEPTED)
+            .filter(status=Membership.Status.ACTIVE)
             .select_related('crew')
             .order_by('crew__name')
     ]

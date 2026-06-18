@@ -3,5 +3,5 @@
         {% include "crew/card.html" %}
     {% endfor %}
 {% else %}
-    <a href="{% url 'crews:find_crews' %}" class="text-secondary small">Find crews</a>
+    <p class="text-secondary small fst-italic">No crews yet.</p>
 {% endif %}

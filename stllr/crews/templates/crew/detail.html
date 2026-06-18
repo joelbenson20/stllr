@@ -36,7 +36,32 @@
     <div class="d-flex align-items-center justify-content-center my-3 gap-3">
         <div class="text-center">
             <h1 class="mb-0">{{ crew.name }}</h1>
-            <p class="text-secondary mb-0">@{{ crew.handle }}</p>
+            <div class="d-flex align-items-center justify-content-center gap-2">
+                <p class="text-secondary mb-0">@{{ crew.handle }}</p>
+                {% if request_user_membership.role == 'owner' %}
+                    <div class="dropdown">
+                        <button class="dropdown-toggle no-caret btn p-0 text-secondary lh-1"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-gear fs-5"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-glass rounded-card">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'crews:edit_crew' crew.handle %}">
+                                    <i class="bi bi-pencil me-2"></i>Edit crew
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{% url 'crews:delete_crew' crew.handle %}">
+                                    <i class="bi bi-trash me-2"></i>Delete crew
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    {% include "crew/buttons/entry.html" with crew=crew request_user_membership=request_user_membership %}
+                {% endif %}
+            </div>
             {% if crew.bio %}<p class="mt-2 mb-0">{{ crew.bio }}</p>{% endif %}
         </div>
     </div>
@@ -44,50 +69,6 @@
     <div class="d-flex justify-content-center gap-3 mb-4 text-secondary small">
         <i>Created: {{ crew.created|date:"N j, Y" }}</i>
     </div>
-
-    {% if request.user.is_authenticated %}
-        <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
-            {% if not request_user_membership or request_user_membership.role != 'owner' %}
-                {% include "crew/buttons/entry.html" with crew=crew request_user_membership=request_user_membership %}
-            {% endif %}
-            <div class="dropend">
-                <button class="dropdown-toggle no-caret btn btn-sm btn-glass rounded-circle flex-shrink-0"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    {% if request.user.pk in crew.admin_pks %}
-                        <i class="bi bi-gear"></i>
-                    {% else %}
-                        <i class="bi bi-three-dots"></i>
-                    {% endif %}
-                </button>
-                <ul class="dropdown-menu dropdown-menu-glass rounded-card">
-                    {% if request.user.pk in crew.admin_pks %}
-                    {% if request_user_membership.role == 'owner' %}
-                    <li>
-                        <a class="dropdown-item" href="{% url 'crews:edit_crew' crew.handle %}">
-                            <i class="bi bi-pencil me-2"></i>Edit crew
-                        </a>
-                    </li>
-                    {% endif %}
-                    <li>
-                        <a class="dropdown-item" href="{% url 'crews:scout_members' crew.handle %}">
-                            <i class="bi bi-person-plus me-2"></i>Scout members
-                        </a>
-                    </li>
-                    {% if request_user_membership.role == 'owner' %}
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <a class="dropdown-item text-danger" href="{% url 'crews:delete_crew' crew.handle %}">
-                            <i class="bi bi-trash me-2"></i>Delete crew
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    {% endif %}
 
     <nav class="profile-tabs border-bottom border-grid mb-4">
         <ul class="nav">
@@ -117,6 +98,13 @@
         {% include "page/feed.html" with starred_by_crew_id=crew.id %}
 
     {% elif active_tab == 'members' %}
+        {% if request.user.pk in crew.admin_pks %}
+            <div class="d-flex justify-content-end mb-3">
+                <a href="{% url 'crews:scout_members' crew.handle %}" class="btn btn-sm btn-glass">
+                    <i class="bi bi-person-plus me-1"></i>Scout members
+                </a>
+            </div>
+        {% endif %}
         {% if memberships_requested %}
             <p class="text-secondary small mb-2">Requests</p>
             {% for membership in memberships_requested %}

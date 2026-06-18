@@ -27,18 +27,13 @@
         {% if results %}
             <div class="d-flex flex-column gap-2">
             {% for result in results %}
-                <div class="glass rounded-card d-flex align-items-center w-100 gap-3 px-2">
-                    <a href="{{ result.crew.get_absolute_url }}" class="btn d-flex align-items-center gap-3 text-light text-decoration-none flex-grow-1">
-                        {% include "crew/avatar.html" with crew=result.crew size="40" dimensions="40x40" %}
-                        <div class="d-flex flex-column text-start">
-                            <span class="text-secondary" style="font-size:0.75rem;">@{{ result.crew.handle }}</span>
-                            <span class="fw-semibold">{{ result.crew.name }}</span>
-                        </div>
-                    </a>
-                    <div class="ms-auto">
-                        {% include "crew/buttons/entry.html" with crew=result.crew request_user_membership=result.membership %}
+                <a href="{{ result.crew.get_absolute_url }}" class="glass rounded-card d-flex align-items-center w-100 gap-3 px-2 text-decoration-none text-light">
+                    {% include "crew/avatar.html" with crew=result.crew size="40" dimensions="40x40" %}
+                    <div class="d-flex flex-column text-start py-2">
+                        <span class="text-secondary" style="font-size:0.75rem;">@{{ result.crew.handle }}</span>
+                        <span class="fw-semibold">{{ result.crew.name }}</span>
                     </div>
-                </div>
+                </a>
             {% endfor %}
             </div>
         {% else %}

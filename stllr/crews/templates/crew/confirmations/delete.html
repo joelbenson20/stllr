@@ -5,14 +5,13 @@
 {% block content %}
 
     <div class="row justify-content-center mt-5">
-        <div class="col-md-6 col-lg-4">
+        <div class="col">
             <div class="card border-danger">
                 <div class="card-body text-center p-4">
                     <i class="bi bi-exclamation-triangle-fill text-danger fs-1 mb-3 d-block"></i>
-                    <h5 class="mb-1">Delete <strong>{{ crew.name }}</strong>?</h5>
+                    <h5 class="mb-1">Delete {{ crew.name }} <strong>(@{{ crew.handle}})</strong>?</h5>
                     <p class="text-secondary small mb-4">
-                        @{{ crew.handle }} and all its memberships and data will be permanently deleted.
-                        This cannot be undone.
+                        The crew and all its data will be scheduled for permanent deletion.
                     </p>
                     <form method="post">
                         {% csrf_token %}
@@ -25,3 +24,6 @@
     </div>
 
 {% endblock content %}
+
+
+{% comment %} TODO: Crew delete -> removal, hold data for 30 days, then delete {% endcomment %}

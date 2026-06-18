@@ -3,5 +3,5 @@
         {% include "user/card.html" with user=contact %}
     {% endfor %}
 {% else %}
-    <a href="{% url 'contacts:find_contacts' %}" class="text-secondary small">Find contacts</a>
+    <p class="text-secondary small fst-italic">No contacts yet.</p>
 {% endif %}

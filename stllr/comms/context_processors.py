@@ -32,36 +32,34 @@ def contacts(request):
             request.user.get_contacts().select_related('profile'),
             key=lambda u: u.username.lower()
         )
-        requests_list = list(
+        from django.db.models import Q
+        pending = list(
             ContactRelation.objects
-            .filter(to_user=request.user, status=ContactRelation.Status.PENDING)
-            .select_related('from_user', 'from_user__profile')
+            .filter(status=ContactRelation.Status.PENDING)
+            .filter(Q(to_user=request.user) | Q(from_user=request.user))
+            .select_related('from_user', 'from_user__profile', 'to_user', 'to_user__profile')
         )
-        return {'contacts_list': contacts_list, 'requests_list': requests_list}
-    return {'contacts_list': [], 'requests_list': []}
+        requests_received = [r for r in pending if r.to_user == request.user]
+        requests_sent = [r for r in pending if r.from_user == request.user]
+        return {'contacts_list': contacts_list, 'requests_received': requests_received, 'requests_sent': requests_sent}
+    return {'contacts_list': [], 'requests_received': [], 'requests_sent': []}
 
 def crews(request):
     if request.user.is_authenticated:
         from crews.models import Membership
         all_crews = list(request.user.get_crews())
-        memberships = Membership.objects.filter(
-            user=request.user,
-            status__in=[Membership.Status.ACCEPTED, Membership.Status.INVITED],
-        ).select_related('crew')
-        admin_crew_ids = set()
-        invitations_list = []
-        for m in memberships:
-            if m.status == Membership.Status.INVITED:
-                invitations_list.append(m)
-            elif m.role in (Membership.Role.OWNER, Membership.Role.ADMIN):
-                admin_crew_ids.add(m.crew_id)
-        admin_crews = [c for c in all_crews if c.pk in admin_crew_ids]
+        pending = list(
+            Membership.objects.filter(
+                user=request.user,
+                status__in=[Membership.Status.INVITED, Membership.Status.REQUESTED],
+            ).select_related('crew')
+        )
         return {
             'crews_list': all_crews,
-            'admin_crews': admin_crews,
-            'invitations_list': invitations_list,
+            'memberships_invited': [m for m in pending if m.status == Membership.Status.INVITED],
+            'memberships_requested': [m for m in pending if m.status == Membership.Status.REQUESTED],
         }
-    return {'crews_list': [], 'admin_crews': [], 'invitations_list': []}
+    return {'crews_list': [], 'memberships_invited': [], 'memberships_requested': []}
 
 
 # TODO: Remove muted_users functionality for now.

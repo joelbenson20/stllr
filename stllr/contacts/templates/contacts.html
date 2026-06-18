@@ -15,7 +15,9 @@
         {% include "contact/invite_dropdown.html" %}
     </div>
 
-    {% include "contact/requests.html" %}
+    {% include "contact/requests_received.html" %}
+    {% include "contact/requests_sent.html" %}
+    {% if requests_received or requests_sent %}<hr class="border-grid my-3">{% endif %}
     {% include "contact/list.html" %}
 
 {% endblock content %}

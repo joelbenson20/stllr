@@ -27,15 +27,10 @@
         {% if results %}
             <div class="d-flex flex-column gap-2">
             {% for result in results %}
-                <div class="glass rounded-card d-flex align-items-center w-100 gap-3 px-2">
-                    <a href="{% url 'users:profile' result.user.username %}" class="btn d-flex align-items-center gap-3 text-light text-decoration-none flex-grow-1">
-                        {% include "user/avatar.html" with user=result.user size="40" dimensions="40x40" %}
-                        <span class="fw-semibold">@{{ result.user.username }}</span>
-                    </a>
-                    <div class="ms-auto">
-                        {% include "contact/status_button.html" with other=result.user contact=result.relation %}
-                    </div>
-                </div>
+                <a href="{% url 'users:profile' result.user.username %}" class="glass rounded-card d-flex align-items-center w-100 gap-3 px-2 py-2 text-decoration-none text-light">
+                    {% include "user/avatar.html" with user=result.user size="40" dimensions="40x40" %}
+                    <span class="fw-semibold">@{{ result.user.username }}</span>
+                </a>
             {% endfor %}
             </div>
         {% else %}
