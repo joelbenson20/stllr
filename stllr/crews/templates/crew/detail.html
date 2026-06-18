@@ -63,14 +63,16 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-glass rounded-card">
                     {% if request.user.pk in crew.admin_pks %}
+                    {% if request_user_membership.role == 'owner' %}
                     <li>
                         <a class="dropdown-item" href="{% url 'crews:edit_crew' crew.handle %}">
                             <i class="bi bi-pencil me-2"></i>Edit crew
                         </a>
                     </li>
+                    {% endif %}
                     <li>
-                        <a class="dropdown-item" href="{% url 'crews:find_members' crew.handle %}">
-                            <i class="bi bi-person-plus me-2"></i>Invite members
+                        <a class="dropdown-item" href="{% url 'crews:scout_members' crew.handle %}">
+                            <i class="bi bi-person-plus me-2"></i>Scout members
                         </a>
                     </li>
                     {% if request_user_membership.role == 'owner' %}
@@ -115,9 +117,9 @@
         {% include "page/feed.html" with starred_by_crew_id=crew.id %}
 
     {% elif active_tab == 'members' %}
-        {% if requested_memberships %}
+        {% if memberships_requested %}
             <p class="text-secondary small mb-2">Requests</p>
-            {% for membership in requested_memberships %}
+            {% for membership in memberships_requested %}
                 <div class="crew-member-row d-flex align-items-center btn-glass rounded-card gap-3 py-2 px-2 mb-2">
                     <a href="{{ membership.user.profile.get_absolute_url }}" class="d-flex align-items-center gap-3 text-decoration-none flex-grow-1">
                         {% include "user/avatar.html" with user=membership.user size="40" dimensions="40x40" %}
@@ -128,7 +130,7 @@
             {% endfor %}
             <hr class="border-grid my-3">
         {% endif %}
-        {% for membership in members %}
+        {% for membership in memberships %}
             {% include "member/card.html" %}
         {% empty %}
             <p class="text-secondary">No members yet.</p>

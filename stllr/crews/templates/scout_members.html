@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Invite members — @{{ crew.handle }}{% endblock title %}
+{% block title %}Scout members — {{ crew.name }}{% endblock title %}
 
 {% block content %}
 
@@ -9,10 +9,10 @@
         <a href="{{ crew.get_absolute_url }}" class="btn btn-glass rounded-circle d-flex align-items-center justify-content-center" style="width:31px;height:31px;">
             <i class="bi bi-arrow-left"></i>
         </a>
-        <h4 class="fw-bold mb-0">Invite members to {{ crew.name }}</h4>
+        <h4 class="fw-bold mb-0">Scout members - {{ crew.name }}</h4>
     </div>
 
-    <form class="d-flex w-100 mb-4" action="{% url 'crews:find_members' crew.handle %}" role="search">
+    <form class="d-flex w-100 mb-4" action="{% url 'crews:scout_members' crew.handle %}" role="search">
         <input class="search-bar glow-on-focus form-control form-control-lg rounded-pill border-0"
             name="q"
             type="search"
@@ -36,7 +36,7 @@
             {% endfor %}
             </div>
         {% else %}
-            <p class="text-secondary small">No users found matching "{{ q }}".</p>
+            <p class="text-secondary small">No users found matching "{{ q }}" that aren't already members.</p>
         {% endif %}
     {% endif %}
 
