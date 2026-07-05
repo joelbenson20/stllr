@@ -4,7 +4,7 @@
 {# TODO: Page cards squished on the extension have title + description overflowing above the top of the thumbnail #}
 
 <div id="page{{ page.id }}"
-    class="page mb-5">
+    class="page {% if not extension_header_card %}mb-5{% endif %}">
 
     <div>
 

@@ -13,7 +13,7 @@ from pages.models import Page, Domain
 from stella.models import Prompt
 from pages.utils import get_canonical, get_domain_name, verify_supported, UnsupportedURLError
 
-SUPPORTED_EXTENSION_VERSIONS = ['2.0']
+SUPPORTED_EXTENSION_VERSIONS = ['3.0']
 
 @login_required #TODO: Unauthenticated users should get forbidden messages rather than redirect for all extension views
 @require_POST
