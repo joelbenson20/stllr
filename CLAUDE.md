@@ -50,35 +50,40 @@ python manage.py createsuperuser         # admin at /admin/
 
 ### Django Apps
 
-- **pages** — Core content app. `Page` stores webpage metadata (canonical URL, title, description, OG image, domain, tags, brightness). `Domain` stores per-domain metadata (favicon, category). `PageStar` is the star/like junction model. Signals auto-download images, rebuild PostgreSQL search vectors, and extract NLTK tags on save. `utils.py` contains URL canonicalization, OpenGraph metadata fetching, and security verification.
-- **forums** — Threaded discussion posts linked to pages. `Post` supports self-referential threading (parent FK, thread_level). `PostStar` is the star junction. Custom `firmament()` manager applies brightness-weighted random ordering.
-- **rooms** — Real-time chat per page. `Message` model stores chat messages. `consumers.py` is the Django Channels WebSocket consumer with presence tracking (Redis cache, 20s TTL heartbeat).
-- **users** — Custom `User` (extends AbstractUser), `Profile` (OneToOne, background image), `Contact` (friendship with PENDING/ACCEPTED states), `Action` (activity log via ContentType generic FK, verbs: STARRED, POSTED, REPLIED, ENTERED). Context processor provides pending contact request counts to all templates.
-- **extension** — Chrome extension API endpoints. Accepts page metadata POST, creates `Page` if needed, returns popup HTML. Provides CSRF tokens and short-lived WebSocket auth tickets (30s TTL via Redis). CORS-whitelisted for three registered extension IDs.
-- **api** — REST endpoints for AJAX interactions: `create_post`, `star_page`, `star_post`, `markdownify`, `get_room_count`. Rate-limited via django-ratelimit.
-- **governance** — Placeholder app (no models yet).
+- **pages** — Core content app. `Page` stores webpage metadata (canonical URL, title, description, OG image, domain, brightness, search vector). `Domain` stores per-domain metadata (favicon, category). `PagePin` is the pin/bookmark junction. Signals auto-download images and rebuild PostgreSQL search vectors on save. `utils.py` contains URL canonicalization, security verification, and `UnsupportedURLError`. `page_processors.py` handles YouTube oEmbed enrichment.
+- **forums** — Threaded discussion posts linked to pages. `Post` supports self-referential threading (parent FK, thread_level) and soft-deletion (removed + removed_by fields). Rate-limited at 10 posts/min. Replies are enforced to begin with `@parent_author_username`.
+- **rooms** — Real-time chat per page. `Broadcast` model stores chat messages (retained 90 days). `consumers.py` is the Django Channels WebSocket consumer with presence tracking (Redis cache, 20s TTL heartbeat).
+- **stars** — Generic star/like system. `Star` model uses a ContentType generic FK and can target `Page` or `Post`. `utils.py` contains the `calculate_brightness()` formula. Celery tasks handle star decay and brightness recalculation. Rate-limited at 3 stars/second.
+- **users** — Custom `User` (extends AbstractUser), `Profile` (OneToOne, background image), `ContactRelation` (friendship with PENDING/ACCEPTED states), `Mute` (per-user content filtering). Context processors inject notifications, contacts list, and muted user IDs into all templates.
+- **comms** — Notification system. `Notification` (with actor aggregation via `NotificationActor`) handles events: CONTACT_REQUEST, CONTACT_ACCEPTED, POST_STARRED, POST_REPLIED, POST_SHARED, PAGE_SHARED, PAGE_ALSO_STARRED, POST_ALSO_STARRED. Signals in various apps call the central `notify()` helper. `share_object` view lets users share pages/posts with contacts (rate-limited 10/min).
+- **oversight** — Content moderation. `PageReport` and `PostReport` models (both extend abstract `Report`) allow users to flag content against enumerated policies defined in `policies.py`. Prevents duplicate reports per user per content item.
+- **extension** — Chrome extension API endpoints. Accepts page metadata POST (requires extension version 2.0+), creates `Page` if needed, returns popup HTML for forum/room/nearby/frame tabs. Provides CSRF tokens and short-lived WebSocket auth tickets (30s TTL via Redis). CORS-whitelisted for three registered extension IDs.
+- **stella** — AI prompt management. `Prompt` model stores per-page LLM prompts (model, prompt template, output, status, token count). Default prompts (summary, primary sources, user sentiment, user-added context) are auto-created via signal when a Page gets content. Output is surfaced in the extension's frame tab.
 
 ### Key Models & Relationships
 
 ```
 Page → (has many) Post → (posted by) User
-Page → (has many) Message → (posted by) User
+Page → (has many) Broadcast → (posted by) User
 Page → (belongs to) Domain
-User → (has many) PageStar → (references) Page
-User → (has many) PostStar → (references) Post
-User → (has many) Action (generic FK to starred/posted/replied objects)
-User → (has many) Contact (self-referential friendship)
+Page → (has many) Prompt (AI-generated summaries)
+User → (has many) Star → (references) Page or Post  [via ContentType]
+User → (has many) PagePin → (references) Page
+User → (has many) Notification (as recipient)
+User → (has many) ContactRelation (self-referential friendship)
+User → (has many) Mute (self-referential content filtering)
 User → (has one) Profile
 ```
 
 ### Brightness Algorithm ("Firmament")
 
-Pages and Posts are ordered by a **brightness** score that decays over time:
+Pages and Posts are both ordered by a **brightness** score that decays over time:
 
-- `PageStar` records older than 7 days are deleted by a Celery task (brightness decay).
-- Brightness is recalculated as `1/(user_count - star_count)^2` (inverse square law: stars = power, non-stars = distance). Edge cases: all-starred → `1e15`, no-stars → `1e-15`.
+- `Star` records older than 7 days are deleted by a Celery task (`stars.delete_old_stars`).
+- Brightness is recalculated as `1/(user_count - star_count)^2` (inverse square law: stars = pull, non-stars = distance). Edge cases: all-starred → `1e15`, no-stars → `1e-15`.
 - `brightness_index` ranks pages by brightness with a random tiebreaker (`RANDOM()` in PostgreSQL). The `rise` field tracks rank movement.
-- The `firmament()` custom manager uses NumPy weighted random selection so brighter pages appear more frequently but not exclusively — a probabilistic "night sky" feed.
+- The page feed uses NumPy weighted random selection so brighter pages appear more frequently but not exclusively — a probabilistic "night sky" feed.
+- All three tasks live in `stars/tasks.py` and are scheduled daily in `CELERY_BEAT_SCHEDULE`.
 
 ### Real-Time Chat (Django Channels)
 
@@ -89,23 +94,31 @@ Pages and Posts are ordered by a **brightness** score that decays over time:
 
 ### Celery Background Tasks
 
-Redis broker + backend. Four periodic tasks defined in `pages/tasks.py`:
+Redis broker + backend. Four periodic tasks scheduled in `CELERY_BEAT_SCHEDULE`:
 
-1. `delete_old_page_stars` — removes PageStars older than 7 days.
-2. `update_page_brightnesses` — recalculates brightness scores.
-3. `update_brightness_index` — re-ranks pages and stores `rise` delta.
-4. *(implicit beat schedule)* — all run on crontab schedule configured in `CELERY_BEAT_SCHEDULE`.
+- `stars.delete_old_stars` — removes Stars older than 7 days (daily).
+- `stars.update_brightnesses` — recalculates brightness for all Pages and Posts (daily).
+- `stars.update_brightness_indexes_and_rises` — re-ranks pages and stores `rise` delta (daily).
+- `rooms.delete_old_broadcasts` — removes Broadcasts older than 90 days (daily).
 
 ### URL Structure
 
-- `/` — Page feed (index). Supports `sort=firmament|brightest|rising`, `tag=`, and full-text `search=`.
-- `/forum/?p=<canonical_url>` — Forum (threaded posts) for a page.
-- `/room/?p=<canonical_url>` — Real-time chat room for a page.
-- `/users/<username>/` — User profile and contact management.
-- `/accounts/` — django-allauth (login, signup, email verification).
+- `/` — Home (authenticated feed / landing).
+- `/explore/` — Page feed. Supports `query=`, `sort=firmament|brightest|rising`, `starred_by=`, `near_to=`.
+- `/contacts/` — Contact management (requires login).
+- `/comms/` — Notification inbox (marks notifications read on visit).
+- `/pins/` — User's pinned pages.
+- `/forum/<page_id>/` — Threaded forum for a page.
+- `/room/<page_id>/` — Real-time chat room for a page.
+- `/users/<username>/posts/` — User's posts.
+- `/users/<username>/stars/` — User's starred items.
+- `/users/<username>/edit/` — Edit profile.
+- `/accounts/` — django-allauth (login, signup, Google OAuth2, email verification).
 - `/policies/<policy>/` — Privacy policy / user agreement.
-- `/extension/` — Extension endpoints: root POST (metadata), `csrf-token/`, `ws-ticket/`, `loading/`, `restricted/`.
-- `/api/` — REST endpoints: `create-post/`, `star-page/`, `star-post/`, `markdownify/`, `get-room-count/`.
+- `/oversight/` — Report page/post endpoints.
+- `/extension/` — Extension endpoints: root POST (metadata), `csrf-token/`, `ws-ticket/`, `restricted/`.
+- `/stars/` — Toggle star endpoint.
+- `/pages/` — Toggle pin endpoint.
 - `/admin/` — Django admin.
 - `ws/room/<page_id>/` — WebSocket endpoint (Channels).
 
@@ -117,17 +130,21 @@ Redis broker + backend. Four periodic tasks defined in `pages/tasks.py`:
 
 ### Static Files & Templates
 
-- Global static assets in `stllr/static/` — Bootstrap 5, Bootstrap Icons, brand assets (`stllr.png`, favicons).
-- Per-app CSS/JS in `<app>/static/` — `forums.js`, `rooms.js`, `pages.js`, `base.js`, `index.js`.
+- Global static assets in `stllr/static/` — Bootstrap 5, Bootstrap Icons, brand assets.
+- Per-app CSS/JS in `<app>/static/` — `forums.js`, `rooms.js`, `pages.js`, `stllr.js`, `modals.js`, `stars.js`.
 - Base template at `stllr/templates/base.html` — navbar, search, auth status.
 - Template directories follow the pattern `<app>/templates/<app>/<model>/<variant>.html` (e.g., `forums/templates/forums/post/card.html`).
 - WhiteNoise (`CompressedManifestStaticFilesStorage`) serves static files in production.
 
 ### Template Tags & Utilities
 
-- `forums/templatetags/utility_tags.py` — `safe_markdown_filter`: renders Markdown to HTML and sanitizes with bleach (allows safe HTML tags; images restricted to self-hosted paths only).
-- `pages/templatetags/math_extras.py` — `negate` filter.
-- `users/context_processors.py` — `notifications()`: injects `notifications.pending_requests` (pending Contact objects) into every template context.
+- `forums/templatetags/forum_tags.py` — `safe_markdown` filter (Markdown → bleach-sanitized HTML; allowed tags: p, br, strong, em, code, pre, blockquote, ul/ol/li, h1-h6, hr, a, img); `render_post` filter (same + @mention linking); `ancestry_chain` tag for threaded post hierarchy.
+- `pages/templatetags/page_tags.py` — `random_seed()` tag.
+- `stars/templatetags/star_tags.py` — `starred_by` filter, `object_ct_name` filter.
+- Context processors (all three injected into every template):
+  - `comms.context_processors.notifications` — `notifications.all` and `notifications.unread`.
+  - `comms.context_processors.contacts` — `contacts_list` (sorted accepted contacts).
+  - `comms.context_processors.muted_users` — `muted_user_ids` set for content filtering.
 
 ### Browser Extension Integration
 
@@ -137,8 +154,12 @@ Three registered Chrome extension IDs are whitelisted in CORS, CSRF trusted orig
 - `mlilkidmlfonjgccanoodpmbfjflggla`
 - `hmpgjgepcimfdojfbffhaedmkndomfml`
 
-**Extension flow:** User clicks extension → extension POSTs current URL + page metadata to `/extension/` → backend canonicalizes URL, creates `Page` if new, returns popup HTML (forum/room/similar tabs) → for chat, extension fetches a WS ticket from `/extension/ws-ticket/` and opens WebSocket with `?ticket=<token>`.
+**Extension flow:** User clicks extension → extension POSTs current URL + page metadata to `/extension/` (must be extension version 2.0+) → backend canonicalizes URL, runs YouTube enrichment if applicable, creates `Page` if new, returns popup HTML (forum/room/nearby/frame tabs) → for chat, extension fetches a WS ticket from `/extension/ws-ticket/` and opens WebSocket with `?ticket=<token>` → the frame tab shows Stella AI prompts generated for the page.
 
-### Activity Feed (Action Model)
+### Content Moderation (Oversight)
 
-The `Action` model in `users` logs user activity using Django's ContentType framework. Verb choices: `STARRED`, `POSTED`, `REPLIED`, `ENTERED`. The `action/card.html` template renders each action differently based on verb — e.g., REPLIED shows the parent post for context.
+`PageReport` and `PostReport` each reference a policy choice from `oversight/policies.py`:
+
+- **PAGE_POLICIES:** `not_a_page`, `explicit`, `spam`, `malicious`, `duplicate`, `misleading_thumbnail`, `other`.
+- **POST_POLICIES:** `spam`, `harassment`, `misinformation`, `explicit`, `off_topic`, `other`.
+- Reports have a `status` of `pending | dismissed | actioned`. Each user can submit at most one report per content item.

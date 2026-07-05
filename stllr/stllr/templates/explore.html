@@ -26,7 +26,6 @@
     </form>
 
     <div class="d-flex justify-content-end align-items-center gap-2 mb-2">
-        <i class="small"> sort:</i>
         <div class="dropdown">
             <button class="btn btn-sm btn-glass rounded-pill dropdown-toggle" id="sortMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ sort|capfirst }}
@@ -35,6 +34,8 @@
                 <a class="dropdown-item" href="{% url 'explore' %}?{% if query %}query={{ query }}&{% endif %}sort=firmament">Firmament</a>
                 <a class="dropdown-item" href="{% url 'explore' %}?{% if query %}query={{ query }}&{% endif %}sort=brightest">Brightest</a>
                 <a class="dropdown-item" href="{% url 'explore' %}?{% if query %}query={{ query }}&{% endif %}sort=rising">Rising</a>
+                <a class="dropdown-item" href="{% url 'explore' %}?{% if query %}query={{ query }}&{% endif %}sort=forging">Forging</a>
+                <a class="dropdown-item" href="{% url 'explore' %}?{% if query %}query={{ query }}&{% endif %}sort=poppin">Poppin</a>
             </div>
         </div>
     </div>

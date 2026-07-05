@@ -65,8 +65,9 @@ class Page(models.Model):
     total_stars = models.PositiveIntegerField(default=0, editable=False)
     brightness = models.FloatField(default=0, editable=False)
     brightness_index = models.PositiveIntegerField(editable=False)
-    rise = models.IntegerField(default=0, editable=False)
-    # TODO: Add 'Forging' and 'Poppin' scores -> Respectively most posts in the past week, most users currently in the room 
+    rising_score = models.IntegerField(default=0, editable=False)
+    forging_score = models.FloatField(default=0, editable=False)
+    poppin_score = models.FloatField(default=0, editable=False)
 
     def save(self, *args, **kwargs):
         if not self.pk:

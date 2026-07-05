@@ -68,7 +68,6 @@ INSTALLED_APPS = [
     'stella.apps.StellaConfig',
     'corsheaders',
     'storages',
-    'taggit',   # TODO: Remove 'zombie' library and reset DB + delete and re-run all migrations for clean start.
     'easy_thumbnails',
     'markdown_deux',
     'crispy_forms',
@@ -236,14 +235,22 @@ CELERY_BEAT_SCHEDULE = {
         "task": "stars.update_brightnesses",
         "schedule": crontab(),
     },
-    "update-brightness-indexes-and-rises": {
-        "task": "stars.update_brightness_indexes_and_rises",
+    "update-rising-scores": {
+        "task": "pages.update_rising_scores",
         "schedule": crontab(),
     },
     "delete_old_broadcasts": {
         "task": "rooms.delete_old_broadcasts",
         "schedule": crontab(),
-    }
+    },
+    "update-forging-scores": {
+        "task": "pages.update_forging_scores",
+        "schedule": crontab(),
+    },
+    "update-poppin-scores": {
+        "task": "pages.update_poppin_scores",
+        "schedule": crontab(),
+    },
 }
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'

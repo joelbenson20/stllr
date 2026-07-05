@@ -69,7 +69,11 @@ def feed(request):
         elif sort == 'brightest':
             pages = Page.objects.order_by('-brightness', '?')
         elif sort == 'rising':
-            pages = Page.objects.order_by('-rise', '?')
+            pages = Page.objects.order_by('-rising_score', '?')
+        elif sort == 'forging':
+            pages = Page.objects.order_by('-forging_score', '?')
+        elif sort == 'poppin':
+            pages = Page.objects.order_by('-poppin_score', '?')
 
         if query:
             pages = pages.filter(search_vector=SearchQuery(query, search_type='websearch'))

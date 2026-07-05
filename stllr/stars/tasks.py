@@ -1,8 +1,6 @@
 import logging
 from datetime import timedelta
 from celery import shared_task
-from django.db.models.expressions import Window
-from django.db.models.functions import RowNumber
 from django.utils import timezone
 from .utils import calculate_brightness
 
@@ -39,22 +37,3 @@ def update_brightnesses():
     Post.objects.bulk_update(posts, ['brightness'])
 
     return {'pages': len(pages), 'posts': len(posts)}
-
-
-@shared_task(name="stars.update_brightness_indexes_and_rises")
-def update_brightness_indexes_and_rises():
-    from pages.models import Page
-    from django.db.models import OrderBy
-    from django.db.models.expressions import RawSQL
-
-    pages = list(
-        Page.objects.annotate(
-            new_brightness_index=Window(expression=RowNumber(), order_by=['-brightness', OrderBy(RawSQL('RANDOM()', []))]
-        )
-    ))
-
-    for page in pages:
-        page.rise = page.brightness_index - page.new_brightness_index
-        page.brightness_index = page.new_brightness_index
-
-    Page.objects.bulk_update(pages, ['rise', 'brightness_index'])

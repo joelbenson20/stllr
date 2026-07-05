@@ -132,7 +132,7 @@ class StarSignalsTests(StarTestBase):
         self.assertGreater(self.page.brightness, 0)
 
     def test_update_page_brightness_index_and_rise(self):
-        from stars.tasks import update_brightness_indexes_and_rises
+        from pages.tasks import update_rising_scores
         from stars.utils import calculate_brightness
 
         user_count = User.objects.count()
@@ -148,14 +148,46 @@ class StarSignalsTests(StarTestBase):
         page_b.brightness_index = 1
         page_b.save(update_fields=['total_stars', 'brightness', 'brightness_index'])
 
-        update_brightness_indexes_and_rises()
+        update_rising_scores()
 
         self.page.refresh_from_db()
         page_b.refresh_from_db()
         self.assertEqual(self.page.brightness_index, 1)
         self.assertEqual(page_b.brightness_index, 2)
-        self.assertGreater(self.page.rise, 0)
-        self.assertLess(page_b.rise, 0)
+        self.assertGreater(self.page.rising_score, 0)
+        self.assertLess(page_b.rising_score, 0)
+
+    def test_update_forging_scores(self):
+        from pages.tasks import update_forging_scores
+
+        page_b = Page.objects.create(canonical='example.com/page-b', title='Page B', domain=self.domain)
+        # self.page has one post from setUp; page_b has none
+
+        update_forging_scores()
+
+        self.page.refresh_from_db()
+        page_b.refresh_from_db()
+        self.assertEqual(self.page.forging_score, 1.0)
+        self.assertEqual(page_b.forging_score, 0.0)
+
+    def test_update_poppin_scores(self):
+        from pages.tasks import update_poppin_scores
+        from unittest.mock import patch
+
+        page_b = Page.objects.create(canonical='example.com/page-b', title='Page B', domain=self.domain)
+
+        def fake_cache_get(key):
+            if key == f'presence:room_{self.page.pk}':
+                return {'channel1': 'user1', 'channel2': 'user2'}
+            return None
+
+        with patch('pages.tasks.cache.get', side_effect=fake_cache_get):
+            update_poppin_scores()
+
+        self.page.refresh_from_db()
+        page_b.refresh_from_db()
+        self.assertEqual(self.page.poppin_score, 1.0)
+        self.assertEqual(page_b.poppin_score, 0.0)
 
     def test_signal_works_with_post(self):
         Star.objects.create(user=self.user, object_ct=self.post_ct, object_id=self.post.id)

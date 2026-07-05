@@ -1,10 +1,24 @@
 {% extends "base.html" %}
 {% load static %}
-{% load humanize %}
 
 {% block content %}
 
-    {% include "page/feed.html" %}
+    <div class="d-flex justify-content-end align-items-center gap-2 mb-2">
+        <div class="dropdown">
+            <button class="btn btn-sm btn-glass rounded-pill dropdown-toggle" id="sortMenuButton" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ sort|capfirst }}
+            </button>
+            <div class="dropdown-menu dropdown-menu-glass" aria-labelledby="sortMenuButton">
+                <a class="dropdown-item" href="{% url 'home' %}?sort=firmament">Firmament</a>
+                <a class="dropdown-item" href="{% url 'home' %}?sort=brightest">Brightest</a>
+                <a class="dropdown-item" href="{% url 'home' %}?sort=rising">Rising</a>
+                <a class="dropdown-item" href="{% url 'home' %}?sort=forging">Forging</a>
+                <a class="dropdown-item" href="{% url 'home' %}?sort=poppin">Poppin'</a>
+            </div>
+        </div>
+    </div>
+
+    {% include "page/feed.html" with sort=sort %}
 
 {% endblock content %}
 
