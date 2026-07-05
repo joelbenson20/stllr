@@ -33,7 +33,6 @@ django-crispy-forms==2.6
 django-markdown-deux==1.0.6
 django-ratelimit==4.1.0
 django-storages==1.14.6
-django-taggit==6.1.0
 easy-thumbnails==2.10.1
 freetype-py==2.5.1
 h11==0.16.0

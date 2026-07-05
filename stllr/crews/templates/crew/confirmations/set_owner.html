@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Transfer Ownership - @{{ crew.handle }} - stllr{% endblock title %}
+
+{% block content %}
+
+    <div class="row justify-content-center mt-5">
+        <div class="col">
+            <div class="card border-warning">
+                <div class="card-body text-center p-4">
+                    <i class="bi bi-person-fill-up text-warning fs-1 mb-3 d-block"></i>
+                    <h5 class="mb-1">Transfer ownership of {{ crew.name }} <strong>(@{{ crew.handle}})</strong> to <strong>@{{ target_user.username }}</strong>?</h5>
+                    <p class="text-secondary small mb-4">
+                        You will become an admin of the crew. This action cannot be undone without the new owner's cooperation.
+                    </p>
+                    <form method="post" action="{% url 'crews:set_owner' crew.handle target_user.username %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning w-100 mb-2">Yes, transfer ownership</button>
+                        <a href="{% url 'crews:crew_members' crew.handle %}" class="btn btn-outline-secondary w-100">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

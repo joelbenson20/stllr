@@ -6,6 +6,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, HTML, Field
 from allauth.socialaccount.forms import SignupForm as SocialSignupFormBase
 
+User = get_user_model()
+
 RESERVED_USERNAMES = {
     # Brand/identity
     'stllr', 'stlr', 'stllrr', 'steller', 'stellar', 'stlllr',
@@ -24,20 +26,20 @@ RESERVED_USERNAMES = {
     'everyone', 'all', 'here',
 }
 
-def validate_username(username, user=None):
 
-    if not re.fullmatch(r'[A-Za-z0-9_]+', username):
-        raise forms.ValidationError("Username may only contain letters, numbers, and underscores.")
-    
-    if username.lower() in RESERVED_USERNAMES and not (user and user.is_staff):
-        raise forms.ValidationError("This username is reserved and cannot be used.")
-    
-    User = get_user_model()
-    qs = User.objects.filter(username__iexact=username)
-    if user and user.pk:
-        qs = qs.exclude(pk=user.pk)
-    if qs.exists():
-        raise forms.ValidationError("This username is already taken.")
+def validate_handle(value, requesting_user=None):
+    if not re.fullmatch(r'[A-Za-z0-9_]+', value):
+        raise forms.ValidationError("Handle may only contain letters, numbers, and underscores.")
+
+    if value.lower() in RESERVED_USERNAMES and not (requesting_user and requesting_user.is_staff):
+        raise forms.ValidationError("This handle is reserved for staff.")
+
+    if User.objects.filter(username__iexact=value).exists():
+        raise forms.ValidationError("This handle is already taken by a user.")
+
+    from crews.models import Crew
+    if Crew.objects.filter(handle__iexact=value).exists():
+        raise forms.ValidationError("This handle is already taken by a crew.")
 
 class SocialSignupForm(SocialSignupFormBase):
     username = forms.CharField(
@@ -48,7 +50,7 @@ class SocialSignupForm(SocialSignupFormBase):
 
     def clean_username(self):
         username = self.cleaned_data['username']
-        validate_username(username)
+        validate_handle(username)
         return username
 
     def custom_signup(self, request, user):
@@ -84,7 +86,7 @@ class UserRegistrationForm(forms.ModelForm):
     
     def clean_username(self):
         username = self.cleaned_data['username']
-        validate_username(username)
+        validate_handle(username)
         return username
 
     def clean_email(self):
@@ -108,13 +110,14 @@ class UserEditForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data['username']
-        validate_username(username, self.instance)
+        if username.lower() != self.instance.username.lower():
+            validate_handle(username, requesting_user=self.instance)
         return username
 
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['background']
+        fields = ['bio', 'background']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

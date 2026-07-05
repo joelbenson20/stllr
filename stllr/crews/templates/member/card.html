@@ -1,0 +1,20 @@
+<div id="crew-member-{{ membership.user.username }}" class="crew-member-row d-flex align-items-center glass-no-blur rounded-card gap-3 py-2 px-2 mb-2">
+    <a href="{{ membership.user.profile.get_absolute_url }}" class="d-flex align-items-center gap-3 text-decoration-none flex-grow-1">
+        {% include "user/avatar.html" with user=membership.user size="40" dimensions="40x40" %}
+        <span class="fw-semibold">@{{ membership.user.username }}</span>
+        {% if membership.role == 'owner' %}
+            <span class="badge bg-info">Owner</span>
+        {% elif membership.role == 'admin' %}
+            <span class="badge bg-secondary">Admin</span>
+        {% endif %}
+    </a>
+
+    {% if membership.role != 'owner' %}
+        {% if request_user_membership.role == 'owner' or request_user_membership.role == 'admin' and membership.role != 'admin' %}
+            {% include "crew/buttons/admittance.html" %}
+        {% endif %}
+        {% if request_user_membership.role == 'owner' %}
+            {% include "crew/buttons/owner.html" %}
+        {% endif %}
+    {% endif %}
+</div>

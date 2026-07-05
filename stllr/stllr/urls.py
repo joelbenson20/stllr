@@ -7,19 +7,22 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('explore/', views.explore, name='explore'),
-    path('contacts/', views.contacts, name='contacts'),
-    path('comms/', views.comms, name='comms'),
+    path('contacts/', include('contacts.urls', namespace='contacts')),
+    path('comms/', views.comms, name='comms'),  # TODO: Move all these tabs into their respective apps
     path('pins', views.pins, name='pins'),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('users/', include('users.urls', namespace='users')),
-    path('policies/<str:policy>/', views.policy, name='policy'),
-    path('forums/', include('forums.urls', namespace='forums')),
     path('pages/', include('pages.urls', namespace='pages')),
+    path('stars/', include('stars.urls', namespace='stars')),
+    path('forums/', include('forums.urls', namespace='forums')),
     path('rooms/', include('rooms.urls', namespace='rooms')),
-    path('extension/', include('extension.urls', namespace='extension')),
+    path('crews/', include('crews.urls', namespace='crews')),
+    path('beacons/', include('beacons.urls', namespace='beacons')),
     path('comms/', include('comms.urls', namespace='comms')),
-    path('oversight/', include('oversight.urls', namespace='oversight')),  # Done by Claude, requires review
+    path('oversight/', include('oversight.urls', namespace='oversight')),
+    path('policies/<str:policy>/', views.policy, name='policy'), # TODO: Move policies urls and views into oversight
+    path('extension/', include('extension.urls', namespace='extension')),
 ]
 
 if settings.DEBUG:

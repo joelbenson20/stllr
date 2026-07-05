@@ -1,15 +1,16 @@
 # stllr
 
-**stllr.io** — a social layer on top of the internet. Every unique webpage that meets our content and security criteria gets exactly one social space: a threaded forum and a live chat room. The companion browser extension surfaces that social space directly in the browser at wherever the user is currently browsing.
+**stllr.io** — a social layer on top of the internet. Every unique webpage that meets our content and security criteria gets exactly one social space: a threaded forum and a live chat room. The companion browser extension surfaces that social space directly in the browser wherever the user is currently browsing. An AI "frame" tab summarizes each page and synthesizes discussion context using LLM prompts generated per page.
 
 ## How it works
 
 1. A user visits a webpage and clicks the Chrome extension (or submits a URL on stllr.io).
 2. The extension POSTs the current URL and scraped page metadata to the backend.
 3. `pages.utils.get_canonical` normalizes the URL — lowercased host, `www.` stripped, default ports dropped, path normalized, tracking params removed — so every variant of the same page maps to one canonical identity.
-4. If no `Page` exists for that canonical, one is created with OpenGraph metadata, domain favicon, and auto-extracted NLTK tags. A security check blocks private IPs and localhost variants.
+4. If no `Page` exists for that canonical, one is created with OpenGraph metadata and domain favicon. A security check blocks private IPs and localhost variants. YouTube pages are enriched via the oEmbed API.
 5. The user enters the page's social space: a threaded forum (persistent posts) and a live chat room (WebSocket, real-time presence).
-6. Pages are ranked by a brightness algorithm — a weighted, probabilistic feed where stars act as gravitational pull.
+6. Pages and posts are ranked by a brightness algorithm — a weighted, probabilistic feed where stars act as gravitational pull.
+7. When a page gains content, Stella auto-generates AI prompts (summary, sources, user sentiment, collective context) surfaced in the extension's frame tab.
 
 ---
 
@@ -29,18 +30,20 @@ stllr/                        ← repo root (docker-compose files live here)
     ├── manage.py
     ├── requirements.txt
     ├── CLAUDE.md
-    ├── stllr/                ← Django project package (settings, urls, asgi, wsgi)
+    ├── stllr/                ← Django project package (settings, urls, asgi, wsgi, views)
     │   └── settings/
     │       ├── base.py
     │       ├── dev.py
     │       └── prod.py
-    ├── pages/                ← Page, Domain, PageStar models; brightness algorithm; signals
-    ├── forums/               ← Post, PostStar models; threaded discussions
-    ├── rooms/                ← Message model; WebSocket consumer; presence tracking
-    ├── users/                ← User, Profile, Contact, Action models; activity feed
+    ├── pages/                ← Page, Domain, PagePin models; URL canonicalization; search vectors
+    ├── forums/               ← Post model; threaded discussions; markdown rendering
+    ├── rooms/                ← Broadcast model; WebSocket consumer; presence tracking
+    ├── stars/                ← Star model (generic FK); brightness algorithm; Celery tasks
+    ├── users/                ← User, Profile, ContactRelation, Mute models; Google OAuth2
+    ├── comms/                ← Notification, NotificationActor models; share endpoint
+    ├── oversight/            ← PageReport, PostReport models; content moderation policies
     ├── extension/            ← Browser extension API endpoints; WS ticket issuance
-    ├── api/                  ← REST endpoints (star, post, markdownify, room count)
-    └── governance/           ← Placeholder (no models yet)
+    └── stella/               ← Prompt model; AI-generated page summaries and context
 ```
 
 ---
@@ -56,11 +59,12 @@ stllr/                        ← repo root (docker-compose files live here)
 | Task queue | Celery 5 (worker + beat) |
 | Database | PostgreSQL 17 |
 | Cache / broker | Redis 8 |
-| Auth | django-allauth (email verification required) |
-| NLP / tagging | NLTK (noun extraction), django-taggit |
+| Auth | django-allauth (email verification required, Google OAuth2) |
 | Full-text search | PostgreSQL `SearchVector` + `SearchQuery` |
 | Image processing | easy-thumbnails, Pillow |
 | Markdown | markdown-deux + bleach sanitization |
+| Forms | django-crispy-forms + crispy-bootstrap5 |
+| Rate limiting | django-ratelimit |
 | Static files | WhiteNoise (CompressedManifestStaticFilesStorage) |
 | TLS | Let's Encrypt (auto-renewed, mounted into nginx container) |
 | Monitoring | Sentry (production only) |
@@ -92,7 +96,6 @@ Requires a local PostgreSQL instance and Redis. Set the env vars below, then:
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python -m nltk.downloader stopwords wordnet punkt_tab averaged_perceptron_tagger_eng
 
 cd stllr
 python manage.py migrate
@@ -187,19 +190,28 @@ SENTRY_DSN=
 
 ### Brightness algorithm
 
-Pages are ranked by a **brightness** score inspired by star luminosity:
+Pages and Posts are ranked by a **brightness** score inspired by star luminosity:
 
-- `PageStar` records older than 7 days are deleted on a schedule (decay).
+- `Star` records older than 7 days are deleted on a schedule (decay). Stars are generic — one model targets both pages and posts via ContentType.
 - Brightness = `1 / (total_users - star_count)²` — stars add gravitational pull; non-stars add distance.
-- Pages are ranked by brightness index, and the home feed uses NumPy weighted random sampling so bright pages appear more frequently without guaranteed ordering ("firmament" mode). Two other sort modes are available: `brightest` (strict rank) and `rising` (rank movement delta).
+- Pages are ranked by brightness index; the explore feed uses NumPy weighted random sampling so bright pages appear more often without guaranteed ordering ("firmament" mode). Two other sort modes: `brightest` (strict rank) and `rising` (rank movement delta).
+- Three Celery tasks in `stars/tasks.py` run daily: star decay, brightness recalculation, and index/rise update.
 
 ### Social space per page
 
-Each `Page` has exactly one `forum` (threaded posts, persistent) and one `room` (live chat, ephemeral messages). Both are accessible at the same canonical URL identity. The Chrome extension makes both available as tabs in the extension popup.
+Each `Page` has exactly one `forum` (threaded posts, persistent) and one `room` (live chat, Broadcasts retained 90 days). Both are accessible at the same canonical URL identity. The Chrome extension makes both available as tabs in the extension popup, along with a "nearby" tab (semantically similar pages) and a "frame" tab (Stella AI summaries).
+
+### Notifications (comms)
+
+The `comms` app handles all inter-user events. Signals in `stars`, `forums`, and `users` call the central `notify()` helper to create or update `Notification` records. Multiple actors triggering the same notification are aggregated via `NotificationActor`. Users can also explicitly share pages and posts with contacts via the `share_object` endpoint.
+
+### Content moderation (oversight)
+
+Users can report pages or posts against enumerated policies in `oversight/policies.py`. Reports have a `status` of `pending | dismissed | actioned` and are one-per-user-per-item. Policy definitions also cover user behavior and code quality (reserved for future enforcement).
 
 ### Browser extension
 
-The extension sends page metadata to `/extension/` and renders the returned HTML directly in the popup. For the live chat room, the extension fetches a short-lived WebSocket auth ticket from `/extension/ws-ticket/` (30-second TTL, stored in Redis) since cross-origin sessions can't be shared with the main site via cookies.
+The extension sends page metadata to `/extension/` (version 2.0+ required) and renders the returned HTML directly in the popup. For the live chat room, the extension fetches a short-lived WebSocket auth ticket from `/extension/ws-ticket/` (30-second TTL, stored in Redis) since cross-origin sessions can't be shared with the main site via cookies.
 
 Three Chrome extension IDs are registered in CORS, CSRF trusted origins, and the WebSocket `OriginValidator`:
 - `polpgpcagljhejdbajfbjgdchdlnfepk`

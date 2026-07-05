@@ -1,34 +1,12 @@
-import numpy as np
-from django.db import models
+from django.db import models, connection
 from django.conf import settings
-from django.db import models
-from django.db.models import Case, When, IntegerField
-from django.contrib.contenttypes.fields import GenericRelation
 from django.urls import reverse
+from django.contrib.contenttypes.fields import GenericRelation
 from pages.models import Page
+from crews.models import Crew
 
 
 class Post(models.Model):
-
-    class FirmamentQuerySet(models.QuerySet):
-        def firmament(self):
-            if not self:
-                return self.none()
-            posts = self.values('id', 'brightness')
-            total_posts = posts.count()
-            ids = [post['id'] for post in posts]
-            brightnesses = np.maximum(np.array([post['brightness'] for post in posts]), 1e-10)
-            probabilities = brightnesses / brightnesses.sum()
-            chosen_ids = np.random.choice(ids, size=total_posts, p=probabilities, replace=False)
-            chosen_order = Case(
-                *[When(id=id, then=pos) for pos, id in enumerate(chosen_ids)],
-                output_field=IntegerField()
-            )
-            firmament = Post.objects.filter(id__in=chosen_ids).order_by(chosen_order)
-            return firmament
-    
-    objects = models.Manager()
-    firmament = FirmamentQuerySet.as_manager()
 
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -50,26 +28,18 @@ class Post(models.Model):
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 
-    users_star = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        through='PostStar',
-        related_name='posts_starred',
-        blank=True
-    )
+    stars = GenericRelation('stars.Star', content_type_field='object_ct', object_id_field='object_id')
     total_stars = models.PositiveIntegerField(default=0)
     brightness = models.FloatField(default=0)
-    removed = models.BooleanField(default=False)
+    removed = models.BooleanField(default=False) #TODO: How do reply mentions work with removing posts and hiding the author? Also, forced mention changes the dynamic of a reply a bit. Worth thinking about.
     removed_by = models.CharField(
         max_length=16,
         choices=[('author', 'the author'), ('moderator', 'a moderator')],
         null=True,
         blank=True
     )
-    actions = GenericRelation('users.Action', content_type_field='object_ct', object_id_field='object_id')
 
     class Meta:
-        default_manager_name = 'firmament'
-        base_manager_name = 'firmament'
         indexes = [
             models.Index(fields=['-brightness'])
         ]
@@ -78,14 +48,64 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('forums:post_detail', args=[self.pk])
 
+    @property
+    def descendant_count(self):
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                WITH RECURSIVE tree AS (
+                    SELECT id FROM forums_post WHERE parent_id = %s
+                    UNION ALL
+                    SELECT p.id FROM forums_post p INNER JOIN tree t ON p.parent_id = t.id
+                )
+                SELECT COUNT(*) FROM tree
+            """, [self.pk])
+            return cursor.fetchone()[0]
+
     def __str__(self):
         return f'{self.author}: {self.content}'
-    
-    
-class PostStar(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='post_stars', on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, related_name='stars', on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
+
+
+class Mention(models.Model):
+
+    post = models.ForeignKey(
+        Post,
+        related_name='mentions',
+        on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='mentions',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    crew = models.ForeignKey(
+        Crew,
+        related_name='mentions',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
 
     class Meta:
-        unique_together = ('user', 'post')
+        constraints = [
+            models.CheckConstraint(
+                condition=(
+                    models.Q(user__isnull=False, crew__isnull=True) |
+                    models.Q(user__isnull=True, crew__isnull=False)
+                ),
+                name='mention_exactly_one_target'
+            ),
+            models.UniqueConstraint(fields=['post', 'user'], name='unique_mention_user', condition=models.Q(user__isnull=False)),
+            models.UniqueConstraint(fields=['post', 'crew'], name='unique_mention_crew', condition=models.Q(crew__isnull=False)),
+        ]
+        indexes = [
+            models.Index(fields=['user']),
+            models.Index(fields=['crew']),
+        ]
+
+    def __str__(self):
+        target = f'@{self.user.username}' if self.user_id else f'@{self.crew.handle}'
+        return f'{target} in post {self.post_id}'
+
+

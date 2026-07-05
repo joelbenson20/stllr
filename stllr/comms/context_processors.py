@@ -1,6 +1,8 @@
 from users.models import Mute
 from comms.models import Notification
 
+# TODO: Move each context processor to its own app.
+
 def notifications(request):
 
     if request.user.is_authenticated:
@@ -25,33 +27,42 @@ def notifications(request):
 
 def contacts(request):
     if request.user.is_authenticated:
+        from contacts.models import ContactRelation
         contacts_list = sorted(
             request.user.get_contacts().select_related('profile'),
             key=lambda u: u.username.lower()
         )
-        return {'contacts_list': contacts_list}
-    return {'contacts_list': []}
-
-def contacts_statuses(request):
-    if request.user.is_authenticated:
-        from users.models import Action
-        contact_users = request.user.get_contacts()
-        actions = (
-            Action.objects
-            .filter(actor__in=contact_users, removed=False)
-            .select_related('actor', 'actor__profile', 'object_ct')
-            .order_by('actor_id', '-created')
+        from django.db.models import Q
+        pending = list(
+            ContactRelation.objects
+            .filter(status=ContactRelation.Status.PENDING)
+            .filter(Q(to_user=request.user) | Q(from_user=request.user))
+            .select_related('from_user', 'from_user__profile', 'to_user', 'to_user__profile')
         )
-        seen = set()
-        result = []
-        for action in actions:
-            if action.actor_id not in seen:
-                seen.add(action.actor_id)
-                result.append(action)
-        result.sort(key=lambda a: a.created, reverse=True)
-        return {'contacts_statuses': result}
-    return {'contacts_statuses': []}
+        requests_received = [r for r in pending if r.to_user == request.user]
+        requests_sent = [r for r in pending if r.from_user == request.user]
+        return {'contacts_list': contacts_list, 'requests_received': requests_received, 'requests_sent': requests_sent}
+    return {'contacts_list': [], 'requests_received': [], 'requests_sent': []}
 
+def crews(request):
+    if request.user.is_authenticated:
+        from crews.models import Membership
+        all_crews = list(request.user.get_crews())
+        pending = list(
+            Membership.objects.filter(
+                user=request.user,
+                status__in=[Membership.Status.INVITED, Membership.Status.REQUESTED],
+            ).select_related('crew')
+        )
+        return {
+            'crews_list': all_crews,
+            'memberships_invited': [m for m in pending if m.status == Membership.Status.INVITED],
+            'memberships_requested': [m for m in pending if m.status == Membership.Status.REQUESTED],
+        }
+    return {'crews_list': [], 'memberships_invited': [], 'memberships_requested': []}
+
+
+# TODO: Remove muted_users functionality for now.
 def muted_users(request):
     if request.user.is_authenticated:
         return {

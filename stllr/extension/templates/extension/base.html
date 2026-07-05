@@ -4,9 +4,14 @@
 <div id="extensionBody" class="d-flex flex-column vh-100">
 
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/users.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stars.css' %}">
     <link rel="stylesheet" href="{% static 'css/forums.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rooms.css' %}">
 
-    <div class="sticky-top glass m-0 p-0">
+    <div class="sticky-top glass">
 
         <div id="stllr-data" style="display:none"
             data-page-id="{{ page.id }}"
@@ -14,26 +19,21 @@
             data-csrf="{{ csrf_token }}">
         </div>
 
-        <div class="p-3 pb-0">
-            {% include "page/card.html" with compact=True standalone=True %}
-        </div>
+        <div class="px-3">
 
-        <nav id="extensionNavbar" class="navbar navbar-expand navbar-dark m-0 p-3" style="overflow-x: auto; scrollbar-width: none;">
-            <ul class="navbar-nav d-flex align-items-center flex-nowrap">
-                {% comment %} <li class="nav-item">
-                    <a id="frameTab" class="nav-link text-light px-4 {% if tab == "frame" %}border-bottom{% endif %}" role="button">Frame</a>
-                </li> {% endcomment %}
-                <li class="nav-item">
-                    <a id="forumTab" class="nav-link text-light px-4 {% if tab == "forum" %}border-bottom{% endif %}" role="button">Forum</a>
-                </li>
-                <li class="nav-item">
-                    <a id="roomTab" class="nav-link text-light px-4 {% if tab == "room" %}border-bottom{% endif %}" role="button">Room</a>
-                </li>
-                <li class="nav-item">
-                    <a id="similarTab" class="nav-link text-light px-4 {% if tab == "similar" %}border-bottom{% endif %}" role="button">Similar</a>
-                </li>
-            </ul>
-        </nav>
+            {% include "page/card.html" with compact=True extension_header_card=True %}
+
+        </div>
+        
+    </div>
+
+    <div id="alertContainer" class="m-0 p-0">
+        {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show m-3 p-4" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
     </div>
 
     <div class="container-fluid p-3 flex-grow-1 {% block content_wrapper_class %}overflow-y-auto{% endblock %}">
@@ -42,7 +42,5 @@
     </div>
 
     {% include "modals/share.html" %}
-
-    {% block scripts %}
-    {% endblock scripts %}
+    {% include "modals/markdown_help.html" %}
 </div>

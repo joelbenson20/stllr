@@ -53,18 +53,21 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.google', #TODO: Sign in with Apple ID
     'stllr',
     'pages.apps.PagesConfig',
-    'comms.apps.CommsConfig',
+    'stars.apps.StarsConfig',
     'forums.apps.ForumsConfig',
     'rooms.apps.RoomsConfig',
+    'contacts.apps.ContactsConfig',
+    'crews.apps.CrewsConfig',
+    'beacons.apps.BeaconsConfig',
+    'comms.apps.CommsConfig',
     'oversight.apps.OversightConfig',
     'extension.apps.ExtensionConfig',
     'stella.apps.StellaConfig',
     'corsheaders',
     'storages',
-    'taggit',
     'easy_thumbnails',
     'markdown_deux',
     'crispy_forms',
@@ -99,7 +102,7 @@ TEMPLATES = [
                 'comms.context_processors.notifications',
                 'comms.context_processors.muted_users',
                 'comms.context_processors.contacts',
-                'comms.context_processors.contacts_statuses',
+                'comms.context_processors.crews',
             ],
         },
     },
@@ -224,24 +227,28 @@ CELERY_TIMEZONE = TIME_ZONE  # reuse Django's TIME_ZONE
 CELERY_TASK_TIME_LIMIT = 5 * 60  # hard kill after 5 min
 
 CELERY_BEAT_SCHEDULE = {
-    "delete-old-page-stars": {
-        "task": "pages.delete_old_page_stars",
+    "delete-old-stars": {
+        "task": "stars.delete_old_stars",
         "schedule": crontab(),
     },
-    "update-page-brightnesses": {
-        "task": "pages.update_page_brightnesses",
+    "update-brightnesses": {
+        "task": "stars.update_brightnesses",
         "schedule": crontab(),
     },
-    "update-brightness-index": {
-        "task": "pages.update_brightness_index",
+    "update-rising-scores": {
+        "task": "pages.update_rising_scores",
         "schedule": crontab(),
     },
-    "delete-old-post-stars": {
-        "task": "forum.delete_old_post_stars",
+    "delete_old_broadcasts": {
+        "task": "rooms.delete_old_broadcasts",
         "schedule": crontab(),
     },
-    "update-post-brightnesses": {
-        "task": "forum.update_post_brightnesses",
+    "update-forging-scores": {
+        "task": "pages.update_forging_scores",
+        "schedule": crontab(),
+    },
+    "update-poppin-scores": {
+        "task": "pages.update_poppin_scores",
         "schedule": crontab(),
     },
 }

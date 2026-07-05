@@ -1,0 +1,12 @@
+{% load star_tags %}
+
+
+<button class="star-button d-flex align-items-center gap-1 btn btn-glass rounded-pill"
+    data-action="{% if obj|starred_by:user %}un{% endif %}star"
+    data-csrf-token={{ csrf_token }}
+    data-endpoint="{% url 'stars:toggle_star' %}"
+    data-object-ct="{{ obj|object_ct_name }}"
+    data-object-id="{{ obj.id }}">
+    <i class="bi {% if obj|starred_by:user %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+    <span class="star-count" style="font-size: 0.8rem;">{{ obj.total_stars }}</span>
+</button>

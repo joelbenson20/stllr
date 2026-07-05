@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Profile, Action
+from .models import User, Profile
 
 admin.site.register(User)
 
@@ -8,8 +8,3 @@ admin.site.register(User)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'background']
     raw_id_fields = ['user']
-
-@admin.register(Action)
-class ActionAdmin(admin.ModelAdmin):
-    list_display = ['actor', 'verb', 'object', 'created']
-    list_filter = ['verb', 'created']

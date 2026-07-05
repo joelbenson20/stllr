@@ -1,0 +1,11 @@
+{% load static %}
+{% load thumbnail %}
+
+<div class="d-block position-relative rounded-circle overflow-hidden flex-shrink-0"
+    style="width:{{size}}px;height:{{size}}px;">
+    {% if crew.background %}
+        {% thumbnail crew.background dimensions crop="smart" as im %}
+        <img class="position-absolute top-0 start-0 object-fit-cover" style="width:{{size}}px;height:{{size}}px;" src="{{ im.url }}">
+    {% endif %}
+    <img class="position-absolute top-0 start-0" style="width:{{size}}px;height:{{size}}px;" src="{% static 'brand/icon.png' %}">
+</div>

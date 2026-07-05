@@ -1,0 +1,4 @@
+.star-button:has(.bi-star-fill) {
+    color: var(--white-hot) !important;
+    text-shadow: 0 0 8px var(--white-hot), 0 0 16px rgba(237, 232, 255, 0.5);
+}

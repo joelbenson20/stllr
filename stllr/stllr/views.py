@@ -1,29 +1,27 @@
-import random
-from django.shortcuts import render
-from django.http import Http404
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.http import Http404
+from django.shortcuts import render
 from pages.models import Page
 
 def home(request):
-    request.session['feed_seed'] = random.random()
-    return render(request, 'home.html')
+    return render(request, 'home.html', {
+        'sort': request.GET.get('sort', 'firmament'),
+    })
 
 def explore(request):
-    request.session['feed_seed'] = random.random()
     return render(request, 'explore.html', {
         'query': request.GET.get('query', ''),
         'sort': request.GET.get('sort', 'firmament'),
     })
 
 @login_required
-def contacts(request):
-    return render(request, 'contacts.html')
-
-@login_required
 def comms(request):
     from comms.models import Notification
+    response = render(request, 'comms.html')
     Notification.objects.filter(recipient=request.user, read=False).update(read=True)
-    return render(request, 'comms.html')
+    return response
 
 @login_required
 def pins(request):

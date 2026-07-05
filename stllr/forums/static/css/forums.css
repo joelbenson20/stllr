@@ -1,7 +1,15 @@
+.post-content a {
+    text-decoration: none;
+}
+
+.post-content a:hover {
+    text-decoration: underline !important;
+}
+
 .post-form textarea,
 .reply-form textarea,
 .markdown-preview {
-    height: 4rem;
+    height: 5.5rem;
 }
 
 .post-form textarea::placeholder,

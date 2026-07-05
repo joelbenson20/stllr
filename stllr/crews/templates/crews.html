@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}crews - stllr{% endblock title %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-2">
+            <h4 class="fw-bold mb-0">Crews</h4>
+            <a href="{% url 'crews:find_crews' %}" class="btn btn-glass rounded-circle d-flex align-items-center justify-content-center" style="width:31px;height:31px;">
+                <i class="bi bi-plus"></i>
+            </a>
+        </div>
+        <a href="{% url 'crews:create_crew' %}" class="btn btn-glass btn-sm">Start a crew</a>
+    </div>
+
+    {% include "crew/invitations.html" %}
+    {% include "crew/requests.html" %}
+    {% if memberships_invited or memberships_requested %}<hr class="border-grid my-3">{% endif %}
+    {% include "crew/list.html" %}
+{% endblock content %}

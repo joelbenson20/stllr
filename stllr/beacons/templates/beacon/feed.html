@@ -1,0 +1,9 @@
+<div class="beacon-feed">
+    <div class="feeder beacon-feeder"
+        data-endpoint="{% url 'beacons:feed' %}"
+        data-beaconed-to-crew-id="{{ beaconed_to_crew_id|default:'' }}"
+        data-beaconed-to-user-id="{{ beaconed_to_user_id|default:'' }}"
+        data-p="1">
+        <div class="feeder-dot"></div>
+    </div>
+</div>

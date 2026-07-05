@@ -1,91 +1,36 @@
 {% load static %}
-{% load humanize %}
-{% load utility_tags %}
+{% load forum_tags %}
 
 <div id="post{{ post.id }}"
-    class="post py-3"
-    data-author-id="{{ post.author.id }}"
-    data-post-url="{{ post.get_absolute_url }}"
-    style="border-bottom: var(--border-grid); cursor: pointer;">
+    class="post glass-no-blur rounded-card mt-3 pb-3 pe-3"
+    data-author-id="{{ post.author.id }}">
 
-    <div class="d-flex gap-3">
+    <div class="d-flex gap-2">
 
         <!-- Avatar column -->
-        <a class="flex-shrink-0 pt-1{% if threaded %} thread-line-down{% endif %}" href="{{ post.author.profile.get_absolute_url }}">
-            {% include "user/profile-picture.html" with user=post.author size="32" dimensions="32x32" %}
+        <a class="flex-shrink-0 mt-2 ms-2" href="{{ post.author.profile.get_absolute_url }}">
+            {% include "user/avatar.html" with user=post.author size="42" dimensions="42x42" %}
         </a>
 
         <!-- Content column -->
         <div class="flex-grow-1" style="min-width: 0;">
 
             <!-- Author row -->
-            <div class="d-flex align-items-center justify-content-between gap-2">
-
-                <div class="d-flex align-items-center gap-1 overflow-hidden">
-                    <a class="fw-semibold text-white text-decoration-none text-truncate" style="font-size: 0.9rem;"
-                        href="{{ post.author.profile.get_absolute_url }}">
-                        @{{ post.author.username }}
-                    </a>
-                    <span class="text-secondary">·</span>
-                    <span class="text-secondary text-nowrap" style="font-size: 0.85rem;">{{ post.created|naturaltime }}</span>
-                </div>
-
-                <!-- Actions Dropdown -->
-                {% if not post.removed %}
-                <button id="post{{ post.id }}Dropdown"
-                    class="dropdown-toggle no-caret btn btn-transparent text-secondary flex-shrink-0 p-0"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    <i class="bi bi-three-dots"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="post{{ post.id }}Dropdown">
-                    {% if request.user.is_authenticated %}
-                    <li>
-                        <button class="dropdown-item d-flex align-items-center gap-2 share-btn"
-                            data-object-type="post"
-                            data-object-id="{{ post.id }}"
-                            data-bs-toggle="modal"
-                            data-bs-target="#shareModal">
-                            <i class="bi bi-share-fill"></i>Share post
-                        </button>
-                    </li>
-                    {% endif %}
-                    <li>
-                        <!-- Done by Claude, requires review -->
-                        <a class="dropdown-item" href="{% url "oversight:report_post" post.id %}" target="_blank">
-                            <i class="bi bi-flag-fill me-2"></i>Report post
-                        </a>
-                    </li>
-                    {% if request.user.is_authenticated and post.author != request.user %}
-                        <li>
-                            <button type="button" class="post-mute-button dropdown-item"
-                                data-action="{% if post.author.id in muted_user_ids %}unmute{% else %}mute{% endif %}"
-                                data-csrf-token="{{ csrf_token }}"
-                                data-endpoint="{% url 'users:mute_user' post.author.username %}">
-                                <i class="bi bi-bell-slash me-2"></i>
-                                <span>{% if post.author.id in muted_user_ids %}Unmute{% else %}Mute{% endif %} {{ post.author.username }}</span>
-                            </button>
-                        </li>
-                    {% endif %}
-                    {% if post.author == request.user %}
-                        <li>
-                            <a class="dropdown-item" href="{% url "forums:remove_post" post.id %}" target="_blank">
-                                <span class="text-danger"><i class="bi bi-x-square-fill me-2"></i>Remove post</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-                {% endif %}
-
+            <div class="d-flex align-items-center gap-1 mt-3">
+                <a class="fw-semibold text-white text-decoration-none text-nowrap" style="font-size: 0.9rem;"
+                    href="{{ post.author.profile.get_absolute_url }}">
+                    @{{ post.author.username }}
+                </a>
+                <span>·</span>
+                <span class="text-light text-truncate" style="font-size: 0.85rem;">{{ post.created|time_since }}</span>
             </div>
 
             <!-- Content -->
-            <div class="post-content mt-1 {% if post.author.id in muted_user_ids %}d-none{% endif %}">
+            <div class="post-content my-3 {% if post.author.id in muted_user_ids %}d-none{% endif %}">
                 {% if post.removed %}
                     <p class="text-secondary fst-italic small">This post was removed by {{ post.get_removed_by_display }}.</p>
                 {% else %}
-                    {{ post.content|safe_markdown }}
+                    {{ post|render_post }}
                 {% endif %}
             </div>
             <div class="post-content-muted {% if post.author.id not in muted_user_ids %}d-none{% endif %}">
@@ -93,52 +38,93 @@
             </div>
 
             <!-- Action buttons -->
-            <div class="d-flex align-items-center mt-2" style="gap: 2rem;">
+            <div class="d-flex align-items-center gap-2">
 
-                <button id="post-star-button-{{ post.id }}"
-                    class="post-star-button star-button btn btn-link p-0 text-secondary d-flex align-items-center gap-1"
-                    data-action="{% if post in user.posts_starred.all %}un{% endif %}star"
-                    data-csrf-token={{ csrf_token }}
-                    data-endpoint="{% url 'forums:toggle_star' post.id %}">
-                    <i class="bi {% if post in user.posts_starred.all %}bi-star-fill{% else %}bi-star{% endif %}"></i>
-                    <span class="star-count" style="font-size: 0.8rem;">{{ post.total_stars }}</span>
-                </button>
+                {% include "star/button.html" with obj=post %}
 
-                <button class="btn btn-link p-0 text-secondary d-flex align-items-center gap-1"
+                <button class="d-flex align-items-center btn btn-glass rounded-pill gap-1"
                     type="button"
                     data-bs-toggle="collapse"
-                    data-bs-target="#children{{ post.id }}"
+                    data-bs-target="#collapseChildren{{ post.id }}"
                     aria-expanded="false">
                     <i class="bi bi-diagram-3-fill"></i>
-                    <span class="children-count" style="font-size: 0.8rem;">{{ post.children.count }}</span>
+                    <span class="descendant-count" style="font-size: 0.8rem;">{{ post.descendant_count }}</span>
                 </button>
 
-                <button class="btn btn-link p-0 text-secondary"
+                <!-- Actions Dropdown -->
+                {% if not post.removed %}
+                <div class="dropend">
+                    <button id="post{{ post.id }}Dropdown"
+                        class="dropdown-toggle no-caret btn btn-glass rounded-circle flex-shrink-0"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-three-dots"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-glass rounded-card" aria-labelledby="post{{ post.id }}Dropdown">
+                        {% if request.user.is_authenticated %}
+                        <li>
+                            <button class="dropdown-item d-flex align-items-center gap-2 share-btn"
+                                data-object-type="post"
+                                data-object-id="{{ post.id }}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#shareModal">
+                                <i class="bi bi-share-fill"></i>Share
+                            </button>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a class="dropdown-item" href="{% url "oversight:report_post" post.id %}" target="_blank">
+                                <i class="bi bi-flag-fill me-2"></i>Report
+                            </a>
+                        </li>
+                        {% if request.user.is_authenticated and post.author != request.user %}
+                            <li>
+                                <button type="button" class="post-mute-button dropdown-item"
+                                    data-action="{% if post.author.id in muted_user_ids %}unmute{% else %}mute{% endif %}"
+                                    data-csrf-token="{{ csrf_token }}"
+                                    data-endpoint="{% url 'users:mute_user' post.author.username %}">
+                                    <i class="bi bi-bell-slash me-2"></i>
+                                    <span>{% if post.author.id in muted_user_ids %}Unmute{% else %}Mute{% endif %} {{ post.author.username }}</span>
+                                </button>
+                            </li>
+                        {% endif %}
+                        {% if post.author == request.user %}
+                            <li>
+                                <a class="dropdown-item" href="{% url "forums:remove_post" post.id %}" target="_blank">
+                                    <span class="text-danger"><i class="bi bi-x-square-fill me-2"></i>Remove</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <button class="btn btn-transparent"
                     style="font-size: 0.8rem;"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#replyForm{{ post.id }}"
-                    aria-expanded="{% if expanded %}true{% else %}false{% endif %}">
+                    aria-expanded="false">
                     Reply
                 </button>
 
             </div>
 
-            {% if not standalone %}
-                <!-- Reply form -->
+            <!-- Reply form -->
+            <div id="replyForm{{ post.id }}" class="collapse" data-reply-username="{{ post.author.username }}">
                 {% include "post/form.html" with page=post.page parent=post %}
+            </div>
 
-                <!-- Children -->
-                <div id="children{{ post.id }}" class="collapse {% if expanded %}show{% endif %}">
-                    {% if reply %}
-                        {% include "post/card.html" with post=reply expanded=False reply=None %}
-                    {% else %}
-                        {% for child in post.children.all.firmament %}
-                            {% include "post/card.html" with post=child reply=None %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            {% endif %}
+            <!-- Displayed children -->
+            <div class="display-children">{{ display_children }}</div>
+
+            <!-- Collapsed children -->
+            <div id="collapseChildren{{ post.id }}" class="collapse {% if expanded %}show{% endif %}">
+                {% if post.descendant_count %}
+                    {% include "post/feed.html" with parent_id=post.id page_id=post.page.id %}
+                {% endif %}
+            </div>
 
         </div>
     </div>

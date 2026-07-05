@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}@{{ crew.handle }} - stllr{% endblock title %}
+
+{% block css %}
+    {% if crew.background %}
+        <style>
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                background-image: url("{{ crew.background.url }}");
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+                opacity: 0.05;
+                z-index: -1;
+            }
+        </style>
+    {% endif %}
+{% endblock css %}
+
+
+{% block content %}
+
+    <div class="position-relative overflow-hidden banner-bleed border-bottom border-grid" style="aspect-ratio: 16/9;">
+        {% if crew.background %}
+            {% thumbnail crew.background "1200x675" crop="center" as banner %}
+            <img class="object-fit-cover w-100 h-100" src="{{ banner.url }}">
+        {% endif %}
+    </div>
+
+    <div class="d-flex align-items-center justify-content-center my-3 gap-3">
+        <div class="text-center">
+            <h1 class="mb-0">{{ crew.name }}</h1>
+            <div class="d-flex align-items-center justify-content-center gap-2">
+                <p class="text-secondary mb-0">@{{ crew.handle }}</p>
+                {% if request_user_membership.role == 'owner' %}
+                    <div class="dropdown">
+                        <button class="dropdown-toggle no-caret btn p-0 text-secondary lh-1"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-gear fs-5"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-glass rounded-card">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'crews:edit_crew' crew.handle %}">
+                                    <i class="bi bi-pencil me-2"></i>Edit crew
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{% url 'crews:delete_crew' crew.handle %}">
+                                    <i class="bi bi-trash me-2"></i>Delete crew
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    {% include "crew/buttons/entry.html" with crew=crew request_user_membership=request_user_membership %}
+                {% endif %}
+            </div>
+            {% if crew.bio %}<p class="mt-2 mb-0">{{ crew.bio }}</p>{% endif %}
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 mb-4 text-secondary small">
+        <i>Created: {{ crew.created|date:"N j, Y" }}</i>
+    </div>
+
+    <nav class="profile-tabs border-bottom border-grid mb-4">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link {% if active_tab == 'beacons' %}active{% endif %}"
+                   href="{% url 'crews:crew_detail' crew.handle %}">Beacons</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if active_tab == 'stars' %}active{% endif %}"
+                   href="{% url 'crews:crew_stars' crew.handle %}">Stars</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if active_tab == 'mentions' %}active{% endif %}"
+                   href="{% url 'crews:crew_mentions' crew.handle %}">Mentions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if active_tab == 'members' %}active{% endif %}"
+                   href="{% url 'crews:crew_members' crew.handle %}">Members</a>
+            </li>
+        </ul>
+    </nav>
+
+    {% if active_tab == 'beacons' %}
+        {% include "beacon/feed.html" with beaconed_to_crew_id=crew.id %}
+
+    {% elif active_tab == 'stars' %}
+        {% include "page/feed.html" with starred_by_crew_id=crew.id %}
+
+    {% elif active_tab == 'members' %}
+        {% if request.user.pk in crew.admin_pks %}
+            <div class="d-flex justify-content-end mb-3">
+                <a href="{% url 'crews:scout_members' crew.handle %}" class="btn btn-sm btn-glass">
+                    <i class="bi bi-person-plus me-1"></i>Scout members
+                </a>
+            </div>
+        {% endif %}
+        {% if memberships_requested %}
+            <p class="text-secondary small mb-2">Requests</p>
+            {% for membership in memberships_requested %}
+                <div class="crew-member-row d-flex align-items-center btn-glass rounded-card gap-3 py-2 px-2 mb-2">
+                    <a href="{{ membership.user.profile.get_absolute_url }}" class="d-flex align-items-center gap-3 text-decoration-none flex-grow-1">
+                        {% include "user/avatar.html" with user=membership.user size="40" dimensions="40x40" %}
+                        <span class="fw-semibold">@{{ membership.user.username }}</span>
+                    </a>
+                    {% include "crew/buttons/admittance.html" %}
+                </div>
+            {% endfor %}
+            <hr class="border-grid my-3">
+        {% endif %}
+        {% for membership in memberships %}
+            {% include "member/card.html" %}
+        {% empty %}
+            <p class="text-secondary">No members yet.</p>
+        {% endfor %}
+
+    {% elif active_tab == 'mentions' %}
+        {% include "post/feed.html" with mentioned_crew_id=crew.id %}
+    {% endif %}
+
+{% endblock content %}

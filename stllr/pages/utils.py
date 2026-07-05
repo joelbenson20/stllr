@@ -58,38 +58,40 @@ def get_domain_name(url):
         host = host[4:]
     return host
 
-class InsecureURLError(Exception):
-    """Raised when a URL fails security verification"""
+class UnsupportedURLError(Exception):
     pass
 
-def verify_security(url):
-    """Verify that a URL is safe to store and display
-    Checks:
-    - Hostname does not resolve to a private/loopback/reserved IP
-    - No obviously malicious schemes (javascript:, data:, etc.)
+def verify_supported(url):
+    """Verify that a URL is one Stllr can store and display.
 
-    Raises InsecureURLError if the URL fails any check
-    Passes silently for None/empty URLs (optional fields like image_url)
+    Raises UnsupportedURLError if the URL fails any check.
+    Passes silently for None/empty URLs (optional fields like image_url).
     """
+    from pages.models import Page
 
     if not url:
         return
-    
+
     parsed = urlparse(url)
+
+    if parsed.scheme.lower() not in Page.Protocol.values:
+        raise UnsupportedURLError(f"Unsupported protocol: {url}")
 
     hostname = parsed.hostname
     if not hostname:
-        raise InsecureURLError(f"URL has no hostname: {url}")
-    
+        raise UnsupportedURLError(f"URL has no hostname: {url}")
+
     # Block private, loopback, and reserved IP addresses
     try:
         addr = ipaddress.ip_address(hostname)
         if addr.is_private or addr.is_loopback or addr.is_reserved or addr.is_link_local:
-            raise InsecureURLError(f"URL points to a private/reserved address: {url}")
+            raise UnsupportedURLError(f"URL points to a private/reserved address: {url}")
     except ValueError:
         # hostname is a domain name, not a raw IP -- that's fine
         pass
 
     # Block localhost variants
     if hostname in ('localhost', '127.0.0.1', '::1', '0.0.0.0'):
-        raise InsecureURLError(f"URL points to a localhost: {url}")
+        raise UnsupportedURLError(f"URL points to a localhost: {url}")
+    
+# TODO: Verify no private information (email address, phone number)

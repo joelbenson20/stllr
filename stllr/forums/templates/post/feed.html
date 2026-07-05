@@ -1,0 +1,19 @@
+{% load forum_tags %}
+<div class="post-feed">
+
+    <div class="feeder post-feeder"
+        data-endpoint="{% url 'forums:feed' %}"
+        data-page-id="{{ page_id|default:'' }}"
+        data-parent-id="{{ parent_id|default:'' }}"
+        data-author-id="{{ author_id|default:'' }}"
+        data-mentioned-user-id="{{ mentioned_user_id|default:'' }}"
+        data-mentioned-crew-id="{{ mentioned_crew_id|default:'' }}"
+        data-replies-only="{{ replies_only|default:'' }}"
+        data-seed="{% random_seed %}"
+        data-p="1">
+
+        <div class="feeder-dot"></div>
+
+    </div>
+
+</div>

@@ -1,0 +1,14 @@
+<div class="d-flex align-items-center gap-2 mb-2">
+    <h6 class="text-uppercase small fw-bold text-secondary mb-0">Crews</h6>
+    <a href="{% url 'crews:find_crews' %}" class="btn btn-glass rounded-circle d-flex align-items-center justify-content-center p-0" style="width:20px;height:20px;font-size:0.75rem;">
+        <i class="bi bi-plus-lg"></i>
+    </a>
+</div>
+{% include "crew/list.html" %}
+<div class="d-flex align-items-center gap-2 mt-4 mb-2">
+    <h6 class="text-uppercase small fw-bold text-secondary mb-0">Contacts</h6>
+    <a href="{% url 'contacts:find_contacts' %}" class="btn btn-glass rounded-circle d-flex align-items-center justify-content-center p-0" style="width:20px;height:20px;font-size:0.75rem;">
+        <i class="bi bi-plus-lg"></i>
+    </a>
+</div>
+{% include "contact/list.html" %}

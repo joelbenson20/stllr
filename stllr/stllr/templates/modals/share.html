@@ -1,21 +1,22 @@
 {% if user.is_authenticated %}
-<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true"
+<div id="shareModal" class="modal modal-glass fade" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true"
     data-endpoint="{% url 'comms:share_object' %}"
     data-csrf-token="{{ csrf_token }}">
+
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass text-white border-secondary">
+        <div class="modal-content glass rounded-card">
             <div class="modal-header border-0">
-                <h5 class="modal-title" id="shareModalLabel">Share with a contact</h5>
+                <h5 class="modal-title" id="shareModalLabel">Select contacts</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 {% if contacts_list %}
                     <div class="d-flex flex-column gap-2">
                         {% for contact in contacts_list %}
-                            <button class="share-contact-btn btn btn-outline-secondary text-start d-flex align-items-center gap-2 w-100"
+                            <button class="share-contact-btn btn btn-glass text-start d-flex align-items-center gap-2 w-100"
                                 data-contact-id="{{ contact.id }}"
                                 data-username="{{ contact.username }}">
-                                {% include "user/profile-picture.html" with user=contact size="32" dimensions="32x32" %}
+                                {% include "user/avatar.html" with user=contact size="32" dimensions="32x32" %}
                                 <span>@{{ contact.username }}</span>
                                 <span class="share-btn-status ms-auto"></span>
                             </button>
@@ -29,3 +30,5 @@
     </div>
 </div>
 {% endif %}
+
+{% comment %} TODO: Move this into the comms app, and the other modals into their respective apps. {% endcomment %}

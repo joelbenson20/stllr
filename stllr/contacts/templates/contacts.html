@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}contacts - stllr{% endblock title %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-2">
+            <h4 class="fw-bold mb-0">Contacts</h4>
+            <a href="{% url 'contacts:find_contacts' %}" class="btn btn-glass rounded-circle d-flex align-items-center justify-content-center" style="width:31px;height:31px;">
+                <i class="bi bi-plus"></i>
+            </a>
+        </div>
+        {% include "contact/invite_dropdown.html" %}
+    </div>
+
+    {% include "contact/requests_received.html" %}
+    {% include "contact/requests_sent.html" %}
+    {% if requests_received or requests_sent %}<hr class="border-grid my-3">{% endif %}
+    {% include "contact/list.html" %}
+
+{% endblock content %}

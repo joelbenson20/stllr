@@ -1,0 +1,58 @@
+.thumbnail {
+    overflow: hidden;
+    display: block;
+}
+
+.thumbnail img {
+    max-height: 315px;
+    object-fit: cover;
+    display: block;
+    width: 100%;
+}
+
+@media (max-width: 576px) {
+    .thumbnail-info .page-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .thumbnail-info .page-description {
+        display: none;
+    }
+}
+
+.page-title {
+    color: var(--white-hot);
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.page-description {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.875rem;
+    line-height: 1.45;
+}
+
+.bi-globe {
+    font-size: 32px;
+}
+
+.page {
+    border-radius: 0;
+    margin: 0;
+}
+
+.ticker-track {
+    animation: ticker-scroll 12s linear infinite;
+}
+.ticker-track > span {  /* TODO: 2.1 Javascript so ticker only runs when title is too long */
+    padding-right: 6rem;
+}
+@keyframes ticker-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}

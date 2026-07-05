@@ -5,24 +5,6 @@
 
 {% block content %}
 
-{% include 'page/card.html' with page=post.page compact=True standalone=True threaded=True %}
-
-{% for ancestor in ancestors %}
-    {% include "post/card.html" with post=ancestor threaded=True %}
-{% endfor %}
-
-{% include "post/card.html" with post=post standalone=True %}
-
-<div class="ms-4 ms-sm-5">
-
-    {% include "post/form.html" with parent=post page=post.page standalone=True %}
-
-    <div id="children{{ post.id }}">
-        {% for child in post.children.all %}
-            {% include "post/card.html" with post=child reply=None %}
-        {% endfor %}
-    </div>
-
-</div>
+    {% include "post/ancestry.html" %}
 
 {% endblock content %}

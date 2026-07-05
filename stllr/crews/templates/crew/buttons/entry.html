@@ -1,0 +1,34 @@
+<div class="crew-entry-btns d-flex gap-2">
+    {% if not request_user_membership %}
+        <form method="post" action="{% url 'crews:join_crew' crew.handle %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass">
+                {% if crew.is_open %}Join{% else %}Request to Join{% endif %}
+            </button>
+        </form>
+    {% elif request_user_membership.status == 'requested' %}
+        <form method="post" action="{% url 'crews:leave_crew' crew.handle %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass">Cancel Request</button>
+        </form>
+    {% elif request_user_membership.status == 'invited' %}
+        <form method="post" action="{% url 'crews:accept_invite' crew.handle %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass btn-glass-success">Accept</button>
+        </form>
+        <form method="post" action="{% url 'crews:decline_invite' crew.handle %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass btn-glass-danger">Decline</button>
+        </form>
+    {% elif request_user_membership.status == 'active' and request_user_membership.role != 'owner' %}
+        <form method="post" action="{% url 'crews:leave_crew' crew.handle %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn btn-sm btn-glass">Leave</button>
+        </form>
+    {% endif %}
+</div>

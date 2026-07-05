@@ -1,0 +1,20 @@
+{% load page_tags %}
+<div class="page-feed">
+
+    <div class="feeder page-feeder"
+        data-endpoint="{% url 'pages:feed' %}"
+        data-sort="{{ sort|default:"firmament" }}"
+        data-p="{{ p|default:1 }}"
+        data-query="{{ query|default:'' }}"
+        data-starred-by-user-id="{{ starred_by_user_id|default:'' }}"
+        data-starred-by-crew-id="{{ starred_by_crew_id|default:'' }}"
+        data-beaconed-by-crew-id="{{ beaconed_by_crew_id|default:'' }}"
+        data-beaconed-to-user-id="{{ beaconed_to_user_id|default:'' }}"
+        data-near-page-id="{{ near_page_id|default:'' }}"
+        data-seed="{% random_seed %}">
+
+        <div class="feeder-dot"></div>
+
+    </div>
+    
+</div>

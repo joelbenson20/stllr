@@ -1,62 +1,57 @@
-{% load markdown_deux_tags %}
+<div class="mt-2">
 
-{% if user.is_authenticated %}
+    {% if user.is_authenticated %}
 
-    <div {% if parent %}id="replyForm{{ parent.id }}"{% endif %}
-        class="{% if parent and not standalone %}collapse {% endif %}py-3"
-        style="border-bottom: var(--border-grid);">
-        <div class="d-flex gap-3">
+        <form class="{% if parent %}reply-form{% else %}post-form{% endif %} glow-on-focus rounded-card bg-white"
+            method="post"
+            data-endpoint="{% url 'forums:create_post' %}"
+            data-mention-endpoint="{% url 'forums:mention_completions' %}">
+            {% csrf_token %}
 
-            <div class="flex-shrink-0 pt-1">
-                {% include "user/profile-picture.html" with user=request.user size="32" dimensions="32x32" %}
+            <input type="hidden" name="page" value="{{ page.id }}">
+            <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
+
+            <textarea class="form-control rounded-card border-0 shadow-none p-3"
+                name="content"
+                placeholder="What's written in the stars?"
+                required></textarea>
+
+            <div class="markdown-preview rounded p-3"></div>
+
+            <div class="d-flex align-items-center">
+
+                <button class="btn btn-transparent btn-light rounded-circle m-1" type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#markdownHelpModal">
+                    <i class="bi bi-question-circle"></i>
+                </button>
+
+                <button class="markdown-preview-button btn btn-transparent btn-light rounded-card m-1"
+                    type="button"
+                    data-endpoint="{% url 'forums:markdownify' %}">
+                    <i class="bi bi-eye-fill"></i> Preview
+                </button>
+
+                <button class="markdown-edit-button btn btn-transparent btn-light rounded-card m-1" type="button">
+                    <i class="bi bi-eye-slash"></i> Edit
+                </button>
+
+                <button class="btn btn-light rounded-card ms-auto m-1" type="submit">
+                    {% if parent %}Reply{% else %}Post{% endif %}
+                </button>
+
             </div>
 
-            <div class="flex-grow-1" style="min-width: 0;">
-                <form class="{% if parent %}reply-form{% else %}post-form{% endif %} glow-on-focus rounded-card bg-white"
-                    method="post"
-                    data-endpoint="{% url 'forums:create_post' %}">
-                    {% csrf_token %}
+        </form>
 
-                    <input type="hidden" name="page" value="{{ page.id }}">
-                    <input type="hidden" name="parent" value="{{ parent.id|default:'' }}">
+    {% else %}
 
-                    <textarea class="form-control rounded-card border-0 shadow-none p-3"
-                        name="content"
-                        placeholder="What's written in the stars?"
-                        required></textarea>
-
-                    <div class="markdown-preview rounded p-3"></div>
-
-                    <div class="d-flex align-items-center">
-
-                        <button class="btn btn-transparent btn-light rounded-circle m-1" type="button">
-                            <i class="bi bi-question-circle"></i>
-                        </button>
-
-                        <button class="markdown-preview-button btn btn-transparent btn-light rounded-card m-1"
-                            type="button"
-                            data-endpoint="{% url 'forums:markdownify' %}">
-                            <i class="bi bi-eye-fill"></i> Preview
-                        </button>
-
-                        <button class="markdown-edit-button btn btn-transparent btn-light rounded-card m-1" type="button">
-                            <i class="bi bi-eye-slash"></i> Edit
-                        </button>
-
-                        <button class="btn btn-light rounded-card ms-auto m-1" type="submit">
-                            {% if parent %}Reply{% else %}Post{% endif %}
-                        </button>
-
-                    </div>
-
-                </form>
-            </div>
-
+        <div class="rounded-card bg-white p-3 text-secondary">
+            <a href="{% url 'account_login' %}?next={{ request.path }}">Sign in</a> to post in the forum.
         </div>
-    </div>
 
-{% else %}
-    <p class="rounded-pill bg-light text-dark ps-3 py-2">
-        Please <a href="{% url "account_login" %}">sign in</a> to post to this forum.
-    </p>
-{% endif %}
+    {% endif %}
+
+</div>
+
+{% comment %} TODO: Make helper buttons dark text so they're visible {% endcomment %}

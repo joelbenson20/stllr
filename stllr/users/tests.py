@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from users.models import ContactRelation
+from contacts.models import ContactRelation
 
 User = get_user_model()
 
@@ -32,7 +32,7 @@ class ContactTests(TestCase):
 
     def test_send_request_creates_pending_contact_relation(self):
         self.client.login(username='stella', password='pass')
-        self.client.get(reverse('users:send_request', args=['stranger']))
+        self.client.get(reverse('contacts:send_request', args=['stranger']))
         relation = ContactRelation.objects.filter(from_user=self.stella, to_user=self.stranger).first()
         self.assertIsNotNone(relation)
         self.assertEqual(relation.status, ContactRelation.Status.PENDING)
@@ -40,26 +40,26 @@ class ContactTests(TestCase):
     def test_accept_request_updates_status_to_accepted(self):
         ContactRelation.objects.create(from_user=self.stranger, to_user=self.stella, status=ContactRelation.Status.PENDING)
         self.client.login(username='stella', password='pass')
-        self.client.get(reverse('users:accept_request', args=['stranger']))
+        self.client.get(reverse('contacts:accept_request', args=['stranger']))
         relation = ContactRelation.objects.get(from_user=self.stranger, to_user=self.stella)
-        self.assertEqual(relation.status, ContactRelation.Status.ACCEPTED)
+        self.assertEqual(relation.status, ContactRelation.Status.ACTIVE)
 
     def test_decline_request_removes_relation(self):
         ContactRelation.objects.create(from_user=self.stranger, to_user=self.stella, status=ContactRelation.Status.PENDING)
         self.client.login(username='stella', password='pass')
-        self.client.get(reverse('users:decline_request', args=['stranger']))
+        self.client.get(reverse('contacts:decline_request', args=['stranger']))
         self.assertFalse(ContactRelation.objects.filter(from_user=self.stranger, to_user=self.stella).exists())
 
     def test_remove_contact_removes_relation_initiated_by_self(self):
-        ContactRelation.objects.create(from_user=self.stella, to_user=self.stranger, status=ContactRelation.Status.ACCEPTED)
+        ContactRelation.objects.create(from_user=self.stella, to_user=self.stranger, status=ContactRelation.Status.ACTIVE)
         self.client.login(username='stella', password='pass')
-        self.client.get(reverse('users:remove_contact', args=['stranger']))
+        self.client.get(reverse('contacts:remove_contact', args=['stranger']))
         self.assertFalse(ContactRelation.objects.filter(from_user=self.stella, to_user=self.stranger).exists())
 
     def test_remove_contact_removes_relation_initiated_by_other(self):
-        ContactRelation.objects.create(from_user=self.stranger, to_user=self.stella, status=ContactRelation.Status.ACCEPTED)
+        ContactRelation.objects.create(from_user=self.stranger, to_user=self.stella, status=ContactRelation.Status.ACTIVE)
         self.client.login(username='stella', password='pass')
-        self.client.get(reverse('users:remove_contact', args=['stranger']))
+        self.client.get(reverse('contacts:remove_contact', args=['stranger']))
         self.assertFalse(ContactRelation.objects.filter(from_user=self.stranger, to_user=self.stella).exists())
 
     

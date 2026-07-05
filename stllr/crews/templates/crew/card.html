@@ -1,0 +1,10 @@
+
+<a class="btn btn-glass rounded-card text-start text-light d-flex align-items-center
+    text-decoration-none w-100 gap-3 py-2 px-2 mb-2"
+    href="{{ crew.get_absolute_url }}">
+    {% include "crew/avatar.html" with crew=crew size="40" dimensions="40x40" %}
+    <div class="d-flex flex-column">
+        <span class="text-secondary" style="font-size: 0.75rem;">@{{ crew.handle }}</span>
+        <span class="fw-semibold">{{ crew.name }}</span>
+    </div>
+</a>
