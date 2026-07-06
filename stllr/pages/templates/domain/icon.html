@@ -1,5 +1,7 @@
 {% load static thumbnail %}
 
+
+{% comment %} TODO: Icons need to support SVG. Lots of defaults aren't working for this reason {% endcomment %}
 {% thumbnail domain.fav_icon dimensions as icon %}{% if icon %}
     <img src="{{ icon.url }}" class="{% if domain.fav_icon_bg_light %}bg-light{% endif %} rounded-circle flex-shrink-0">
 {% else %}

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 
 
+# TODO: Create 'Share' like 'Beacon' so when you share with another user, the checkmark appears in the modal persistently just like currently done with Beacons
 class Beacon(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
